@@ -11,7 +11,6 @@ There are several dependencies:
  - svn
  - hg/mercurial
  - gcc & g++
- - jq
  - wget
 
 The bootstrap.sh script will build the toolchain (ct-ng) and buildroot.<br/>
@@ -30,3 +29,6 @@ To build a plugin, run:<br/>
 
 If everything goes well, you will have the final plugin bundle in ~/workdir/plugins.<br/>
 You can use MOD-SDK 'publish' tab to push those into a MOD Duo.
+
+To cleanup the build of a plugin, run:<br/>
+```./build <plugin-package>-dirclean```

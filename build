@@ -14,14 +14,11 @@ if [[ "${build}" == "plugins-dep" ]]; then
     fi
 
     if [[ "${action}" != *"-dirclean" ]]; then
-      action=$(basename ${action} | sed "s/.json//" | sed "s/.mk//")
+      action=$(basename ${action} | sed "s/.mk//")
+      pkgname=$(echo ${action} | tr a-z- A-Z_)
 
       if [ ! -d ${SOURCE_DIR}/plugins/package/${action} ]; then
         error "Package name '${action}' does not exist"
-        exit 1
-      fi
-      if [ ! -f ${SOURCE_DIR}/plugins/package/${action}/${action}.json ]; then
-        error "Requested package has no 'json' file"
         exit 1
       fi
       if [ ! -f ${SOURCE_DIR}/plugins/package/${action}/${action}.mk ]; then
@@ -29,7 +26,7 @@ if [[ "${build}" == "plugins-dep" ]]; then
         exit 1
       fi
 
-      bundles=($(jq -r '.bundles | .[] | .name' ${SOURCE_DIR}/plugins/package/${action}/${action}.json))
+      bundles=($(cat plugins/package/${action}/${action}.mk | awk 'sub("'${pkgname}'_BUNDLES = ","")'))
 
       if [[ "${bundles}" == "" ]]; then
         error "Requested package has no bundles"
