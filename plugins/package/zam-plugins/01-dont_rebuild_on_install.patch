@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index cfd0c4a..6eb5131 100644
+--- a/Makefile
++++ b/Makefile
+@@ -33,7 +33,7 @@ $(PLUGINS): libs
+ 
+ # --------------------------------------------------------------
+ 
+-install: all
++install:
+ 	install -d $(DESTDIR)$(PREFIX)/$(LIBDIR)/ladspa \
+ 		$(DESTDIR)$(PREFIX)/$(LIBDIR)/lv2 \
+ 		$(DESTDIR)$(PREFIX)/$(LIBDIR)/vst \
+

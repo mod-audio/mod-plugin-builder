@@ -1,0 +1,59 @@
+diff -U 3 -H -w -E -d -r -N -- x42-plugins-20150702.orig/midifilter.lv2/Makefile x42-plugins-20150702/midifilter.lv2/Makefile
+--- x42-plugins-20150702.orig/midifilter.lv2/Makefile	2015-06-30 22:05:57.000000000 +0200
++++ x42-plugins-20150702/midifilter.lv2/Makefile	2015-07-17 15:30:52.495634575 +0200
+@@ -4,7 +4,7 @@
+ PREFIX ?= /usr/local
+ CFLAGS ?= $(OPTIMIZATIONS) -Wall
+ 
+-STRIP=strip
++STRIP?=strip
+ STRIPFLAGS=-s
+ 
+ midifilter_VERSION?=$(shell git describe --tags HEAD 2>/dev/null | sed 's/-g.*$$//;s/^v//' || echo "LV2")
+diff -U 3 -H -w -E -d -r -N -- x42-plugins-20150702.orig/nodelay.lv2/Makefile x42-plugins-20150702/nodelay.lv2/Makefile
+--- x42-plugins-20150702.orig/nodelay.lv2/Makefile	2015-07-02 13:13:45.000000000 +0200
++++ x42-plugins-20150702/nodelay.lv2/Makefile	2015-07-17 15:21:28.139389821 +0200
+@@ -9,7 +9,7 @@
+ CFLAGS ?= $(OPTIMIZATIONS) -Wall
+ LIBDIR ?= lib
+ 
+-STRIP=strip
++STRIP?=strip
+ STRIPFLAGS=-s
+ 
+ nodelay_VERSION?=$(shell git describe --tags HEAD 2>/dev/null | sed 's/-g.*$$//;s/^v//' || echo "LV2")
+diff -U 3 -H -w -E -d -r -N -- x42-plugins-20150702.orig/onsettrigger.lv2/Makefile x42-plugins-20150702/onsettrigger.lv2/Makefile
+--- x42-plugins-20150702.orig/onsettrigger.lv2/Makefile	2015-07-02 13:21:57.000000000 +0200
++++ x42-plugins-20150702/onsettrigger.lv2/Makefile	2015-07-17 15:31:36.824047023 +0200
+@@ -5,7 +5,7 @@
+ CFLAGS ?= -Wall -Wno-unused-function
+ LIBDIR ?= lib
+ 
+-STRIP=strip
++STRIP?=strip
+ STRIPFLAGS=-s
+ 
+ override CFLAGS += -g $(OPTIMIZATIONS)
+diff -U 3 -H -w -E -d -r -N -- x42-plugins-20150702.orig/robtk/robtk.mk x42-plugins-20150702/robtk/robtk.mk
+--- x42-plugins-20150702.orig/robtk/robtk.mk	2015-07-02 12:19:39.000000000 +0200
++++ x42-plugins-20150702/robtk/robtk.mk	2015-07-17 15:31:43.531109435 +0200
+@@ -1,6 +1,6 @@
+ RT=$(RW)rtk/
+ WD=$(RW)widgets/robtk_
+-STRIP=strip
++STRIP?=strip
+ LIBSTRIPFLAGS=-s
+ APPSTRIPFLAGS=-s
+ WINDRES=$(XWIN)-windres
+diff -U 3 -H -w -E -d -r -N -- x42-plugins-20150702.orig/xfade.lv2/Makefile x42-plugins-20150702/xfade.lv2/Makefile
+--- x42-plugins-20150702.orig/xfade.lv2/Makefile	2015-07-02 13:26:07.000000000 +0200
++++ x42-plugins-20150702/xfade.lv2/Makefile	2015-07-17 15:31:49.428164309 +0200
+@@ -8,7 +8,7 @@
+ CFLAGS ?= $(OPTIMIZATIONS) -Wall
+ LIBDIR ?= lib
+ 
+-STRIP=strip
++STRIP?=strip
+ STRIPFLAGS=-s
+ 
+ xfade_VERSION?=$(shell git describe --tags HEAD 2>/dev/null | sed 's/-g.*$$//;s/^v//' || echo "LV2")

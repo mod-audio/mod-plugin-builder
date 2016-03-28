@@ -1,0 +1,13 @@
+diff -U 3 -H -w -E -d -r -N -- x42-plugins-20150702.orig/Makefile x42-plugins-20150702/Makefile
+--- x42-plugins-20150702.orig/Makefile	2015-06-08 21:51:01.000000000 +0200
++++ x42-plugins-20150702/Makefile	2015-07-17 15:22:37.438033186 +0200
+@@ -7,8 +7,7 @@
+ 
+ VERSION ?=$(shell date +%Y%m%d)
+ SUBDIRS = balance.lv2 convoLV2 nodelay.lv2 xfade.lv2 \
+-          midifilter.lv2 meters.lv2 sisco.lv2 tuna.lv2 \
+-          onsettrigger.lv2 mixtri.lv2 fil4.lv2
++          midifilter.lv2 # fil4.lv2
+ 
+ all clean install uninstall: submodule_check $(SUBDIRS)
+ 
