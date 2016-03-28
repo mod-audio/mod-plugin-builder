@@ -1,0 +1,23 @@
+diff --git a/kernel/cycle.h b/kernel/cycle.h
+index 873e92e..486cf97 100644
+--- a/kernel/cycle.h
++++ b/kernel/cycle.h
+@@ -527,6 +527,18 @@ INLINE_ELAPSED(inline)
+ #define HAVE_TICK_COUNTER
+ #endif
+ 
++#if defined(__ARM_ARCH_7A__)
++typedef uint64_t ticks;
++static inline ticks getticks(void)
++{
++  uint32_t r;
++  asm volatile("mrc p15, 0, %0, c9, c13, 0\t\n" : "=r"(r)); /* Read PMCCNTR       */
++  return ((uint64_t)r) << 6;                                /* 1 tick = 64 clocks */
++}
++INLINE_ELAPSED(inline)
++#define HAVE_TICK_COUNTER
++#endif
++
+ #if defined(__aarch64__) && defined(ARMV8_HAS_CNTCVT_EL0) && !defined(HAVE_ARMV8CC)
+ typedef uint64_t ticks;
+ static inline ticks getticks(void)

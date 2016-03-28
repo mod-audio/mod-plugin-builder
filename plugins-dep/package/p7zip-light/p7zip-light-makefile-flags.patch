@@ -1,0 +1,80 @@
+Allow CC/CFLAGS/CXX/CXXFLAGS overrides
+
+The makefiles currently use hardcoded values for the compiler and
+compiler flags. This patch removes flags that not essential or are
+already added by buildroot and then modifies the makefiles to
+to allow specifying custom compiler and compiler flags.
+
+Signed-off-by: Jonathan Liu <net147 at gmail.com>
+---
+ CPP/7zip/Compress/LZMA_Alone/makefile |  7 +++----
+ makefile                              |  1 +
+ makefile.glb                          |  4 ++--
+ makefile.machine                      | 15 +++++----------
+ 4 files changed, 11 insertions(+), 16 deletions(-)
+
+Index: p7zip_9.20.1/CPP/7zip/Compress/LZMA_Alone/makefile
+===================================================================
+--- p7zip_9.20.1.orig/CPP/7zip/Compress/LZMA_Alone/makefile
++++ p7zip_9.20.1/CPP/7zip/Compress/LZMA_Alone/makefile
+@@ -1,12 +1,11 @@
++LOCAL_FLAGS = -c -I. -I../../../  -I../../../myWindows  -I../../../include_windows \
++         -UENV_UNIX -DCOMPRESS_MF_MT -DBENCH_MT
++
+ include ../../../../makefile.machine
+ 
+ PROG = lzma
+ LIB = $(LOCAL_LIBS)
+ RM = rm -f
+-CFLAGS = -c -I. -I../../../  -I../../../myWindows  -I../../../include_windows \
+-         -UENV_UNIX -DCOMPRESS_MF_MT -DBENCH_MT
+-
+-CXXFLAGS=$(CFLAGS)
+ 
+ OBJS = \
+   LzmaAlone.o \
+Index: p7zip_9.20.1/makefile.glb
+===================================================================
+--- p7zip_9.20.1.orig/makefile.glb
++++ p7zip_9.20.1/makefile.glb
+@@ -1,12 +1,12 @@
+ 
+ RM=rm -f
+-CFLAGS=-c -I. \
++override CFLAGS+=-c -I. \
+ -I../../../../C \
+ -I../../../myWindows \
+ -I../../../include_windows \
+ -I../../..
+ 
+-CXXFLAGS=-c -I. \
++override CXXFLAGS+=-c -I. \
+ -I../../../myWindows \
+ -I../../../ \
+ -I../../../include_windows
+Index: p7zip_9.20.1/makefile.machine
+===================================================================
+--- p7zip_9.20.1.orig/makefile.machine
++++ p7zip_9.20.1/makefile.machine
+@@ -2,16 +2,11 @@
+ # makefile for Linux (x86, PPC, alpha ...)
+ #
+ 
+-OPTFLAGS=-O
+-
+-ALLFLAGS=${OPTFLAGS} -pipe -s \
+-    	-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE \
+-	-DNDEBUG -D_REENTRANT -DENV_UNIX \
+-	-D_7ZIP_LARGE_PAGES \
+-	$(LOCAL_FLAGS)
+-
+-CXX=g++ $(ALLFLAGS)
+-CC=gcc $(ALLFLAGS)
++ALLFLAGS=-DNDEBUG -D_REENTRANT -DENV_UNIX -D_7ZIP_LARGE_PAGES $(LOCAL_FLAGS)
++CXX?=g++
++CC?=gcc $(ALLFLAGS)
++override CXXFLAGS+=$(ALLFLAGS)
++override CCFLAGS+=$(ALLFLAGS)
+ CC_SHARED=-fPIC
+ LINK_SHARED=-fPIC -shared
+ 

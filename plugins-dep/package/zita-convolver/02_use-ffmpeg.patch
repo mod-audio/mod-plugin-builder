@@ -1,0 +1,428 @@
+diff --git a/libs/Makefile b/libs/Makefile
+index 8ac26ee..62d3cde 100644
+--- a/libs/Makefile
++++ b/libs/Makefile
+@@ -33,14 +33,14 @@ VERSION = $(MAJVERS).$(MINVERS)
+ CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DENABLE_VECTOR_MODE 
+ CXXFLAGS += -fPIC -Wall
+ CXXFLAGS += -ffast-math -funroll-loops -O3
+-LDLFAGS += 
++LDFLAGS += -Wl,--no-undefined
+ LDLIBS +=
+ 
+ 
+ ZITA-CONVOLVER_SO = libzita-convolver.so
+ ZITA-CONVOLVER_MAJ = $(ZITA-CONVOLVER_SO).$(MAJVERS)
+ ZITA-CONVOLVER_MIN = $(ZITA-CONVOLVER_MAJ).$(MINVERS)
+-ZITA-CONVOLVER_DEP = -lfftw3f -lpthread
++ZITA-CONVOLVER_DEP = -lavcodec -lavfilter -lavutil -lfftw3f -lpthread -lm
+ ZITA-CONVOLVER_O = zita-convolver.o
+ ZITA-CONVOLVER_H = zita-convolver.h 
+ 
+diff --git a/libs/zita-convolver.cc b/libs/zita-convolver.cc
+index a5155de..6e5927d 100644
+--- a/libs/zita-convolver.cc
++++ b/libs/zita-convolver.cc
+@@ -22,6 +22,11 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <stdio.h>
++#include <cmath>
++extern "C" {
++#define __STDC_CONSTANT_MACROS  // needed for UINT64_C (libavutil 0.8.6)
++#include <libavutil/common.h>
++}
+ #include "zita-convolver.h"
+ 
+ 
+@@ -44,7 +49,6 @@ float Convproc::_fft_cost = 5.0f;
+ 
+ Convproc::Convproc (void) :
+     _state (ST_IDLE),
+-    _options (0),
+     _skipcnt (0),
+     _density (0),
+     _ninp (0),
+@@ -67,12 +71,6 @@ Convproc::~Convproc (void)
+ }
+ 
+ 
+-void Convproc::set_options (unsigned int options)
+-{
+-    _options = options;
+-}
+-
+-
+ void Convproc::set_density (float density)
+ {
+     _density = density;
+@@ -153,7 +151,7 @@ int Convproc::configure (unsigned int ninp,
+ 		if (cfft < d * cmac) npar = nmin;
+ 	    }
+ 	    _convlev [pind] = new Convlevel ();
+-	    _convlev [pind]->configure (prio, offs, npar, size, _options);
++	    _convlev [pind]->configure (prio, offs, npar, size);
+ 
+ 	    offs += size * npar;
+ 	    if (offs < maxsize)
+@@ -309,7 +307,6 @@ int Convproc::process (bool sync)
+ 	{
+             if (++_latecnt >= 5)
+             {
+-	        stop_process ();
+ 	        f |= FL_LOAD;
+ 	    }
+ 	}
+@@ -360,7 +357,6 @@ int Convproc::cleanup (void)
+     }
+ 
+     _state = ST_IDLE;
+-    _options = 0;
+     _skipcnt = 0;
+     _density = 0;
+     _ninp = 0;
+@@ -404,14 +400,11 @@ Convlevel::Convlevel (void) :
+     _stat (ST_IDLE),
+     _npar (0),
+     _parsize (0),
+-    _options (0),
+     _pthr (0),
+     _inp_list (0),
+     _out_list (0),
+     _plan_r2c (0),
+     _plan_c2r (0),
+-    _time_data (0),
+-    _prep_data (0),
+     _freq_data (0)
+ {
+ }
+@@ -428,7 +421,7 @@ void *Convlevel::alloc_aligned (size_t size)
+ {
+     void *p;
+ 
+-    if (posix_memalign (&p, 16, size)) throw (Converror (Converror::MEM_ALLOC));
++    p = av_malloc(size);
+     memset (p, 0, size);
+     return p;
+ }
+@@ -437,27 +430,20 @@ void *Convlevel::alloc_aligned (size_t size)
+ void Convlevel::configure (int prio,
+                            unsigned int offs,
+                            unsigned int npar,
+-                           unsigned int parsize,
+-			   unsigned int options)
++                           unsigned int parsize)
+ {
+-    int fftwopt = (options & OPT_FFTW_MEASURE) ? FFTW_MEASURE : FFTW_ESTIMATE;
+-
+     _prio = prio;
+     _offs = offs;
+     _npar = npar;
+     _parsize = parsize;
+-    _options = options;
+     
+-    _time_data = (float *)(alloc_aligned (2 * _parsize * sizeof (float)));
+-    _prep_data = (float *)(alloc_aligned (2 * _parsize * sizeof (float)));
+     _freq_data = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
+-    _plan_r2c = fftwf_plan_dft_r2c_1d (2 * _parsize, _time_data, _freq_data, fftwopt);
+-    _plan_c2r = fftwf_plan_dft_c2r_1d (2 * _parsize, _freq_data, _time_data, fftwopt);
++    _plan_r2c = av_rdft_init (int(log2(2 * _parsize)), DFT_R2C);
++    _plan_c2r = av_rdft_init (int(log2(2 * _parsize)), IDFT_C2R);
+     if (_plan_r2c && _plan_c2r) return;
+     throw (Converror (Converror::MEM_ALLOC));
+ }
+ 
+-
+ void Convlevel::impdata_create (unsigned int inp,
+                                 unsigned int out,
+                                 unsigned int step,
+@@ -468,7 +454,7 @@ void Convlevel::impdata_create (unsigned int inp,
+     unsigned int   k;
+     int            j, j0, j1, n;
+     float          norm;
+-    fftwf_complex  *fftb;
++    fftwf_complex *fftb;
+     Macnode        *M;
+ 
+     n = i1 - i0;
+@@ -483,7 +469,7 @@ void Convlevel::impdata_create (unsigned int inp,
+ 	memset (M->_fftb, 0, _npar * sizeof (fftwf_complex *));
+     }
+ 
+-    norm = 0.5f / _parsize;
++    norm = 1.0f / _parsize;
+     for (k = 0; k < _npar; k++)
+     {
+ 	i1 = i0 + _parsize;
+@@ -493,22 +479,21 @@ void Convlevel::impdata_create (unsigned int inp,
+ 	    {
+ 		M->_fftb [k] = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
+ 	    }
+-	    if (data)
++	    float *prepdata = (float*)_freq_data;
++	    memset (prepdata, 0, 2 * (_parsize+1) * sizeof (float));
++	    j0 = (i0 < 0) ? 0 : i0;
++	    j1 = (i1 > n) ? n : i1;
++	    for (j = j0; j < j1; j++) prepdata [j - i0] = norm * data [j * step];
++	    av_rdft_calc(_plan_r2c, prepdata);
++	    // adjust for packing convention
++	    _freq_data[_parsize][0] = _freq_data[0][1];
++	    _freq_data[0][1] = 0;
++	    fftswap (_freq_data);
++  	    fftb = M->_fftb [k];
++	    for (j = 0; j <= (int)_parsize; j++)
+ 	    {
+-	        memset (_prep_data, 0, 2 * _parsize * sizeof (float));
+-	        j0 = (i0 < 0) ? 0 : i0;
+-	        j1 = (i1 > n) ? n : i1;
+-	        for (j = j0; j < j1; j++) _prep_data [j - i0] = norm * data [j * step];
+-	        fftwf_execute_dft_r2c (_plan_r2c, _prep_data, _freq_data);
+-#ifdef ENABLE_VECTOR_MODE
+-	        if (_options & OPT_VECTOR_MODE) fftswap (_freq_data);
+-#endif
+-  	        fftb = M->_fftb [k];
+-	        for (j = 0; j <= (int)_parsize; j++)
+-	        {
+-	            fftb [j][0] += _freq_data [j][0];
+-	            fftb [j][1] += _freq_data [j][1];
+-		}
++	        fftb [j][0] += _freq_data [j][0];
++	        fftb [j][1] += _freq_data [j][1];
+ 	    }
+ 	}
+ 	i0 = i1;
+@@ -526,7 +511,7 @@ void Convlevel::impdata_update (unsigned int inp,
+     unsigned int   k;
+     int            j, j0, j1, n;
+     float          norm;
+-    fftwf_complex  *fftb;
++    fftwf_complex *fftb;
+     Macnode        *M;
+ 
+     M = findmacnode (inp, out, false);
+@@ -537,21 +522,24 @@ void Convlevel::impdata_update (unsigned int inp,
+     i1 = i0 + _npar * _parsize;
+     if ((i0 >= n) || (i1 <= 0)) return;
+ 
+-    norm = 0.5f / _parsize;
++    norm = 1.0f / _parsize;
+     for (k = 0; k < _npar; k++)
+     {
+ 	i1 = i0 + _parsize;
+ 	fftb = M->_fftb [k];
+ 	if (fftb && (i0 < n) && (i1 > 0))
+ 	{
+-	    memset (_prep_data, 0, 2 * _parsize * sizeof (float));
++	    float *prepdata = (float*)fftb;
++	    memset (prepdata, 0, 2 * _parsize * sizeof (float));
+ 	    j0 = (i0 < 0) ? 0 : i0;
+ 	    j1 = (i1 > n) ? n : i1;
+-	    for (j = j0; j < j1; j++) _prep_data [j - i0] = norm * data [j * step];
+-	    fftwf_execute_dft_r2c (_plan_r2c, _prep_data, fftb);
+-#ifdef ENABLE_VECTOR_MODE
+-	    if (_options & OPT_VECTOR_MODE) fftswap (fftb);
+-#endif
++	    for (j = j0; j < j1; j++) prepdata [j - i0] = norm * data [j * step];
++	    av_rdft_calc(_plan_r2c, prepdata);
++	    // adjust for packing convention
++	    fftb[_parsize][0] = fftb[0][1];
++	    fftb[_parsize][1] = 0;
++	    fftb[0][1] = 0;
++	    fftswap (fftb);
+ 	}
+ 	i0 = i1;
+     }
+@@ -699,15 +687,11 @@ void Convlevel::cleanup (void)
+     }
+     _out_list = 0;
+ 
+-    fftwf_destroy_plan (_plan_r2c);
+-    fftwf_destroy_plan (_plan_c2r);
+-    free (_time_data);
+-    free (_prep_data);
+-    free (_freq_data);
++    av_rdft_end (_plan_r2c);
++    av_rdft_end (_plan_c2r);
++    av_free (_freq_data);
+     _plan_r2c = 0;
+     _plan_c2r = 0;
+-    _time_data = 0;
+-    _prep_data = 0;
+     _freq_data = 0;
+ }
+ 
+@@ -767,13 +751,16 @@ void Convlevel::process (bool skip)
+     for (X = _inp_list; X; X = X->_next)
+     {
+ 	inpd = _inpbuff [X->_inp];
+-	if (n1) memcpy (_time_data, inpd + i1, n1 * sizeof (float));
+-	if (n2) memcpy (_time_data + n1, inpd, n2 * sizeof (float));
+-	memset (_time_data + _parsize, 0, _parsize * sizeof (float));
+-	fftwf_execute_dft_r2c (_plan_r2c, _time_data, X->_ffta [_ptind]);
+-#ifdef ENABLE_VECTOR_MODE
+-	if (_options & OPT_VECTOR_MODE) fftswap (X->_ffta [_ptind]);
+-#endif
++	fftwf_complex *freqdata = X->_ffta [_ptind];
++	float *time_data = (float*)freqdata;
++	if (n1) memcpy (time_data, inpd + i1, n1 * sizeof (float));
++	if (n2) memcpy (time_data + n1, inpd, n2 * sizeof (float));
++	memset (time_data + _parsize, 0, (_parsize+2) * sizeof (float));
++	av_rdft_calc(_plan_r2c, time_data);
++	// adjust for packing convention
++	freqdata[_parsize][0] = freqdata[0][1];
++	freqdata[0][1] = 0;
++	fftswap (X->_ffta [_ptind]);
+     }
+ 
+     if (skip)
+@@ -799,46 +786,32 @@ void Convlevel::process (bool skip)
+ 		    fftb = M->_fftb [j];
+ 		    if (fftb)
+ 		    {
+-#ifdef ENABLE_VECTOR_MODE
+-			if (_options & OPT_VECTOR_MODE)
+-			{
+-			    FV4 *A = (FV4 *) ffta;
+-			    FV4 *B = (FV4 *) fftb;
+-			    FV4 *D = (FV4 *) _freq_data;
+-			    for (k = 0; k < _parsize; k += 4)
+-			    {
+-				D [0] += A [0] * B [0] - A [1] * B [1];
+-				D [1] += A [0] * B [1] + A [1] * B [0];
+-				A += 2;
+-				B += 2;
+-				D += 2;
+-			    }
+-			    _freq_data [_parsize][0] += ffta [_parsize][0] * fftb [_parsize][0];
+-			    _freq_data [_parsize][1] = 0;
+-			}
+-			else
+-#endif
++			FV4 *A = (FV4 *) ffta;
++			FV4 *B = (FV4 *) fftb;
++			FV4 *D = (FV4 *) _freq_data;
++			for (k = 0; k < _parsize; k += 4)
+ 			{
+-			    for (k = 0; k <= _parsize; k++)
+-			    {
+-				_freq_data [k][0] += ffta [k][0] * fftb [k][0] - ffta [k][1] * fftb [k][1];
+-				_freq_data [k][1] += ffta [k][0] * fftb [k][1] + ffta [k][1] * fftb [k][0];
+-			    }
++			    D [0] += A [0] * B [0] - A [1] * B [1];
++			    D [1] += A [0] * B [1] + A [1] * B [0];
++			    A += 2;
++			    B += 2;
++			    D += 2;
+ 			}
++			_freq_data [_parsize][0] += ffta [_parsize][0] * fftb [_parsize][0];
++			_freq_data [_parsize][1] = 0;
+ 		    }
+ 		    if (i == 0) i = _npar;
+ 		    i--;
+ 		}
+ 	    }
+ 
+-#ifdef ENABLE_VECTOR_MODE
+-	    if (_options & OPT_VECTOR_MODE) fftswap (_freq_data);
+-#endif
+-	    fftwf_execute_dft_c2r (_plan_c2r, _freq_data, _time_data);
++	    fftswap (_freq_data);
++	    _freq_data[0][1] = _freq_data[_parsize][0]; // adjust for packing convention
++	    av_rdft_calc(_plan_c2r, (float*)_freq_data);
+ 	    outd = Y->_buff [opi1];
+-	    for (k = 0; k < _parsize; k++) outd [k] += _time_data [k];
++	    for (k = 0; k < _parsize; k++) outd [k] += ((float*)_freq_data) [k];
+ 	    outd = Y->_buff [opi2];
+-	    memcpy (outd, _time_data + _parsize, _parsize * sizeof (float));
++	    memcpy (outd, ((float*)_freq_data) + _parsize, _parsize * sizeof (float));
+ 	}
+     }
+ 
+@@ -909,7 +882,7 @@ Macnode *Convlevel::findmacnode (unsigned int inp, unsigned int out, bool create
+ 	_inp_list = X;
+ 	X->_inp = inp;
+ 	X->_ffta = new fftwf_complex * [_npar];
+-	memset (X->_ffta, 0, _npar * sizeof (fftw_complex *));
++	memset (X->_ffta, 0, _npar * sizeof (fftwf_complex *));
+         for (i = 0; i < _npar; i++)
+ 	{
+             X->_ffta [i] = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
+@@ -951,8 +924,6 @@ Macnode *Convlevel::findmacnode (unsigned int inp, unsigned int out, bool create
+ }
+ 
+ 
+-#ifdef ENABLE_VECTOR_MODE
+-
+ void Convlevel::fftswap (fftwf_complex *p)
+ {
+     unsigned int  n = _parsize;
+@@ -970,7 +941,3 @@ void Convlevel::fftswap (fftwf_complex *p)
+         n -= 4;
+     }
+ }
+-
+-#endif
+-
+-
+diff --git a/libs/zita-convolver.h b/libs/zita-convolver.h
+index 0c15710..fe8e4e7 100644
+--- a/libs/zita-convolver.h
++++ b/libs/zita-convolver.h
+@@ -23,6 +23,9 @@
+ 
+ 
+ #include <pthread.h>
++extern "C" {
++#include <libavcodec/avfft.h>
++}
+ #include <fftw3.h>
+ 
+ 
+@@ -244,8 +247,7 @@ private:
+     void configure (int prio,
+                     unsigned int offs,
+                     unsigned int npar,
+-                    unsigned int parsize,
+-		    unsigned int options);
++                    unsigned int parsize);
+ 
+     void impdata_create (unsigned int inp,
+                          unsigned int out,
+@@ -300,7 +302,6 @@ private:
+     unsigned int          _outoffs;        // offset into output buffer
+     unsigned int          _inpsize;        // size of shared input buffer 
+     unsigned int          _inpoffs;        // offset into input buffer
+-    unsigned int          _options;        // various options
+     unsigned int          _ptind;          // rotating partition index
+     unsigned int          _opind;          // rotating output buffer index
+     int                   _bits;           // bit identifiying this level
+@@ -310,10 +311,8 @@ private:
+     ZCsema                _done;           // sema used to wait for a cycle
+     Inpnode              *_inp_list;       // linked list of active inputs
+     Outnode              *_out_list;       // linked list of active outputs
+-    fftwf_plan            _plan_r2c;       // FFTW plan, forward FFT
+-    fftwf_plan            _plan_c2r;       // FFTW plan, inverse FFT
+-    float                *_time_data;      // workspace
+-    float                *_prep_data;      // workspace
++    RDFTContext          *_plan_r2c;       // FFTW plan, forward FFT
++    RDFTContext          *_plan_c2r;       // FFTW plan, inverse FFT
+     fftwf_complex        *_freq_data;      // workspace
+     float               **_inpbuff;        // array of shared input buffers
+     float               **_outbuff;        // array of shared output buffers
+@@ -379,7 +378,7 @@ public:
+ 
+     void set_density (float density);
+ 
+-    void set_options (unsigned int options);
++    void set_options (unsigned int /*options*/) {}
+ 
+     void set_skipcnt (unsigned int skipcnt);
+ 
+@@ -433,7 +432,6 @@ private:
+     float          *_outbuff [MAXOUT];        // output buffers
+     unsigned int    _inpoffs;                 // current offset in input buffers
+     unsigned int    _outoffs;                 // current offset in output buffers
+-    unsigned int    _options;                 // option bits
+     unsigned int    _skipcnt;                 // number of frames to skip 
+     float           _density;                 // matrix density hint
+     unsigned int    _ninp;                    // number of inputs

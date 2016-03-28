@@ -1,0 +1,30 @@
+Do not install documentation
+
+The install script installs documentation files which are not needed.
+Exclude them to reduce footprint.
+
+Signed-off-by: Jonathan Liu <net147 at gmail.com>
+---
+ install.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+Index: p7zip_9.20.1/install.sh
+===================================================================
+--- p7zip_9.20.1.orig/install.sh
++++ p7zip_9.20.1/install.sh
+@@ -129,6 +129,7 @@
+   fi
+ fi
+ 
++:<<DISABLED
+ mkdir -p "${DEST_DIR}${DEST_MAN}/man1"
+ if [ -d DOCS ]
+ then
+@@ -181,6 +182,7 @@
+   find "${DEST_DIR}${DEST_SHARE_DOC}/DOCS" -type d -exec chmod 555 {} \;
+   find "${DEST_DIR}${DEST_SHARE_DOC}/DOCS" -type f -exec chmod 444 {} \;
+ fi
++DISABLED
+ 
+ use_lang="n"
+ 

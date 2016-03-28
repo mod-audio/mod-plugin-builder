@@ -1,0 +1,109 @@
+#!/bin/bash
+
+source .common
+
+#######################################################################################################################
+# initial plugin setup
+
+action=$1
+
+if [[ "${build}" == "plugins-dep" ]]; then
+    if [[ "${action}" == "" ]]; then
+      echo "Usage: $0 <package-name>"
+      exit 1
+    fi
+
+    if [[ "${action}" != *"-dirclean" ]]; then
+      action=$(basename ${action} | sed "s/.json//" | sed "s/.mk//")
+
+      if [ ! -d ${SOURCE_DIR}/plugins/package/${action} ]; then
+        error "Package name '${action}' does not exist"
+        exit 1
+      fi
+      if [ ! -f ${SOURCE_DIR}/plugins/package/${action}/${action}.json ]; then
+        error "Requested package has no 'json' file"
+        exit 1
+      fi
+      if [ ! -f ${SOURCE_DIR}/plugins/package/${action}/${action}.mk ]; then
+        error "Requested package has no 'mk' file"
+        exit 1
+      fi
+
+      bundles=($(jq -r '.bundles | .[] | .name' ${SOURCE_DIR}/plugins/package/${action}/${action}.json))
+
+      if [[ "${bundles}" == "" ]]; then
+        error "Requested package has no bundles"
+        exit 1
+      fi
+    fi
+fi
+
+#######################################################################################################################
+# buildroot setup
+
+export DOWNLOAD_PATH=${DOWNLOAD_DIR}
+export TOOLCHAIN_PATH=${TOOLCHAIN_DIR}
+
+mkdir -p /tmp/skeleton
+
+#######################################################################################################################
+# now building...
+
+cd ${BUILD_DIR}/${BUILDROOT_VERSION}
+make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} modduo_defconfig &>/dev/null
+make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${action}
+
+#######################################################################################################################
+# if cleaning, stop here
+
+if [[ "${action}" == *"-dirclean" ]]; then
+  exit 0
+fi
+
+#######################################################################################################################
+# copy the requested plugin bundles
+
+function try_copy_plugin_bundles
+{
+  path="$1"
+
+  for bundle in ${bundles[@]}; do
+    if [ ! -d ${path}/${bundle} ]; then
+      return
+    fi
+  done
+
+  for bundle in ${bundles[@]}; do
+    rm -rf ${WORKDIR}/plugins/${bundle}
+    cp -rL ${path}/${bundle} ${WORKDIR}/plugins/${bundle}
+    info "Finished copying ${bundle}"
+  done
+
+  exit 0
+}
+
+if [[ "${build}" == "plugins-dep" ]]; then
+  mkdir -p ${WORKDIR}/plugins
+
+  try_copy_plugin_bundles ${WORKDIR}/${build}/target/usr/lib/lv2
+  try_copy_plugin_bundles ${WORKDIR}/${build}/target/usr/local/lib/lv2
+
+  error "Failed to find plugin installed bundles"
+  exit 1
+fi
+
+#######################################################################################################################
+# check for a menuconfig action to automatically save config
+
+if [[ "${action}" == *"menuconfig"* ]]; then
+    PREFIX=$(echo ${action} | sed 's/menuconfig//g')
+    if [[ "$PREFIX" == "" ]]; then
+        make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} savedefconfig
+    else
+        make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} "$PREFIX"update-config
+    fi
+
+    info "Changes of ${action} saved to correspondent configuration file"
+fi
+
+#######################################################################################################################

@@ -1,0 +1,14 @@
+--- liblo-static-0.28.orig/src/message.c
++++ liblo-static-0.28/src/message.c
+@@ -1014,6 +1014,10 @@ void lo_arg_pp_internal(lo_type type, vo
+     int size;
+     int i;
+ 
++    // initialize vals
++    memset(&val32, 0, sizeof(lo_pcast32));
++    memset(&val64, 0, sizeof(lo_pcast64));
++
+     size = lo_arg_size(type, data);
+     if (size == 4 || type == LO_BLOB) {
+         if (bigendian) {
+

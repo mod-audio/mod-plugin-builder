@@ -1,0 +1,112 @@
+Disable RAR support
+
+The RAR support is non-free and licensed under the unRAR restriction.
+As this support is usually not neeeded, disable it to reduce footprint
+and simplify licensing.
+
+Signed-off-by: Jonathan Liu <net147 at gmail.com>
+---
+ CPP/7zip/Bundles/Format7zFree/makefile | 11 -----------
+ makefile                               |  3 ---
+ makefile.rules                         | 17 -----------------
+ 3 files changed, 31 deletions(-)
+
+Index: p7zip_9.20.1/CPP/7zip/Bundles/Format7zFree/makefile
+===================================================================
+--- p7zip_9.20.1.orig/CPP/7zip/Bundles/Format7zFree/makefile
++++ p7zip_9.20.1/CPP/7zip/Bundles/Format7zFree/makefile
+@@ -158,14 +158,6 @@
+   NsisIn.o \
+   NsisRegister.o \
+ 
+-RAR_OBJS = \
+-  RarHandler.o \
+-  RarHeader.o \
+-  RarIn.o \
+-  RarItem.o \
+-  RarVolumeInStream.o \
+-  RarRegister.o \
+-
+ TAR_OBJS = \
+   TarHandler.o \
+   TarHandlerOut.o \
+@@ -257,8 +249,6 @@
+   MyAes.o \
+   Pbkdf2HmacSha1.o \
+   RandGen.o \
+-  Rar20Crypto.o \
+-  RarAes.o \
+   Sha1.o \
+   WzAes.o \
+   ZipCrypto.o \
+@@ -314,7 +304,6 @@
+   $(HFS_OBJS) \
+   $(ISO_OBJS) \
+   $(NSIS_OBJS) \
+-  $(RAR_OBJS) \
+   $(TAR_OBJS) \
+   $(UDF_OBJS) \
+   $(WIM_OBJS) \
+Index: p7zip_9.20.1/makefile
+===================================================================
+--- p7zip_9.20.1.orig/makefile
++++ p7zip_9.20.1/makefile
+@@ -56,7 +56,6 @@
+ 	$(MAKE) -C CPP/7zip/UI/Client7z           depend
+ 	$(MAKE) -C CPP/7zip/UI/Console            depend
+ 	$(MAKE) -C CPP/7zip/Bundles/Format7zFree  depend
+-	$(MAKE) -C CPP/7zip/Compress/Rar          depend
+ 	$(MAKE) -C CPP/7zip/UI/GUI                depend
+ 	$(MAKE) -C CPP/7zip/UI/FileManager        depend
+ 	$(MAKE) -C check/my_86_filter             depend
+@@ -68,7 +67,6 @@
+ common7z:common
+ 	$(MKDIR) bin/Codecs
+ 	$(MAKE) -C CPP/7zip/Bundles/Format7zFree all
+-	$(MAKE) -C CPP/7zip/Compress/Rar         all
+ 
+ 7z: common7z
+ 	$(MAKE) -C CPP/7zip/UI/Console           all
+@@ -93,7 +91,6 @@
+ 	$(MAKE) -C CPP/7zip/UI/FileManager       clean
+ 	$(MAKE) -C CPP/7zip/UI/GUI               clean
+ 	$(MAKE) -C CPP/7zip/Bundles/Format7zFree clean
+-	$(MAKE) -C CPP/7zip/Compress/Rar         clean
+ 	$(MAKE) -C CPP/7zip/Compress/LZMA_Alone  clean
+ 	$(MAKE) -C CPP/7zip/Bundles/AloneGCOV    clean
+ 	$(MAKE) -C CPP/7zip/TEST/TestUI          clean
+Index: p7zip_9.20.1/makefile.rules
+===================================================================
+--- p7zip_9.20.1.orig/makefile.rules
++++ p7zip_9.20.1/makefile.rules
+@@ -448,19 +448,6 @@
+ NsisRegister.o : ../../Archive/Nsis/NsisRegister.cpp
+ 	$(CXX) $(CXXFLAGS) ../../Archive/Nsis/NsisRegister.cpp
+ 
+-RarHandler.o : ../../Archive/Rar/RarHandler.cpp
+-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarHandler.cpp
+-RarHeader.o : ../../Archive/Rar/RarHeader.cpp
+-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarHeader.cpp
+-RarIn.o : ../../Archive/Rar/RarIn.cpp
+-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarIn.cpp
+-RarItem.o : ../../Archive/Rar/RarItem.cpp
+-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarItem.cpp
+-RarVolumeInStream.o : ../../Archive/Rar/RarVolumeInStream.cpp
+-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarVolumeInStream.cpp
+-RarRegister.o : ../../Archive/Rar/RarRegister.cpp
+-	$(CXX) $(CXXFLAGS) ../../Archive/Rar/RarRegister.cpp
+-
+ UdfHandler.o : ../../Archive/Udf/UdfHandler.cpp
+ 	$(CXX) $(CXXFLAGS) ../../Archive/Udf/UdfHandler.cpp
+ UdfIn.o : ../../Archive/Udf/UdfIn.cpp
+@@ -535,10 +522,6 @@
+ 	$(CXX) $(CXXFLAGS) ../../Crypto/7zAesRegister.cpp
+ WzAes.o : ../../Crypto/WzAes.cpp
+ 	$(CXX) $(CXXFLAGS) ../../Crypto/WzAes.cpp
+-Rar20Crypto.o : ../../Crypto/Rar20Crypto.cpp
+-	$(CXX) $(CXXFLAGS) ../../Crypto/Rar20Crypto.cpp
+-RarAes.o : ../../Crypto/RarAes.cpp
+-	$(CXX) $(CXXFLAGS) ../../Crypto/RarAes.cpp
+ HmacSha1.o : ../../Crypto/HmacSha1.cpp
+ 	$(CXX) $(CXXFLAGS) ../../Crypto/HmacSha1.cpp
+ Pbkdf2HmacSha1.o : ../../Crypto/Pbkdf2HmacSha1.cpp

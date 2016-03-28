@@ -1,0 +1,4 @@
+config BR2_PACKAGE_ZITA_CONVOLVER
+	bool "zita-convolver"
+	select BR2_PACKAGE_FFMPEG
+	select BR2_PACKAGE_FFTWF

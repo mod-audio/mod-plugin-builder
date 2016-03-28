@@ -1,0 +1,21 @@
+config BR2_PACKAGE_P7ZIP_LIGHT
+	bool "p7zip-light"
+	help
+	  Command-line version of the 7-Zip compressed file archiver
+	  without RAR and GUI support.
+
+	  http://p7zip.sourceforge.net/
+
+if BR2_PACKAGE_P7ZIP_LIGHT
+
+config BR2_PACKAGE_P7ZIP_LIGHT_SFX
+	bool "SFX support"
+	help
+	  Enable support for creating self-extracting archives.
+
+config BR2_PACKAGE_P7ZIP_LIGHT_7ZR
+	bool "7zr"
+	help
+	  Build 7zr executable. Only supports 7z archives.
+
+endif

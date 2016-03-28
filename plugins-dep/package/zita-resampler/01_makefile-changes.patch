@@ -1,0 +1,30 @@
+diff --git a/libs/Makefile b/libs/Makefile
+index 15b0471..344edd0 100644
+--- a/libs/Makefile
++++ b/libs/Makefile
+@@ -32,7 +32,6 @@ DISTDIR = zita-resampler-$(VERSION)
+ 
+ CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
+ CXXFLAGS += -Wall -fPIC -O2 -ffast-math
+-CXXFLAGS += -march=native
+ LDFLAGS += 
+ LDLIBS +=
+ 
+@@ -47,7 +46,7 @@ ZITA-RESAMPLER_H = zita-resampler/resampler.h zita-resampler/resampler-table.h \
+ 
+ 
+ $(ZITA-RESAMPLER_MIN): $(ZITA-RESAMPLER_O)
+-	g++ -shared $(LDFLAGS) -Wl,-soname,$(ZITA-RESAMPLER_MAJ) -o $(ZITA-RESAMPLER_MIN) $(ZITA-RESAMPLER_O) $(ZITA-RESAMPLER_DEP)
++	$(CXX) -shared $(LDFLAGS) -Wl,-soname,$(ZITA-RESAMPLER_MAJ) -o $(ZITA-RESAMPLER_MIN) $(ZITA-RESAMPLER_O) $(ZITA-RESAMPLER_DEP)
+ 
+ $(ZITA-RESAMPLER_O):	$(ZITA-RESAMPLER_H)
+ 
+@@ -58,7 +57,7 @@ install:	$(ZITA-RESAMPLER_MIN)
+ 	install -m 644 $(ZITA-RESAMPLER_H) $(DESTDIR)$(PREFIX)/include/zita-resampler
+ 	install -m 644 $(ZITA-RESAMPLER_MIN) $(DESTDIR)$(PREFIX)/$(LIBDIR)
+ 	ln -sf $(ZITA-RESAMPLER_MIN) $(DESTDIR)$(PREFIX)/$(LIBDIR)/$(ZITA-RESAMPLER_SO)
+-	ldconfig
++	ln -sf $(ZITA-RESAMPLER_MIN) $(DESTDIR)$(PREFIX)/$(LIBDIR)/$(ZITA-RESAMPLER_MAJ)
+ 
+ uninstall:
+ 	/bin/rm -rf $(DESTDIR)$(PREFIX)/include/zita-resampler

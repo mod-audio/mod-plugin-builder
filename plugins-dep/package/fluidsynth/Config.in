@@ -1,0 +1,4 @@
+config BR2_PACKAGE_FLUIDSYNTH
+	bool "fluidsynth"
+	select BR2_PACKAGE_LIBGLIB2
+	select BR2_PACKAGE_LIBSNDFILE

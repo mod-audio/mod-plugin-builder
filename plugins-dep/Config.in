@@ -1,0 +1,7 @@
+source "$BR2_EXTERNAL/package/fluidsynth/Config.in"
+source "$BR2_EXTERNAL/package/fftwf/Config.in"
+source "$BR2_EXTERNAL/package/lv2/Config.in"
+source "$BR2_EXTERNAL/package/lvtk/Config.in"
+source "$BR2_EXTERNAL/package/p7zip-light/Config.in"
+source "$BR2_EXTERNAL/package/zita-convolver/Config.in"
+source "$BR2_EXTERNAL/package/zita-resampler/Config.in"

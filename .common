@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#######################################################################################################################
+# exit if any command fails
+
+set -e
+
+#######################################################################################################################
+# environment variables
+
+build=${build:=plugins-dep}
+WORKDIR=${WORKDIR:=~/mod-workdir}
+
+#######################################################################################################################
+# crosstool-ng variables
+
+CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
+CT_NG_VERSION=crosstool-ng-1.21.0
+CT_NG_FILE=${CT_NG_VERSION}.tar.bz2
+
+#######################################################################################################################
+# buildroot variables
+
+BUILDROOT_LINK=http://buildroot.uclibc.org/downloads/
+BUILDROOT_VERSION=buildroot-2015.08.1
+BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.bz2
+
+#######################################################################################################################
+# setup directories
+
+SOURCE_DIR=$(readlink -f $(dirname $0))
+BUILD_DIR=${WORKDIR}/build
+DOWNLOAD_DIR=${WORKDIR}/download
+TOOLCHAIN_DIR=${WORKDIR}/toolchain
+
+mkdir -p ${BUILD_DIR}
+mkdir -p ${DOWNLOAD_DIR}
+mkdir -p ${TOOLCHAIN_DIR}
+
+#######################################################################################################################
+# Colored print functions
+
+function error {
+    echo -e "\e[0;31m"$@"\e[0m"
+}
+
+function info {
+    echo -e "\e[0;32m"$@"\e[0m"
+}
+
+function warn {
+    echo -e "\e[0;33m"$@"\e[0m"
+}
+
+#######################################################################################################################

@@ -1,0 +1,3 @@
+config BR2_PACKAGE_LVTK
+	bool "lvtk"
+	select BR2_PACKAGE_LV2
