@@ -32,5 +32,11 @@ To build a plugin, run:<br/>
 If everything goes well, you will have the final plugin bundle in ~/workdir/plugins.<br/>
 You can use MOD-SDK's 'publish' tab to push those into a MOD Duo.
 
+NOTE: If you want to build the provided plugins in this repository you'll need to enable git submodules, like this:
+```
+git submodule init
+git submodule update
+```
+
 To cleanup the build of a plugin, run:<br/>
 ```./build <plugin-package>-dirclean```
