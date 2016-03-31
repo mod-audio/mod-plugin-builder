@@ -56,7 +56,12 @@ fi
 export DOWNLOAD_PATH=${DOWNLOAD_DIR}
 export TOOLCHAIN_PATH=${TOOLCHAIN_DIR}
 
-mkdir -p /tmp/skeleton
+mkdir -p /tmp/skeleton/usr/bin
+mkdir -p /tmp/skeleton/usr/lib
+mkdir -p /tmp/skeleton/usr/sbin
+ln -sf usr/bin  /tmp/skeleton/
+ln -sf usr/lib  /tmp/skeleton/
+ln -sf usr/sbin /tmp/skeleton/
 
 #######################################################################################################################
 # initial first build

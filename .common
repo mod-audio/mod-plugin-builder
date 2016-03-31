@@ -22,7 +22,7 @@ CT_NG_FILE=${CT_NG_VERSION}.tar.bz2
 # buildroot variables
 
 BUILDROOT_LINK=http://buildroot.uclibc.org/downloads/
-BUILDROOT_VERSION=buildroot-2015.08.1
+BUILDROOT_VERSION=buildroot-2016.02
 BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.bz2
 
 #######################################################################################################################
