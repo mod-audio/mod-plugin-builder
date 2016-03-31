@@ -68,6 +68,19 @@ endef
 
 define ZAM_PLUGINS_INSTALL_TARGET_CMDS
 	$(ZAM_PLUGINS_TARGET_MAKE) install PREFIX=/usr DESTDIR=$(TARGET_DIR)
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamAutoSat.lv2/*    $(TARGET_DIR)/usr/lib/lv2/ZamAutoSat.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamComp.lv2/*       $(TARGET_DIR)/usr/lib/lv2/ZamComp.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamCompX2.lv2/*     $(TARGET_DIR)/usr/lib/lv2/ZamCompX2.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamDelay.lv2/*      $(TARGET_DIR)/usr/lib/lv2/ZamDelay.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamEQ2.lv2/*        $(TARGET_DIR)/usr/lib/lv2/ZamEQ2.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamGate.lv2/*       $(TARGET_DIR)/usr/lib/lv2/ZamGate.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamGateX2.lv2/*     $(TARGET_DIR)/usr/lib/lv2/ZamGateX2.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamGEQ31.lv2/*      $(TARGET_DIR)/usr/lib/lv2/ZamGEQ31.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamHeadX2.lv2/*     $(TARGET_DIR)/usr/lib/lv2/ZamHeadX2.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZamTube.lv2/*       $(TARGET_DIR)/usr/lib/lv2/ZamTube.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZaMaximX2.lv2/*     $(TARGET_DIR)/usr/lib/lv2/ZaMaximX2.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZaMultiComp.lv2/*   $(TARGET_DIR)/usr/lib/lv2/ZaMultiComp.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/zam-plugins/ZaMultiCompX2.lv2/* $(TARGET_DIR)/usr/lib/lv2/ZaMultiCompX2.lv2/
 endef
 
 $(eval $(generic-package))

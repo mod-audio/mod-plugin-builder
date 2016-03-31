@@ -16,6 +16,25 @@ endef
 
 define TAP_LV2_INSTALL_TARGET_CMDS
 	$(TAP_LV2_TARGET_MAKE) install DESTDIR=$(TARGET_DIR) INSTALL_PATH=/usr/lib/lv2
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-autopan.lv2/*       $(TARGET_DIR)/usr/lib/lv2/tap-autopan.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-chorusflanger.lv2/* $(TARGET_DIR)/usr/lib/lv2/tap-chorusflanger.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-deesser.lv2/*       $(TARGET_DIR)/usr/lib/lv2/tap-deesser.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-doubler.lv2/*       $(TARGET_DIR)/usr/lib/lv2/tap-doubler.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-dynamics.lv2/*      $(TARGET_DIR)/usr/lib/lv2/tap-dynamics.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-dynamics-st.lv2/*   $(TARGET_DIR)/usr/lib/lv2/tap-dynamics-st.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-echo.lv2/*          $(TARGET_DIR)/usr/lib/lv2/tap-echo.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-eqbw.lv2/*          $(TARGET_DIR)/usr/lib/lv2/tap-eqbw.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-eq.lv2/*            $(TARGET_DIR)/usr/lib/lv2/tap-eq.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-limiter.lv2/*       $(TARGET_DIR)/usr/lib/lv2/tap-limiter.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-pinknoise.lv2/*     $(TARGET_DIR)/usr/lib/lv2/tap-pinknoise.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-pitch.lv2/*         $(TARGET_DIR)/usr/lib/lv2/tap-pitch.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-reflector.lv2/*     $(TARGET_DIR)/usr/lib/lv2/tap-reflector.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-reverb.lv2/*        $(TARGET_DIR)/usr/lib/lv2/tap-reverb.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-rotspeak.lv2/*      $(TARGET_DIR)/usr/lib/lv2/tap-rotspeak.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-sigmoid.lv2/*       $(TARGET_DIR)/usr/lib/lv2/tap-sigmoid.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-tremolo.lv2/*       $(TARGET_DIR)/usr/lib/lv2/tap-tremolo.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-tubewarmth.lv2/*    $(TARGET_DIR)/usr/lib/lv2/tap-tubewarmth.lv2/
+	cp -rL $(BR2_EXTERNAL)/package/tap-lv2/tap-vibrato.lv2/*       $(TARGET_DIR)/usr/lib/lv2/tap-vibrato.lv2/
 endef
 
 $(eval $(generic-package))
