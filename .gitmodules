@@ -1,0 +1,3 @@
+[submodule "mod-lv2-data"]
+	path = lv2-data
+	url = git@github.com:moddevices/mod-lv2-data.git
