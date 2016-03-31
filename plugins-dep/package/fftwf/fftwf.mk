@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-FFTWF_VERSION = 3.3.4+git20151030
+FFTWF_VERSION = 3.3.4+git20151030b
 FFTWF_SITE = http://web1.moddevices.com/shared
 FFTWF_SOURCE = fftw-$(FFTWF_VERSION).tar.gz
 FFTWF_LICENSE = GPLv2+
