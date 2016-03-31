@@ -1,0 +1,1729 @@
+diff --git a/ams.lv2/ad_2.ttl b/ams.lv2/ad_2.ttl
+index ba1abf3..9960ab3 100644
+--- a/ams.lv2/ad_2.ttl
++++ b/ams.lv2/ad_2.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/ad_2/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <ad_2_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/ad_2>
+ 	a lv2:Plugin, lv2:SpectralPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Analog Driver - 2 Outputs" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/ad_2/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/ad_4.ttl b/ams.lv2/ad_4.ttl
+index f43a468..7801d1f 100644
+--- a/ams.lv2/ad_4.ttl
++++ b/ams.lv2/ad_4.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/ad_4/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <ad_4_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/ad_4>
+ 	a lv2:Plugin, lv2:SpectralPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Analog Driver - 4 Outputs" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/ad_4/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/ad_6.ttl b/ams.lv2/ad_6.ttl
+index 3e0fb14..89db458 100644
+--- a/ams.lv2/ad_6.ttl
++++ b/ams.lv2/ad_6.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/ad_6/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <ad_6_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/ad_6>
+ 	a lv2:Plugin, lv2:SpectralPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Analog Driver - 6 Outputs" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/ad_6/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/advenv.ttl b/ams.lv2/advenv.ttl
+index 038a4fe..b541758 100644
+--- a/ams.lv2/advenv.ttl
++++ b/ams.lv2/advenv.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/advenv/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <advenv_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/advenv>
+ 	a lv2:Plugin, lv2:EnvelopePlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Advanced Envelope" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/advenv/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/amp.ttl b/ams.lv2/amp.ttl
+index c0f2155..a1a5bdf 100644
+--- a/ams.lv2/amp.ttl
++++ b/ams.lv2/amp.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/amp/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <amp_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/amp>
+ 	a lv2:Plugin, lv2:AmplifierPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Amp" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/amp/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/analogmemory.ttl b/ams.lv2/analogmemory.ttl
+index b8bc092..e328918 100644
+--- a/ams.lv2/analogmemory.ttl
++++ b/ams.lv2/analogmemory.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/analogmemory/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <analogmemory_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/analogmemory>
+ 	a lv2:Plugin, lv2:DelayPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Analog Memory" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/analogmemory/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/bitgrinder.ttl b/ams.lv2/bitgrinder.ttl
+index ac74a70..bf334ab 100644
+--- a/ams.lv2/bitgrinder.ttl
++++ b/ams.lv2/bitgrinder.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/bitgrinder/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <bitgrinder_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/bitgrinder>
+ 	a lv2:Plugin, lv2:SpectralPlugin  ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Bitgrinder" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/bitgrinder/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/cvs.ttl b/ams.lv2/cvs.ttl
+index 3e28e61..e863c0f 100644
+--- a/ams.lv2/cvs.ttl
++++ b/ams.lv2/cvs.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/cvs/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <cvs_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/cvs>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS CV Source" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/cvs/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/delay.ttl b/ams.lv2/delay.ttl
+index d59eeaf..2d02391 100644
+--- a/ams.lv2/delay.ttl
++++ b/ams.lv2/delay.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/delay/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <delay_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/delay>
+ 	a lv2:Plugin, lv2:DelayPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Delay" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/delay/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/dynamicwaves2_4.ttl b/ams.lv2/dynamicwaves2_4.ttl
+index 3c6710d..97ad65b 100644
+--- a/ams.lv2/dynamicwaves2_4.ttl
++++ b/ams.lv2/dynamicwaves2_4.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/dynamicwaves2_4/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <dynamicwaves2_4_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/dynamicwaves2_4#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -73,7 +68,6 @@
+ 	doap:name "AMS Dynamic Waves 2 - 4 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/dynamicwaves2_4/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/dynamicwaves2_6.ttl b/ams.lv2/dynamicwaves2_6.ttl
+index c2dd9b7..71af1b3 100644
+--- a/ams.lv2/dynamicwaves2_6.ttl
++++ b/ams.lv2/dynamicwaves2_6.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/dynamicwaves2_6/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <dynamicwaves2_6_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/dynamicwaves2_6#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -95,7 +90,6 @@
+ 	doap:name "AMS Dynamic Waves 2 - 6 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/dynamicwaves2_6/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/dynamicwaves2_8.ttl b/ams.lv2/dynamicwaves2_8.ttl
+index fce1c6e..ce411f6 100644
+--- a/ams.lv2/dynamicwaves2_8.ttl
++++ b/ams.lv2/dynamicwaves2_8.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/dynamicwaves2_8/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <dynamicwaves2_8_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/dynamicwaves2_8#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -116,7 +111,6 @@
+ 	doap:name "AMS Dynamic Waves 2 - 8 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/dynamicwaves2_8/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/dynamicwaves_4.ttl b/ams.lv2/dynamicwaves_4.ttl
+index a5fbfbe..e2d3751 100644
+--- a/ams.lv2/dynamicwaves_4.ttl
++++ b/ams.lv2/dynamicwaves_4.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/dynamicwaves_4/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <dynamicwaves_4_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/dynamicwaves_4#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -73,7 +68,6 @@
+ 	doap:name "AMS Dynamic Waves - 4 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/dynamicwaves_4/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/dynamicwaves_6.ttl b/ams.lv2/dynamicwaves_6.ttl
+index 154a126..f21e83e 100644
+--- a/ams.lv2/dynamicwaves_6.ttl
++++ b/ams.lv2/dynamicwaves_6.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/dynamicwaves_6/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <dynamicwaves_6_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/dynamicwaves_6#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -95,7 +90,6 @@
+ 	doap:name "AMS Dynamic Waves - 6 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/dynamicwaves_6/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/dynamicwaves_8.ttl b/ams.lv2/dynamicwaves_8.ttl
+index a929d06..7db9bd7 100644
+--- a/ams.lv2/dynamicwaves_8.ttl
++++ b/ams.lv2/dynamicwaves_8.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/dynamicwaves_8/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <dynamicwaves_8_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/dynamicwaves_8#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -116,7 +111,6 @@
+ 	doap:name "AMS Dynamic Waves - 8 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/dynamicwaves_8/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/env.ttl b/ams.lv2/env.ttl
+index 357f5ee..548bb7b 100644
+--- a/ams.lv2/env.ttl
++++ b/ams.lv2/env.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/env/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <env_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/env>
+ 	a lv2:Plugin, lv2:EnvelopePlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Envelope" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/env/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/fftvocoder.ttl b/ams.lv2/fftvocoder.ttl
+index 50616dc..0cecf7a 100644
+--- a/ams.lv2/fftvocoder.ttl
++++ b/ams.lv2/fftvocoder.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/fftvocoder/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <fftvocoder_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/fftvocoder>
+ 	a lv2:Plugin, lv2:SpectralPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS FFT Vocoder" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/fftvocoder/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/haas.ttl b/ams.lv2/haas.ttl
+index dfe128b..e14dacc 100644
+--- a/ams.lv2/haas.ttl
++++ b/ams.lv2/haas.ttl
+@@ -4,21 +4,14 @@
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix units:  <http://lv2plug.in/ns/extensions/units#> .
+ 
+-
+-<http://github.com/blablack/ams-lv2/haas/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <haas_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/haas>
+ 	a lv2:Plugin, lv2:DelayPlugin ;
+ 	lv2:project <http://github.com/blablack/ams-lv2/> ;
+ 	doap:name "Haas" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/haas/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/ams.lv2/hysteresis.ttl b/ams.lv2/hysteresis.ttl
+index 99fa9bc..8e60222 100644
+--- a/ams.lv2/hysteresis.ttl
++++ b/ams.lv2/hysteresis.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/hysteresis/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <hysteresis_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/hysteresis>
+ 	a lv2:Plugin, lv2:DelayPlugin  ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Hysteresis" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/hysteresis/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/hztovc.ttl b/ams.lv2/hztovc.ttl
+index c2a9ae6..49aaefb 100644
+--- a/ams.lv2/hztovc.ttl
++++ b/ams.lv2/hztovc.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/hztovc/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <hztovc_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/hztovc>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "Hz to VC" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/hztovc/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/lfo.ttl b/ams.lv2/lfo.ttl
+index 7575a1d..567ada7 100644
+--- a/ams.lv2/lfo.ttl
++++ b/ams.lv2/lfo.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/lfo/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <lfo_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/lfo>
+ 	a lv2:Plugin, lv2:OscillatorPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS LFO" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/lfo/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/lfo2_freq.ttl b/ams.lv2/lfo2_freq.ttl
+index cc6611f..164220f 100644
+--- a/ams.lv2/lfo2_freq.ttl
++++ b/ams.lv2/lfo2_freq.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/lfo2_freq/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <lfo2_freq_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/lfo2_freq>
+ 	a lv2:Plugin, lv2:OscillatorPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS LFO2 - Freq" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/lfo2_freq/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/lfo2_tempo.ttl b/ams.lv2/lfo2_tempo.ttl
+index 593cd5b..1626694 100644
+--- a/ams.lv2/lfo2_tempo.ttl
++++ b/ams.lv2/lfo2_tempo.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/lfo2_tempo/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <lfo2_tempo_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/lfo2_tempo>
+ 	a lv2:Plugin, lv2:OscillatorPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS LFO2 - Tempo" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/lfo2_tempo/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/mixer_2ch.ttl b/ams.lv2/mixer_2ch.ttl
+index 9a232c2..fdc6379 100644
+--- a/ams.lv2/mixer_2ch.ttl
++++ b/ams.lv2/mixer_2ch.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/mixer_2ch/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <mixer_2ch_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/mixer_2ch>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Mixer 2 channels" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/mixer_2ch/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/ams.lv2/mixer_4ch.ttl b/ams.lv2/mixer_4ch.ttl
+index a3229cf..abe9d1b 100644
+--- a/ams.lv2/mixer_4ch.ttl
++++ b/ams.lv2/mixer_4ch.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/mixer_4ch/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <mixer_4ch_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/mixer_4ch>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Mixer 4 channels" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/mixer_4ch/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/ams.lv2/mixer_8ch.ttl b/ams.lv2/mixer_8ch.ttl
+index b320dc6..d405a88 100644
+--- a/ams.lv2/mixer_8ch.ttl
++++ b/ams.lv2/mixer_8ch.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/mixer_8ch/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <mixer_8ch_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/mixer_8ch>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Mixer 8 channels" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/mixer_8ch/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/ams.lv2/mooglpf.ttl b/ams.lv2/mooglpf.ttl
+index e875c8a..90ebd5b 100644
+--- a/ams.lv2/mooglpf.ttl
++++ b/ams.lv2/mooglpf.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/mooglpf/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <mooglpf_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/mooglpf>
+ 	a lv2:Plugin, lv2:SpectralPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "Moog LPF" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/mooglpf/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 	[
+diff --git a/ams.lv2/multiphase_lfo.ttl b/ams.lv2/multiphase_lfo.ttl
+index 1889020..dfbc4d4 100644
+--- a/ams.lv2/multiphase_lfo.ttl
++++ b/ams.lv2/multiphase_lfo.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/multiphase_lfo/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <multiphase_lfo_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/multiphase_lfo>
+ 	a lv2:Plugin, lv2:OscillatorPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Multiphase LFO" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/multiphase_lfo/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/noise2.ttl b/ams.lv2/noise2.ttl
+index 215aca1..6dc59a4 100644
+--- a/ams.lv2/noise2.ttl
++++ b/ams.lv2/noise2.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/noise2/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <noise2_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/noise2>
+ 	a lv2:Plugin, lv2:GeneratorPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Noise2" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/noise2/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/percussiveenv.ttl b/ams.lv2/percussiveenv.ttl
+index eb3385c..fd384ce 100644
+--- a/ams.lv2/percussiveenv.ttl
++++ b/ams.lv2/percussiveenv.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/percussiveenv/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <percussiveenv_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/percussiveenv>
+ 	a lv2:Plugin, lv2:EnvelopePlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Percussive Envelope" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/percussiveenv/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/ringmodulator.ttl b/ams.lv2/ringmodulator.ttl
+index 316caa2..4251c4c 100644
+--- a/ams.lv2/ringmodulator.ttl
++++ b/ams.lv2/ringmodulator.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/ringmodulator/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <ringmodulator_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/ringmodulator>
+ 	a lv2:Plugin, lv2:AmplifierPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Ring Modulator" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/ringmodulator/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/samplehold.ttl b/ams.lv2/samplehold.ttl
+index b16660b..cd9e4c9 100644
+--- a/ams.lv2/samplehold.ttl
++++ b/ams.lv2/samplehold.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/samplehold/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <samplehold_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/samplehold>
+ 	a lv2:Plugin, lv2:DelayPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Sample&Hold" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/samplehold/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/seq_12.ttl b/ams.lv2/seq_12.ttl
+index df764c7..a55fc95 100644
+--- a/ams.lv2/seq_12.ttl
++++ b/ams.lv2/seq_12.ttl
+@@ -5,11 +5,6 @@
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/seq_12/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <seq_12_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/seq_12#main_controls>
+     lv2:name "Main Controls" ;
+@@ -34,7 +29,6 @@
+ 	doap:name "AMS Sequencer - 12 Steps" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/seq_12/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/seq_16.ttl b/ams.lv2/seq_16.ttl
+index 58d71a2..3a17ee1 100644
+--- a/ams.lv2/seq_16.ttl
++++ b/ams.lv2/seq_16.ttl
+@@ -5,11 +5,6 @@
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/seq_16/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <seq_16_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/seq_16#main_controls>
+     lv2:name "Main Controls" ;
+@@ -34,7 +29,6 @@
+ 	doap:name "AMS Sequencer - 16 Steps" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/seq_16/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/seq_24.ttl b/ams.lv2/seq_24.ttl
+index beca1d3..7d1947d 100644
+--- a/ams.lv2/seq_24.ttl
++++ b/ams.lv2/seq_24.ttl
+@@ -5,11 +5,6 @@
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/seq_24/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <seq_24_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/seq_24#main_controls>
+     lv2:name "Main Controls" ;
+@@ -34,7 +29,6 @@
+ 	doap:name "AMS Sequencer - 24 Steps" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/seq_24/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/seq_32.ttl b/ams.lv2/seq_32.ttl
+index 8da94aa..404fd7d 100644
+--- a/ams.lv2/seq_32.ttl
++++ b/ams.lv2/seq_32.ttl
+@@ -5,11 +5,6 @@
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/seq_32/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <seq_32_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/seq_32#main_controls>
+     lv2:name "Main Controls" ;
+@@ -34,7 +29,6 @@
+ 	doap:name "AMS Sequencer - 32 Steps" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/seq_32/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/seq_8.ttl b/ams.lv2/seq_8.ttl
+index eece906..9b297fd 100644
+--- a/ams.lv2/seq_8.ttl
++++ b/ams.lv2/seq_8.ttl
+@@ -5,11 +5,6 @@
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/seq_8/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <seq_8_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/seq_8#main_controls>
+     lv2:name "Main Controls" ;
+@@ -34,7 +29,6 @@
+ 	doap:name "AMS Sequencer - 8 Steps" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/seq_8/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/slew.ttl b/ams.lv2/slew.ttl
+index 71b9bd5..5066ba0 100644
+--- a/ams.lv2/slew.ttl
++++ b/ams.lv2/slew.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/slew/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <slew_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/slew>
+ 	a lv2:Plugin, lv2:DelayPlugin  ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Slew Limiter" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/slew/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/stereomixer_2ch.ttl b/ams.lv2/stereomixer_2ch.ttl
+index e266945..93f4124 100644
+--- a/ams.lv2/stereomixer_2ch.ttl
++++ b/ams.lv2/stereomixer_2ch.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/stereomixer_2ch/gui>
+-  	a guiext:GtkUI ;
+-	guiext:binary <stereomixer_2ch_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/stereomixer_2ch>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Stereo Mixer 2 channels" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/stereomixer_2ch/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/stereomixer_4ch.ttl b/ams.lv2/stereomixer_4ch.ttl
+index 358eab3..e468034 100644
+--- a/ams.lv2/stereomixer_4ch.ttl
++++ b/ams.lv2/stereomixer_4ch.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/stereomixer_4ch/gui>
+-  	a guiext:GtkUI ;
+-	guiext:binary <stereomixer_4ch_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/stereomixer_4ch>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Stereo Mixer 4 channels" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/stereomixer_4ch/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/stereomixer_8ch.ttl b/ams.lv2/stereomixer_8ch.ttl
+index 839bec3..34f7e44 100644
+--- a/ams.lv2/stereomixer_8ch.ttl
++++ b/ams.lv2/stereomixer_8ch.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/stereomixer_8ch/gui>
+-  	a guiext:GtkUI ;
+-	guiext:binary <stereomixer_8ch_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/stereomixer_8ch>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS Stereo Mixer 8 channels" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/stereomixer_8ch/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/vcaexp.ttl b/ams.lv2/vcaexp.ttl
+index ed74338..147d819 100644
+--- a/ams.lv2/vcaexp.ttl
++++ b/ams.lv2/vcaexp.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcaexp/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcaexp_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcaexp>
+ 	a lv2:Plugin, lv2:AmplifierPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VCA Exp" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcaexp/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/vcalin.ttl b/ams.lv2/vcalin.ttl
+index 24e9d44..bfc5445 100644
+--- a/ams.lv2/vcalin.ttl
++++ b/ams.lv2/vcalin.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcalin/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcalin_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcalin>
+ 	a lv2:Plugin, lv2:AmplifierPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VCA Lin" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcalin/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/vcdelay.ttl b/ams.lv2/vcdelay.ttl
+index 95996c0..af03166 100644
+--- a/ams.lv2/vcdelay.ttl
++++ b/ams.lv2/vcdelay.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcdelay/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <vcdelay_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcdelay>
+ 	a lv2:Plugin, lv2:DelayPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VC Delay" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcdelay/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:CVPort ;
+diff --git a/ams.lv2/vcdoubledecay.ttl b/ams.lv2/vcdoubledecay.ttl
+index 0ede6db..cd7c4c9 100644
+--- a/ams.lv2/vcdoubledecay.ttl
++++ b/ams.lv2/vcdoubledecay.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcdoubledecay/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <vcdoubledecay_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcdoubledecay>
+ 	a lv2:Plugin, lv2:DelayPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VC Double Decay" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcdoubledecay/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/vcenv.ttl b/ams.lv2/vcenv.ttl
+index d74c90a..1d3175f 100644
+--- a/ams.lv2/vcenv.ttl
++++ b/ams.lv2/vcenv.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcenv/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <vcenv_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcenv>
+ 	a lv2:Plugin, lv2:EnvelopePlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VC Envelope" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcenv/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/vcenvii.ttl b/ams.lv2/vcenvii.ttl
+index 0c227c6..8fe0d2a 100644
+--- a/ams.lv2/vcenvii.ttl
++++ b/ams.lv2/vcenvii.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcenvii/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <vcenvii_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcenvii>
+ 	a lv2:Plugin, lv2:EnvelopePlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VC Envelope II" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcenvii/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/vcf.ttl b/ams.lv2/vcf.ttl
+index 4aea079..3b298ea 100644
+--- a/ams.lv2/vcf.ttl
++++ b/ams.lv2/vcf.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcf/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcf_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcf>
+ 	a lv2:Plugin, lv2:SpectralPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VCF" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcf/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port 
+ 		[
+diff --git a/ams.lv2/vco2.ttl b/ams.lv2/vco2.ttl
+index 6fee904..58e01b5 100644
+--- a/ams.lv2/vco2.ttl
++++ b/ams.lv2/vco2.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vco2/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vco2_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vco2#group_frequency>
+     a param:OscillatorControls ;
+     lv2:name "Frequency" ;
+@@ -39,7 +34,6 @@
+ 	doap:name "AMS VCO2" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vco2/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:CVPort, lv2:InputPort ;
+diff --git a/ams.lv2/vco3.ttl b/ams.lv2/vco3.ttl
+index 3c94b7c..2b30d55 100644
+--- a/ams.lv2/vco3.ttl
++++ b/ams.lv2/vco3.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vco3/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vco3_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vco3#group_frequency>
+     a param:OscillatorControls ;
+     lv2:name "Frequency" ;
+@@ -39,7 +34,6 @@
+ 	doap:name "AMS VCO3" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vco3/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:CVPort, lv2:InputPort ;
+diff --git a/ams.lv2/vcorgan2_4.ttl b/ams.lv2/vcorgan2_4.ttl
+index 27a485d..dfee767 100644
+--- a/ams.lv2/vcorgan2_4.ttl
++++ b/ams.lv2/vcorgan2_4.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vcorgan2_4/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcorgan2_4_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vcorgan2_4#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -58,7 +53,6 @@
+ 	doap:name "AMS VC Organ 2 - 4 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcorgan2_4/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/vcorgan2_6.ttl b/ams.lv2/vcorgan2_6.ttl
+index a8ad65b..91715d6 100644
+--- a/ams.lv2/vcorgan2_6.ttl
++++ b/ams.lv2/vcorgan2_6.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vcorgan2_6/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcorgan2_6_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vcorgan2_6#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -65,7 +60,6 @@
+ 	doap:name "AMS VC Organ 2 - 6 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcorgan2_6/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/vcorgan2_8.ttl b/ams.lv2/vcorgan2_8.ttl
+index fe8b0d5..cf01a32 100644
+--- a/ams.lv2/vcorgan2_8.ttl
++++ b/ams.lv2/vcorgan2_8.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vcorgan2_8/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcorgan2_8_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vcorgan2_8#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -76,7 +71,6 @@
+ 	doap:name "AMS VC Organ 2 - 8 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcorgan2_8/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/vcorgan_4.ttl b/ams.lv2/vcorgan_4.ttl
+index c8f19b3..8888e16 100644
+--- a/ams.lv2/vcorgan_4.ttl
++++ b/ams.lv2/vcorgan_4.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vcorgan_4/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcorgan_4_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vcorgan_4#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -58,7 +53,6 @@
+ 	doap:name "AMS VC Organ - 4 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcorgan_4/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/vcorgan_6.ttl b/ams.lv2/vcorgan_6.ttl
+index 04bb543..6bf43c3 100644
+--- a/ams.lv2/vcorgan_6.ttl
++++ b/ams.lv2/vcorgan_6.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vcorgan_6/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcorgan_6_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vcorgan_6#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -65,7 +60,6 @@
+ 	doap:name "AMS VC Organ - 6 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcorgan_6/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/vcorgan_8.ttl b/ams.lv2/vcorgan_8.ttl
+index eaaae1c..0211fd1 100644
+--- a/ams.lv2/vcorgan_8.ttl
++++ b/ams.lv2/vcorgan_8.ttl
+@@ -3,15 +3,10 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+ @prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://github.com/blablack/ams-lv2/vcorgan_8/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcorgan_8_gui.so> .
+-
+ <http://github.com/blablack/ams-lv2/vcorgan_8#inputs>
+     a param:OscillatorControls ;
+     lv2:name "Inputs" ;
+@@ -76,7 +71,6 @@
+ 	doap:name "AMS VC Organ - 8 Osc" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcorgan_8/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port
+ 		[
+diff --git a/ams.lv2/vcpanning.ttl b/ams.lv2/vcpanning.ttl
+index 832faf5..6724668 100644
+--- a/ams.lv2/vcpanning.ttl
++++ b/ams.lv2/vcpanning.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcpanning/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcpanning_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcpanning>
+ 	a lv2:Plugin, lv2:SpatialPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VC Panning" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcpanning/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/ams.lv2/vcswitch.ttl b/ams.lv2/vcswitch.ttl
+index 23d7ed4..2cba79f 100644
+--- a/ams.lv2/vcswitch.ttl
++++ b/ams.lv2/vcswitch.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcswitch/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcswitch_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vcswitch>
+ 	a lv2:Plugin, lv2:AmplifierPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "AMS VC Switch" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcswitch/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/ams.lv2/vctohz.ttl b/ams.lv2/vctohz.ttl
+index edb6028..85fa285 100644
+--- a/ams.lv2/vctohz.ttl
++++ b/ams.lv2/vctohz.ttl
+@@ -4,11 +4,6 @@
+ @prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vctohz/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vctohz_gui.so> .
+ 
+ <http://github.com/blablack/ams-lv2/vctohz>
+ 	a lv2:Plugin, lv2:UtilityPlugin ;
+@@ -16,7 +11,6 @@
+ 	doap:name "VC to Hz" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vctohz/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/wscript b/wscript
+index 9889fa9..f0c4508 100644
+--- a/wscript
++++ b/wscript
+@@ -27,13 +27,8 @@ def configure(conf):
+     conf.load('compiler_cxx')
+     conf.load('lv2')
+ 
+-    autowaf.check_pkg(conf, 'gtkmm-2.4',  uselib_store='GTKMM',atleast_version='2.24.0', mandatory=True)
+-    autowaf.check_pkg(conf, 'gtk+-2.0', uselib_store='GTK2', atleast_version='2.24.0', mandatory=True)
+-    autowaf.check_pkg(conf, 'cairo', uselib_store='CAIRO', atleast_version='1.10.0', mandatory=True)
+     autowaf.check_pkg(conf, 'lv2', uselib_store='LV2', atleast_version='1.10.0', mandatory=True)
+     autowaf.check_pkg(conf, 'lvtk-plugin-1', uselib_store='LVTK_PLUGIN', atleast_version='1.2.0', mandatory=True)
+-    autowaf.check_pkg(conf, 'lvtk-ui-1', uselib_store='LVTK_UI', atleast_version='1.2.0', mandatory=True)
+-    autowaf.check_pkg(conf, 'lvtk-gtkui-1', uselib_store='LVTK_GTKGUI', atleast_version='1.2.0', mandatory=True)
+     autowaf.check_pkg(conf, 'fftw3', uselib_store='FFTW3', atleast_version='3.3.3', mandatory=True)
+ 
+     check = 'Extended Initializer Lists'
+@@ -85,25 +80,6 @@ def build_plugin(bld, bundle, name, source, cxxflags=[], cppflags=[], libs=[], a
+     bld.install_files('${LV2DIR}/' + bundle, os.path.join(bundle, data_file))
+ 
+ 
+-def build_plugin_gui(bld, bundle, name, source, cxxflags=[], cppflags=[], libs=[], add_source=[]):
+-    penv = bld.env.derive()
+-    penv['cxxshlib_PATTERN'] = bld.env['pluginlib_PATTERN']
+-    obj              = bld(features = 'cxx cxxshlib')
+-    obj.env          = penv
+-    obj.source       = source + add_source
+-    obj.includes     = ['.', './src']
+-    obj.name         = name
+-    obj.target       = os.path.join(bundle, name)
+-    if cxxflags != []:
+-        obj.cxxflags = cxxflags
+-    obj.cxxflags = obj.cxxflags + ['-msse', '-mfpmath=sse', '-ffast-math']
+-    if cppflags != []:
+-        obj.cppflags = cppflags
+-    if libs != []:
+-        obj.uselib = libs
+-    obj.install_path = '${LV2DIR}/' + bundle
+-
+-
+ def build(bld):
+     def do_copy(task):
+         src = task.inputs[0].abspath()
+@@ -204,110 +180,6 @@ def build(bld):
+ 
+ ########################################################################
+ 
+-    plugins_gui = '''
+-    amp_gui
+-    bitgrinder_gui
+-    delay_gui
+-    haas_gui
+-    hysteresis_gui
+-    hztovc_gui
+-    mixer_2ch_gui
+-    mixer_4ch_gui
+-    mixer_8ch_gui
+-    ringmodulator_gui
+-    samplehold_gui
+-    slew_gui
+-    vcdelay_gui
+-    vcswitch_gui
+-    '''.split()
+-
+-    for i in plugins_gui:
+-       build_plugin_gui(bld, 'ams.lv2', i, ['src/%s.cpp' % i],
+-                        ['-DPLUGIN_CLASS=%s' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="%s"' % i,
+-                         '-DPLUGIN_HEADER="src/%s.hpp"' % i],
+-                        [],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp'])
+-
+-########################################################################
+-
+-    plugins_gui = '''
+-    analogmemory_gui
+-    cvs_gui
+-    fftvocoder_gui
+-    lfo2_freq_gui
+-    lfo2_tempo_gui
+-    lfo_gui
+-    mooglpf_gui
+-    multiphase_lfo_gui
+-    noise2_gui
+-    stereomixer_2ch_gui
+-    stereomixer_4ch_gui
+-    stereomixer_8ch_gui
+-    vcaexp_gui
+-    vcalin_gui
+-    vcdoubledecay_gui
+-    vcenv_gui
+-    vcenvii_gui
+-    vcf_gui
+-    vco2_gui
+-    vco3_gui
+-    vcpanning_gui
+-    vctohz_gui
+-    '''.split()
+-
+-    for i in plugins_gui:
+-       build_plugin_gui(bld, 'ams.lv2', i, ['src/%s.cpp' % i],
+-                        ['-DPLUGIN_CLASS=%s' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="%s"' % i,
+-                         '-DPLUGIN_HEADER="src/%s.hpp"' % i],
+-                        [],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp'])
+-
+-########################################################################
+-
+-    build_plugin_gui(bld, 'ams.lv2', 'env_gui', ['src/env_gui.cpp'],
+-                     ['-DPLUGIN_CLASS=env_gui',
+-                      '-std=c++11',
+-                      '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                      '-DPLUGIN_URI_SUFFIX="env_gui"',
+-                      '-DPLUGIN_HEADER="src/env_gui.hpp"'],
+-                     [],
+-                     ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                     ['src/dial.cpp', 'src/labeleddial.cpp', 'src/env_gui_scope.cpp', 'src/my_box.cpp'])
+-
+-########################################################################
+-
+-    build_plugin_gui(bld, 'ams.lv2', 'percussiveenv_gui', ['src/percussiveenv_gui.cpp'],
+-                     ['-DPLUGIN_CLASS=percussiveenv_gui',
+-                      '-std=c++11',
+-                      '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                      '-DPLUGIN_URI_SUFFIX="percussiveenv_gui"',
+-                      '-DPLUGIN_HEADER="src/percussiveenv_gui.hpp"'],
+-                     [],
+-                     ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                     ['src/dial.cpp', 'src/labeleddial.cpp', 'src/percussiveenv_gui_scope.cpp', 'src/my_box.cpp'])
+-
+-########################################################################
+-
+-    build_plugin_gui(bld, 'ams.lv2', 'advenv_gui', ['src/advenv_gui.cpp'],
+-                     ['-DPLUGIN_CLASS=advenv_gui',
+-                      '-std=c++11',
+-                      '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                      '-DPLUGIN_URI_SUFFIX="advenv_gui"',
+-                      '-DPLUGIN_HEADER="src/advenv_gui.hpp"'],
+-                     [],
+-                     ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                     ['src/dial.cpp', 'src/labeleddial.cpp', 'src/advenv_gui_scope.cpp', 'src/my_box.cpp'])
+-
+-########################################################################
+-
+     plugins = '''
+     2
+     4
+@@ -325,16 +197,6 @@ def build(bld):
+                     ['LV2', 'LVTK_PLUGIN'],
+                     ['src/synthdata.cpp'])
+ 
+-       build_plugin_gui(bld, 'ams.lv2', "ad_%s_gui" % i, ['src/ad_gui.cpp'],
+-                        ['-DPLUGIN_CLASS=ad_%s_gui' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="ad_%s_gui"' % i,
+-                         '-DPLUGIN_HEADER="src/ad_gui.hpp"'],
+-                        ['-DOUT_COUNT=%s' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp'])
+-
+ ########################################################################
+ 
+     plugins = '''
+@@ -354,16 +216,6 @@ def build(bld):
+                     ['LV2', 'LVTK_PLUGIN'],
+                     ['src/synthdata.cpp'])
+ 
+-       build_plugin_gui(bld, 'ams.lv2', 'dynamicwaves_%s_gui' % i, ['src/dynamicwaves_gui.cpp'],
+-                        ['-DPLUGIN_CLASS=dynamicwaves_%s_gui' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="dynamicwaves_%s_gui"' % i,
+-                         '-DPLUGIN_HEADER="src/dynamicwaves_gui.hpp"'],
+-                        ['-DOSC_COUNT=%s' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp', 'src/dynamicwaves_scope.cpp'])
+-
+        build_plugin(bld, 'ams.lv2', 'vcorgan_%s' % i, ['src/vcorgan.cpp'],
+                     ['-DPLUGIN_CLASS=vcorgan_%s' % i,
+                      '-std=c++11',
+@@ -374,16 +226,6 @@ def build(bld):
+                     ['LV2', 'LVTK_PLUGIN'],
+                     ['src/synthdata.cpp'])
+ 
+-       build_plugin_gui(bld, 'ams.lv2', 'vcorgan_%s_gui' % i, ['src/vcorgan_gui.cpp'],
+-                        ['-DPLUGIN_CLASS=vcorgan_%s_gui' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="vcorgan_%s_gui"' % i,
+-                         '-DPLUGIN_HEADER="src/vcorgan_gui.hpp"'],
+-                        ['-DOSC_COUNT=%s' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp'])
+-
+        build_plugin(bld, 'ams.lv2', 'dynamicwaves2_%s' % i, ['src/dynamicwaves2.cpp'],
+                     ['-DPLUGIN_CLASS=dynamicwaves2_%s' % i,
+                      '-std=c++11',
+@@ -394,16 +236,6 @@ def build(bld):
+                     ['LV2', 'LVTK_PLUGIN'],
+                     ['src/synthdata.cpp'])
+ 
+-       build_plugin_gui(bld, 'ams.lv2', 'dynamicwaves2_%s_gui' % i, ['src/dynamicwaves2_gui.cpp'],
+-                        ['-DPLUGIN_CLASS=dynamicwaves2_%s_gui' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="dynamicwaves2_%s_gui"' % i,
+-                         '-DPLUGIN_HEADER="src/dynamicwaves2_gui.hpp"'],
+-                        ['-DOSC_COUNT=%s' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp', 'src/dynamicwaves_scope.cpp'])
+-
+        build_plugin(bld, 'ams.lv2', 'vcorgan2_%s' % i, ['src/vcorgan2.cpp'],
+                     ['-DPLUGIN_CLASS=vcorgan2_%s' % i,
+                      '-std=c++11',
+@@ -414,16 +246,6 @@ def build(bld):
+                     ['LV2', 'LVTK_PLUGIN'],
+                     ['src/synthdata.cpp'])
+ 
+-       build_plugin_gui(bld, 'ams.lv2', 'vcorgan2_%s_gui' % i, ['src/vcorgan2_gui.cpp'],
+-                        ['-DPLUGIN_CLASS=vcorgan2_%s_gui' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="vcorgan2_%s_gui"' % i,
+-                         '-DPLUGIN_HEADER="src/vcorgan2_gui.hpp"'],
+-                        ['-DOSC_COUNT=%s' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp'])
+-
+ ########################################################################
+ 
+     plugins = '''
+@@ -444,14 +266,3 @@ def build(bld):
+                     ['-DSTEP_COUNT=%s' % i],
+                     ['LV2', 'LVTK_PLUGIN'],
+                     ['src/synthdata.cpp'])
+-
+-       build_plugin_gui(bld, 'ams.lv2', 'seq_%s_gui' % i, ['src/seq_gui.cpp'],
+-                        ['-DPLUGIN_CLASS=seq_%s_gui' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/ams-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="seq_%s_gui"' % i,
+-                         '-DPLUGIN_HEADER="src/seq_gui.hpp"'],
+-                        ['-DSTEP_COUNT=%s' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp'])
+-

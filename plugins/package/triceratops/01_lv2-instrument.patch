@@ -1,0 +1,11 @@
+--- triceratops-lv2-0.3.0.orig/triceratops.ttl
++++ triceratops-lv2-0.3.0/triceratops.ttl
+@@ -16,7 +16,7 @@ guiext:requiredFeature guiext:makeReside
+ 
+ <http://nickbailey.co.nr/triceratops>
+ 	a lv2:Plugin ,
+-		lv2:AmplifierPlugin ;
++		lv2:InstrumentPlugin ;
+ 	doap:maintainer <http://nickbailey.co.nr> ;
+ 	doap:name "Triceratops" ;
+ 	doap:license <http://opensource.org/licenses/gpl-3.0> ;

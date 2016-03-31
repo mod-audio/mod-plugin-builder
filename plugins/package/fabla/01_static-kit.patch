@@ -1,0 +1,77 @@
+diff --git a/src/dsp/fabla2.cxx b/src/dsp/fabla2.cxx
+index cc6bee4..aaf9730 100644
+--- a/src/dsp/fabla2.cxx
++++ b/src/dsp/fabla2.cxx
+@@ -43,6 +43,8 @@
+ 
+ #include "plotter.hxx"
+ 
++#include "staticKit/kit.hxx"
++
+ namespace Fabla2
+ {
+ 
+@@ -81,6 +83,19 @@ Fabla2DSP::Fabla2DSP( int rate, URIs* u ) :
+ 		library->bank( bankID )->pad( tmpPad );
+ 	}
+ 
++	// statically load 8 samples
++	for(int i = 0; i < 8; i++)
++	{
++		Pad* p = library->bank( 0 )->pad( i );
++		// add a Sample* based on a static (compiled in) audio buffer
++		// for loading in the MOD Quadra, which doesn't have file load
++		printf("loading static samples... %i, %p, first float %f\n", samps[i].size, samps[i].data, samps[i].data[0] );
++		Sample* samp = new Sample( this, rate, "sampleName", samps[i].size, samps[i].data, 1 );
++		p->add( samp );
++		printf("samp %p, pad %p\n", samp, p );
++	}
++	printf("done creating pads, and loading static samples\n");
++
+ 	// for debugging null pointers etc
+ 	//library->checkAll();
+ }
+diff --git a/src/dsp/pad.cxx b/src/dsp/pad.cxx
+index b9c9386..40c69be 100644
+--- a/src/dsp/pad.cxx
++++ b/src/dsp/pad.cxx
+@@ -119,7 +119,7 @@ void Pad::add( Sample* s )
+ 		return;
+ 
+ 	// request DSP to refresh UI layers for this pad
+-	if( dsp ) {
++	if( false ) {
+ 		dsp->padRefreshLayers( bank_, ID_ );
+ 		dsp->writePadsState( bank_, ID_, this );
+ 	}
+diff --git a/src/dsp/sample.cxx b/src/dsp/sample.cxx
+index 0a68106..1cb8947 100644
+--- a/src/dsp/sample.cxx
++++ b/src/dsp/sample.cxx
+@@ -221,11 +221,11 @@ void Sample::init()
+ 	dirty = true;
+ }
+ 
+-Sample::Sample( Fabla2DSP* d, int rate, const char* nme, int size, float* data ) :
++Sample::Sample( Fabla2DSP* d, int rate, const char* nme, int size, float* data, int chans ) :
+ 	dsp( d ),
+ 	sr(rate),
+ 	name( nme ),
+-	channels( 2 ),
++	channels( chans ),
+ 	frames( size / 2 ),
+ 	velLow( 0 ),
+ 	velHigh( 1 ),
+diff --git a/src/dsp/sample.hxx b/src/dsp/sample.hxx
+index 7571a03..25157b2 100644
+--- a/src/dsp/sample.hxx
++++ b/src/dsp/sample.hxx
+@@ -42,7 +42,7 @@ public:
+ 	Sample( Fabla2DSP* dsp, int rate, std::string name, std::string filePathToLoad );
+ 
+ 	/// record constructor: creates a Sample based on live-recorded audio data
+-	Sample( Fabla2DSP* dsp, int rate, const char* name, int size, float* data );
++	Sample( Fabla2DSP* dsp, int rate, const char* name, int size, float* data, int chans = 2 );
+ 
+ 	~Sample();
+ 

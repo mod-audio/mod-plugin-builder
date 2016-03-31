@@ -1,0 +1,60 @@
+diff -U 3 -H -w -E -d -r -N -- abGate-1.1.7.orig/Makefile abGate-1.1.7/Makefile
+--- abGate-1.1.7.orig/Makefile	2014-01-13 10:17:05.000000000 +0100
++++ abGate-1.1.7/Makefile	2015-07-16 18:29:32.863103572 +0200
+@@ -4,7 +4,7 @@
+ PREFIX = /usr
+ INSTALL_DIR = $(DESTDIR)$(PREFIX)/lib/lv2
+ 
+-$(BUNDLE): manifest.ttl gate.ttl gate.so gate_gui.so bypass_on.png bypass_off.png knob.png background.png abGateQt/libabGateQt.so
++$(BUNDLE): manifest.ttl gate.ttl gate.so
+ 	rm -rf $(BUNDLE)
+ 	mkdir $(BUNDLE)
+ 	cp $^ $(BUNDLE)
+diff -U 3 -H -w -E -d -r -N -- abGate-1.1.7.orig/gate.ttl abGate-1.1.7/gate.ttl
+--- abGate-1.1.7.orig/gate.ttl	2012-04-21 07:18:24.000000000 +0200
++++ abGate-1.1.7/gate.ttl	2015-07-16 18:28:50.579702673 +0200
+@@ -6,16 +6,6 @@
+ @prefix foaf: <http://xmlns.com/foaf/0.1/>.
+ 
+ 
+-<http://hippie.lt/lv2/gate/guiQt4>
+-	a ui:Qt4UI;
+-	ui:requiredFeature ui:makeResident;
+-	ui:optionalFeature ui:noUserResize.
+-
+-<http://hippie.lt/lv2/gate/gui>
+-	a ui:GtkUI;
+-	ui:requiredFeature ui:makeResident;
+-	ui:optionalFeature ui:noUserResize.
+-
+ <http://hippie.lt/lv2/gate>
+ 	a lv2:Plugin, lv2:GatePlugin;
+ 	lv2:binary <gate.so>;
+@@ -37,9 +27,6 @@
+ 
+   	doap:license <http://usefulinc.com/doap/licenses/lgpl>;
+ 
+-	ui:ui <http://hippie.lt/lv2/gate/guiQt4>;
+-	ui:ui <http://hippie.lt/lv2/gate/gui>;
+-  	
+ 	lv2:port [
+ 	    	a lv2:AudioPort, lv2:OutputPort;
+ 	    	lv2:index 0;
+diff -U 3 -H -w -E -d -r -N -- abGate-1.1.7.orig/manifest.ttl abGate-1.1.7/manifest.ttl
+--- abGate-1.1.7.orig/manifest.ttl	2012-04-21 07:16:31.000000000 +0200
++++ abGate-1.1.7/manifest.ttl	2015-07-16 18:32:13.342625579 +0200
+@@ -6,14 +6,3 @@
+ 	a lv2:Plugin, lv2:GatePlugin;
+ 	lv2:binary <gate.so>;
+ 	rdfs:seeAlso <gate.ttl>.
+-
+-<http://hippie.lt/lv2/gate/guiQt4>
+-	a ui:Qt4UI;
+-	ui:binary <libabGateQt.so>;
+-	rdfs:seeAlso <gate.ttl>.
+-
+-<http://hippie.lt/lv2/gate/gui>
+-	a ui:GtkUI;
+-	ui:binary <gate_gui.so>;
+-	rdfs:seeAlso <gate.ttl>.
+-

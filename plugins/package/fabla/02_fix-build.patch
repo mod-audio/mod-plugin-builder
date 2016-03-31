@@ -1,0 +1,20 @@
+diff --git a/src/dsp/sequencer.c b/src/dsp/sequencer.c
+index 3009e3f..5c7b7a0 100644
+--- a/src/dsp/sequencer.c
++++ b/src/dsp/sequencer.c
+@@ -105,12 +105,14 @@ void sequencer_reset_playhead( Sequencer* s )
+ void sequencer_reset( Sequencer* s )
+ {
+ 	assert( s );
++	int i;
++
+ 	s->num_steps = 32;
+ 	s->length = 0;
+ 	s->cur_step = 0;
+ 	s->counter = 0;
+ 
+-	for( int i = 0; i < MAX_STEPS; i++ ) {
++	for( i = 0; i < MAX_STEPS; i++ ) {
+ 		s->steps[i] = 0;
+ 	}
+ }

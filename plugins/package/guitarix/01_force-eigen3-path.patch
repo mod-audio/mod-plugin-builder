@@ -1,0 +1,24 @@
+diff --git a/trunk/src/plugins/wscript b/trunk/src/plugins/wscript
+index e257625..91c31e6 100644
+--- a/trunk/src/plugins/wscript
++++ b/trunk/src/plugins/wscript
+@@ -148,4 +148,4 @@ def build(bld):
+         tsk.env['shlib_PATTERN'] = '%s.so'
+ 
+ def configure(conf):
+-    conf.check_cfg(package='eigen3', args='--cflags', uselib_store="EIGEN3", mandatory=1)
++    pass
+diff --git a/trunk/wscript b/trunk/wscript
+index cf456b0..28aa310 100644
+--- a/trunk/wscript
++++ b/trunk/wscript
+@@ -766,6 +766,8 @@ def configure(conf):
+             sub_file('./libgxwmm/gxwmm.pc.in', './libgxwmm/gxwmm.pc', (('prefix=/path', 'prefix=%s' % pa), ))
+             sub_file('./libgxwmm/gxwmm.pc', './libgxwmm/gxwmm.pc', (('libdir=/path','libdir=%s' % conf.env['LIBDIR']), ))
+ 
++    conf.env['CXXFLAGS'] += ["-I%s" % os.getenv("EIGEN3_PATH")]
++
+     # writing config.h
+     conf.write_config_header('config.h')
+ 
+

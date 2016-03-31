@@ -1,0 +1,38 @@
+From: Pablo Lopez Rios <pablomme@googlemail.com>
+Description: Fixed wrong graph in compressor GUI.
+Bug-Ubuntu: https://launchpad.net/bugs/755151
+Forwarded: yes
+---
+ plugingui/widgets/display-Compressor.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+--- invada-lv2.orig/plugingui/widgets/display-Compressor.c
++++ invada-lv2/plugingui/widgets/display-Compressor.c
+@@ -314,7 +314,7 @@ inv_display_comp_paint(GtkWidget *widget
+ 
+ 	gint		i;
+ 	float		rmsC,rmsV,attackC,releaseC,env;
+-	float		y,threshsig;
++	float		y;
+ 	cairo_t 	*cr;
+ 	GtkStyle	*style;
+ 	char		label[50];
+@@ -677,8 +677,7 @@ inv_display_comp_paint(GtkWidget *widget
+ 		/* compressed signal */
+ 
+ 		// gain change at +6 db <- GRAPH MUST END HERE
+-		threshsig=pow(10,threshold/20);
+-		y = 20*log10(threshsig+((2-threshsig)/ratio));
++		y = threshold+(6-threshold)/ratio;
+ 
+ 		if(bypass==INV_PLUGIN_BYPASS) {
+ 			cairo_set_source_rgb(cr, 0.4, 0.4, 0.4);
+@@ -687,7 +686,7 @@ inv_display_comp_paint(GtkWidget *widget
+ 		}
+ 		cairo_set_line_width(cr,2);
+ 
+-		cairo_move_to(cr, 306                 , 200-(21*gain/6));
++		cairo_move_to(cr, 306                 , 199-(21*gain/6));
+ 		cairo_line_to(cr, 536+(30*threshold/6), 38-(21*gain/6)-(21*threshold/6));
+ 		cairo_line_to(cr, 566                 , 38-(21*gain/6)-(21*y/6)); 
+ 		cairo_stroke(cr);

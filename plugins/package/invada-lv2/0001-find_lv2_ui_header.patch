@@ -1,0 +1,115 @@
+Description: ui extension is now provided by lv2-extensions-good, point the
+ #include statements to the right location.
+Author: Alessio Treglia <alessio@debian.org>
+Forwarded: yes
+---
+ plugingui/inv_compressor_gui.c |    2 +-
+ plugingui/inv_delay_gui.c      |    2 +-
+ plugingui/inv_erreverb_gui.c   |    2 +-
+ plugingui/inv_filter_gui.c     |    2 +-
+ plugingui/inv_input_gui.c      |    2 +-
+ plugingui/inv_meter_gui.c      |    2 +-
+ plugingui/inv_phaser_gui.c     |    2 +-
+ plugingui/inv_testtone_gui.c   |    2 +-
+ plugingui/inv_tube_gui.c       |    2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+
+--- invada-lv2.orig/plugingui/inv_compressor_gui.c
++++ invada-lv2/plugingui/inv_compressor_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/display-Compressor.h"
+ #include "widgets/knob.h"
+--- invada-lv2.orig/plugingui/inv_delay_gui.c
++++ invada-lv2/plugingui/inv_delay_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/knob.h"
+ #include "widgets/lamp.h"
+--- invada-lv2.orig/plugingui/inv_erreverb_gui.c
++++ invada-lv2/plugingui/inv_erreverb_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/display-ErReverb.h"
+ #include "widgets/knob.h"
+--- invada-lv2.orig/plugingui/inv_filter_gui.c
++++ invada-lv2/plugingui/inv_filter_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/knob.h"
+ #include "widgets/lamp.h"
+--- invada-lv2.orig/plugingui/inv_input_gui.c
++++ invada-lv2/plugingui/inv_input_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/knob.h"
+ #include "widgets/lamp.h"
+--- invada-lv2.orig/plugingui/inv_meter_gui.c
++++ invada-lv2/plugingui/inv_meter_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/meter-peak.h"
+ #include "widgets/meter-phase.h"
+--- invada-lv2.orig/plugingui/inv_phaser_gui.c
++++ invada-lv2/plugingui/inv_phaser_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/knob.h"
+ #include "widgets/lamp.h"
+--- invada-lv2.orig/plugingui/inv_testtone_gui.c
++++ invada-lv2/plugingui/inv_testtone_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/knob.h"
+ #include "widgets/lamp.h"
+--- invada-lv2.orig/plugingui/inv_tube_gui.c
++++ invada-lv2/plugingui/inv_tube_gui.c
+@@ -25,7 +25,7 @@
+ #include <math.h>
+ #include <gtk/gtk.h>
+ #include <lv2.h>
+-#include "lv2_ui.h"
++#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+ #include "widgets/widgets.h"
+ #include "widgets/knob.h"
+ #include "widgets/lamp.h"

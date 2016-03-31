@@ -1,0 +1,11 @@
+diff --git a/autogen.sh b/autogen.sh
+index 9e6253a..b8abb60 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -19,6 +19,3 @@ ${LIBTOOLIZE} --force --automake --copy
+ autoheader --force
+ autoconf --force
+ automake -a --copy
+-if test "$NOCONFIGURE" != 1; then
+-  ./configure --enable-experimental $@
+-fi

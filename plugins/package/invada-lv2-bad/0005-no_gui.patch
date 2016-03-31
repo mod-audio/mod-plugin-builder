@@ -1,0 +1,730 @@
+diff --git a/Makefile b/Makefile
+index fbb1c16..d5654a7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -33,7 +33,7 @@ INSTALL_BUNDLE_DIR		=	invada.lv2
+ 
+ # GENERAL
+ 
+-SUBDIRS		=	plugin/library plugin plugingui/widgets plugingui
++SUBDIRS		=	plugin/library plugin
+ GLADEDIRS	=	plugingui/gtk 
+ DESTDIR		=	""
+ 
+@@ -69,12 +69,8 @@ install-sys:
+ 	@echo "Installing into $(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)"; 
+ 	@echo "=================================="; 
+ 	-mkdir -p		$(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)/$(INSTALL_BUNDLE_DIR)
+-	-mkdir -p		$(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)/$(INSTALL_BUNDLE_DIR)/gtk
+ 	cp plugin/*.so 		$(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)/$(INSTALL_BUNDLE_DIR)
+-	cp plugingui/*.so	$(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)/$(INSTALL_BUNDLE_DIR)
+ 	cp rdf/*.ttl 		$(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)/$(INSTALL_BUNDLE_DIR)
+-	cp plugingui/gtk/*.png	$(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)/$(INSTALL_BUNDLE_DIR)/gtk
+-	cp plugingui/gtk/*.xml	$(DESTDIR)$(INSTALL_SYS_PLUGINS_DIR)/$(INSTALL_BUNDLE_DIR)/gtk
+ 	@echo ""
+ 
+ install-user: 
+diff --git a/rdf/inv_compressor.ttl b/rdf/inv_compressor.ttl
+index e88e98a..c68e21d 100644
+--- a/rdf/inv_compressor.ttl
++++ b/rdf/inv_compressor.ttl
+@@ -3,51 +3,10 @@
+ @prefix doap:   <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix dct:    <http://purl.org/dc/terms/> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-
+-<http://invadarecords.com/plugins/lv2/compressor/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_compressor_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/mono> ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/mono> ;
+-        uiext:portIndex 9 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/mono> ;
+-        uiext:portIndex 10 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/mono> ;
+-        uiext:portIndex 11 ;
+-    ] ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/stereo> ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/stereo> ;
+-        uiext:portIndex 9 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/stereo> ;
+-        uiext:portIndex 10 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/stereo> ;
+-        uiext:portIndex 11 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/stereo> ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/stereo> ;
+-        uiext:portIndex 15 ;
+-    ] .
+-
+ <http://invadarecords.com/plugins/lv2/compressor/mono> 
+     a lv2:Plugin, lv2:CompressorPlugin ;
+     doap:name "Invada Compressor (mono)" ;
+@@ -63,7 +22,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/compressor/gui> ;
+     dct:replaces <urn:ladspa:3308> ;
+ 
+     lv2:port [
+@@ -210,7 +168,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/compressor/gui> ;
+     dct:replaces <urn:ladspa:3309> ;
+ 
+     lv2:port [
+diff --git a/rdf/inv_delay.ttl b/rdf/inv_delay.ttl
+index 248e317..5fadeba 100644
+--- a/rdf/inv_delay.ttl
++++ b/rdf/inv_delay.ttl
+@@ -3,43 +3,9 @@
+ @prefix doap:   <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-<http://invadarecords.com/plugins/lv2/delay/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_delay_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/mono> ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/mono> ;
+-        uiext:portIndex 15 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/mono> ;
+-        uiext:portIndex 16 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/mono> ;
+-        uiext:portIndex 17 ;
+-    ] ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/sum> ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/sum> ;
+-        uiext:portIndex 15 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/sum> ;
+-        uiext:portIndex 16 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/sum> ;
+-        uiext:portIndex 17 ;
+-    ] .
+-
+ <http://invadarecords.com/plugins/lv2/delay/mono#out> 
+     a pg:Group ;
+     a pg:StereoGroup ;
+@@ -60,7 +26,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/delay/gui>;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -270,7 +235,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/delay/gui>;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+diff --git a/rdf/inv_erreverb.ttl b/rdf/inv_erreverb.ttl
+index 57976a2..6f10be9 100644
+--- a/rdf/inv_erreverb.ttl
++++ b/rdf/inv_erreverb.ttl
+@@ -3,39 +3,10 @@
+ @prefix doap:   <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix dct:    <http://purl.org/dc/terms/> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-
+-<http://invadarecords.com/plugins/lv2/erreverb/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_erreverb_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/erreverb/mono> ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/erreverb/mono> ;
+-        uiext:portIndex 15 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/erreverb/mono> ;
+-        uiext:portIndex 16 ;
+-    ] ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/erreverb/sum> ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/erreverb/sum> ;
+-        uiext:portIndex 15 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/erreverb/sum> ;
+-        uiext:portIndex 16 ;
+-    ] .
+-
+ <http://invadarecords.com/plugins/lv2/erreverb/mono#out> 
+     a pg:Group ;
+     a pg:StereoGroup ;
+@@ -56,7 +27,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/erreverb/gui> ;
+     dct:replaces <urn:ladspa:3311> ;
+ 
+     lv2:port [
+@@ -229,7 +199,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/erreverb/gui> ;
+     dct:replaces <urn:ladspa:3312> ;
+ 
+     lv2:port [
+diff --git a/rdf/inv_filter.ttl b/rdf/inv_filter.ttl
+index 58058c4..1961f4b 100644
+--- a/rdf/inv_filter.ttl
++++ b/rdf/inv_filter.ttl
+@@ -3,75 +3,10 @@
+ @prefix doap:   <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix dct:    <http://purl.org/dc/terms/> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-
+-<http://invadarecords.com/plugins/lv2/filter/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_filter_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/mono> ;
+-        uiext:portIndex 4 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/mono> ;
+-        uiext:portIndex 5 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/mono> ;
+-        uiext:portIndex 8 ;
+-    ] ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/mono> ;
+-        uiext:portIndex 4 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/mono> ;
+-        uiext:portIndex 5 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/mono> ;
+-        uiext:portIndex 8 ;
+-    ] ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/stereo> ;
+-        uiext:portIndex 4 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/stereo> ;
+-        uiext:portIndex 5 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/stereo> ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/stereo> ;
+-        uiext:portIndex 9 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/stereo> ;
+-        uiext:portIndex 10 ;
+-    ] ;
+-
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/stereo> ;
+-        uiext:portIndex 4 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/stereo> ;
+-        uiext:portIndex 5 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/stereo> ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/stereo> ;
+-        uiext:portIndex 9 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/hpf/stereo> ;
+-        uiext:portIndex 10 ;
+-    ] .
+-
+-
+ <http://invadarecords.com/plugins/lv2/filter/lpf/mono> 
+     a lv2:Plugin, lv2:LowpassPlugin ;
+     doap:name "Invada Low Pass Filter (mono)" ;
+@@ -87,7 +22,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+     dct:replaces <urn:ladspa:3302> ;
+ 
+     lv2:port [
+@@ -190,7 +124,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+     dct:replaces <urn:ladspa:3304> ;
+ 
+     lv2:port [
+@@ -319,7 +252,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+     dct:replaces <urn:ladspa:3303> ;
+ 
+     lv2:port [
+@@ -422,7 +354,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+     dct:replaces <urn:ladspa:3305> ;
+ 
+     lv2:port [
+diff --git a/rdf/inv_input.ttl b/rdf/inv_input.ttl
+index a1fd1ae..b0e3487 100644
+--- a/rdf/inv_input.ttl
++++ b/rdf/inv_input.ttl
+@@ -3,36 +3,9 @@
+ @prefix doap:  <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix dct:   <http://purl.org/dc/terms/> .
+ @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-
+-<http://invadarecords.com/plugins/lv2/input/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_input_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/input>  ;
+-        uiext:portIndex 11 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/input>  ;
+-        uiext:portIndex 12 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/input>  ;
+-        uiext:portIndex 13 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/input>  ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/input>  ;
+-        uiext:portIndex 15 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/input>  ;
+-        uiext:portIndex 16 ;
+-    ] .
+-
+ <http://invadarecords.com/plugins/lv2/input#in> 
+     a pg:Group ;
+     a pg:StereoGroup ;
+@@ -58,7 +31,6 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/input/gui> ;
+     dct:replaces <urn:ladspa:3301> ;
+ 
+     lv2:port [
+diff --git a/rdf/inv_meter.ttl b/rdf/inv_meter.ttl
+index 14f798c..5399fed 100644
+--- a/rdf/inv_meter.ttl
++++ b/rdf/inv_meter.ttl
+@@ -3,125 +3,8 @@
+ @prefix doap:  <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-
+-<http://invadarecords.com/plugins/lv2/meter/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_meter_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 5 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 6 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 7 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 9 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 10 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 11 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 12 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 13 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 15 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 16 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 17 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 18 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 19 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 20 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 21 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 22 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 23 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 24 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 25 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 26 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 27 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 28 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 29 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 30 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 31 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 32 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 33 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 34 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 35 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 36 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 37 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 38 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 39 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+-        uiext:portIndex 40 ;
+-    ] .
+-
+ <http://invadarecords.com/plugins/lv2/meter#in> 
+     a pg:Group ;
+     a pg:StereoGroup ;
+@@ -147,7 +30,6 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/meter/gui>;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+diff --git a/rdf/inv_phaser.ttl b/rdf/inv_phaser.ttl
+index 0812e07..00d9f0d 100644
+--- a/rdf/inv_phaser.ttl
++++ b/rdf/inv_phaser.ttl
+@@ -3,80 +3,9 @@
+ @prefix doap:   <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-<http://invadarecords.com/plugins/lv2/phaser/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_phaser_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/mono> ;
+-        uiext:portIndex 6 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/mono> ;
+-        uiext:portIndex 7 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/mono> ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/mono> ;
+-        uiext:portIndex 11 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/mono> ;
+-        uiext:portIndex 12 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/mono> ;
+-        uiext:portIndex 14 ;
+-    ] ;
+-
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/stereo> ;
+-        uiext:portIndex 6 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/stereo> ;
+-        uiext:portIndex 7 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/stereo> ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/stereo> ;
+-        uiext:portIndex 11 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/stereo> ;
+-        uiext:portIndex 12 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/stereo> ;
+-        uiext:portIndex 14 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/stereo> ;
+-        uiext:portIndex 16 ;
+-    ] ;
+-
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/sum> ;
+-        uiext:portIndex 6 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/sum> ;
+-        uiext:portIndex 7 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/sum> ;
+-        uiext:portIndex 8 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/sum> ;
+-        uiext:portIndex 11 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/sum> ;
+-        uiext:portIndex 12 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/sum> ;
+-        uiext:portIndex 14 ;
+-    ] .
+-
+ <http://invadarecords.com/plugins/lv2/phaser/mono#out> 
+     a pg:Group ;
+     a pg:StereoGroup ;
+@@ -97,7 +26,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/phaser/gui>;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -251,7 +179,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/phaser/gui>;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -423,7 +350,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/phaser/gui>;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+diff --git a/rdf/inv_testtone.ttl b/rdf/inv_testtone.ttl
+index 0fc0b4d..ec7ae97 100644
+--- a/rdf/inv_testtone.ttl
++++ b/rdf/inv_testtone.ttl
+@@ -3,21 +3,9 @@
+ @prefix doap:   <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-
+-<http://invadarecords.com/plugins/lv2/testtone/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_testtone_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/testtone>  ;
+-        uiext:portIndex 4 ;
+-    ] .
+-
+ <http://invadarecords.com/plugins/lv2/testtone> 
+     a lv2:Plugin, lv2:OscillatorPlugin ;
+     doap:name "Invada Test Tones" ;
+@@ -33,7 +21,6 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/testtone/gui> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+diff --git a/rdf/inv_tube.ttl b/rdf/inv_tube.ttl
+index 1ce0c86..f750d5a 100644
+--- a/rdf/inv_tube.ttl
++++ b/rdf/inv_tube.ttl
+@@ -3,45 +3,9 @@
+ @prefix doap:  <http://usefulinc.com/ns/doap#> .
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix dct:   <http://purl.org/dc/terms/> .
+ @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+-
+-<http://invadarecords.com/plugins/lv2/tube/gui>
+-    a uiext:GtkUI;
+-    uiext:binary <inv_tube_gui.so>;
+-    lv2:optionalFeature uiext:noUserResize ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/mono> ;
+-        uiext:portIndex 5 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/mono> ;
+-        uiext:portIndex 6 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/mono> ;
+-        uiext:portIndex 7 ;
+-    ] ;
+-
+-    uiext:portNotification [ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/stereo> ;
+-        uiext:portIndex 5 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/stereo> ;
+-        uiext:portIndex 6 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/stereo> ;
+-        uiext:portIndex 7 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/stereo> ;
+-        uiext:portIndex 10 ;
+-    ],[ 
+-	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/stereo> ;
+-        uiext:portIndex 11 ;
+-    ] .
+-
+-
+ <http://invadarecords.com/plugins/lv2/tube/mono> 
+     a lv2:Plugin, lv2:DistortionPlugin ;
+     doap:name "Invada Tube Distortion (mono)" ;
+@@ -57,7 +21,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/tube/gui> ;
+     dct:replaces <urn:ladspa:3306> ;
+ 
+     lv2:port [
+@@ -168,7 +131,6 @@
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:optionalFeature lv2:hardRTCapable ;
+-    uiext:ui <http://invadarecords.com/plugins/lv2/tube/gui> ;
+     dct:replaces <urn:ladspa:3307> ;
+ 
+     lv2:port [

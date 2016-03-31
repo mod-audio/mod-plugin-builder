@@ -1,0 +1,26 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index e9517e5..6339a1c 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -50,10 +50,6 @@ check_cxx_compiler_flag("-mfpu=neon -Werror" SUPPORT_NEON)
+ set(CMAKE_REQUIRED_FLAGS "")
+ 
+ 
+-execute_process(COMMAND echo fistpl 0
+-                COMMAND as -
+-                ERROR_VARIABLE AVOID_ASM)
+-
+ ######### Settings ###########
+ # NOTE: These cache variables should normally not be changed in this
+ # file, but either in in CMakeCache.txt before compile, or by passing
+@@ -239,10 +235,6 @@ add_definitions(
+ 	 -Wall
+ 	 -Wextra
+ 	 )
+-if(NOT AVOID_ASM)
+-	message(STATUS "Compiling with x86 opcode support")
+-    add_definitions(-DASM_F2I_YES)
+-endif()
+ 
+ if (BuildForDebug)
+ 	set (CMAKE_BUILD_TYPE "Debug")

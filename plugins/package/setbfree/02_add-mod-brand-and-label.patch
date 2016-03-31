@@ -1,0 +1,113 @@
+From 47c88e0e378810902c34d1f8907aa3c42f7b8680 Mon Sep 17 00:00:00 2001
+From: falkTX <falktx@gmail.com>
+Date: Mon, 16 Nov 2015 13:10:59 +0100
+Subject: [PATCH] Add MOD brand and label
+
+---
+ b_overdrive/b_overdrive.ttl.in      | 3 +++
+ b_reverb/b_reverb.ttl.in            | 3 +++
+ b_synth/b_synth.ttl.in              | 3 +++
+ b_whirl/b_whirl-configurable.ttl.in | 3 +++
+ b_whirl/b_whirl.ttl.in              | 3 +++
+ 5 files changed, 15 insertions(+)
+
+diff --git a/b_overdrive/b_overdrive.ttl.in b/b_overdrive/b_overdrive.ttl.in
+index 6f6f212..93b245a 100644
+--- a/b_overdrive/b_overdrive.ttl.in
++++ b/b_overdrive/b_overdrive.ttl.in
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ 
+@@ -102,5 +103,7 @@
+ 		lv2:minimum 0.0 ;
+ 		lv2:maximum 1.0 ;
+ 	] ;
++	mod:brand "x42" ;
++	mod:label "Organ Overdrive" ;
+ 	rdfs:comment "A mean fuzz/overdrive used for the setBfree Tonewheel Organ." ;
+ 	.
+diff --git a/b_reverb/b_reverb.ttl.in b/b_reverb/b_reverb.ttl.in
+index 6d2435b..c902732 100644
+--- a/b_reverb/b_reverb.ttl.in
++++ b/b_reverb/b_reverb.ttl.in
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ 
+@@ -52,5 +53,7 @@
+ 		lv2:minimum 0.0 ;
+ 		lv2:maximum 1.0 ;
+ 	] ;
++	mod:brand "x42" ;
++	mod:label "Organ Reverb" ;
+ 	rdfs:comment "A Schroeder Reverberator"
+ 	.
+diff --git a/b_synth/b_synth.ttl.in b/b_synth/b_synth.ttl.in
+index 0975505..26e479d 100644
+--- a/b_synth/b_synth.ttl.in
++++ b/b_synth/b_synth.ttl.in
+@@ -2,6 +2,7 @@
+ @prefix doap:  <http://usefulinc.com/ns/doap#> .
+ @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
++@prefix mod:   <http://moddevices.com/ns/mod#> .
+ @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@@ -63,5 +64,7 @@
+ 		lv2:name "Right Output" ;
+ 		lv2:designation pg:right
+ 	];
++	mod:brand "x42" ;
++	mod:label "setBfree" ;
+ 	rdfs:comment "setBfree is a MIDI-controlled, software synthesizer designed to imitate the sound and properties of the electromechanical organs and sound modification devices that brought world-wide fame to the names and products of Laurens Hammond and Don Leslie."
+ 	.
+diff --git a/b_whirl/b_whirl-configurable.ttl.in b/b_whirl/b_whirl-configurable.ttl.in
+index 8eb4629..c7c291b 100644
+--- a/b_whirl/b_whirl-configurable.ttl.in
++++ b/b_whirl/b_whirl-configurable.ttl.in
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix pp: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -651,5 +652,7 @@
+ 			rdf:value 2.0 ;
+ 		];
+ 	];
++	mod:brand "x42" ;
++	mod:label "Whirl Speaker XT" ;
+ 	rdfs:comment "A rotating loudspeaker emulator designed to imitate the sound and properties of the sound modification device that brought world-wide fame to the name of Don Leslie" ;
+ 	.
+diff --git a/b_whirl/b_whirl.ttl.in b/b_whirl/b_whirl.ttl.in
+index 99212db..f8529f5 100644
+--- a/b_whirl/b_whirl.ttl.in
++++ b/b_whirl/b_whirl.ttl.in
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix pp: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -108,5 +109,7 @@
+       rdf:value 2.0 ;
+     ];
+ 	];
++	mod:brand "x42" ;
++	mod:label "Whirl Speaker" ;
+ 	rdfs:comment "A rotating loudspeaker emulator designed to imitate the sound of device that brought world-wide fame to the name of Don Leslie" ;
+ 	.

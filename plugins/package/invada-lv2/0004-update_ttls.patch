@@ -1,0 +1,611 @@
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_testtone.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_testtone.ttl
+@@ -1,18 +1,17 @@
+-@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+-@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+-@prefix doap:  <http://usefulinc.com/ns/doap#> .
+-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix epp:   <http://lv2plug.in/ns/dev/extportinfo#> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
++@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
++@prefix doap:   <http://usefulinc.com/ns/doap#> .
++@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
++@prefix units:  <http://lv2plug.in/ns/extension/units#> .
++@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
++@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
++@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ 
+ <http://invadarecords.com/plugins/lv2/testtone/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_testtone_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/testtone>  ;
+@@ -33,7 +32,7 @@
+ 	foaf:homepage <http://www.invadarecords.com/Downloads.php?ID=00000264> ;
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/testtone/gui> ;
+ 
+     lv2:port [
+@@ -54,7 +53,7 @@
+ 	lv2:minimum 20.0 ;
+ 	lv2:maximum 20000.0 ;
+ 	units:unit units:hz ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 2 ;
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_phaser.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_phaser.ttl
+@@ -1,17 +1,16 @@
+-@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+-@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+-@prefix doap:  <http://usefulinc.com/ns/doap#> .
+-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix epp:   <http://lv2plug.in/ns/dev/extportinfo#> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
++@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
++@prefix doap:   <http://usefulinc.com/ns/doap#> .
++@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
++@prefix units:  <http://lv2plug.in/ns/extension/units#> .
++@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
++@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
++@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ <http://invadarecords.com/plugins/lv2/phaser/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_phaser_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/phaser/mono> ;
+@@ -97,7 +96,7 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/phaser/gui>;
+ 
+     lv2:port [
+@@ -118,7 +117,7 @@
+ 	lv2:minimum 0.5 ;
+ 	lv2:maximum 500 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 2 ;
+@@ -251,7 +250,7 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/phaser/gui>;
+ 
+     lv2:port [
+@@ -272,7 +271,7 @@
+ 	lv2:minimum 0.5 ;
+ 	lv2:maximum 500 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 2 ;
+@@ -423,7 +422,7 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/phaser/gui>;
+ 
+     lv2:port [
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_compressor.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_compressor.ttl
+@@ -1,19 +1,18 @@
+-@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+-@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+-@prefix doap:  <http://usefulinc.com/ns/doap#> .
+-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix epp:   <http://lv2plug.in/ns/dev/extportinfo#> .
+-@prefix dc:    <http://dublincore.org/documents/dcmi-namespace/> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
++@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
++@prefix doap:   <http://usefulinc.com/ns/doap#> .
++@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
++@prefix units:  <http://lv2plug.in/ns/extension/units#> .
++@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
++@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
++@prefix dct:    <http://purl.org/dc/terms/> .
++@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ 
+ <http://invadarecords.com/plugins/lv2/compressor/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_compressor_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/compressor/mono> ;
+@@ -63,9 +62,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/compressor/gui> ;
+-    dc:replaces <urn:ladspa:3308> ;
++    dct:replaces <urn:ladspa:3308> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -93,7 +92,7 @@
+ 	lv2:minimum 0.00001 ;
+ 	lv2:maximum 0.750 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 3 ;
+@@ -103,7 +102,7 @@
+ 	lv2:minimum 0.001 ;
+ 	lv2:maximum 5.0 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 4 ;
+@@ -210,9 +209,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/compressor/gui> ;
+-    dc:replaces <urn:ladspa:3309> ;
++    dct:replaces <urn:ladspa:3309> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -240,7 +239,7 @@
+ 	lv2:minimum 0.00001 ;
+ 	lv2:maximum 0.750 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 3 ;
+@@ -250,7 +249,7 @@
+ 	lv2:minimum 0.001 ;
+ 	lv2:maximum 5.0 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 4 ;
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_tube.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_tube.ttl
+@@ -4,15 +4,14 @@
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+ @prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix dc:    <http://dublincore.org/documents/dcmi-namespace/> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix dct:   <http://purl.org/dc/terms/> .
++@prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ 
+ <http://invadarecords.com/plugins/lv2/tube/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_tube_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/tube/mono> ;
+@@ -57,9 +56,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/tube/gui> ;
+-    dc:replaces <urn:ladspa:3306> ;
++    dct:replaces <urn:ladspa:3306> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -168,9 +167,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/tube/gui> ;
+-    dc:replaces <urn:ladspa:3307> ;
++    dct:replaces <urn:ladspa:3307> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_meter.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_meter.ttl
+@@ -4,14 +4,13 @@
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+ @prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ 
+ <http://invadarecords.com/plugins/lv2/meter/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_meter_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/meter>  ;
+@@ -147,7 +146,7 @@
+ 	foaf:homepage <http://www.invadarecords.com/Downloads.php?ID=00000264> ;
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/meter/gui>;
+ 
+     lv2:port [
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_erreverb.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_erreverb.ttl
+@@ -1,19 +1,18 @@
+-@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+-@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+-@prefix doap:  <http://usefulinc.com/ns/doap#> .
+-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix epp:   <http://lv2plug.in/ns/dev/extportinfo#> .
+-@prefix dc:    <http://dublincore.org/documents/dcmi-namespace/> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
++@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
++@prefix doap:   <http://usefulinc.com/ns/doap#> .
++@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
++@prefix units:  <http://lv2plug.in/ns/extension/units#> .
++@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
++@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
++@prefix dct:    <http://purl.org/dc/terms/> .
++@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ 
+ <http://invadarecords.com/plugins/lv2/erreverb/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_erreverb_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/erreverb/mono> ;
+@@ -56,9 +55,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/erreverb/gui> ;
+-    dc:replaces <urn:ladspa:3311> ;
++    dct:replaces <urn:ladspa:3311> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -137,7 +136,7 @@
+ 	lv2:minimum 20.0 ;
+ 	lv2:maximum 2000.0 ;
+ 	units:unit units:hz ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 9 ;
+@@ -229,9 +228,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/erreverb/gui> ;
+-    dc:replaces <urn:ladspa:3312> ;
++    dct:replaces <urn:ladspa:3312> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -310,7 +309,7 @@
+ 	lv2:minimum 20.0 ;
+ 	lv2:maximum 2000.0 ;
+ 	units:unit units:hz ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 9 ;
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_filter.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_filter.ttl
+@@ -1,19 +1,18 @@
+-@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+-@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+-@prefix doap:  <http://usefulinc.com/ns/doap#> .
+-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix epp:   <http://lv2plug.in/ns/dev/extportinfo#> .
+-@prefix dc:    <http://dublincore.org/documents/dcmi-namespace/> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
++@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
++@prefix doap:   <http://usefulinc.com/ns/doap#> .
++@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
++@prefix units:  <http://lv2plug.in/ns/extension/units#> .
++@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
++@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
++@prefix dct:    <http://purl.org/dc/terms/> .
++@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ 
+ <http://invadarecords.com/plugins/lv2/filter/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_filter_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/filter/lpf/mono> ;
+@@ -87,9 +86,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+-    dc:replaces <urn:ladspa:3302> ;
++    dct:replaces <urn:ladspa:3302> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -109,7 +108,7 @@
+ 	lv2:minimum 20 ;
+ 	lv2:maximum 20000 ;
+ 	units:unit units:hz ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 2 ;
+@@ -190,9 +189,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+-    dc:replaces <urn:ladspa:3304> ;
++    dct:replaces <urn:ladspa:3304> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -212,7 +211,7 @@
+ 	lv2:minimum 20 ;
+ 	lv2:maximum 20000 ;
+ 	units:unit units:hz ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 2 ;
+@@ -319,9 +318,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+-    dc:replaces <urn:ladspa:3303> ;
++    dct:replaces <urn:ladspa:3303> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -341,7 +340,7 @@
+ 	lv2:minimum 20 ;
+ 	lv2:maximum 20000 ;
+ 	units:unit units:hz ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 2 ;
+@@ -422,9 +421,9 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/filter/gui> ;
+-    dc:replaces <urn:ladspa:3305> ;
++    dct:replaces <urn:ladspa:3305> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;
+@@ -444,7 +443,7 @@
+ 	lv2:minimum 20 ;
+ 	lv2:maximum 20000 ;
+ 	units:unit units:hz ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 2 ;
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_delay.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_delay.ttl
+@@ -1,17 +1,16 @@
+-@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+-@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+-@prefix doap:  <http://usefulinc.com/ns/doap#> .
+-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix units: <http://lv2plug.in/ns/extension/units#> .
+-@prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix epp:   <http://lv2plug.in/ns/dev/extportinfo#> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
++@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
++@prefix doap:   <http://usefulinc.com/ns/doap#> .
++@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
++@prefix units:  <http://lv2plug.in/ns/extension/units#> .
++@prefix uiext:  <http://lv2plug.in/ns/extensions/ui#> .
++@prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
++@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ <http://invadarecords.com/plugins/lv2/delay/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_delay_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/delay/mono> ;
+@@ -60,7 +59,7 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/delay/gui>;
+ 
+     lv2:port [
+@@ -108,7 +107,7 @@
+ 	lv2:minimum 2.0 ;
+ 	lv2:maximum 200.0 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 5 ;
+@@ -127,7 +126,7 @@
+ 	lv2:minimum 0.02 ;
+ 	lv2:maximum 2 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 7 ;
+@@ -163,7 +162,7 @@
+ 	lv2:minimum 0.02 ;
+ 	lv2:maximum 2 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 11 ;
+@@ -270,7 +269,7 @@
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/delay/gui>;
+ 
+     lv2:port [
+@@ -318,7 +317,7 @@
+ 	lv2:minimum 2.0 ;
+ 	lv2:maximum 200.0 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 5 ;
+@@ -337,7 +336,7 @@
+ 	lv2:minimum 0.02 ;
+ 	lv2:maximum 2 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 7 ;
+@@ -373,7 +372,7 @@
+ 	lv2:minimum 0.02 ;
+ 	lv2:maximum 2 ;
+ 	units:unit units:s ;
+-        lv2:portProperty epp:logarithmic ;
++        lv2:portProperty pprops:logarithmic ;
+     ] , [
+ 	a lv2:InputPort, lv2:ControlPort ;
+ 	lv2:index 11 ;
+--- invada-studio-plugins-lv2-1.2.0+repack0.orig/rdf/inv_input.ttl
++++ invada-studio-plugins-lv2-1.2.0+repack0/rdf/inv_input.ttl
+@@ -4,15 +4,14 @@
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+ @prefix uiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix dc:    <http://dublincore.org/documents/dcmi-namespace/> .
+-@prefix pg:    <http://lv2plug.in/ns/dev/port-groups#> .
++@prefix dct:   <http://purl.org/dc/terms/> .
++@prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+ 
+ 
+ <http://invadarecords.com/plugins/lv2/input/gui>
+     a uiext:GtkUI;
+     uiext:binary <inv_input_gui.so>;
+-    uiext:requiredFeature uiext:makeResident ;
+-    uiext:optionalFeature uiext:noUserResize ;
++    lv2:optionalFeature uiext:noUserResize ;
+ 
+     uiext:portNotification [ 
+ 	uiext:plugin <http://invadarecords.com/plugins/lv2/input>  ;
+@@ -58,9 +57,9 @@
+ 	foaf:homepage <http://www.invadarecords.com/Downloads.php?ID=00000264> ;
+ 	foaf:mbox <mailto:fraser@arkhostings.com> ;
+     ] ;
+-    lv2:optionalFeature lv2:hardRtCapable ;
++    lv2:optionalFeature lv2:hardRTCapable ;
+     uiext:ui <http://invadarecords.com/plugins/lv2/input/gui> ;
+-    dc:replaces <urn:ladspa:3301> ;
++    dct:replaces <urn:ladspa:3301> ;
+ 
+     lv2:port [
+ 	a lv2:InputPort, lv2:ControlPort ;

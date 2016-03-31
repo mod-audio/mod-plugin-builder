@@ -1,0 +1,51 @@
+diff --git a/plugin/Makefile b/plugin/Makefile
+index 47b98bd..1a8e77d 100644
+--- a/plugin/Makefile
++++ b/plugin/Makefile
+@@ -19,10 +19,10 @@
+ 
+ # GENERAL
+ 
+-CC		=	gcc
+-LD		=	gcc
+-CFLAGS		=	-I. -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
+-LDFLAGS		=	-shared -Llibrary -lc -lm  -linv_common -fPIC -DPIC
++CC		?=	gcc
++LD		?=	gcc
++CFLAGS		+=	-I. -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
++LDFLAGS		+=	-shared -Llibrary -lc -lm  -linv_common -fPIC -DPIC
+ 
+ PLUGINS		=	inv_compressor.so \
+                         inv_delay.so \
+diff --git a/plugin/library/Makefile b/plugin/library/Makefile
+index 0ac1220..b3118e3 100644
+--- a/plugin/library/Makefile
++++ b/plugin/library/Makefile
+@@ -18,9 +18,9 @@
+ 
+ # GENERAL
+ 
+-CC		=	gcc
+-LD		=	ld
+-CFLAGS		=	-I. -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
++CC		?=	gcc
++LD		?=	ld
++CFLAGS		+=	-I. -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
+ 
+ 
+ 
+diff --git a/plugingui/Makefile b/plugingui/Makefile
+index 3a9ceb4..85e7f9c 100644
+--- a/plugingui/Makefile
++++ b/plugingui/Makefile
+@@ -21,8 +21,8 @@
+ 
+ CC		=	gcc
+ LD		=	gcc
+-CFLAGS		=	-I. `pkg-config --cflags cairo gtk+-2.0` -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
+-LDFLAGS		=	-shared -Lwidgets -L../plugin/library -lc -lm -linv_widgets -linv_common `pkg-config --libs cairo gtk+-2.0` -fPIC -DPIC
++CFLAGS		+=	-I. `pkg-config --cflags cairo gtk+-2.0` -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
++LDFLAGS		+=	-shared -Lwidgets -L../plugin/library -lc -lm -linv_widgets -linv_common `pkg-config --libs cairo gtk+-2.0` -fPIC -DPIC
+ 
+ 
+ GUIS		=	inv_compressor_gui.so \

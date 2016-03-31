@@ -1,0 +1,357 @@
+diff --git a/fomp.lv2/autowah.ttl b/fomp.lv2/autowah.ttl
+index 56dd8a0..05aae94 100644
+--- a/fomp.lv2/autowah.ttl
++++ b/fomp.lv2/autowah.ttl
+@@ -2,6 +2,7 @@
+ @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix owl: <http://www.w3.org/2002/07/owl#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@@ -11,6 +12,8 @@
+ 	a lv2:Plugin ,
+ 		lv2:FilterPlugin ;
+ 	doap:name "Auto-wah" ;
++	mod:brand "FOMP" ;
++	mod:label "Auto-Wah" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/cs_chorus1.ttl b/fomp.lv2/cs_chorus1.ttl
+index 326195b..dd339ec 100644
+--- a/fomp.lv2/cs_chorus1.ttl
++++ b/fomp.lv2/cs_chorus1.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:cs_chorus1
+ 	a lv2:Plugin ,
+ 		lv2:ChorusPlugin ;
+ 	doap:name "CS Chorus 1" ;
++	mod:brand "FOMP" ;
++	mod:label "CS Chorus 1" ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:project fomp: ;
+diff --git a/fomp.lv2/cs_chorus2.ttl b/fomp.lv2/cs_chorus2.ttl
+index acfe3e1..0e2e03c 100644
+--- a/fomp.lv2/cs_chorus2.ttl
++++ b/fomp.lv2/cs_chorus2.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:cs_chorus2
+ 	a lv2:Plugin ,
+ 		lv2:ChorusPlugin ;
+ 	doap:name "CS Chorus 2" ;
++	mod:brand "FOMP" ;
++	mod:label "CS Chorus 2" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/cs_phaser1.ttl b/fomp.lv2/cs_phaser1.ttl
+index 91aea11..9841c92 100644
+--- a/fomp.lv2/cs_phaser1.ttl
++++ b/fomp.lv2/cs_phaser1.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:cs_phaser1
+ 	a lv2:Plugin ,
+ 		lv2:PhaserPlugin ;
+ 	doap:name "CS Phaser 1" ;
++	mod:brand "FOMP" ;
++	mod:label "CS Phaser 1" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/cs_phaser1_lfo.ttl b/fomp.lv2/cs_phaser1_lfo.ttl
+index 74cba4d..56d0d01 100644
+--- a/fomp.lv2/cs_phaser1_lfo.ttl
++++ b/fomp.lv2/cs_phaser1_lfo.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -9,6 +10,8 @@ fomp:cs_phaser1_lfo
+ 	a lv2:Plugin ,
+ 		lv2:PhaserPlugin ;
+ 	doap:name "CS Phaser 1 with LFO" ;
++	mod:brand "FOMP" ;
++	mod:label "CS Phaser 1+LFO" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/mvchpf1.ttl b/fomp.lv2/mvchpf1.ttl
+index b4a2b13..01c1194 100644
+--- a/fomp.lv2/mvchpf1.ttl
++++ b/fomp.lv2/mvchpf1.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:mvchpf1
+ 	a lv2:Plugin ,
+ 		lv2:HighpassPlugin ;
+ 	doap:name "Moog High-Pass Filter 1" ;
++	mod:brand "FOMP" ;
++	mod:label "Moog High-Pass 1" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/mvclpf1.ttl b/fomp.lv2/mvclpf1.ttl
+index 25d92fe..2723672 100644
+--- a/fomp.lv2/mvclpf1.ttl
++++ b/fomp.lv2/mvclpf1.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:mvclpf1
+ 	a lv2:Plugin ,
+ 		lv2:LowpassPlugin ;
+ 	doap:name "Moog Low-Pass Filter 1" ;
++	mod:brand "FOMP" ;
++	mod:label "Moog Low-Pass 1" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/mvclpf2.ttl b/fomp.lv2/mvclpf2.ttl
+index a7f5ff0..6a9217e 100644
+--- a/fomp.lv2/mvclpf2.ttl
++++ b/fomp.lv2/mvclpf2.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:mvclpf2
+ 	a lv2:Plugin ,
+ 		lv2:LowpassPlugin ;
+ 	doap:name "Moog Low-Pass Filter 2" ;
++	mod:brand "FOMP" ;
++	mod:label "Moog Low-Pass 2" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/mvclpf3.ttl b/fomp.lv2/mvclpf3.ttl
+index 9d6ff60..73431f5 100644
+--- a/fomp.lv2/mvclpf3.ttl
++++ b/fomp.lv2/mvclpf3.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:mvclpf3
+ 	a lv2:Plugin ,
+ 		lv2:LowpassPlugin ;
+ 	doap:name "Moog Low-Pass Filter 3" ;
++	mod:brand "FOMP" ;
++	mod:label "Moog Low-Pass 3" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/mvclpf4.ttl b/fomp.lv2/mvclpf4.ttl
+index 8c7c9e0..a86e520 100644
+--- a/fomp.lv2/mvclpf4.ttl
++++ b/fomp.lv2/mvclpf4.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:mvclpf4
+ 	a lv2:Plugin ,
+ 		lv2:LowpassPlugin ;
+ 	doap:name "Moog Low-Pass Filter 4" ;
++	mod:brand "FOMP" ;
++	mod:label "Moog Low-Pass 4" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/parametric1.ttl b/fomp.lv2/parametric1.ttl
+index 545c03d..12d37cf 100644
+--- a/fomp.lv2/parametric1.ttl
++++ b/fomp.lv2/parametric1.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:parametric1
+ 	a lv2:Plugin ,
+ 		lv2:ParaEQPlugin ;
+ 	doap:name "4-Band Parametric Filter" ;
++	mod:brand "FOMP" ;
++	mod:label "Parametric Filtr" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/pulse_vco.ttl b/fomp.lv2/pulse_vco.ttl
+index 77dd0af..ff0ea62 100644
+--- a/fomp.lv2/pulse_vco.ttl
++++ b/fomp.lv2/pulse_vco.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:pulse_vco
+ 	a lv2:Plugin ,
+ 		lv2:OscillatorPlugin ;
+ 	doap:name "Pulse VCO" ;
++	mod:brand "FOMP" ;
++	mod:label "Pulse VCO" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/rec_vco.ttl b/fomp.lv2/rec_vco.ttl
+index 2d99e11..971e8ea 100644
+--- a/fomp.lv2/rec_vco.ttl
++++ b/fomp.lv2/rec_vco.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:rec_vco
+ 	a lv2:Plugin ,
+ 		lv2:OscillatorPlugin ;
+ 	doap:name "Rec VCO" ;
++	mod:brand "FOMP" ;
++	mod:label "Rec VCO" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/reverb.ttl b/fomp.lv2/reverb.ttl
+index c7af965..3dccde3 100644
+--- a/fomp.lv2/reverb.ttl
++++ b/fomp.lv2/reverb.ttl
+@@ -2,6 +2,7 @@
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix owl: <http://www.w3.org/2002/07/owl#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@@ -11,6 +12,8 @@ fomp:reverb
+ 	a lv2:Plugin ,
+ 		lv2:ReverbPlugin ;
+ 	doap:name "reverb" ;
++	mod:brand "FOMP" ;
++	mod:label "Reverb" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/reverb_amb.ttl b/fomp.lv2/reverb_amb.ttl
+index 3df491f..ddcf3bc 100644
+--- a/fomp.lv2/reverb_amb.ttl
++++ b/fomp.lv2/reverb_amb.ttl
+@@ -2,6 +2,7 @@
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix owl: <http://www.w3.org/2002/07/owl#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@@ -11,6 +12,8 @@ fomp:reverb_amb
+ 	a lv2:Plugin ,
+ 		lv2:ReverbPlugin ;
+ 	doap:name "reverb-amb" ;
++	mod:brand "FOMP" ;
++	mod:label "Reverb Amb" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/saw_vco.ttl b/fomp.lv2/saw_vco.ttl
+index 7fbde9b..187ab23 100644
+--- a/fomp.lv2/saw_vco.ttl
++++ b/fomp.lv2/saw_vco.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:saw_vco
+ 	a lv2:Plugin ,
+ 		lv2:OscillatorPlugin ;
+ 	doap:name "Saw VCO" ;
++	mod:brand "FOMP" ;
++	mod:label "Saw VCO" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+diff --git a/fomp.lv2/triple_chorus.ttl b/fomp.lv2/triple_chorus.ttl
+index 913c5c3..978fadf 100644
+--- a/fomp.lv2/triple_chorus.ttl
++++ b/fomp.lv2/triple_chorus.ttl
+@@ -1,6 +1,7 @@
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix fomp: <http://drobilla.net/plugins/fomp/> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -8,6 +9,8 @@ fomp:triple_chorus
+ 	a lv2:Plugin ,
+ 		lv2:ChorusPlugin ;
+ 	doap:name "Triple chorus" ;
++	mod:brand "FOMP" ;
++	mod:label "Triple Chorus" ;
+ 	lv2:microVersion 0 ;
+ 	lv2:minorVersion 0 ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;

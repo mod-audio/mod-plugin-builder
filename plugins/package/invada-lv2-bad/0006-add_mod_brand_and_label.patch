@@ -1,0 +1,258 @@
+diff --git a/rdf/inv_compressor.ttl b/rdf/inv_compressor.ttl
+index c68e21d..337b6d7 100644
+--- a/rdf/inv_compressor.ttl
++++ b/rdf/inv_compressor.ttl
+@@ -6,10 +6,13 @@
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix dct:    <http://purl.org/dc/terms/> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:    <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/compressor/mono> 
+     a lv2:Plugin, lv2:CompressorPlugin ;
+     doap:name "Invada Compressor (mono)" ;
++    mod:brand "Invada" ;
++    mod:label "Compressor M" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -156,6 +159,8 @@
+ <http://invadarecords.com/plugins/lv2/compressor/stereo> 
+     a lv2:Plugin, lv2:CompressorPlugin ;
+     doap:name "Invada Compressor (stereo)" ;
++    mod:brand "Invada" ;
++    mod:label "Compressor St" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+diff --git a/rdf/inv_delay.ttl b/rdf/inv_delay.ttl
+index 5fadeba..827e86c 100644
+--- a/rdf/inv_delay.ttl
++++ b/rdf/inv_delay.ttl
+@@ -5,6 +5,7 @@
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:    <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/delay/mono#out> 
+     a pg:Group ;
+@@ -14,6 +15,8 @@
+ <http://invadarecords.com/plugins/lv2/delay/mono> 
+     a lv2:Plugin, lv2:DelayPlugin ;
+     doap:name "Invada Delay Munge (mono in)" ;
++    mod:brand "Invada" ;
++    mod:label "Delay Munge M" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -223,6 +226,8 @@
+ <http://invadarecords.com/plugins/lv2/delay/sum> 
+     a lv2:Plugin, lv2:DelayPlugin ;
+     doap:name "Invada Delay Munge (sum L+R in)" ;
++    mod:brand "Invada" ;
++    mod:label "Delay Munge LR" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+diff --git a/rdf/inv_erreverb.ttl b/rdf/inv_erreverb.ttl
+index 6f10be9..a108ec9 100644
+--- a/rdf/inv_erreverb.ttl
++++ b/rdf/inv_erreverb.ttl
+@@ -6,6 +6,7 @@
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix dct:    <http://purl.org/dc/terms/> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:    <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/erreverb/mono#out> 
+     a pg:Group ;
+@@ -15,6 +16,8 @@
+ <http://invadarecords.com/plugins/lv2/erreverb/mono> 
+     a lv2:Plugin, lv2:ReverbPlugin ;
+     doap:name "Invada Early Reflection Reverb (mono in)" ;
++    mod:brand "Invada" ;
++    mod:label "ER Reverb M" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -187,6 +190,8 @@
+ <http://invadarecords.com/plugins/lv2/erreverb/sum> 
+     a lv2:Plugin, lv2:ReverbPlugin ;
+     doap:name "Invada Early Reflection Reverb (sum L+R in)" ;
++    mod:brand "Invada" ;
++    mod:label "ER Reverb LR" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+diff --git a/rdf/inv_filter.ttl b/rdf/inv_filter.ttl
+index 1961f4b..ba9ac76 100644
+--- a/rdf/inv_filter.ttl
++++ b/rdf/inv_filter.ttl
+@@ -6,10 +6,13 @@
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix dct:    <http://purl.org/dc/terms/> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:    <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/filter/lpf/mono> 
+     a lv2:Plugin, lv2:LowpassPlugin ;
+     doap:name "Invada Low Pass Filter (mono)" ;
++    mod:brand "Invada" ;
++    mod:label "Low-Pass Fltr M" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -112,6 +115,8 @@
+ <http://invadarecords.com/plugins/lv2/filter/lpf/stereo>
+     a lv2:Plugin, lv2:LowpassPlugin ;
+     doap:name "Invada Low Pass Filter (stereo)" ;
++    mod:brand "Invada" ;
++    mod:label "Low-Pass Fltr St" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -240,6 +245,8 @@
+ <http://invadarecords.com/plugins/lv2/filter/hpf/mono>
+     a lv2:Plugin, lv2:HighpassPlugin ;
+     doap:name "Invada High Pass Filter (mono)" ;
++    mod:brand "Invada" ;
++    mod:label "High-Pass Fltr M" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -342,6 +349,8 @@
+ <http://invadarecords.com/plugins/lv2/filter/hpf/stereo>
+     a lv2:Plugin, lv2:HighpassPlugin ;
+     doap:name "Invada High Pass Filter (stereo)" ;
++    mod:brand "Invada" ;
++    mod:label "High-Pass Fltr S" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+diff --git a/rdf/inv_input.ttl b/rdf/inv_input.ttl
+index b0e3487..fa77cee 100644
+--- a/rdf/inv_input.ttl
++++ b/rdf/inv_input.ttl
+@@ -5,6 +5,7 @@
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+ @prefix dct:   <http://purl.org/dc/terms/> .
+ @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:   <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/input#in> 
+     a pg:Group ;
+@@ -19,6 +20,8 @@
+ <http://invadarecords.com/plugins/lv2/input> 
+     a lv2:Plugin, lv2:UtilityPlugin ;
+     doap:name "Invada Input Module" ;
++    mod:brand "Invada" ;
++    mod:label "Input Module" ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+diff --git a/rdf/inv_meter.ttl b/rdf/inv_meter.ttl
+index 5399fed..6a31d24 100644
+--- a/rdf/inv_meter.ttl
++++ b/rdf/inv_meter.ttl
+@@ -4,6 +4,7 @@
+ @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+ @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:   <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/meter#in> 
+     a pg:Group ;
+@@ -18,6 +19,8 @@
+ <http://invadarecords.com/plugins/lv2/meter> 
+     a lv2:Plugin, lv2:AnalyserPlugin ;
+     doap:name "Invada Meter" ;
++    mod:brand "Invada" ;
++    mod:label "Meter" ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+diff --git a/rdf/inv_phaser.ttl b/rdf/inv_phaser.ttl
+index 00d9f0d..64945c6 100644
+--- a/rdf/inv_phaser.ttl
++++ b/rdf/inv_phaser.ttl
+@@ -5,6 +5,7 @@
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:    <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/phaser/mono#out> 
+     a pg:Group ;
+@@ -14,6 +15,8 @@
+ <http://invadarecords.com/plugins/lv2/phaser/mono> 
+     a lv2:Plugin, lv2:PhaserPlugin ;
+     doap:name "Invada Stereo Phaser (mono in)" ;
++    mod:brand "Invada" ;
++    mod:label "Stereo Phaser M" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -167,6 +170,8 @@
+ <http://invadarecords.com/plugins/lv2/phaser/stereo> 
+     a lv2:Plugin, lv2:PhaserPlugin ;
+     doap:name "Invada Stereo Phaser (stereo in)" ;
++    mod:brand "Invada" ;
++    mod:label "Stereo Phaser St" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -338,6 +343,8 @@
+ <http://invadarecords.com/plugins/lv2/phaser/sum> 
+     a lv2:Plugin, lv2:PhaserPlugin ;
+     doap:name "Invada Stereo Phaser (sum L+R in)" ;
++    mod:brand "Invada" ;
++    mod:label "Stereo Phaser LR" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+diff --git a/rdf/inv_testtone.ttl b/rdf/inv_testtone.ttl
+index ec7ae97..eb5d40e 100644
+--- a/rdf/inv_testtone.ttl
++++ b/rdf/inv_testtone.ttl
+@@ -5,10 +5,13 @@
+ @prefix units:  <http://lv2plug.in/ns/extension/units#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:    <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/testtone> 
+     a lv2:Plugin, lv2:OscillatorPlugin ;
+     doap:name "Invada Test Tones" ;
++    mod:brand "Invada" ;
++    mod:label "Test Tones" ;
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+diff --git a/rdf/inv_tube.ttl b/rdf/inv_tube.ttl
+index f750d5a..4fb035c 100644
+--- a/rdf/inv_tube.ttl
++++ b/rdf/inv_tube.ttl
+@@ -5,10 +5,13 @@
+ @prefix units: <http://lv2plug.in/ns/extension/units#> .
+ @prefix dct:   <http://purl.org/dc/terms/> .
+ @prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
++@prefix mod:   <http://moddevices.com/ns/mod#> .
+ 
+ <http://invadarecords.com/plugins/lv2/tube/mono> 
+     a lv2:Plugin, lv2:DistortionPlugin ;
+     doap:name "Invada Tube Distortion (mono)" ;
++    mod:brand "Invada" ;
++    mod:label "Tube Dist. M" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;
+@@ -119,6 +122,8 @@
+ <http://invadarecords.com/plugins/lv2/tube/stereo> 
+     a lv2:Plugin, lv2:DistortionPlugin ;
+     doap:name "Invada Tube Distortion (stereo)" ;
++    mod:brand "Invada" ;
++    mod:label "Tube Dist. St" ;
+     doap:developer [
+ 	foaf:name "Fraser Stuart";
+ 	foaf:homepage <https://launchpad.net/invada-studio> ;

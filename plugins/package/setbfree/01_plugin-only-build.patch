@@ -1,0 +1,11 @@
+--- setbfree-0.8.0.orig/Makefile
++++ setbfree-0.8.0/Makefile
+@@ -14,7 +14,7 @@ RW=$(abspath $(ROBTK))/
+ export RW
+ endif
+ 
+-SUBDIRS = b_overdrive b_whirl b_reverb b_conv src b_synth ui
++SUBDIRS = b_overdrive b_whirl b_reverb b_conv b_synth
+ 
+ default: all
+ 

@@ -1,0 +1,12 @@
+diff --git a/wscript b/wscript
+index f0c4508..6e39a6a 100644
+--- a/wscript
++++ b/wscript
+@@ -68,7 +68,6 @@ def build_plugin(bld, bundle, name, source, cxxflags=[], cppflags=[], libs=[], a
+     obj.target       = os.path.join(bundle, name)
+     if cxxflags != []:
+         obj.cxxflags = cxxflags
+-    obj.cxxflags = obj.cxxflags + ['-msse', '-mfpmath=sse', '-ffast-math']
+     if cppflags != []:
+         obj.cppflags = cppflags
+     if libs != []:

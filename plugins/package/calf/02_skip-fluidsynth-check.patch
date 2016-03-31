@@ -1,0 +1,21 @@
+--- calf-0.0.60.orig/configure.ac
++++ calf-0.0.60/configure.ac
+@@ -35,8 +35,6 @@ AC_SUBST(GUI_DEPS_CFLAGS)
+ AC_SUBST(GUI_DEPS_LIBS)
+ AC_SUBST(JACK_DEPS_CFLAGS)
+ AC_SUBST(JACK_DEPS_LIBS)
+-AC_SUBST(FLUIDSYNTH_DEPS_CFLAGS)
+-AC_SUBST(FLUIDSYNTH_DEPS_LIBS)
+ AC_SUBST(LV2_DEPS_CFLAGS)
+ AC_SUBST(LV2_DEPS_LIBS)
+ 
+@@ -59,9 +57,6 @@ AC_CHECK_HEADERS([jack/jack.h], have_jac
+ # GLib
+ PKG_CHECK_MODULES(GLIB_DEPS, glib-2.0 >= 2.0.0 gthread-2.0 >= 2.0.0, true, AC_MSG_ERROR([Calf requires glib2 and gthread2]))
+ 
+-# Fluidsynth
+-PKG_CHECK_MODULES(FLUIDSYNTH_DEPS, fluidsynth >= 1.0.7, true, AC_MSG_ERROR([fluidsynth library not found]))
+-
+ # Sordi
+ AC_CHECK_PROG(SORDI_ENABLED, sordi, yes, no)
+ 

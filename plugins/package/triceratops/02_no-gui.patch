@@ -1,0 +1,64 @@
+diff --git a/triceratops.ttl b/triceratops.ttl
+index 392d6ff..845435c 100644
+--- a/triceratops.ttl
++++ b/triceratops.ttl
+@@ -6,14 +6,6 @@
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ 
+-# This is a custom extension, which allows us to tag things easily later
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#>.
+-
+-<http://nickbailey.co.nr/triceratops/gui>
+-a guiext:GtkUI;
+-guiext:binary <triceratops_gui.so>;
+-guiext:requiredFeature guiext:makeResident.
+-
+ <http://nickbailey.co.nr/triceratops>
+ 	a lv2:Plugin ,
+ 		lv2:InstrumentPlugin ;
+@@ -22,9 +14,6 @@ guiext:requiredFeature guiext:makeResident.
+ 	doap:license <http://opensource.org/licenses/gpl-3.0> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 
+-# here we say that this plugin has a GUI, and its URI is that
+-guiext:ui <http://nickbailey.co.nr/triceratops/gui>;
+-
+ ######################################################################
+ # AUDIO OUT AND MIDI PORTS                                         				  #
+ #                                                                   							 #
+diff --git a/wscript b/wscript
+index 8dd3385..28eae83 100644
+--- a/wscript
++++ b/wscript
+@@ -29,13 +29,8 @@ def configure(conf):
+     else:
+         conf.env.append_unique('CXXFLAGS', ['-O2','-funroll-loops','-std=c++0x'])
+ 
+-	if sys.maxint >= 9223372036854775807:
+-		print "detected 64 bit architecture, enabling -fPIC"
+-        	conf.env.append_unique('CXXFLAGS', ['-fPIC','-fpermissive','-finline-functions'])
+-
+     if not autowaf.is_child():
+         autowaf.check_pkg(conf, 'lv2core', uselib_store='LV2CORE')
+-        autowaf.check_pkg(conf, 'gtkmm-2.4', uselib_store='GTKMM')
+ 
+     # Set env['pluginlib_PATTERN']
+     pat = conf.env['cshlib_PATTERN']
+@@ -85,16 +80,6 @@ def build(bld):
+               install_path = '${LV2DIR}/%s' % bundle,
+               uselib       = 'LV2CORE',
+               includes     = includes)
+-    
+-    # Build UI library
+-    obj = bld(features     = 'cxx cshlib',
+-              env          = penv,
+-              source       = 'triceratops_gui.cpp fader_widget.cpp wave_widget.cpp filter_widget.cpp knob_widget.cpp volume_widget.cpp toggle_widget.cpp spacer_widget.cpp presets.cpp widget_button.cpp dco_gui.cpp lfo_gui.cpp adsr_gui.cpp adsr_lfo_gui.cpp amp_gui.cpp echo_gui.cpp reverb_gui.cpp modifier_gui.cpp unison_gui.cpp logo_gui.cpp ',
+-              name         = 'triceratops_gui',
+-              target       = '%s/triceratops_gui' % bundle,
+-              install_path = '${LV2DIR}/%s' % bundle,
+-              uselib       = 'LV2CORE GTKMM',
+-              includes     = includes)
+ 
+     bld.install_files('${LV2DIR}/triceratops.lv2/', 'minblep.mat')
+     bld.install_files('${LV2DIR}/triceratops.lv2/', 'logo.png')

@@ -1,0 +1,202 @@
+--- amsynth-1.6.3.orig/Makefile.am
++++ amsynth-1.6.3/Makefile.am
+@@ -80,64 +80,6 @@ libgui_sources = \
+ 
+ 
+ #
+-# amsynth standalone
+-#
+-
+-bin_PROGRAMS = amsynth
+-
+-amsynth_SOURCES = \
+-	$(libcore_sources) \
+-	$(libdsp_sources) \
+-	src/AudioOutput.cc \
+-	src/AudioOutput.h \
+-	src/drivers/ALSAAudioDriver.cc \
+-	src/drivers/ALSAAudioDriver.h \
+-	src/drivers/ALSAMidiDriver.cc \
+-	src/drivers/ALSAMidiDriver.h \
+-	src/drivers/ALSAmmapAudioDriver.cc \
+-	src/drivers/ALSAmmapAudioDriver.h \
+-	src/drivers/AudioDriver.h \
+-	src/drivers/MidiDriver.h \
+-	src/drivers/OSSAudioDriver.cc \
+-	src/drivers/OSSAudioDriver.h \
+-	src/drivers/OSSMidiDriver.cc \
+-	src/drivers/OSSMidiDriver.h \
+-	src/JackOutput.cc \
+-	src/JackOutput.h \
+-	src/lash.c \
+-	src/lash.h \
+-	src/main.h \
+-	src/main.cc
+-
+-amsynth_CPPFLAGS = $(AM_CPPFLAGS) @ALSA_CFLAGS@ @JACK_CFLAGS@ @LASH_CFLAGS@ @SNDFILE_CFLAGS@ @GTKMM_CFLAGS@
+-
+-amsynth_LDADD = @ALSA_LIBS@ @JACK_LIBS@ @LASH_LIBS@ @SNDFILE_LIBS@ @LIBS@
+-
+-if BUILD_GUI
+-amsynth_SOURCES += $(libgui_sources) \
+-	src/GUI/ConfigDialog.cpp \
+-	src/GUI/ConfigDialog.h \
+-	src/GUI/GUI.cc \
+-	src/GUI/GUI.h \
+-	src/GUI/gui_main.cc \
+-	src/GUI/gui_main.h \
+-	src/GUI/MIDILearnDialog.cpp \
+-	src/GUI/MIDILearnDialog.h \
+-	src/GUI/PresetControllerView.cc \
+-	src/GUI/PresetControllerView.h \
+-	src/GUI/Request.h
+-amsynth_LDADD += @GTKMM_LIBS@
+-endif
+-
+-if DARWIN
+-amsynth_SOURCES += \
+-	src/drivers/CoreAudio.cc \
+-	src/drivers/CoreAudio.h
+-amsynth_LDFLAGS = $(AM_LDFLAGS) -framework CoreFoundation -framework CoreAudio -framework CoreMIDI
+-endif
+-
+-
+-#
+ # plugins
+ #
+ # using noinst prevents the .a and .la files being installed
+@@ -203,15 +145,9 @@ amsynth_lv2_la_SOURCES = src/amsynth_lv2
+ 	include/lv2/lv2plug.in/ns/ext/state/state.h \
+ 	include/lv2/lv2plug.in/ns/ext/urid/urid.h \
+ 	include/lv2/lv2plug.in/ns/ext/dynmanifest/dynmanifest.h
+-amsynth_lv2_la_CPPFLAGS = $(AM_CPPFLAGS) -I"$(top_srcdir)/include" @LV2_CFLAGS@
++amsynth_lv2_la_CPPFLAGS = $(AM_CPPFLAGS) -I"$(top_srcdir)/include"
+ amsynth_lv2_la_LDFLAGS = -rpath $(amsynth_lv2dir) -avoid-version -module -export-symbols-regex "lv2_descriptor" -disable-static
+ 
+-noinst_LTLIBRARIES += amsynth_lv2_gtk.la
+-amsynth_lv2_gtk_la_SOURCES = src/amsynth_lv2_ui_gtk.c $(libcore_sources) $(libgui_sources)
+-amsynth_lv2_gtk_la_CPPFLAGS = $(AM_CPPFLAGS) -I"$(top_srcdir)/include" @LV2_CFLAGS@
+-amsynth_lv2_gtk_la_LDFLAGS = -rpath $(amsynth_lv2dir) -avoid-version -module -export-symbols-regex "lv2ui_descriptor" -disable-static
+-amsynth_lv2_gtk_la_LIBADD = @LV2_LIBS@
+-
+ dist_amsynth_lv2_DATA = \
+ 	data/amsynth.lv2/manifest.ttl \
+ 	data/amsynth.lv2/amsynth.ttl \
+@@ -263,67 +199,6 @@ endif
+ #
+ #
+ 
+-dist_pkgdata_DATA = data/rc
+-
+-EXTRA_DIST = data/amsynth.png
+-
+-icondir = $(datadir)/pixmaps
+-icon_DATA = data/amsynth.png
+-
+-desktopdir = $(datadir)/applications
+-desktop_in_files = data/amsynth.desktop.in
+-desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+-
+-skinsdefaultdir="${pkgdatadir}/skins/default"
+-dist_skinsdefault_DATA = \
+-	data/default-skin/background.png \
+-	data/default-skin/button_simple.png \
+-	data/default-skin/filter_slope.png \
+-	data/default-skin/filter_type.png \
+-	data/default-skin/keybmode.png \
+-	data/default-skin/knob.png \
+-	data/default-skin/knob_boost.png \
+-	data/default-skin/knob_boost_cut.png \
+-	data/default-skin/knob_mix.png \
+-	data/default-skin/knob_osc_octave.png \
+-	data/default-skin/knob_osc_pitch.png \
+-	data/default-skin/knob_spot.png \
+-	data/default-skin/knob_width.png \
+-	data/default-skin/layout.ini \
+-	data/default-skin/osc_select.png \
+-	data/default-skin/portamento_modes.png \
+-	data/default-skin/slider_boost_1.png \
+-	data/default-skin/slider_boost_2.png \
+-	data/default-skin/waveform_lfo.png \
+-	data/default-skin/waveform_pics.png
+-
+-banksdir = $(pkgdatadir)/banks
+-dist_banks_DATA = \
+-	data/banks/amsynth_factory.bank \
+-	data/banks/BriansBank01.amSynth.bank \
+-	data/banks/BriansBank02.amSynth.bank \
+-	data/banks/BriansBank03.amSynth.bank \
+-	data/banks/BriansBank04.amSynth.bank \
+-	data/banks/BriansBank05.amSynth.bank \
+-	data/banks/BriansBank06.amSynth.bank \
+-	data/banks/BriansBank07.amSynth.bank \
+-	data/banks/BriansBank08.amSynth.bank \
+-	data/banks/BriansBank09.amSynth.bank \
+-	data/banks/BriansBank10.amSynth.bank \
+-	data/banks/BriansBank11.amSynth.bank \
+-	data/banks/BriansBank12.amSynth.bank \
+-	data/banks/BriansBank13.amSynth.bank \
+-	data/banks/BriansBank14.amSynth.bank \
+-	data/banks/BriansBank15.amSynth.bank \
+-	data/banks/BriansBank16.amSynth.bank \
+-	data/banks/BriansBank17.amSynth.bank \
+-	data/banks/BriansBank18.amSynth.bank
+-
+-
+-#
+-#
+-#
+-
+ install-exec-hook:
+ if ENABLE_REALTIME
+ 	chown root $(DESTDIR)$(bindir)/amsynth
+@@ -343,8 +218,6 @@ if BUILD_LV2
+ 	$(INSTALL_PROGRAM_ENV) $(INSTALL) -d $(DESTDIR)$(amsynth_lv2dir)
+ 	$(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL) \
+ 		$(top_builddir)/.libs/amsynth_lv2.so $(DESTDIR)$(amsynth_lv2dir)/amsynth_lv2.so
+-	$(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL) \
+-		$(top_builddir)/.libs/amsynth_lv2_gtk.so $(DESTDIR)$(amsynth_lv2dir)/amsynth_lv2_gtk.so
+ endif
+ if BUILD_VST
+ 	$(INSTALL_PROGRAM_ENV) $(INSTALL) -d $(DESTDIR)$(vstdir)
+--- amsynth-1.6.3.orig/configure.ac
++++ amsynth-1.6.3/configure.ac
+@@ -66,7 +66,6 @@ AS_IF([test "x$with_gui" != "xno"], [
+        AC_DEFINE([WITH_GUI],, [Build GUI])
+        with_gui="yes"], [
+        with_gui="no"
+-       with_lv2="no"
+        with_dssi_gui="no"])
+ AM_CONDITIONAL([BUILD_GUI], [test "x$with_gui" != "xno"])
+ 
+@@ -113,8 +112,6 @@ AM_CONDITIONAL([BUILD_DSSI], [test "x$wi
+ AM_CONDITIONAL([BUILD_DSSI_GUI], [test "x$with_dssi_gui" == "xyes"])
+ 
+ AC_ARG_WITH([lv2], [AS_HELP_STRING([--with-lv2], [build support for LV2])])
+-AS_IF([test "x$with_lv2" != "xno"], [
+-    PKG_CHECK_MODULES([LV2], [[gtk+-2.0 >= 2.20.0]], [with_lv2="yes"], [with_lv2="no"])])
+ AM_CONDITIONAL([BUILD_LV2], [test "x$with_lv2" != "xno"])
+ 
+ AC_ARG_WITH([vst], [AS_HELP_STRING([--with-vst], [build VST plug-in] [default=yes])], [], [with_vst=yes])
+--- amsynth-1.6.3.orig/data/amsynth.lv2/amsynth.ttl
++++ amsynth-1.6.3/data/amsynth.lv2/amsynth.ttl
+@@ -14,11 +14,6 @@
+ @prefix units:   <http://lv2plug.in/ns/extensions/units#> .
+ @prefix param:   <http://lv2plug.in/ns/ext/parameters#> .
+ 
+-<http://code.google.com/p/amsynth/amsynth/ui/gtk>
+-    a uiext:GtkUI ;
+-    uiext:binary <amsynth_lv2_gtk.so> ;
+-    lv2:optionalFeature uiext:noUserResize .
+-
+ <http://code.google.com/p/amsynth/amsynth#group_out>
+     a pg:StereoGroup ,
+         pg:OutputGroup ;
+@@ -88,7 +83,6 @@
+     doap:license <http://usefulinc.com/doap/licenses/gpl> ;
+     lv2:requiredFeature urid:map ;
+     lv2:optionalFeature lv2:hardRTCapable;
+-    uiext:ui <http://code.google.com/p/amsynth/amsynth/ui/gtk> ;
+     lv2:port [
+         a lv2:OutputPort ;
+         a lv2:AudioPort ;

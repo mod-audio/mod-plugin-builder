@@ -1,0 +1,13 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 6a6d189..1bc53a5 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -77,7 +77,7 @@ if USE_GUI
+ endif
+ if USE_LV2
+ 	install -d -m 755 $(DESTDIR)$(lv2dir)
+-	ln -sf $(pkglibdir)/calf.so $(DESTDIR)$(lv2dir)/calf.so
++	cp -f $(DESTDIR)$(pkglibdir)/calf.so $(DESTDIR)$(lv2dir)/calf.so
+ if USE_LV2_GUI
+ 	install -c -m 755 $(top_builddir)/src/.libs/calflv2gui.so $(DESTDIR)$(lv2dir)/calflv2gui.so
+ endif
