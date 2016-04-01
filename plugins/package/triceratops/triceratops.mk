@@ -7,7 +7,7 @@
 TRICERATOPS_VERSION = 0.3.0
 TRICERATOPS_SITE = http://download.sourceforge.net/triceratops/
 TRICERATOPS_SOURCE = triceratops-lv2-v$(TRICERATOPS_VERSION).tar.gz
-TRICERATOPS_BUNDLES = 
+TRICERATOPS_BUNDLES = triceratops.lv2
 
 TRICERATOPS_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python ./waf
 

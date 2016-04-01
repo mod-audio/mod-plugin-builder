@@ -7,7 +7,7 @@
 AMSYNTH_VERSION = 1.6.3
 AMSYNTH_SITE = https://github.com/amsynth/amsynth/releases/download/release-$(AMSYNTH_VERSION)/
 AMSYNTH_SOURCE = amsynth-$(AMSYNTH_VERSION).tar.gz
-AMSYNTH_BUNDLES = 
+AMSYNTH_BUNDLES = amsynth.lv2
 
 # we modify configure.ac via patch, so we need to regenerate configure
 AMSYNTH_AUTORECONF = YES

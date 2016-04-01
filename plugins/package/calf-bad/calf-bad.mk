@@ -8,7 +8,7 @@ CALF_BAD_VERSION = 0.0.60
 CALF_BAD_SITE = http://calf-studio-gear.org/files/
 CALF_BAD_SOURCE = calf-$(CALF_BAD_VERSION).tar.gz
 CALF_BAD_DEPENDENCIES = cairo expat libglib2 host-calf-bad
-CALF_BAD_BUNDLES = 
+CALF_BAD_BUNDLES = calf-bad.lv2
 
 CALF_BAD_HOST_MAKE   = $(HOST_MAKE_ENV)   $(HOST_CONFIGURE_OPTS)   $(MAKE) -C $(@D)
 CALF_BAD_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)

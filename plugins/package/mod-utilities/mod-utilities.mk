@@ -6,7 +6,7 @@
 
 MOD_UTILITIES_VERSION = 7cdeeac26ae682730740105ece121d4dddb8ba3f
 MOD_UTILITIES_SITE = $(call github,moddevices,mod-utilities,$(MOD_UTILITIES_VERSION))
-MOD_UTILITIES_BUNDLES = 
+MOD_UTILITIES_BUNDLES = mod-bpf.lv2 mod-crossover2.lv2 mod-crossover3.lv2 mod-gain.lv2 mod-gain2x2.lv2 mod-hpf.lv2 mod-lpf.lv2 mod-switchbox2.lv2 mod-switchtrigger4.lv2 mod-toggleswitch4.lv2
 
 MOD_UTILITIES_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 

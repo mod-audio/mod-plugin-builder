@@ -7,7 +7,7 @@
 FOMP_BAD_VERSION = 4511cfc6641bb9b4b08d63f3cd7d16911bce8372
 FOMP_BAD_SITE = http://git.drobilla.net/fomp.lv2.git
 FOMP_BAD_SITE_METHOD = git
-FOMP_BAD_BUNDLES = 
+FOMP_BAD_BUNDLES = fomp-bad.lv2
 
 FOMP_BAD_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf
 

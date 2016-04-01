@@ -6,7 +6,7 @@
 
 MOD_MDA_LV2_VERSION = 3d6dd099146b72c1fe88e06679034715fb999a5b
 MOD_MDA_LV2_SITE = $(call github,moddevices,mda-lv2,$(MOD_MDA_LV2_VERSION))
-MOD_MDA_LV2_BUNDLES = 
+MOD_MDA_LV2_BUNDLES = mod-mda-Ambience.lv2 mod-mda-Bandisto.lv2 mod-mda-BeatBox.lv2 mod-mda-Combo.lv2 mod-mda-DeEss.lv2 mod-mda-Degrade.lv2 mod-mda-Delay.lv2 mod-mda-Detune.lv2 mod-mda-Dither.lv2 mod-mda-DubDelay.lv2 mod-mda-DX10.lv2 mod-mda-Dynamics.lv2 mod-mda-EPiano.lv2 mod-mda-Image.lv2 mod-mda-JX10.lv2 mod-mda-Leslie.lv2 mod-mda-Limiter.lv2 mod-mda-Loudness.lv2 mod-mda-MultiBand.lv2 mod-mda-Overdrive.lv2 mod-mda-Piano.lv2 mod-mda-RePsycho.lv2 mod-mda-RezFilter.lv2 mod-mda-RingMod.lv2 mod-mda-RoundPan.lv2 mod-mda-Shepard.lv2 mod-mda-Splitter.lv2 mod-mda-Stereo.lv2 mod-mda-SubSynth.lv2 mod-mda-TalkBox.lv2 mod-mda-TestTone.lv2 mod-mda-ThruZero.lv2 mod-mda-Tracker.lv2 mod-mda-Transient.lv2 mod-mda-VocInput.lv2 mod-mda-Vocoder.lv2
 
 MOD_MDA_LV2_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf
 

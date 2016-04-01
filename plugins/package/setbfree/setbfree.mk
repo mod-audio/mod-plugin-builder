@@ -7,7 +7,7 @@
 SETBFREE_VERSION = 8bb8d1fe429559d5dafa7f0a4e5fbdd2171af0d8
 SETBFREE_SITE = $(call github,pantherb,setBfree,$(SETBFREE_VERSION))
 SETBFREE_DEPENDENCIES = fftwf libsndfile zita-convolver
-SETBFREE_BUNDLES = 
+SETBFREE_BUNDLES = b_overdrive b_reverb b_synth b_whirl b_whirl_xt
 
 SETBFREE_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) ENABLE_CONVOLUTION=yes OPTIMIZATIONS= PREFIX=/usr -C $(@D)
 

@@ -7,7 +7,7 @@
 FLUIDPLUG_VERSION = a181928f98997a0112e609d8a0403cd3d33e9413
 FLUIDPLUG_SITE = $(call github,falkTX,FluidPlug,$(FLUIDPLUG_VERSION))
 FLUIDPLUG_DEPENDENCIES = fluidsynth host-p7zip-light
-FLUIDPLUG_BUNDLES = 
+FLUIDPLUG_BUNDLES = AirFont320.lv2 FluidBass.lv2 FluidBrass.lv2 FluidChromPerc.lv2 FluidDrums.lv2 FluidEnsemble.lv2 FluidEthnic.lv2 FluidGuitars.lv2 FluidOrgans.lv2 FluidPercussion.lv2 FluidPianos.lv2 FluidPipes.lv2 FluidReeds.lv2 FluidSoundFX.lv2 FluidStrings.lv2 FluidSynthFX.lv2 FluidSynthLeads.lv2 FluidSynthPads.lv2
 
 FLUIDPLUG_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 

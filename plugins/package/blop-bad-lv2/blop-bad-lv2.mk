@@ -8,7 +8,7 @@ BLOP_BAD_LV2_VERSION = 44ff27dd355e850b9865fa50e3f32d8e24619006
 BLOP_BAD_LV2_SITE = http://git.drobilla.net/blop.lv2.git
 BLOP_BAD_LV2_SITE_METHOD = git
 BLOP_BAD_LV2_DEPENDENCIES = host-blop-bad-lv2 host-lv2 host-python
-BLOP_BAD_LV2_BUNDLES = 
+BLOP_BAD_LV2_BUNDLES = blop-bad.lv2
 
 BLOP_HOST_WAF   = $(HOST_MAKE_ENV)   $(HOST_CONFIGURE_OPTS)   $(HOST_DIR)/usr/bin/python ./waf
 BLOP_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python ./waf

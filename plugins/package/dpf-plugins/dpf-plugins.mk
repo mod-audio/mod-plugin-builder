@@ -7,7 +7,7 @@
 DPF_PLUGINS_VERSION = 4b0e9dbea7d903cdd1aa62119dc4f468d4bf1dfc
 DPF_PLUGINS_SITE = $(call github,DISTRHO,DPF-Plugins,$(DPF_PLUGINS_VERSION))
 DPF_PLUGINS_DEPENDENCIES = host-dpf-plugins
-DPF_PLUGINS_BUNDLES = 
+DPF_PLUGINS_BUNDLES = 3BandEQ.lv2 3BandSplitter.lv2 AmplitudeImposer.lv2 CycleShifter.lv2 Kars.lv2 MaBitcrush.lv2 MaFreeverb.lv2 MaGigaverb.lv2 MaPitchshift.lv2 MVerb.lv2 Nekobi.lv2 PingPongPan.lv2 SoulForce.lv2
 
 DPF_PLUGINS_HOST_MAKE   = $(HOST_MAKE_ENV)   $(HOST_CONFIGURE_OPTS)   $(MAKE) NOOPT=true -C $(@D)
 DPF_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)

@@ -6,7 +6,7 @@
 
 FREAKED_VERSION = 7f4fca70d7d424ddd353347bafb68e62aba0e043
 FREAKED_SITE = $(call github,pjotrompet,freaked,$(FREAKED_VERSION))
-FREAKED_BUNDLES = 
+FREAKED_BUNDLES = Freakclip.lv2 Freaktail.lv2 Prefreak.lv2 Granulator.lv2
 
 FREAKED_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) NOOPT=true
 

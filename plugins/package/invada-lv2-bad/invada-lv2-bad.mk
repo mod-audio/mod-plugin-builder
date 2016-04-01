@@ -7,7 +7,7 @@
 INVADA_LV2_BAD_VERSION = 1.2.0
 INVADA_LV2_BAD_SITE = https://launchpad.net/invada-studio/lv2/1.2/+download/
 INVADA_LV2_BAD_SOURCE = invada-studio-plugins-lv2_$(INVADA_LV2_BAD_VERSION)-nopkg.tgz
-INVADA_LV2_BAD_BUNDLES = 
+INVADA_LV2_BAD_BUNDLES = invada-bad.lv2
 
 INVADA_LV2_BAD_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) LD=$(TARGET_CC) $(MAKE) -C $(@D)
 

@@ -8,7 +8,7 @@ CALF_VERSION = 0.0.60
 CALF_SITE = http://calf-studio-gear.org/files/
 CALF_SOURCE = calf-$(CALF_VERSION).tar.gz
 CALF_DEPENDENCIES = cairo expat libglib2 host-calf
-CALF_BUNDLES = 
+CALF_BUNDLES = calf.lv2
 
 CALF_HOST_MAKE   = $(HOST_MAKE_ENV)   $(HOST_CONFIGURE_OPTS)   $(MAKE) -C $(@D)
 CALF_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
