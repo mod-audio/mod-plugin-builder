@@ -10,7 +10,7 @@ RKRLV2_DEPENDENCIES = fftw libsamplerate
 RKRLV2_BUNDLES = rkr.lv2
 
 define RKRLV2_POST_INSTALL_TARGET_TTLFILES
-	cp -rL $($(PKG)_PKGDIR)/rkrlv2/rkr.lv2/* $(TARGET_DIR)/usr/lib/lv2/rkr.lv2/
+	cp -rL $($(PKG)_PKGDIR)/rkr.lv2/* $(TARGET_DIR)/usr/lib/lv2/rkr.lv2/
 endef
 
 RKRLV2_POST_INSTALL_TARGET_HOOKS += RKRLV2_POST_INSTALL_TARGET_TTLFILES

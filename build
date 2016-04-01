@@ -82,6 +82,16 @@ fi
 #######################################################################################################################
 # copy the requested plugin bundles
 
+function bundle_has_binaries
+{
+  for f in "$1"/*.so; do
+    if [ -e "$f" ]; then
+      return 1;
+    fi
+  done
+  return 0
+}
+
 function try_copy_plugin_bundles
 {
   path="$1"
@@ -107,7 +117,7 @@ function try_copy_plugin_bundles
 
   if [ ${was_empty} == "1" ]; then
     for bundle in `ls ${path}`; do
-      if [ ! -f ${path}/${bundle}/*.so ]; then
+      if ( bundle_has_binaries ${path}/${bundle} ); then
         continue
       fi
       if [[ " ${bundles[@]} " =~ " ${bundle} " ]]; then true; else
