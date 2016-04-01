@@ -1,3 +1,9 @@
+######################################
+#
+# triceratops
+#
+######################################
+
 TRICERATOPS_VERSION = 0.3.0
 TRICERATOPS_SITE = http://download.sourceforge.net/triceratops/
 TRICERATOPS_SOURCE = triceratops-lv2-v$(TRICERATOPS_VERSION).tar.gz

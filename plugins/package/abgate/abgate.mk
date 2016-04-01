@@ -1,3 +1,9 @@
+######################################
+#
+# abgate
+#
+######################################
+
 ABGATE_VERSION = 1.1.7
 ABGATE_SITE = http://download.sourceforge.net/abgate/
 ABGATE_SOURCE = abGate-$(ABGATE_VERSION).tar.gz

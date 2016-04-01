@@ -1,3 +1,9 @@
+######################################
+#
+# amsynth
+#
+######################################
+
 AMSYNTH_VERSION = 1.6.3
 AMSYNTH_SITE = https://github.com/amsynth/amsynth/releases/download/release-$(AMSYNTH_VERSION)/
 AMSYNTH_SOURCE = amsynth-$(AMSYNTH_VERSION).tar.gz

@@ -1,3 +1,9 @@
+######################################
+#
+# gxvoxtb
+#
+######################################
+
 GXVOXTB_VERSION = 9ff36d0daff8fce475074ff50167a9d4205adb37
 GXVOXTB_SITE = $(call github,moddevices,gx_vobtb.lv2,$(GXVOXTB_VERSION))
 GXVOXTB_BUNDLES = 

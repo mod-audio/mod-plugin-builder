@@ -1,3 +1,9 @@
+######################################
+#
+# mod-pitchshifter
+#
+######################################
+
 MOD_PITCHSHIFTER_VERSION = 6f7970ad5759e1203c2ea56eb11af0287d96966f
 MOD_PITCHSHIFTER_SITE = $(call github,moddevices,mod-pitchshifter,$(MOD_PITCHSHIFTER_VERSION))
 MOD_PITCHSHIFTER_DEPENDENCIES = armadillo fftwf host-fftwf host-python host-python-mpmath

@@ -1,3 +1,9 @@
+######################################
+#
+# invada-lv2-bad
+#
+######################################
+
 INVADA_LV2_BAD_VERSION = 1.2.0
 INVADA_LV2_BAD_SITE = https://launchpad.net/invada-studio/lv2/1.2/+download/
 INVADA_LV2_BAD_SOURCE = invada-studio-plugins-lv2_$(INVADA_LV2_BAD_VERSION)-nopkg.tgz

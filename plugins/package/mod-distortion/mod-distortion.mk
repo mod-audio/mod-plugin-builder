@@ -1,3 +1,9 @@
+######################################
+#
+# mod-distortion
+#
+######################################
+
 MOD_DISTORTION_VERSION = 92c101b78a3ea81f3fbef14e0f358148721219ad
 MOD_DISTORTION_SITE = $(call github,moddevices,mod-distortion,$(MOD_DISTORTION_VERSION))
 MOD_DISTORTION_BUNDLES = 

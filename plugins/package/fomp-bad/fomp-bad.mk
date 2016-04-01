@@ -1,3 +1,9 @@
+######################################
+#
+# fomp-bad
+#
+######################################
+
 FOMP_BAD_VERSION = 4511cfc6641bb9b4b08d63f3cd7d16911bce8372
 FOMP_BAD_SITE = http://git.drobilla.net/fomp.lv2.git
 FOMP_BAD_SITE_METHOD = git

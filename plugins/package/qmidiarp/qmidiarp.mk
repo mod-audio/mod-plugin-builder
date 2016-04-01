@@ -1,3 +1,9 @@
+######################################
+#
+# qmidiarp
+#
+######################################
+
 QMIDIARP_VERSION = 0.6.3
 QMIDIARP_SITE = http://download.sourceforge.net/qmidiarp/
 QMIDIARP_SOURCE = qmidiarp-$(QMIDIARP_VERSION).tar.bz2
