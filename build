@@ -13,6 +13,28 @@ if [[ "${build}" == "plugins-dep" ]]; then
       exit 1
     fi
 
+    if [[ "${action}" == "cleanup" ]]; then
+      # cleanup previous
+      rm -rf ${WORKDIR}/tmp-lv2-spec
+
+      # make sure plugins dir exists and it's clean
+      mkdir -p ${WORKDIR}/plugins
+      rm -rf ${WORKDIR}/plugins/*
+
+      # move lv2 spec to a temp dir so we can delete everything else
+      mkdir ${WORKDIR}/tmp-lv2-spec
+      mv ${WORKDIR}/${build}/target/usr/lib/lv2/{atom,buf-size,data-access,dynmanifest,event,instance-access,log,lv2core,midi,morph,options,parameters,patch,port-groups,port-props,presets,resize-port,schemas,state,time,ui,units,urid,uri-map,worker}.lv2 ${WORKDIR}/tmp-lv2-spec/
+      rm -rf ${WORKDIR}/${build}/target/usr/lib/lv2/*
+      mv ${WORKDIR}/tmp-lv2-spec/* ${WORKDIR}/${build}/target/usr/lib/lv2/
+      rmdir ${WORKDIR}/tmp-lv2-spec
+
+      # just in case
+      rm -rf ${WORKDIR}/${build}/target/usr/local/lib/lv2
+
+      # all done!
+      exit 0
+    fi
+
     if [[ "${action}" != *"-dirclean" ]]; then
       action=$(basename ${action} | sed "s/.mk//")
       pkgname=$(echo ${action} | tr a-z- A-Z_)
@@ -70,11 +92,29 @@ function try_copy_plugin_bundles
     fi
   done
 
+  ls ${WORKDIR}/plugins
+  if [ -z "`ls ${WORKDIR}/plugins`" ]; then
+    was_empty="1"
+  else
+    was_empty="0"
+  fi
+
   for bundle in ${bundles[@]}; do
     rm -rf ${WORKDIR}/plugins/${bundle}
     cp -rL ${path}/${bundle} ${WORKDIR}/plugins/${bundle}
     info "Finished copying ${bundle}"
   done
+
+  if [ ${was_empty} == "1" ]; then
+    for bundle in `ls ${path}`; do
+      if [ ! -f ${path}/${bundle}/*.so ]; then
+        continue
+      fi
+      if [[ " ${bundles[@]} " =~ " ${bundle} " ]]; then true; else
+        echo "NOTE: Bundle '$bundle' possibly missing from _BUNDLES definition"
+      fi
+    done
+  fi
 
   exit 0
 }
