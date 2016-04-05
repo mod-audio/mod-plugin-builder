@@ -9,8 +9,9 @@ if [ ! -f ${DOWNLOAD_DIR}/${CT_NG_FILE} ]; then
   wget ${CT_NG_LINK}/${CT_NG_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_FILE}
 fi
 
-if [ ! -d ${BUILD_DIR}/${CT_NG_VERSION} ]; then
-  tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${BUILD_DIR}
+if [ ! -f ${BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
+  mkdir -p ${BUILD_DIR}/${CT_NG_VERSION}
+  tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
 fi
 
 #######################################################################################################################
