@@ -35,7 +35,7 @@ if [[ "${build}" == "plugins-dep" ]]; then
       exit 0
     fi
 
-    if [[ "${action}" != *"-dirclean" ]]; then
+    if [[ "${action}" != *"-dirclean" ]] && [[ "${action}" != "menuconfig" ]]; then
       action=$(basename ${action} | sed "s/.mk//")
       pkgname=$(echo ${action} | tr a-z- A-Z_)
 
@@ -129,7 +129,7 @@ function try_copy_plugin_bundles
   exit 0
 }
 
-if [[ "${build}" == "plugins-dep" ]]; then
+if [[ "${build}" == "plugins-dep" ]] && [[ "${action}" != "menuconfig" ]]; then
   mkdir -p ${WORKDIR}/plugins
 
   try_copy_plugin_bundles ${WORKDIR}/${build}/target/usr/lib/lv2
