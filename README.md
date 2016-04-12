@@ -40,3 +40,11 @@ git submodule update
 
 To cleanup the build of a plugin, run:<br/>
 ```./build <plugin-package>-dirclean```
+
+
+If you get an issue under Debian or Ubuntu about missing libtool, like this:
+```
+checking for GNU libtool >= 1.5.26... no
+configure: error: could not find GNU libtool >= 1.5.26
+```
+Please install libtool-bin and re-run bootstrap.sh.
