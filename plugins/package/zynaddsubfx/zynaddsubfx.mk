@@ -4,7 +4,7 @@
 #
 ######################################
 
-ZYNADDSUBFX_VERSION = 9ba01bb22414193e503e4f2c5fbae744f69009d8
+ZYNADDSUBFX_VERSION = 6f8d0ca068adf4dfff517677d5315293bd4f9800
 ZYNADDSUBFX_SITE = git://git.code.sf.net/p/zynaddsubfx/code
 ZYNADDSUBFX_SITE_METHOD = git
 ZYNADDSUBFX_DEPENDENCIES = fftw mxml liblo zlib
@@ -25,9 +25,7 @@ endef
 # build plugins in target skipping ttl generation
 define ZYNADDSUBFX_BUILD_CMDS
 	# first build that fails
-	$(ZYNADDSUBFX_TARGET_MAKE) || true
-	$(ZYNADDSUBFX_TARGET_MAKE) || true
-	$(ZYNADDSUBFX_TARGET_MAKE) || true
+	$(ZYNADDSUBFX_TARGET_MAKE) -k || true
 
 	# create dummy generator
 	rm $(@D)/src/Plugin/lv2-ttl-generator
