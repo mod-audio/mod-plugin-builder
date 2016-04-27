@@ -1,3 +1,2 @@
 config BR2_PACKAGE_FFTWF
 	bool "fftwf"
-	select BR2_PACKAGE_FFMPEG
