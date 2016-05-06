@@ -18,7 +18,7 @@ ENV USER builder
 ENV HOME /home/$USER
 
 # mod-plugin-builder settings
-ENV MPB_GIT_URL https://github.com/moddevices/mod-plugin-builder
+ENV MPB_GIT_URL git://github.com/moddevices/mod-plugin-builder
 
 # create user
 RUN useradd -d $HOME -m -G sudo $USER
