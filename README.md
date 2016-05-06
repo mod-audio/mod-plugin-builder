@@ -50,3 +50,5 @@ checking for GNU libtool >= 1.5.26... no
 configure: error: could not find GNU libtool >= 1.5.26
 ```
 Please install libtool-bin and re-run bootstrap.sh.
+
+There's a more detailed [HowTo](http://wiki.moddevices.com/wiki/How_To_Build_and_Deploy_LV2_Plugin_to_MOD_Duo) explaining how to compile a LV2 Plugin using mod-plugin-builder.
