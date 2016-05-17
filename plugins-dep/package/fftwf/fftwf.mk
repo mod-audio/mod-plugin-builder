@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-FFTWF_VERSION = 3.3.4+git20151030b
+FFTWF_VERSION = 3.3.5+git20160517
 FFTWF_SITE = http://web1.moddevices.com/shared
 FFTWF_SOURCE = fftw-$(FFTWF_VERSION).tar.gz
 FFTWF_LICENSE = GPLv2+
@@ -16,6 +16,8 @@ FFTWF_CONF_OPTS += --enable-threads
 FFTWF_CONF_OPTS += --enable-single
 FFTWF_CONF_OPTS += --disable-doc
 FFTWF_CONF_OPTS += --disable-debug
+FFTWF_CONF_OPTS += --enable-generic-simd128
+FFTWF_CONF_OPTS += --enable-generic-simd256
 ifdef BR2_arm
 FFTWF_CONF_OPTS += --enable-neon
 endif
