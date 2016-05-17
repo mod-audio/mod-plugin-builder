@@ -19,7 +19,7 @@ EG_AMP_LV2_DEPENDENCIES =
 EG_AMP_LV2_BUNDLES = eg-amp.lv2
 
 # call make with the current arguments and path. "$(@D)" is the build directory.
-EG_AMP_LV2_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/eg-amp.lv2/
+EG_AMP_LV2_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)/source/
 
 
 # instead of extracting code tarball (which doesn't exist), copy the local contents to the build dir
