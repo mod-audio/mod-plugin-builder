@@ -1,3 +1,5 @@
 *~
 *.bak
 kernel
+plugins/package/eg-amp-lv2/eg-amp.lv2/eg-amp.lv2/amp.so
+plugins/package/eg-amp-lv2/eg-amp.lv2/eg-amp.lv2/manifest.ttl
