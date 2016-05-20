@@ -5,11 +5,11 @@ source .common
 #######################################################################################################################
 # download and extract crosstool-ng
 
-if [ ! -f ${DOWNLOAD_DIR}/${CT_NG_FILE} ]; then
-  wget ${CT_NG_LINK}/${CT_NG_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_FILE}
-fi
-
 if [ ! -f ${BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
+  if [ ! -f ${DOWNLOAD_DIR}/${CT_NG_FILE} ]; then
+    wget ${CT_NG_LINK}/${CT_NG_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_FILE}
+  fi
+
   mkdir -p ${BUILD_DIR}/${CT_NG_VERSION}
   tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
 fi
@@ -43,11 +43,11 @@ fi
 #######################################################################################################################
 # download and extract buildroot
 
-if [ ! -f ${DOWNLOAD_DIR}/${BUILDROOT_FILE} ]; then
-  wget ${BUILDROOT_LINK}/${BUILDROOT_FILE} -O ${DOWNLOAD_DIR}/${BUILDROOT_FILE}
-fi
-
 if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
+  if [ ! -f ${DOWNLOAD_DIR}/${BUILDROOT_FILE} ]; then
+    wget ${BUILDROOT_LINK}/${BUILDROOT_FILE} -O ${DOWNLOAD_DIR}/${BUILDROOT_FILE}
+  fi
+
   tar xf ${DOWNLOAD_DIR}/${BUILDROOT_FILE} -C ${BUILD_DIR}
 fi
 
