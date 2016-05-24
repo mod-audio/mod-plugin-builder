@@ -3,13 +3,13 @@ MAINTAINER Alexandre Cunha <alex@moddevices.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 # update and upgrade system
-RUN apt-get update && apt-get upgrade -qy
+RUN apt-get update && apt-get upgrade -qy && apt-get clean
 
 # install packages for buildroot
-RUN apt-get install -qy acl bash bash-completion bc curl cvs git mercurial rsync subversion wget
-RUN apt-get install -qy bison bzip2 flex gawk gperf gzip nano perl patch tar texinfo unzip
-RUN apt-get install -qy automake binutils build-essential libtool ncurses-dev pkg-config
-RUN apt-get clean
+RUN apt-get install -qy acl bash bash-completion bc curl cvs git mercurial rsync subversion wget && \
+    apt-get install -qy bison bzip2 flex gawk gperf gzip nano perl patch tar texinfo unzip && \
+    apt-get install -qy automake binutils build-essential libtool ncurses-dev pkg-config && \
+    apt-get clean
 RUN locale-gen en_US.UTF-8
 RUN echo "source /etc/bash_completion" >> $HOME/.bashrc
 
@@ -32,7 +32,7 @@ USER $USER
 WORKDIR $HOME
 RUN git clone $MPB_GIT_URL
 WORKDIR mod-plugin-builder
-RUN ./bootstrap.sh
+RUN ./bootstrap.sh && ./.clean-install.sh
 
 # CMD
 CMD ["bash"]
