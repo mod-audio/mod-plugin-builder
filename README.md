@@ -3,16 +3,25 @@ mod-plugin-builder
 
 This repository contains the toolchain and libraries used in MOD Devices.
 
-It allows developers to locally build plugins for MOD Duo and also prepare for Cloud builds.
+It allows developers to locally build plugins for MOD Duo and also prepare for Cloud builds.<br/>
+Currently this builder only supports Linux hosts.<br/>
+If you're not running Linux see this [HowTo](http://wiki.moddevices.com/wiki/How_To_Use_Docker_With_MPB).
 
 There are several dependencies:
  - gcc & g++
  - git
- - automake
- - binutils & libtool
- - svn
+ - subversion
  - hg/mercurial
+ - autoconf
+ - automake
+ - bzip2
+ - lzma
+ - binutils
+ - libtool
+ - ncurses
+ - rsync
  - wget
+ - bc
  - bison
  - flex
  - gperf
@@ -51,4 +60,5 @@ configure: error: could not find GNU libtool >= 1.5.26
 ```
 Please install libtool-bin and re-run bootstrap.sh.
 
-There's a more detailed [HowTo](http://wiki.moddevices.com/wiki/How_To_Build_and_Deploy_LV2_Plugin_to_MOD_Duo) explaining how to compile a LV2 Plugin using mod-plugin-builder.
+
+There's a more detailed [HowTo](http://wiki.moddevices.com/wiki/How_To_Build_and_Deploy_LV2_Plugin_to_MOD_Duo) explaining how to compile an LV2 Plugin using mod-plugin-builder.
