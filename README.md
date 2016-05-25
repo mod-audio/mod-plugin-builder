@@ -5,7 +5,7 @@ This repository contains the toolchain and libraries used in MOD Devices.
 
 It allows developers to locally build plugins for MOD Duo and also prepare for Cloud builds.<br/>
 Currently this builder only supports Linux hosts.<br/>
-If you're not running Linux see this [HowTo](http://wiki.moddevices.com/wiki/How_To_Use_Docker_With_MPB).
+If you're not running Linux see this [HowTo](http://wiki.moddevices.com/wiki/How_To_Use_Docker_Toolbox_With_MPB).
 
 There are several dependencies:
  - gcc & g++
