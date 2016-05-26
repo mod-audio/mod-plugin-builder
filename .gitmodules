@@ -1,6 +1,6 @@
 [submodule "mod-lv2-data"]
 	path = lv2-data
 	url = git://github.com/moddevices/mod-lv2-data
-[submodule "plugins/package/eg-amp-dpf/dpf"]
+[submodule "dpf"]
 	path = plugins/package/eg-amp-dpf/dpf
 	url = git://github.com/DISTRHO/DPF
