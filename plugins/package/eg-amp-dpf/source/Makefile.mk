@@ -83,7 +83,7 @@ endif
 TARGET_DIR = build
 
 BUILD_C_FLAGS   += -I.
-BUILD_CXX_FLAGS += -I. -I../../../dpf/distrho
+BUILD_CXX_FLAGS += -I. -I../dpf/distrho
 
 # --------------------------------------------------------------
 # Set plugin binary file targets
@@ -94,7 +94,7 @@ lv2_ttl = $(TARGET_DIR)/$(NAME).lv2/manifest.ttl
 # --------------------------------------------------------------
 # Set distrho code files
 
-DISTRHO_PLUGIN_FILES = ../../../dpf/distrho/DistrhoPluginMain.cpp
+DISTRHO_PLUGIN_FILES = ../dpf/distrho/DistrhoPluginMain.cpp
 
 # --------------------------------------------------------------
 # all needs to be first
@@ -117,6 +117,10 @@ clean:
 	rm -f $(TARGET_DIR)/$(NAME).lv2/$(NAME)_dsp.ttl
 	rm -f $(TARGET_DIR)/lv2_ttl_generator
 
+install:
+	install -d $(DESTDIR)/usr/lib/lv2
+	cp -r $(TARGET_DIR)/$(NAME).lv2 $(DESTDIR)/usr/lib/lv2/
+
 # --------------------------------------------------------------
 # LV2
 
@@ -132,8 +136,8 @@ $(lv2_ttl): $(lv2_dsp) $(TARGET_DIR)/lv2_ttl_generator
 	../lv2_ttl_generator ./$(NAME)_dsp$(LIB_EXT)
 
 $(TARGET_DIR)/lv2_ttl_generator:
-	$(MAKE) -C ../../../dpf/utils/lv2-ttl-generator/ && \
-	mv ../../../dpf/utils/lv2_ttl_generator $@
+	$(MAKE) -C ../dpf/utils/lv2-ttl-generator/ && \
+	mv ../dpf/utils/lv2_ttl_generator $@
 
 # --------------------------------------------------------------
 
