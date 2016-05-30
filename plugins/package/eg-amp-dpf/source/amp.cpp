@@ -21,8 +21,7 @@
 #define DB_CO(g) ((g) > -90.0f ? powf(10.0f, (g) * 0.05f) : 0.0f)
 
 /**
-   In code, ports are referred to by index.  An enumeration of port indices
-   should be defined for readability.
+  Your plugin class that subclases the base DPF Plugin one.
 */
 class AmplifierPlugin : public Plugin
 {

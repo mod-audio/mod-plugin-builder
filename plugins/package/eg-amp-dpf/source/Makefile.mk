@@ -136,6 +136,7 @@ $(lv2_ttl): $(lv2_dsp) $(TARGET_DIR)/lv2_ttl_generator
 	../lv2_ttl_generator ./$(NAME)_dsp$(LIB_EXT)
 
 $(TARGET_DIR)/lv2_ttl_generator:
+	mkdir -p $(shell dirname $@)
 	$(MAKE) -C ../dpf/utils/lv2-ttl-generator/ && \
 	mv ../dpf/utils/lv2_ttl_generator $@
 

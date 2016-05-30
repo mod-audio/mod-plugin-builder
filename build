@@ -76,6 +76,8 @@ make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${action}
 # if cleaning, stop here
 
 if [[ "${action}" == *"-dirclean" ]]; then
+  # run host-*-dirclean
+  make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} host-${action} &>/dev/null
   exit 0
 fi
 
