@@ -51,7 +51,7 @@ define EG_AMP_DPF_BUILD_CMDS
 	chmod +x $(@D)/source/build/lv2_ttl_generator
 
 	# copy previously generated bundles
-	cp -r $(EG_AMP_DPF_TMP_DIR)/*.lv2 $(@D)/build/
+	cp -r $(EG_AMP_DPF_TMP_DIR)/*.lv2 $(@D)/source/build/
 
 	# now build in target
 	$(EG_AMP_DPF_TARGET_MAKE)

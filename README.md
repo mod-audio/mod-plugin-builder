@@ -24,6 +24,7 @@ There are several dependencies:
  - bc
  - bison
  - flex
+ - gawk
  - gperf
  - texinfo
 
