@@ -1,0 +1,26 @@
+diff --git a/balance.lv2/Makefile b/balance.lv2/Makefile
+index e28c593..cddfd5f 100644
+--- a/balance.lv2/Makefile
++++ b/balance.lv2/Makefile
+@@ -9,7 +9,7 @@ PREFIX ?= /usr/local
+ CXXFLAGS ?= $(OPTIMIZATIONS) -Wall
+ LIBDIR ?= lib
+ 
+-STRIP=strip
++STRIP?=strip
+ STRIPFLAGS=-s
+ UISTRIPFLAGS=-s
+ 
+diff --git a/stereoroute.lv2/Makefile b/stereoroute.lv2/Makefile
+index 7c840e3..4f6a6ac 100644
+--- a/stereoroute.lv2/Makefile
++++ b/stereoroute.lv2/Makefile
+@@ -8,7 +8,7 @@ PREFIX ?= /usr/local
+ CFLAGS ?= $(OPTIMIZATIONS) -Wall
+ LIBDIR ?= lib
+ 
+-STRIP=strip
++STRIP?=strip
+ STRIPFLAGS=-s
+ 
+ stereoroute_VERSION?=$(shell git describe --tags HEAD 2>/dev/null | sed 's/-g.*$$//;s/^v//' || echo "LV2")
