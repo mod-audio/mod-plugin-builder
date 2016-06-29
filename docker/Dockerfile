@@ -2,13 +2,25 @@ FROM ubuntu:16.04
 MAINTAINER Alexandre Cunha <alex@moddevices.com>
 ENV DEBIAN_FRONTEND noninteractive
 
+# enable armhf
+RUN dpkg --add-architecture armhf
+
+RUN echo "deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse"               > /etc/apt/sources.list && \
+    echo "deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted universe multiverse"      >> /etc/apt/sources.list && \
+    echo "deb [arch=amd64] http://archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse"    >> /etc/apt/sources.list && \
+    echo "deb [arch=amd64] http://security.ubuntu.com/ubuntu xenial-security main restricted universe multiverse"     >> /etc/apt/sources.list && \
+    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"           >> /etc/apt/sources.list && \
+    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse"   >> /etc/apt/sources.list && \
+    echo "deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse" >> /etc/apt/sources.list
+
 # update and upgrade system
 RUN apt-get update && apt-get upgrade -qy && apt-get clean
 
 # install packages for buildroot
-RUN apt-get install -qy acl bash bash-completion bc curl cvs git mercurial rsync subversion sudo wget && \
+RUN apt-get install -qy multiarch-support:armhf libstdc++6:armhf qemu-user-static && \
+    apt-get install -qy acl bash bash-completion bc curl cvs git mercurial rsync subversion sudo wget && \
     apt-get install -qy bison bzip2 flex gawk gperf gzip nano perl patch tar texinfo unzip && \
-    apt-get install -qy automake binutils build-essential libtool-bin ncurses-dev pkg-config qemu-system-arm && \
+    apt-get install -qy automake binutils build-essential cpio libtool-bin ncurses-dev pkg-config && \
     apt-get clean
 RUN locale-gen en_US.UTF-8
 RUN echo "source /etc/bash_completion" >> $HOME/.bashrc
