@@ -4,7 +4,7 @@
 #
 ######################################
 
-LVTK_VERSION = 065830b1e88e4a152eafbe963c325554983fcfe4
+LVTK_VERSION = 6bfe981dfb5b27ea199dd4f6801b5305ca0355f9
 LVTK_SITE = $(call github,lvtk,lvtk,$(LVTK_VERSION))
 LVTK_DEPENDENCIES = lv2 host-python
 LVTK_INSTALL_STAGING = YES
@@ -15,7 +15,6 @@ define LVTK_CONFIGURE_CMDS
 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(LVTK_WAF) configure \
 		--prefix=/usr      \
 		--disable-examples \
-		--disable-tools    \
 		--disable-ui)
 endef
 
