@@ -20,7 +20,6 @@ define X42_PLUGINS_INSTALL_TARGET_CMDS
 	$(X42_PLUGINS_TARGET_MAKE) install DESTDIR=$(TARGET_DIR)
 	cp -rL $($(PKG)_PKGDIR)/balance.lv2/*     $(TARGET_DIR)/usr/lib/lv2/balance.lv2/
 	cp -rL $($(PKG)_PKGDIR)/convo.lv2/*       $(TARGET_DIR)/usr/lib/lv2/convo.lv2/
-	cp -rL $($(PKG)_PKGDIR)/fil4.lv2/*        $(TARGET_DIR)/usr/lib/lv2/fil4.lv2/
 	cp -rL $($(PKG)_PKGDIR)/midifilter.lv2/*  $(TARGET_DIR)/usr/lib/lv2/midifilter.lv2/
 	cp -rL $($(PKG)_PKGDIR)/midigen.lv2/*     $(TARGET_DIR)/usr/lib/lv2/midigen.lv2/
 	cp -rL $($(PKG)_PKGDIR)/nodelay.lv2/*     $(TARGET_DIR)/usr/lib/lv2/nodelay.lv2/
