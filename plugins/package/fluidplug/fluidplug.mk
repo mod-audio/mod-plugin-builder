@@ -20,7 +20,6 @@ endef
 define FLUIDPLUG_INSTALL_TARGET_CMDS
 	$(FLUIDPLUG_TARGET_MAKE) install PREFIX=/usr DESTDIR=$(TARGET_DIR)
 	cp -rL $($(PKG)_PKGDIR)/AirFont320.lv2/*      $(TARGET_DIR)/usr/lib/lv2/AirFont320.lv2/
-	cp -rL $($(PKG)_PKGDIR)/FluidGM.lv2/*         $(TARGET_DIR)/usr/lib/lv2/FluidGM.lv2/
 	cp -rL $($(PKG)_PKGDIR)/FluidBass.lv2/*       $(TARGET_DIR)/usr/lib/lv2/FluidBass.lv2/
 	cp -rL $($(PKG)_PKGDIR)/FluidBrass.lv2/*      $(TARGET_DIR)/usr/lib/lv2/FluidBrass.lv2/
 	cp -rL $($(PKG)_PKGDIR)/FluidChromPerc.lv2/*  $(TARGET_DIR)/usr/lib/lv2/FluidChromPerc.lv2/
