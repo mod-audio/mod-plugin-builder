@@ -15,7 +15,7 @@ WORKDIR=${WORKDIR:=~/mod-workdir}
 # crosstool-ng variables
 
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
-CT_NG_VERSION=crosstool-ng-1.21.0
+CT_NG_VERSION=crosstool-ng-1.22.0
 CT_NG_FILE=${CT_NG_VERSION}.tar.bz2
 
 #######################################################################################################################
