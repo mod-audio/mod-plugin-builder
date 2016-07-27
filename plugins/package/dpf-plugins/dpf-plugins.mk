@@ -10,7 +10,6 @@ DPF_PLUGINS_BUNDLES = 3BandEQ.lv2 3BandSplitter.lv2 AmplitudeImposer.lv2 CycleSh
 
 DPF_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 
-# build plugins in target skipping ttl generation
 define DPF_PLUGINS_BUILD_CMDS
 	$(DPF_PLUGINS_TARGET_MAKE)
 endef
