@@ -4,7 +4,7 @@
 #
 ######################################
 
-BLOP_LV2_VERSION = 44ff27dd355e850b9865fa50e3f32d8e24619006
+BLOP_LV2_VERSION = 25451be928b69c288f6978fb3b3fcf202dbd1ee1
 BLOP_LV2_SITE = http://git.drobilla.net/blop.lv2.git
 BLOP_LV2_SITE_METHOD = git
 BLOP_LV2_BUNDLES = blop.lv2

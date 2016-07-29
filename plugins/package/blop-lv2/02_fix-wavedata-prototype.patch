@@ -1,0 +1,26 @@
+diff --git a/src/wavedata.c b/src/wavedata.c
+index e574903..8ec3783 100644
+--- a/src/wavedata.c
++++ b/src/wavedata.c
+@@ -58,7 +58,7 @@ wavedata_load(Wavedata*   w,
+ 		typedef int (*DescFunc)(Wavedata*, unsigned long);
+ 		DescFunc desc_func = (DescFunc)dlsym(handle, wdat_descriptor_name);
+ 		if (desc_func) {
+-			retval         = desc_func(w, sample_rate);
++			retval         = desc_func(w, (unsigned long)sample_rate);
+ 			w->data_handle = handle;
+ 			return retval;
+ 		}
+diff --git a/src/wdatutil.c b/src/wdatutil.c
+index b3bf84e..86b5fb0 100644
+--- a/src/wdatutil.c
++++ b/src/wdatutil.c
+@@ -249,7 +249,7 @@ wavedata_write_prototype(FILE*       wdat_fp,
+ 	fprintf(wdat_fp, "int\n");
+ 	fprintf(
+ 	    wdat_fp,
+-	    "blop_get_%s (Wavedata * w, double sample_rate, const char* bundle_path, const LV2_Feature* const* features)",
++	    "blop_get_%s (Wavedata * w, unsigned long sample_rate)",
+ 	    data_name);
+ }
+ 
