@@ -23,6 +23,7 @@ AMSYNTH_CONF_OPTS += --with-vst=no
 AMSYNTH_CONF_OPTS += --with-lv2=yes
 
 define AMSYNTH_POST_INSTALL_TARGET_TTLFILES
+	rm $(TARGET_DIR)/usr/lib/lv2/amsynth.lv2/*.ttl
 	cp -rL $($(PKG)_PKGDIR)/amsynth.lv2/* $(TARGET_DIR)/usr/lib/lv2/amsynth.lv2/
 endef
 
