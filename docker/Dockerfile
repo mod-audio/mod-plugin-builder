@@ -19,7 +19,7 @@ RUN apt-get update && apt-get upgrade -qy && apt-get clean
 # install packages for buildroot
 RUN apt-get install -qy multiarch-support:armhf libstdc++6:armhf qemu-user-static && \
     apt-get install -qy acl bash bash-completion bc curl cvs git mercurial rsync subversion sudo wget && \
-    apt-get install -qy bison bzip2 flex gawk gperf gzip nano perl patch tar texinfo unzip && \
+    apt-get install -qy bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip && \
     apt-get install -qy automake binutils build-essential cpio libtool-bin ncurses-dev pkg-config && \
     apt-get clean
 RUN locale-gen en_US.UTF-8
