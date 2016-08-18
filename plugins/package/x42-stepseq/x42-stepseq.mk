@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_STEPSEQ_VERSION = 54f53880421c2153499aa3c61798abac496e8889
+X42_STEPSEQ_VERSION = 348d7eb7b805ca04cfae8df60e8270b221ee13e9
 X42_STEPSEQ_SITE = $(call github,x42,stepseq.lv2,$(X42_STEPSEQ_VERSION))
 X42_STEPSEQ_BUNDLES = stepseq8x4.lv2 stepseq8x8.lv2 stepseq8x16.lv2
 
@@ -33,9 +33,9 @@ define X42_STEPSEQ_INSTALL_TARGET_CMDS
 	mv $(TARGET_DIR)/usr/lib/lv2/stepseq.lv2 $(TARGET_DIR)/usr/lib/lv2/stepseq8x16.lv2
 
 	# copy custom ttls
-	cp -rL $($(PKG)_PKGDIR)/stepseq8x4.lv2/*  $(TARGET_DIR)/usr/lib/lv2/stepseq8x4.lv2/
-	cp -rL $($(PKG)_PKGDIR)/stepseq8x8.lv2/*  $(TARGET_DIR)/usr/lib/lv2/stepseq8x8.lv2/
-	cp -rL $($(PKG)_PKGDIR)/stepseq8x16.lv2/* $(TARGET_DIR)/usr/lib/lv2/stepseq8x16.lv2/
+# 	cp -rL $($(PKG)_PKGDIR)/stepseq8x4.lv2/*  $(TARGET_DIR)/usr/lib/lv2/stepseq8x4.lv2/
+# 	cp -rL $($(PKG)_PKGDIR)/stepseq8x8.lv2/*  $(TARGET_DIR)/usr/lib/lv2/stepseq8x8.lv2/
+# 	cp -rL $($(PKG)_PKGDIR)/stepseq8x16.lv2/* $(TARGET_DIR)/usr/lib/lv2/stepseq8x16.lv2/
 endef
 
 $(eval $(generic-package))

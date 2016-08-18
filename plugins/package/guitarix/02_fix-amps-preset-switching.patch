@@ -1,0 +1,220 @@
+diff --git a/trunk/src/LV2/gx_amp.lv2/gxamp.cpp b/trunk/src/LV2/gx_amp.lv2/gxamp.cpp
+index 3c33d74..1c8fe96 100644
+--- a/trunk/src/LV2/gx_amp.lv2/gxamp.cpp
++++ b/trunk/src/LV2/gx_amp.lv2/gxamp.cpp
+@@ -229,18 +229,17 @@ private:
+   float                        *alevel;
+   float                        alevel_;
+   float                        pre;
+-  float                        val;
+   bool                         doit;
+   float*                       schedule_ok;
+   float                        schedule_ok_;
+   volatile int32_t             schedule_wait;
+ 
+   inline bool cab_changed() 
+-    {return abs(cab - (clevel_ + c_model_)) > 0.1;}
++    {return abs(cab - clevel_ ) > 0.1;}
+   inline bool buffsize_changed() 
+     {return abs(bufsize - cur_bufsize) != 0;}
+   inline void update_cab() 
+-    {cab = (clevel_ + c_model_); c_old_model_ = c_model_;}
++    {cab = clevel_ ; c_old_model_ = c_model_;}
+   inline bool change_cab() 
+     {return abs(c_old_model_ - c_model_) > 0.1;}
+   inline bool pre_changed() 
+@@ -248,9 +247,7 @@ private:
+   inline void update_pre() 
+     {pre = (alevel_);}
+   inline bool val_changed() 
+-    {return abs(val - ((*alevel) + (*clevel) + (*c_model))) > 0.1;}
+-  inline void update_val() 
+-    {val = (alevel_) + (clevel_) + (c_model_);}
++    {return  abs(alevel_ - (*alevel)) > 0.1 || abs(clevel_ - (*clevel)) > 0.1 || abs(c_model_ - (*c_model)) > 0.1;}
+ 
+   // LV2 stuff
+   LV2_URID_Map*                map;
+@@ -318,7 +315,6 @@ GxPluginMono::GxPluginMono() :
+   alevel(NULL),
+   alevel_(0),
+   pre(0),
+-  val(0),
+   schedule_ok(NULL),
+   schedule_ok_(0)
+ {
+@@ -337,6 +333,7 @@ GxPluginMono::~GxPluginMono()
+ 
+ void GxPluginMono::do_work_mono()
+ {
++  
+   if (buffsize_changed()) 
+    {
+      printf("buffersize changed to %u\n",cur_bufsize);
+@@ -372,7 +369,7 @@ void GxPluginMono::do_work_mono()
+      if(!ampconv.start(prio, SCHED_FIFO))
+         printf("presence convolver update buffersize fail\n");
+    }
+-  if (cab_changed())
++  if (cab_changed() || change_cab())
+     {
+       if (cabconv.is_runnable())
+         {
+@@ -393,7 +390,6 @@ void GxPluginMono::do_work_mono()
+         cabconv.set_samplerate(s_rate);
+         cabconv.set_buffersize(bufsize);
+         cabconv.configure(cabconv.cab_count, cabconv.cab_data, cabconv.cab_sr);
+-        //printf("cabconv.changed.\n");
+       }
+       float cab_irdata_c[cabconv.cab_count];
+       float adjust_1x8 = 1;
+@@ -406,7 +402,6 @@ void GxPluginMono::do_work_mono()
+       if(!cabconv.start(prio, SCHED_FIFO))
+         printf("cabinet convolver disabled\n");
+       update_cab();
+-      //printf("cabinet convolver updated\n");
+     } // else printf("cabinet convolver disabled\n");
+     }
+   if (pre_changed())
+@@ -424,9 +419,7 @@ void GxPluginMono::do_work_mono()
+       if(!ampconv.start(prio, SCHED_FIFO))
+         printf("presence convolver disabled\n");
+       update_pre();
+-      //printf("presence convolver updated\n");
+     }
+-  update_val();
+   atomic_set(&schedule_wait,0);
+ }
+ 
+diff --git a/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp b/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp
+index 9a75adc..6a92524 100644
+--- a/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp
++++ b/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp
+@@ -229,28 +229,25 @@ private:
+   float                        *alevel;
+   float                        alevel_;
+   float                        pre;
+-  float                        val;
+   bool                         doit;
+   float*                       schedule_ok;
+   float                        schedule_ok_;
+   volatile int32_t             schedule_wait;
+   
+   bool cab_changed()
+-    {return abs(cab - (clevel_ + c_model_)) > 0.1;}
++    {return abs(cab - clevel_ ) > 0.1;}
+   bool buffsize_changed() 
+     {return abs(bufsize - cur_bufsize) != 0;}
+   void update_cab()
+-    {cab = (clevel_ + c_model_); c_old_model_ = c_model_;}
++    {cab = (clevel_ ); c_old_model_ = c_model_;}
+   bool change_cab()
+     {return abs(c_old_model_ - c_model_) > 0.1;}
+   bool pre_changed()
+     {return abs(pre - alevel_) > 0.1;}
+   void update_pre()
+     {pre = (alevel_);}
+-  bool val_changed()
+-    {return abs(val - ((*alevel) + (*clevel) + (*c_model))) > 0.1;}
+-  void update_val()
+-    {val = (alevel_) + (clevel_) + (c_model_);}
++  inline bool val_changed() 
++    {return  abs(alevel_ - (*alevel)) > 0.1 || abs(clevel_ - (*clevel)) > 0.1 || abs(c_model_ - (*c_model)) > 0.1;}
+ 
+   // LV2 stuff
+   LV2_URID_Map*                map;
+@@ -323,7 +320,6 @@ GxPluginStereo::GxPluginStereo() :
+   alevel(NULL),
+   alevel_(0),
+   pre(0),
+-  val(0),
+   schedule_ok(NULL),
+   schedule_ok_(0)
+ {
+@@ -379,7 +375,7 @@ void GxPluginStereo::do_work_stereo()
+      if(!ampconv.start(prio, SCHED_FIFO))
+         printf("presence convolver update buffersize fail\n");
+    }
+-  if (cab_changed())
++  if (cab_changed() || change_cab())
+     {
+       if (cabconv.is_runnable())
+         {
+@@ -432,7 +428,6 @@ void GxPluginStereo::do_work_stereo()
+       update_pre();
+       //printf("presence convolver updated\n");
+     }
+-  update_val();
+   atomic_set(&schedule_wait,0);
+ }
+ 
+diff --git a/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp b/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp
+index 7ccaef1..0ad8c0f 100644
+--- a/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp
++++ b/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp
+@@ -94,28 +94,27 @@ private:
+   float                        cbass_;
+   float                        *ctreble;
+   float                        ctreble_;
+-  float                        cab;
++  float                        cab_bass;
++  float                        cab_treble;
++  float                        cab_level;
+   float                        *c_model;
+   float                        c_model_;
+   float                        c_old_model_;
+-  float                        val;
+   bool                         doit;
+   float*                       schedule_ok;
+   float                        schedule_ok_;
+   volatile int32_t             schedule_wait;
+ 
+   inline bool cab_changed() 
+-    {return abs(cab - (cbass_ + ctreble_ + clevel_ + c_model_)) > 0.1;}
++    {return abs(cab_bass - cbass_) > 0.1 || abs(cab_treble - ctreble_) > 0.1 || abs(cab_level - clevel_) > 0.1;}
+   inline bool buffsize_changed() 
+     {return abs(bufsize - cur_bufsize) != 0;}
+   inline void update_cab() 
+-    {cab = (cbass_ + ctreble_ + clevel_ + c_model_); c_old_model_ = c_model_;}
++    {cab_bass = cbass_; cab_treble = ctreble_; cab_level = clevel_; c_old_model_ = c_model_;}
+   inline bool change_cab() 
+     {return abs(c_old_model_ - c_model_) > 0.1;}
+   inline bool val_changed() 
+-    {return abs(val - ((*cbass) + (*ctreble) + (*clevel) + (*c_model))) > 0.1;}
+-  inline void update_val() 
+-    {val = (cbass_) + (ctreble_) + (clevel_) + (c_model_);}
++    {return abs(cbass_ - (*cbass)) > 0.1 || abs(ctreble_ != (*ctreble)) > 0.1 || abs(clevel_ != (*clevel)) > 0.1 ||  abs(c_model_ != (*c_model)) > 0.1;}
+ 
+   // LV2 stuff
+   LV2_URID_Map*                map;
+@@ -174,11 +173,12 @@ GxCabinet::GxCabinet() :
+   cbass_(0),
+   ctreble(NULL),
+   ctreble_(0),
+-  cab(0),
++  cab_bass(0),
++  cab_treble(0),
++  cab_level(0),
+   c_model(NULL),
+   c_model_(0),
+   c_old_model_(0),
+-  val(0),
+   schedule_ok(NULL),
+   schedule_ok_(0)
+ {
+@@ -217,7 +217,7 @@ void GxCabinet::do_work_mono()
+      if(!cabconv.start(prio, SCHED_FIFO))
+         printf("cabinet convolver update buffersize fail\n");
+    }
+-  if (cab_changed())
++  if (cab_changed() || change_cab())
+     {
+       if (cabconv.is_runnable())
+         {
+@@ -254,7 +254,6 @@ void GxCabinet::do_work_mono()
+       //printf("cabinet convolver updated\n");
+     } // else printf("cabinet convolver disabled\n");
+     }
+-  update_val();
+   atomic_set(&schedule_wait,0);
+ }
+ 
