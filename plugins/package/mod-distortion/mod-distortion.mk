@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_DISTORTION_VERSION = 30fb491e43917b4653d8007597ca3e76afe9edd6
+MOD_DISTORTION_VERSION = e672d5feb9d631798e3d56eb96e8958c3d2c6821
 MOD_DISTORTION_SITE = $(call github,moddevices,mod-distortion,$(MOD_DISTORTION_VERSION))
 MOD_DISTORTION_BUNDLES = mod-bigmuff.lv2 mod-ds1.lv2
 
