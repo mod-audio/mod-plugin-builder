@@ -4,7 +4,7 @@
 #
 ######################################
 
-FLUIDPLUG_VERSION = e54a6c93afbcdb83197eaf834b4e8e94f294209e
+FLUIDPLUG_VERSION = f6b230057a78659e0cfe65c38c55e83ff6b70180
 FLUIDPLUG_SITE = $(call github,falkTX,FluidPlug,$(FLUIDPLUG_VERSION))
 FLUIDPLUG_DEPENDENCIES = fluidsynth host-p7zip-light
 FLUIDPLUG_BUNDLES = AirFont320.lv2 FluidBass.lv2 FluidBrass.lv2 FluidChromPerc.lv2 FluidDrums.lv2 FluidEnsemble.lv2 FluidEthnic.lv2 FluidGuitars.lv2 FluidOrgans.lv2 FluidPercussion.lv2 FluidPianos.lv2 FluidPipes.lv2 FluidReeds.lv2 FluidSoundFX.lv2 FluidStrings.lv2 FluidSynthFX.lv2 FluidSynthLeads.lv2 FluidSynthPads.lv2
