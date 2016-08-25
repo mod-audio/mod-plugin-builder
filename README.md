@@ -29,6 +29,13 @@ There are several dependencies:
  - gperf
  - texinfo
 
+If you're running a debian based system you can install all dependencies by running:
+```
+sudo apt-get install acl bc curl cvs git mercurial rsync subversion wget \
+bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
+automake binutils build-essential cpio libtool-bin libncurses-dev pkg-config
+```
+
 To begin simply run the bootstrap.sh script.<br/>
 The bootstrap.sh script will build the toolchain (ct-ng) and buildroot.<br/>
 Depending on your machine it can take more than 1 hour.<br/>
