@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_FAT1_VERSION = a25fc0484b1dd48d0ba0167b3eaa5f57ca05f84e
+X42_FAT1_VERSION = c160568eea54d66bc173aab45d3ae2542cfef55b
 X42_FAT1_SITE = $(call github,x42,fat1.lv2,$(X42_FAT1_VERSION))
 X42_FAT1_DEPENDENCIES = fftwf
 X42_FAT1_BUNDLES = fat1.lv2
