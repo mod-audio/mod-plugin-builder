@@ -19,6 +19,11 @@ fi
 
 cd ${BUILD_DIR}/${CT_NG_VERSION}
 
+if [ ! -f patches/gcc/4.8.5/132-build_gcc-5_with_gcc-6.patch ]; then
+    wget https://raw.githubusercontent.com/jcmvbkbc/crosstool-NG/ecfc19a597d76c0eea65148b08d7ccb505cdcac6/patches/gcc/4.8.5/132-build_gcc-5_with_gcc-6.patch
+    mv 132-build_gcc-5_with_gcc-6.patch patches/gcc/4.8.5/
+fi
+
 if [ ! -f .config ]; then
   cp ${SOURCE_DIR}/toolchain/modduo.config .config
   sed -i "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
