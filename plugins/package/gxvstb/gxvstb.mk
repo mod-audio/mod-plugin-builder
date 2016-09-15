@@ -11,6 +11,8 @@ GXVSTB_BUNDLES = gx_vstb.lv2
 GXVSTB_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) SSE_CFLAGS="" -C $(@D)
 
 define GXVSTB_BUILD_CMDS
+	# FIXME remove this
+	mkdir $(@D)/modgui
 	$(GXVSTB_TARGET_MAKE)
 endef
 

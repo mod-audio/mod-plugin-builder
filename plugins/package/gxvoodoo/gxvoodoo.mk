@@ -11,6 +11,8 @@ GXVOODOO_BUNDLES = gx_voodoo.lv2
 GXVOODOO_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) SSE_CFLAGS="" -C $(@D)
 
 define GXVOODOO_BUILD_CMDS
+	# FIXME remove this
+	mkdir $(@D)/modgui
 	$(GXVOODOO_TARGET_MAKE)
 endef
 

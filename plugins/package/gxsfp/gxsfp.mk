@@ -11,6 +11,8 @@ GXSFP_BUNDLES = gx_sfp.lv2
 GXSFP_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) SSE_CFLAGS="" -C $(@D)
 
 define GXSFP_BUILD_CMDS
+	# FIXME remove this
+	mkdir $(@D)/modgui
 	$(GXSFP_TARGET_MAKE)
 endef
 
