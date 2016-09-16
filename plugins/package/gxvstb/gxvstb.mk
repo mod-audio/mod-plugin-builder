@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXVSTB_VERSION = bb1b722255fb7b65991e346a2726835bf8b4603e
+GXVSTB_VERSION = a8c1c1a0c5df8144fee72eb11c0b2cfc55b816a8
 GXVSTB_SITE = $(call github,moddevices,GxSuppaToneBender.lv2,$(GXVSTB_VERSION))
 GXVSTB_BUNDLES = gx_vstb.lv2
 
