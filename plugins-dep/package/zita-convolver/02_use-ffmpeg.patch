@@ -1,8 +1,7 @@
-diff --git a/libs/Makefile b/libs/Makefile
-index 8ac26ee..62d3cde 100644
---- a/libs/Makefile
-+++ b/libs/Makefile
-@@ -33,14 +33,14 @@ VERSION = $(MAJVERS).$(MINVERS)
+diff -U 3 -H -b -w -B -d -r -N -- zita-convolver-3.1.0.orig/libs/Makefile zita-convolver-3.1.0/libs/Makefile
+--- zita-convolver-3.1.0.orig/libs/Makefile	2016-09-16 18:09:58.565444509 +0200
++++ zita-convolver-3.1.0/libs/Makefile	2016-09-16 18:11:06.753446127 +0200
+@@ -33,14 +33,14 @@
  CPPFLAGS += -I. -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DENABLE_VECTOR_MODE 
  CXXFLAGS += -fPIC -Wall
  CXXFLAGS += -ffast-math -funroll-loops -O3
@@ -15,14 +14,13 @@ index 8ac26ee..62d3cde 100644
  ZITA-CONVOLVER_MAJ = $(ZITA-CONVOLVER_SO).$(MAJVERS)
  ZITA-CONVOLVER_MIN = $(ZITA-CONVOLVER_MAJ).$(MINVERS)
 -ZITA-CONVOLVER_DEP = -lfftw3f -lpthread
-+ZITA-CONVOLVER_DEP = -lavcodec -lavfilter -lavutil -lfftw3f -lpthread -lm
++ZITA-CONVOLVER_DEP = -lavcodec -lavfilter -lavutil -lpthread -lm
  ZITA-CONVOLVER_O = zita-convolver.o
  ZITA-CONVOLVER_H = zita-convolver.h 
  
-diff --git a/libs/zita-convolver.cc b/libs/zita-convolver.cc
-index a5155de..6e5927d 100644
---- a/libs/zita-convolver.cc
-+++ b/libs/zita-convolver.cc
+diff -U 3 -H -b -w -B -d -r -N -- zita-convolver-3.1.0.orig/libs/zita-convolver.cc zita-convolver-3.1.0/libs/zita-convolver.cc
+--- zita-convolver-3.1.0.orig/libs/zita-convolver.cc	2011-11-20 22:16:49.000000000 +0100
++++ zita-convolver-3.1.0/libs/zita-convolver.cc	2016-09-16 18:08:48.000000000 +0200
 @@ -22,6 +22,11 @@
  #include <stdlib.h>
  #include <string.h>
@@ -35,7 +33,7 @@ index a5155de..6e5927d 100644
  #include "zita-convolver.h"
  
  
-@@ -44,7 +49,6 @@ float Convproc::_fft_cost = 5.0f;
+@@ -44,7 +49,6 @@
  
  Convproc::Convproc (void) :
      _state (ST_IDLE),
@@ -43,7 +41,7 @@ index a5155de..6e5927d 100644
      _skipcnt (0),
      _density (0),
      _ninp (0),
-@@ -67,12 +71,6 @@ Convproc::~Convproc (void)
+@@ -67,12 +71,6 @@
  }
  
  
@@ -56,7 +54,7 @@ index a5155de..6e5927d 100644
  void Convproc::set_density (float density)
  {
      _density = density;
-@@ -153,7 +151,7 @@ int Convproc::configure (unsigned int ninp,
+@@ -153,7 +151,7 @@
  		if (cfft < d * cmac) npar = nmin;
  	    }
  	    _convlev [pind] = new Convlevel ();
@@ -65,7 +63,7 @@ index a5155de..6e5927d 100644
  
  	    offs += size * npar;
  	    if (offs < maxsize)
-@@ -309,7 +307,6 @@ int Convproc::process (bool sync)
+@@ -309,7 +307,6 @@
  	{
              if (++_latecnt >= 5)
              {
@@ -73,7 +71,7 @@ index a5155de..6e5927d 100644
  	        f |= FL_LOAD;
  	    }
  	}
-@@ -360,7 +357,6 @@ int Convproc::cleanup (void)
+@@ -360,7 +357,6 @@
      }
  
      _state = ST_IDLE;
@@ -81,7 +79,7 @@ index a5155de..6e5927d 100644
      _skipcnt = 0;
      _density = 0;
      _ninp = 0;
-@@ -404,14 +400,11 @@ Convlevel::Convlevel (void) :
+@@ -404,14 +400,11 @@
      _stat (ST_IDLE),
      _npar (0),
      _parsize (0),
@@ -96,7 +94,7 @@ index a5155de..6e5927d 100644
      _freq_data (0)
  {
  }
-@@ -428,7 +421,7 @@ void *Convlevel::alloc_aligned (size_t size)
+@@ -428,7 +421,7 @@
  {
      void *p;
  
@@ -105,7 +103,7 @@ index a5155de..6e5927d 100644
      memset (p, 0, size);
      return p;
  }
-@@ -437,27 +430,20 @@ void *Convlevel::alloc_aligned (size_t size)
+@@ -437,22 +430,16 @@
  void Convlevel::configure (int prio,
                             unsigned int offs,
                             unsigned int npar,
@@ -123,30 +121,32 @@ index a5155de..6e5927d 100644
      
 -    _time_data = (float *)(alloc_aligned (2 * _parsize * sizeof (float)));
 -    _prep_data = (float *)(alloc_aligned (2 * _parsize * sizeof (float)));
-     _freq_data = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
+-    _freq_data = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
 -    _plan_r2c = fftwf_plan_dft_r2c_1d (2 * _parsize, _time_data, _freq_data, fftwopt);
 -    _plan_c2r = fftwf_plan_dft_c2r_1d (2 * _parsize, _freq_data, _time_data, fftwopt);
++    _freq_data = (float_complex *)(alloc_aligned ((_parsize + 1) * sizeof (float_complex)));
 +    _plan_r2c = av_rdft_init (int(log2(2 * _parsize)), DFT_R2C);
 +    _plan_c2r = av_rdft_init (int(log2(2 * _parsize)), IDFT_C2R);
      if (_plan_r2c && _plan_c2r) return;
      throw (Converror (Converror::MEM_ALLOC));
  }
- 
--
- void Convlevel::impdata_create (unsigned int inp,
-                                 unsigned int out,
-                                 unsigned int step,
-@@ -468,7 +454,7 @@ void Convlevel::impdata_create (unsigned int inp,
+@@ -468,7 +454,7 @@
      unsigned int   k;
      int            j, j0, j1, n;
      float          norm;
 -    fftwf_complex  *fftb;
-+    fftwf_complex *fftb;
++    float_complex *fftb;
      Macnode        *M;
  
      n = i1 - i0;
-@@ -483,7 +469,7 @@ void Convlevel::impdata_create (unsigned int inp,
- 	memset (M->_fftb, 0, _npar * sizeof (fftwf_complex *));
+@@ -479,11 +465,11 @@
+     M = findmacnode (inp, out, true);
+     if (! (M->_fftb))
+     {
+-	M->_fftb = new fftwf_complex * [_npar];
+-	memset (M->_fftb, 0, _npar * sizeof (fftwf_complex *));
++	M->_fftb = new float_complex * [_npar];
++	memset (M->_fftb, 0, _npar * sizeof (float_complex *));
      }
  
 -    norm = 0.5f / _parsize;
@@ -154,53 +154,52 @@ index a5155de..6e5927d 100644
      for (k = 0; k < _npar; k++)
      {
  	i1 = i0 + _parsize;
-@@ -493,22 +479,21 @@ void Convlevel::impdata_create (unsigned int inp,
+@@ -491,18 +477,18 @@
+ 	{
+ 	    if (! (M->_fftb [k]))
  	    {
- 		M->_fftb [k] = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
+-		M->_fftb [k] = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
++		M->_fftb [k] = (float_complex *)(alloc_aligned ((_parsize + 1) * sizeof (float_complex)));
  	    }
 -	    if (data)
+-	    {
+-	        memset (_prep_data, 0, 2 * _parsize * sizeof (float));
 +	    float *prepdata = (float*)_freq_data;
 +	    memset (prepdata, 0, 2 * (_parsize+1) * sizeof (float));
-+	    j0 = (i0 < 0) ? 0 : i0;
-+	    j1 = (i1 > n) ? n : i1;
+ 	        j0 = (i0 < 0) ? 0 : i0;
+ 	        j1 = (i1 > n) ? n : i1;
+-	        for (j = j0; j < j1; j++) _prep_data [j - i0] = norm * data [j * step];
+-	        fftwf_execute_dft_r2c (_plan_r2c, _prep_data, _freq_data);
+-#ifdef ENABLE_VECTOR_MODE
+-	        if (_options & OPT_VECTOR_MODE) fftswap (_freq_data);
+-#endif
 +	    for (j = j0; j < j1; j++) prepdata [j - i0] = norm * data [j * step];
 +	    av_rdft_calc(_plan_r2c, prepdata);
 +	    // adjust for packing convention
 +	    _freq_data[_parsize][0] = _freq_data[0][1];
 +	    _freq_data[0][1] = 0;
 +	    fftswap (_freq_data);
-+  	    fftb = M->_fftb [k];
-+	    for (j = 0; j <= (int)_parsize; j++)
- 	    {
--	        memset (_prep_data, 0, 2 * _parsize * sizeof (float));
--	        j0 = (i0 < 0) ? 0 : i0;
--	        j1 = (i1 > n) ? n : i1;
--	        for (j = j0; j < j1; j++) _prep_data [j - i0] = norm * data [j * step];
--	        fftwf_execute_dft_r2c (_plan_r2c, _prep_data, _freq_data);
--#ifdef ENABLE_VECTOR_MODE
--	        if (_options & OPT_VECTOR_MODE) fftswap (_freq_data);
--#endif
--  	        fftb = M->_fftb [k];
--	        for (j = 0; j <= (int)_parsize; j++)
--	        {
--	            fftb [j][0] += _freq_data [j][0];
--	            fftb [j][1] += _freq_data [j][1];
--		}
-+	        fftb [j][0] += _freq_data [j][0];
-+	        fftb [j][1] += _freq_data [j][1];
+   	        fftb = M->_fftb [k];
+ 	        for (j = 0; j <= (int)_parsize; j++)
+ 	        {
+@@ -510,7 +496,6 @@
+ 	            fftb [j][1] += _freq_data [j][1];
+ 		}
  	    }
- 	}
+-	}
  	i0 = i1;
-@@ -526,7 +511,7 @@ void Convlevel::impdata_update (unsigned int inp,
+     }
+ }
+@@ -526,7 +511,7 @@
      unsigned int   k;
      int            j, j0, j1, n;
      float          norm;
 -    fftwf_complex  *fftb;
-+    fftwf_complex *fftb;
++    float_complex *fftb;
      Macnode        *M;
  
      M = findmacnode (inp, out, false);
-@@ -537,21 +522,24 @@ void Convlevel::impdata_update (unsigned int inp,
+@@ -537,21 +522,24 @@
      i1 = i0 + _npar * _parsize;
      if ((i0 >= n) || (i1 <= 0)) return;
  
@@ -232,7 +231,16 @@ index a5155de..6e5927d 100644
  	}
  	i0 = i1;
      }
-@@ -699,15 +687,11 @@ void Convlevel::cleanup (void)
+@@ -592,7 +580,7 @@
+     {
+         for (i = 0; i < _npar; i++)
+ 	{
+-            memset (X->_ffta [i], 0, (_parsize + 1) * sizeof (fftwf_complex));
++            memset (X->_ffta [i], 0, (_parsize + 1) * sizeof (float_complex));
+ 	}
+     }
+     for (Y = _out_list; Y; Y = Y->_next) 
+@@ -699,15 +687,11 @@
      }
      _out_list = 0;
  
@@ -251,7 +259,18 @@ index a5155de..6e5927d 100644
      _freq_data = 0;
  }
  
-@@ -767,13 +751,16 @@ void Convlevel::process (bool skip)
+@@ -745,8 +729,8 @@
+     Inpnode         *X;
+     Macnode         *M;
+     Outnode         *Y;
+-    fftwf_complex   *ffta;
+-    fftwf_complex   *fftb;
++    float_complex   *ffta;
++    float_complex   *fftb;
+     float           *inpd;
+     float           *outd;
+ 
+@@ -767,13 +751,16 @@
      for (X = _inp_list; X; X = X->_next)
      {
  	inpd = _inpbuff [X->_inp];
@@ -262,7 +281,7 @@ index a5155de..6e5927d 100644
 -#ifdef ENABLE_VECTOR_MODE
 -	if (_options & OPT_VECTOR_MODE) fftswap (X->_ffta [_ptind]);
 -#endif
-+	fftwf_complex *freqdata = X->_ffta [_ptind];
++	float_complex *freqdata = X->_ffta [_ptind];
 +	float *time_data = (float*)freqdata;
 +	if (n1) memcpy (time_data, inpd + i1, n1 * sizeof (float));
 +	if (n2) memcpy (time_data + n1, inpd, n2 * sizeof (float));
@@ -275,48 +294,39 @@ index a5155de..6e5927d 100644
      }
  
      if (skip)
-@@ -799,46 +786,32 @@ void Convlevel::process (bool skip)
+@@ -788,7 +775,7 @@
+     {
+ 	for (Y = _out_list; Y; Y = Y->_next)
+ 	{
+-	    memset (_freq_data, 0, (_parsize + 1) * sizeof (fftwf_complex));
++	    memset (_freq_data, 0, (_parsize + 1) * sizeof (float_complex));
+ 	    for (M = Y->_list; M; M = M->_next)
+ 	    {
+ 		X = M->_inpn;
+@@ -799,9 +786,6 @@
  		    fftb = M->_fftb [j];
  		    if (fftb)
  		    {
 -#ifdef ENABLE_VECTOR_MODE
 -			if (_options & OPT_VECTOR_MODE)
 -			{
--			    FV4 *A = (FV4 *) ffta;
--			    FV4 *B = (FV4 *) fftb;
--			    FV4 *D = (FV4 *) _freq_data;
--			    for (k = 0; k < _parsize; k += 4)
--			    {
--				D [0] += A [0] * B [0] - A [1] * B [1];
--				D [1] += A [0] * B [1] + A [1] * B [0];
--				A += 2;
--				B += 2;
--				D += 2;
--			    }
--			    _freq_data [_parsize][0] += ffta [_parsize][0] * fftb [_parsize][0];
--			    _freq_data [_parsize][1] = 0;
--			}
+ 			    FV4 *A = (FV4 *) ffta;
+ 			    FV4 *B = (FV4 *) fftb;
+ 			    FV4 *D = (FV4 *) _freq_data;
+@@ -816,29 +800,18 @@
+ 			    _freq_data [_parsize][0] += ffta [_parsize][0] * fftb [_parsize][0];
+ 			    _freq_data [_parsize][1] = 0;
+ 			}
 -			else
 -#endif
-+			FV4 *A = (FV4 *) ffta;
-+			FV4 *B = (FV4 *) fftb;
-+			FV4 *D = (FV4 *) _freq_data;
-+			for (k = 0; k < _parsize; k += 4)
- 			{
+-			{
 -			    for (k = 0; k <= _parsize; k++)
 -			    {
 -				_freq_data [k][0] += ffta [k][0] * fftb [k][0] - ffta [k][1] * fftb [k][1];
 -				_freq_data [k][1] += ffta [k][0] * fftb [k][1] + ffta [k][1] * fftb [k][0];
 -			    }
-+			    D [0] += A [0] * B [0] - A [1] * B [1];
-+			    D [1] += A [0] * B [1] + A [1] * B [0];
-+			    A += 2;
-+			    B += 2;
-+			    D += 2;
- 			}
-+			_freq_data [_parsize][0] += ffta [_parsize][0] * fftb [_parsize][0];
-+			_freq_data [_parsize][1] = 0;
- 		    }
+-			}
+-		    }
  		    if (i == 0) i = _npar;
  		    i--;
  		}
@@ -338,25 +348,33 @@ index a5155de..6e5927d 100644
  	}
      }
  
-@@ -909,7 +882,7 @@ Macnode *Convlevel::findmacnode (unsigned int inp, unsigned int out, bool create
+@@ -908,11 +881,11 @@
+ 	X->_next = _inp_list;
  	_inp_list = X;
  	X->_inp = inp;
- 	X->_ffta = new fftwf_complex * [_npar];
+-	X->_ffta = new fftwf_complex * [_npar];
 -	memset (X->_ffta, 0, _npar * sizeof (fftw_complex *));
-+	memset (X->_ffta, 0, _npar * sizeof (fftwf_complex *));
++	X->_ffta = new float_complex * [_npar];
++	memset (X->_ffta, 0, _npar * sizeof (float_complex *));
          for (i = 0; i < _npar; i++)
  	{
-             X->_ffta [i] = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
-@@ -951,8 +924,6 @@ Macnode *Convlevel::findmacnode (unsigned int inp, unsigned int out, bool create
+-            X->_ffta [i] = (fftwf_complex *)(alloc_aligned ((_parsize + 1) * sizeof (fftwf_complex)));
++            X->_ffta [i] = (float_complex *)(alloc_aligned ((_parsize + 1) * sizeof (float_complex)));
+ 	}
+     }
+ 
+@@ -951,9 +924,7 @@
  }
  
  
 -#ifdef ENABLE_VECTOR_MODE
 -
- void Convlevel::fftswap (fftwf_complex *p)
+-void Convlevel::fftswap (fftwf_complex *p)
++void Convlevel::fftswap (float_complex *p)
  {
      unsigned int  n = _parsize;
-@@ -970,7 +941,3 @@ void Convlevel::fftswap (fftwf_complex *p)
+     float         a, b;
+@@ -970,7 +941,3 @@
          n -= 4;
      }
  }
@@ -364,21 +382,40 @@ index a5155de..6e5927d 100644
 -#endif
 -
 -
-diff --git a/libs/zita-convolver.h b/libs/zita-convolver.h
-index 0c15710..fe8e4e7 100644
---- a/libs/zita-convolver.h
-+++ b/libs/zita-convolver.h
-@@ -23,6 +23,9 @@
+diff -U 3 -H -b -w -B -d -r -N -- zita-convolver-3.1.0.orig/libs/zita-convolver.h zita-convolver-3.1.0/libs/zita-convolver.h
+--- zita-convolver-3.1.0.orig/libs/zita-convolver.h	2011-12-02 22:22:15.000000000 +0100
++++ zita-convolver-3.1.0/libs/zita-convolver.h	2016-09-16 18:08:31.000000000 +0200
+@@ -23,7 +23,10 @@
  
  
  #include <pthread.h>
+-#include <fftw3.h>
 +extern "C" {
 +#include <libavcodec/avfft.h>
 +}
- #include <fftw3.h>
++typedef float float_complex[2];
  
  
-@@ -244,8 +247,7 @@ private:
+ #define ZITA_CONVOLVER_MAJOR_VERSION 3
+@@ -164,7 +167,7 @@
+     friend class Convlevel;
+ 
+     Inpnode        *_next;
+-    fftwf_complex **_ffta;
++    float_complex **_ffta;
+     unsigned int    _inp;
+ };
+ 
+@@ -177,7 +180,7 @@
+ 
+     Macnode        *_next;
+     Inpnode        *_inpn;
+-    fftwf_complex **_fftb;
++    float_complex **_fftb;
+     bool            _copy;
+ };
+ 
+@@ -244,8 +247,7 @@
      void configure (int prio,
                      unsigned int offs,
                      unsigned int npar,
@@ -388,7 +425,16 @@ index 0c15710..fe8e4e7 100644
  
      void impdata_create (unsigned int inp,
                           unsigned int out,
-@@ -300,7 +302,6 @@ private:
+@@ -281,7 +283,7 @@
+ 
+     void cleanup (void);
+ 
+-    void fftswap (fftwf_complex *p);
++    void fftswap (float_complex *p);
+ 
+     void print (FILE *F);
+ 
+@@ -300,7 +302,6 @@
      unsigned int          _outoffs;        // offset into output buffer
      unsigned int          _inpsize;        // size of shared input buffer 
      unsigned int          _inpoffs;        // offset into input buffer
@@ -396,7 +442,7 @@ index 0c15710..fe8e4e7 100644
      unsigned int          _ptind;          // rotating partition index
      unsigned int          _opind;          // rotating output buffer index
      int                   _bits;           // bit identifiying this level
-@@ -310,10 +311,8 @@ private:
+@@ -310,11 +311,9 @@
      ZCsema                _done;           // sema used to wait for a cycle
      Inpnode              *_inp_list;       // linked list of active inputs
      Outnode              *_out_list;       // linked list of active outputs
@@ -404,12 +450,14 @@ index 0c15710..fe8e4e7 100644
 -    fftwf_plan            _plan_c2r;       // FFTW plan, inverse FFT
 -    float                *_time_data;      // workspace
 -    float                *_prep_data;      // workspace
+-    fftwf_complex        *_freq_data;      // workspace
 +    RDFTContext          *_plan_r2c;       // FFTW plan, forward FFT
 +    RDFTContext          *_plan_c2r;       // FFTW plan, inverse FFT
-     fftwf_complex        *_freq_data;      // workspace
++    float_complex        *_freq_data;      // workspace
      float               **_inpbuff;        // array of shared input buffers
      float               **_outbuff;        // array of shared output buffers
-@@ -379,7 +378,7 @@ public:
+ };
+@@ -379,7 +378,7 @@
  
      void set_density (float density);
  
@@ -418,7 +466,7 @@ index 0c15710..fe8e4e7 100644
  
      void set_skipcnt (unsigned int skipcnt);
  
-@@ -433,7 +432,6 @@ private:
+@@ -433,7 +432,6 @@
      float          *_outbuff [MAXOUT];        // output buffers
      unsigned int    _inpoffs;                 // current offset in input buffers
      unsigned int    _outoffs;                 // current offset in output buffers
