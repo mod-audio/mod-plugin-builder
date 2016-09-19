@@ -9,6 +9,7 @@ CALF_BAD_SITE = http://calf-studio-gear.org/files/
 CALF_BAD_SOURCE = calf-$(CALF_BAD_VERSION).tar.gz
 CALF_BAD_DEPENDENCIES = cairo expat libglib2
 CALF_BAD_AUTORECONF = YES
+CALF_BAD_MAKE = $(MAKE1)
 CALF_BAD_BUNDLES = calf-bad.lv2
 
 define CALF_BAD_POST_INSTALL_TARGET_MODGUIS
