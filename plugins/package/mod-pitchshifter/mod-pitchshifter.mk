@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_PITCHSHIFTER_VERSION = 0558244d125603e855222d2d07367641c0757c5f
+MOD_PITCHSHIFTER_VERSION = 9f9195d8b572f9b0bf70441ac8f65e300f351bbe
 MOD_PITCHSHIFTER_SITE = $(call github,moddevices,mod-pitchshifter,$(MOD_PITCHSHIFTER_VERSION))
 MOD_PITCHSHIFTER_DEPENDENCIES = armadillo fftwf host-fftwf host-python host-python-mpmath
 MOD_PITCHSHIFTER_BUNDLES = mod-2voices.lv2 mod-capo.lv2 mod-drop.lv2 mod-harmonizer.lv2 mod-harmonizer2.lv2 mod-harmonizercs.lv2 mod-supercapo.lv2 mod-superwhammy.lv2
