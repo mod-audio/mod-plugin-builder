@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LV2_VERSION = 4f597a80888eb6a448ee29c0777e99c87fa2eba4
+LV2_VERSION = 2811f4211c8314903da632de665a8e3fd17b5a51
 LV2_SITE = $(call github,drobilla,lv2,$(LV2_VERSION))
 LV2_LICENSE = ISC License
 LV2_LICENSE_FILES = COPYING
