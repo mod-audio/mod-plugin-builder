@@ -1,0 +1,97 @@
+diff --git a/common/JackServerGlobals.cpp b/common/JackServerGlobals.cpp
+index 1668841..6d804bc 100644
+--- a/common/JackServerGlobals.cpp
++++ b/common/JackServerGlobals.cpp
+@@ -203,11 +203,7 @@ bool JackServerGlobals::Init()
+                     if (tolower (optarg[0]) == 'h') {
+                         clock_source = JACK_TIMER_HPET;
+                     } else if (tolower (optarg[0]) == 'c') {
+-                        /* For backwards compatibility with scripts, allow
+-                         * the user to request the cycle clock on the
+-                         * command line, but use the system clock instead
+-                         */
+-                        clock_source = JACK_TIMER_SYSTEM_CLOCK;
++                        clock_source = JACK_TIMER_CYCLE_COUNTER;
+                     } else if (tolower (optarg[0]) == 's') {
+                         clock_source = JACK_TIMER_SYSTEM_CLOCK;
+                     } else {
+diff --git a/common/JackTypes.h b/common/JackTypes.h
+index f696fdc..04f186e 100644
+--- a/common/JackTypes.h
++++ b/common/JackTypes.h
+@@ -39,6 +39,7 @@ typedef uint16_t jack_int_t;  // Internal type for ports and refnum
+ 
+ typedef enum {
+ 	JACK_TIMER_SYSTEM_CLOCK,
++	JACK_TIMER_CYCLE_COUNTER,
+ 	JACK_TIMER_HPET,
+ } jack_timer_type_t;
+ 
+diff --git a/common/Jackdmp.cpp b/common/Jackdmp.cpp
+index a2ccd9c..3432340 100644
+--- a/common/Jackdmp.cpp
++++ b/common/Jackdmp.cpp
+@@ -203,7 +203,7 @@ static void usage(FILE* file, jackctl_server_t *server, bool full = true)
+             "               [ --internal-client OR -I internal-client-name ]\n"
+             "               [ --verbose OR -v ]\n"
+ #ifdef __linux__
+-            "               [ --clocksource OR -c [ h(pet) | s(ystem) ]\n"
++            "               [ --clocksource OR -c [ c(ycle) | h(pet) | s(ystem) ]\n"
+ #endif
+             "               [ --autoconnect OR -a <modechar>]\n");
+ 
+@@ -333,11 +333,7 @@ int main(int argc, char** argv)
+                         value.ui = JACK_TIMER_HPET;
+                         jackctl_parameter_set_value(param, &value);
+                     } else if (tolower (optarg[0]) == 'c') {
+-                        /* For backwards compatibility with scripts, allow
+-                         * the user to request the cycle clock on the
+-                         * command line, but use the system clock instead
+-                         */
+-                        value.ui = JACK_TIMER_SYSTEM_CLOCK;
++                        value.ui = JACK_TIMER_CYCLE_COUNTER;
+                         jackctl_parameter_set_value(param, &value);
+                     } else if (tolower (optarg[0]) == 's') {
+                         value.ui = JACK_TIMER_SYSTEM_CLOCK;
+diff --git a/linux/JackLinuxTime.c b/linux/JackLinuxTime.c
+index a5ece76..5df079b 100644
+--- a/linux/JackLinuxTime.c
++++ b/linux/JackLinuxTime.c
+@@ -122,6 +122,17 @@ static jack_time_t jack_get_microseconds_from_hpet (void)
+ 
+ #endif /* HPET_SUPPORT */
+ 
++static jack_time_t jack_get_microseconds_from_cycles (void)
++{
++#if defined(__ARM_ARCH_7A__)
++        uint32_t r;
++        asm volatile("mrc p15, 0, %0, c9, c13, 0\t\n" : "=r"(r));
++        return (((uint64_t)r) << 6) / 912; // 912 is the hardcoded MOD Duo CPU frequency
++#else
++        return 0;
++#endif
++}
++
+ #define HAVE_CLOCK_GETTIME 1
+ 
+ #ifndef HAVE_CLOCK_GETTIME
+@@ -171,6 +182,10 @@ void SetClockSource(jack_timer_type_t source)
+ 
+ 	switch (source)
+ 	{
++        case JACK_TIMER_CYCLE_COUNTER:
++            _jack_get_microseconds = jack_get_microseconds_from_cycles;
++            break;
++
+         case JACK_TIMER_HPET:
+             if (jack_hpet_init () == 0) {
+                 _jack_get_microseconds = jack_get_microseconds_from_hpet;
+@@ -189,6 +204,8 @@ void SetClockSource(jack_timer_type_t source)
+ const char* ClockSourceName(jack_timer_type_t source)
+ {
+ 	switch (source) {
++        case JACK_TIMER_CYCLE_COUNTER:
++            return "cycle counter";
+         case JACK_TIMER_HPET:
+             return "hpet";
+         case JACK_TIMER_SYSTEM_CLOCK:

@@ -1,0 +1,386 @@
+From eb479ef0be59ed656fecf1b2505e21c4884e86e0 Mon Sep 17 00:00:00 2001
+From: falkTX <falktx@gmail.com>
+Date: Thu, 23 Jun 2016 11:38:32 +0200
+Subject: [PATCH] Use linux futex as JackSynchro
+
+---
+ common/JackInternalClient.cpp |  17 ++++
+ common/JackInternalClient.h   |   3 +
+ common/wscript                |   2 +-
+ linux/JackLinuxFutex.cpp      | 207 ++++++++++++++++++++++++++++++++++++++++++
+ linux/JackLinuxFutex.h        |  78 ++++++++++++++++
+ linux/JackPlatformPlug_os.h   |   4 +-
+ 6 files changed, 308 insertions(+), 3 deletions(-)
+ create mode 100644 linux/JackLinuxFutex.cpp
+ create mode 100644 linux/JackLinuxFutex.h
+
+diff --git a/common/JackInternalClient.cpp b/common/JackInternalClient.cpp
+index 0668516..a1c5a69 100644
+--- a/common/JackInternalClient.cpp
++++ b/common/JackInternalClient.cpp
+@@ -117,6 +117,23 @@ void JackInternalClient::ShutDown(jack_status_t code, const char* message)
+     JackClient::ShutDown(code, message);
+ }
+ 
++int JackInternalClient::Activate()
++{
++#ifdef __linux__
++    fSynchroTable[fClientControl.fRefNum].MakePrivate(true);
++#endif
++    return JackClient::Activate();
++}
++
++int JackInternalClient::Deactivate()
++{
++    const int ret = JackClient::Deactivate();
++#ifdef __linux__
++    fSynchroTable[fClientControl.fRefNum].MakePrivate(false);
++#endif
++    return ret;
++}
++
+ JackGraphManager* JackInternalClient::GetGraphManager() const
+ {
+     assert(fGraphManager);
+diff --git a/common/JackInternalClient.h b/common/JackInternalClient.h
+index 28c11d4..81e7b9e 100644
+--- a/common/JackInternalClient.h
++++ b/common/JackInternalClient.h
+@@ -49,6 +49,9 @@ class JackInternalClient : public JackClient
+         int Open(const char* server_name, const char* name, int uuid, jack_options_t options, jack_status_t* status);
+         void ShutDown(jack_status_t code, const char* message);
+ 
++        virtual int Activate();
++        virtual int Deactivate();
++
+         JackGraphManager* GetGraphManager() const;
+         JackEngineControl* GetEngineControl() const;
+         JackClientControl* GetClientControl() const;
+diff --git a/common/wscript b/common/wscript
+index b64d275..2cff1b5 100644
+--- a/common/wscript
++++ b/common/wscript
+@@ -83,10 +83,10 @@ def build(bld):
+             'JackDebugClient.cpp',
+             'timestamps.c',
+             '../posix/JackPosixThread.cpp',
+-            '../posix/JackPosixSemaphore.cpp',
+             '../posix/JackPosixProcessSync.cpp',
+             '../posix/JackPosixMutex.cpp',
+             '../posix/JackSocket.cpp',
++            '../linux/JackLinuxFutex.cpp',
+             '../linux/JackLinuxTime.c',
+             ]
+         includes = ['../linux', '../posix'] + includes
+diff --git a/linux/JackLinuxFutex.cpp b/linux/JackLinuxFutex.cpp
+new file mode 100644
+index 0000000..2c109fe
+--- /dev/null
++++ b/linux/JackLinuxFutex.cpp
+@@ -0,0 +1,207 @@
++/*
++Copyright (C) 2004-2008 Grame
++Copyright (C) 2016 Filipe Coelho
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU Lesser General Public License as published by
++the Free Software Foundation; either version 2.1 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU Lesser General Public License for more details.
++
++You should have received a copy of the GNU Lesser General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++
++*/
++
++#include "JackLinuxFutex.h"
++#include "JackTools.h"
++#include "JackConstants.h"
++#include "JackError.h"
++#include <fcntl.h>
++#include <stdio.h>
++#include <sys/mman.h>
++#include <syscall.h>
++#include <linux/futex.h>
++
++namespace Jack
++{
++
++void JackLinuxFutex::BuildName(const char* client_name, const char* server_name, char* res, int size)
++{
++    char ext_client_name[SYNC_MAX_NAME_SIZE + 1];
++    JackTools::RewriteName(client_name, ext_client_name);
++    if (getenv("JACK_PROMISCUOUS_SERVER")) {
++        snprintf(res, size, "jack_sem.%s_%s", server_name, ext_client_name);
++    } else {
++        snprintf(res, size, "jack_sem.%d_%s_%s", JackTools::GetUID(), server_name, ext_client_name);
++    }
++}
++
++bool JackLinuxFutex::Signal()
++{
++    if (!fFutex) {
++        jack_error("JackLinuxFutex::Signal name = %s already deallocated!!", fName);
++        return false;
++    }
++
++    if (fFlush) {
++        return true;
++    }
++
++    if (! __sync_bool_compare_and_swap(fFutex, 0, 1)) {
++        // already unlocked, do not wake futex
++        return true;
++    }
++
++    ::syscall(__NR_futex, fFutex, fPrivate ? FUTEX_WAKE_PRIVATE : FUTEX_WAKE, 1, NULL, NULL, 0);
++    return true;
++}
++
++bool JackLinuxFutex::SignalAll()
++{
++    return Signal();
++}
++
++bool JackLinuxFutex::Wait()
++{
++    if (!fFutex) {
++        jack_error("JackLinuxFutex::Wait name = %s already deallocated!!", fName);
++        return false;
++    }
++
++    for (;;)
++    {
++        if (__sync_bool_compare_and_swap(fFutex, 1, 0))
++            return true;
++
++        if (::syscall(__NR_futex, fFutex, fPrivate ? FUTEX_WAIT_PRIVATE : FUTEX_WAIT, 0, NULL, NULL, 0) != 0 && errno != EWOULDBLOCK)
++            return false;
++    }
++}
++
++bool JackLinuxFutex::TimedWait(long usec)
++{
++    if (!fFutex) {
++        jack_error("JackLinuxFutex::TimedWait name = %s already deallocated!!", fName);
++        return false;
++     }
++
++    const uint secs  =  usec / 1000000;
++    const int  nsecs = (usec % 1000000) * 1000;
++
++    const timespec timeout = { static_cast<time_t>(secs), nsecs };
++
++    for (;;)
++    {
++        if (__sync_bool_compare_and_swap(fFutex, 1, 0))
++            return true;
++
++        if (::syscall(__NR_futex, fFutex, fPrivate ? FUTEX_WAIT_PRIVATE : FUTEX_WAIT, 0, &timeout, NULL, 0) != 0 && errno != EWOULDBLOCK)
++            return false;
++    }
++}
++
++// Server side : publish the futex in the global namespace
++bool JackLinuxFutex::Allocate(const char* name, const char* server_name, int value)
++{
++    BuildName(name, server_name, fName, sizeof(fName));
++    jack_log("JackLinuxFutex::Allocate name = %s val = %ld", fName, value);
++
++    if ((fSharedMem = shm_open(fName, O_CREAT | O_RDWR, 0777)) < 0) {
++        jack_error("Allocate: can't check in named futex name = %s err = %s", fName, strerror(errno));
++        return false;
++    }
++
++    ftruncate(fSharedMem, sizeof(int));
++
++    if ((fFutex = (int*)mmap(NULL, sizeof(int), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, fSharedMem, 0)) == NULL) {
++        jack_error("Allocate: can't check in named futex name = %s err = %s", fName, strerror(errno));
++        close(fSharedMem);
++        fSharedMem = -1;
++        shm_unlink(fName);
++        return false;
++    }
++
++    *fFutex = value;
++    return true;
++}
++
++// Client side : get the published futex from server
++bool JackLinuxFutex::ConnectInput(const char* name, const char* server_name)
++{
++    BuildName(name, server_name, fName, sizeof(fName));
++    jack_log("JackLinuxFutex::Connect name = %s", fName);
++
++    // Temporary...
++    if (fFutex) {
++        jack_log("Already connected name = %s", name);
++        return true;
++    }
++
++    if ((fSharedMem = shm_open(fName, O_RDWR, 0)) < 0) {
++        jack_error("Connect: can't connect named futex name = %s err = %s", fName, strerror(errno));
++        return false;
++    }
++
++    if ((fFutex = (int*)mmap(NULL, sizeof(int), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, fSharedMem, 0)) == NULL) {
++        jack_error("Connect: can't connect named futex name = %s err = %s", fName, strerror(errno));
++        close(fSharedMem);
++        fSharedMem = -1;
++        return false;
++    }
++
++    return true;
++}
++
++bool JackLinuxFutex::Connect(const char* name, const char* server_name)
++{
++    return ConnectInput(name, server_name);
++}
++
++bool JackLinuxFutex::ConnectOutput(const char* name, const char* server_name)
++{
++    return ConnectInput(name, server_name);
++}
++
++bool JackLinuxFutex::Disconnect()
++{
++    if (!fFutex) {
++        return true;
++    }
++
++    munmap(fFutex, sizeof(int));
++    fFutex = NULL;
++
++    close(fSharedMem);
++    fSharedMem = -1;
++    return true;
++}
++
++// Server side : destroy the futex
++void JackLinuxFutex::Destroy()
++{
++    if (!fFutex) {
++        return;
++    }
++
++    munmap(fFutex, sizeof(int));
++    fFutex = NULL;
++
++    close(fSharedMem);
++    fSharedMem = -1;
++
++    shm_unlink(fName);
++}
++
++void JackLinuxFutex::MakePrivate(bool priv)
++{
++    fPrivate = priv;
++}
++
++} // end of namespace
++
+diff --git a/linux/JackLinuxFutex.h b/linux/JackLinuxFutex.h
+new file mode 100644
+index 0000000..283ba1a
+--- /dev/null
++++ b/linux/JackLinuxFutex.h
+@@ -0,0 +1,78 @@
++/*
++Copyright (C) 2004-2008 Grame
++Copyright (C) 2016 Filipe Coelho
++
++This program is free software; you can redistribute it and/or modify
++it under the terms of the GNU Lesser General Public License as published by
++the Free Software Foundation; either version 2.1 of the License, or
++(at your option) any later version.
++
++This program is distributed in the hope that it will be useful,
++but WITHOUT ANY WARRANTY; without even the implied warranty of
++MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++GNU Lesser General Public License for more details.
++
++You should have received a copy of the GNU Lesser General Public License
++along with this program; if not, write to the Free Software
++Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
++
++*/
++
++#ifndef __JackLinuxFutex__
++#define __JackLinuxFutex__
++
++#include "JackSynchro.h"
++#include "JackCompilerDeps.h"
++#include <stddef.h>
++
++namespace Jack
++{
++
++/*!
++\brief Inter process synchronization using Linux futex.
++
++ Based on the JackPosixSemaphore class.
++ Adapted to work with linux futex to be as light as possible and also work in multiple architectures.
++
++ Adds a new 'MakePrivate' function that makes the sync happen in the local process only,
++ making it even faster for internal clients.
++*/
++
++class SERVER_EXPORT JackLinuxFutex : public detail::JackSynchro
++{
++
++    private:
++
++        int fSharedMem;
++        int* fFutex;
++        bool fPrivate;
++
++    protected:
++
++        void BuildName(const char* name, const char* server_name, char* res, int size);
++
++    public:
++
++        JackLinuxFutex():JackSynchro(), fSharedMem(-1), fFutex(NULL), fPrivate(false)
++        {}
++
++        bool Signal();
++        bool SignalAll();
++        bool Wait();
++        bool TimedWait(long usec);
++
++        bool Allocate(const char* name, const char* server_name, int value);
++        bool Connect(const char* name, const char* server_name);
++        bool ConnectInput(const char* name, const char* server_name);
++        bool ConnectOutput(const char* name, const char* server_name);
++        bool Disconnect();
++        void Destroy();
++
++        void MakePrivate(bool priv);
++};
++
++} // end of namespace
++
++
++#endif
++
+diff --git a/linux/JackPlatformPlug_os.h b/linux/JackPlatformPlug_os.h
+index b480f45..60c9a58 100644
+--- a/linux/JackPlatformPlug_os.h
++++ b/linux/JackPlatformPlug_os.h
+@@ -54,8 +54,8 @@ namespace Jack { typedef JackPosixThread JackThread; }
+ namespace Jack { typedef JackFifo JackSynchro; }
+ */
+ 
+-#include "JackPosixSemaphore.h"
+-namespace Jack { typedef JackPosixSemaphore JackSynchro; }
++#include "JackLinuxFutex.h"
++namespace Jack { typedef JackLinuxFutex JackSynchro; }
+ 
+ /* __JackPlatformChannelTransaction__ */
+ /*

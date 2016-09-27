@@ -1,0 +1,38 @@
+diff --git a/common/JackServer.cpp b/common/JackServer.cpp
+index 1fd2675..d032f96 100644
+--- a/common/JackServer.cpp
++++ b/common/JackServer.cpp
+@@ -234,11 +234,6 @@ int JackServer::SetBufferSize(jack_nframes_t buffer_size)
+     jack_log("JackServer::SetBufferSize nframes = %ld", buffer_size);
+     jack_nframes_t current_buffer_size = fEngineControl->fBufferSize;
+ 
+-    if (current_buffer_size == buffer_size) {
+-        jack_log("SetBufferSize: requirement for new buffer size equals current value");
+-        return 0;
+-    }
+-
+     if (fAudioDriver->IsFixedBufferSize()) {
+         jack_log("SetBufferSize: driver only supports a fixed buffer size");
+         return -1;
+diff --git a/linux/alsa/JackAlsaDriver.cpp b/linux/alsa/JackAlsaDriver.cpp
+index 05c0ded..23defcf 100644
+--- a/linux/alsa/JackAlsaDriver.cpp
++++ b/linux/alsa/JackAlsaDriver.cpp
+@@ -69,6 +69,9 @@ namespace Jack
+ 
+ int JackAlsaDriver::SetBufferSize(jack_nframes_t buffer_size)
+ {
++    if (buffer_size == 0)
++        buffer_size = fEngineControl->fBufferSize;
++
+     jack_log("JackAlsaDriver::SetBufferSize %ld", buffer_size);
+     int res = alsa_driver_reset_parameters((alsa_driver_t *)fDriver, buffer_size,
+                                            ((alsa_driver_t *)fDriver)->user_nperiods,
+@@ -922,6 +925,7 @@ int Restart()
+ {
+     int res;
+     if ((res = g_alsa_driver->Stop()) == 0) {
++        g_alsa_driver->SetBufferSize(0);
+         res = g_alsa_driver->Start();
+     }
+     return res;

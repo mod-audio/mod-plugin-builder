@@ -1,0 +1,175 @@
+diff --git a/common/JackEngine.cpp b/common/JackEngine.cpp
+index 8883663..102d900 100644
+--- a/common/JackEngine.cpp
++++ b/common/JackEngine.cpp
+@@ -613,7 +613,7 @@ int JackEngine::ClientExternalOpen(const char* name, int pid, int uuid, int* ref
+ 
+     JackExternalClient* client = new JackExternalClient();
+ 
+-    if (!fSynchroTable[refnum].Allocate(real_name, fEngineControl->fServerName, 0)) {
++    if (!fSynchroTable[refnum].Allocate(real_name, fEngineControl->fServerName, 0, false)) {
+         jack_error("Cannot allocate synchro");
+         goto error;
+     }
+@@ -663,7 +663,7 @@ int JackEngine::ClientInternalOpen(const char* name, int* ref, JackEngineControl
+         goto error;
+     }
+ 
+-    if (!fSynchroTable[refnum].Allocate(name, fEngineControl->fServerName, 0)) {
++    if (!fSynchroTable[refnum].Allocate(name, fEngineControl->fServerName, 0, true)) {
+         jack_error("Cannot allocate synchro");
+         goto error;
+     }
+diff --git a/common/JackInternalClient.cpp b/common/JackInternalClient.cpp
+index a1c5a69..0668516 100644
+--- a/common/JackInternalClient.cpp
++++ b/common/JackInternalClient.cpp
+@@ -117,23 +117,6 @@ void JackInternalClient::ShutDown(jack_status_t code, const char* message)
+     JackClient::ShutDown(code, message);
+ }
+ 
+-int JackInternalClient::Activate()
+-{
+-#ifdef __linux__
+-    fSynchroTable[fClientControl.fRefNum].MakePrivate(true);
+-#endif
+-    return JackClient::Activate();
+-}
+-
+-int JackInternalClient::Deactivate()
+-{
+-    const int ret = JackClient::Deactivate();
+-#ifdef __linux__
+-    fSynchroTable[fClientControl.fRefNum].MakePrivate(false);
+-#endif
+-    return ret;
+-}
+-
+ JackGraphManager* JackInternalClient::GetGraphManager() const
+ {
+     assert(fGraphManager);
+diff --git a/common/JackInternalClient.h b/common/JackInternalClient.h
+index 81e7b9e..28c11d4 100644
+--- a/common/JackInternalClient.h
++++ b/common/JackInternalClient.h
+@@ -49,9 +49,6 @@ class JackInternalClient : public JackClient
+         int Open(const char* server_name, const char* name, int uuid, jack_options_t options, jack_status_t* status);
+         void ShutDown(jack_status_t code, const char* message);
+ 
+-        virtual int Activate();
+-        virtual int Deactivate();
+-
+         JackGraphManager* GetGraphManager() const;
+         JackEngineControl* GetEngineControl() const;
+         JackClientControl* GetClientControl() const;
+diff --git a/common/JackMidiAsyncWaitQueue.cpp b/common/JackMidiAsyncWaitQueue.cpp
+index 016737c..6d63a4d 100644
+--- a/common/JackMidiAsyncWaitQueue.cpp
++++ b/common/JackMidiAsyncWaitQueue.cpp
+@@ -29,7 +29,7 @@ JackMidiAsyncWaitQueue::JackMidiAsyncWaitQueue(size_t max_bytes,
+                                                size_t max_messages):
+     JackMidiAsyncQueue(max_bytes, max_messages)
+ {
+-    if (semaphore.Allocate("JackMidiAsyncWaitQueue", "midi-thread", 0)) {
++    if (semaphore.Allocate("JackMidiAsyncWaitQueue", "midi-thread", 0, true)) {
+         throw std::bad_alloc();
+     }
+ }
+diff --git a/linux/JackLinuxFutex.cpp b/linux/JackLinuxFutex.cpp
+index 2c109fe..2d74e77 100644
+--- a/linux/JackLinuxFutex.cpp
++++ b/linux/JackLinuxFutex.cpp
+@@ -35,11 +35,15 @@ void JackLinuxFutex::BuildName(const char* client_name, const char* server_name,
+ {
+     char ext_client_name[SYNC_MAX_NAME_SIZE + 1];
+     JackTools::RewriteName(client_name, ext_client_name);
++#if 1
++    snprintf(res, size, "jack_sem.%s", ext_client_name);
++#else
+     if (getenv("JACK_PROMISCUOUS_SERVER")) {
+         snprintf(res, size, "jack_sem.%s_%s", server_name, ext_client_name);
+     } else {
+         snprintf(res, size, "jack_sem.%d_%s_%s", JackTools::GetUID(), server_name, ext_client_name);
+     }
++#endif
+ }
+ 
+ bool JackLinuxFutex::Signal()
+@@ -53,9 +57,10 @@ bool JackLinuxFutex::Signal()
+         return true;
+     }
+ 
+-    if (! __sync_bool_compare_and_swap(fFutex, 0, 1)) {
++    if (! __sync_bool_compare_and_swap(fFutex, 0, 1))
++    {
+         // already unlocked, do not wake futex
+-        return true;
++        if (! fPrivate) return true;
+     }
+ 
+     ::syscall(__NR_futex, fFutex, fPrivate ? FUTEX_WAKE_PRIVATE : FUTEX_WAKE, 1, NULL, NULL, 0);
+@@ -107,7 +112,7 @@ bool JackLinuxFutex::TimedWait(long usec)
+ }
+ 
+ // Server side : publish the futex in the global namespace
+-bool JackLinuxFutex::Allocate(const char* name, const char* server_name, int value)
++bool JackLinuxFutex::Allocate(const char* name, const char* server_name, int value, bool internal)
+ {
+     BuildName(name, server_name, fName, sizeof(fName));
+     jack_log("JackLinuxFutex::Allocate name = %s val = %ld", fName, value);
+@@ -128,11 +133,12 @@ bool JackLinuxFutex::Allocate(const char* name, const char* server_name, int val
+     }
+ 
+     *fFutex = value;
++    fPrivate = internal;
+     return true;
+ }
+ 
+ // Client side : get the published futex from server
+-bool JackLinuxFutex::ConnectInput(const char* name, const char* server_name)
++bool JackLinuxFutex::Connect(const char* name, const char* server_name)
+ {
+     BuildName(name, server_name, fName, sizeof(fName));
+     jack_log("JackLinuxFutex::Connect name = %s", fName);
+@@ -158,14 +164,14 @@ bool JackLinuxFutex::ConnectInput(const char* name, const char* server_name)
+     return true;
+ }
+ 
+-bool JackLinuxFutex::Connect(const char* name, const char* server_name)
++bool JackLinuxFutex::ConnectInput(const char* name, const char* server_name)
+ {
+-    return ConnectInput(name, server_name);
++    return Connect(name, server_name);
+ }
+ 
+ bool JackLinuxFutex::ConnectOutput(const char* name, const char* server_name)
+ {
+-    return ConnectInput(name, server_name);
++    return Connect(name, server_name);
+ }
+ 
+ bool JackLinuxFutex::Disconnect()
+@@ -198,10 +204,5 @@ void JackLinuxFutex::Destroy()
+     shm_unlink(fName);
+ }
+ 
+-void JackLinuxFutex::MakePrivate(bool priv)
+-{
+-    fPrivate = priv;
+-}
+-
+ } // end of namespace
+ 
+diff --git a/linux/JackLinuxFutex.h b/linux/JackLinuxFutex.h
+index 283ba1a..bcda93a 100644
+--- a/linux/JackLinuxFutex.h
++++ b/linux/JackLinuxFutex.h
+@@ -61,7 +61,7 @@ class SERVER_EXPORT JackLinuxFutex : public detail::JackSynchro
+         bool Wait();
+         bool TimedWait(long usec);
+ 
+-        bool Allocate(const char* name, const char* server_name, int value);
++        bool Allocate(const char* name, const char* server_name, int value, bool internal);
+         bool Connect(const char* name, const char* server_name);
+         bool ConnectInput(const char* name, const char* server_name);
+         bool ConnectOutput(const char* name, const char* server_name);

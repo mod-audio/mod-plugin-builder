@@ -1,0 +1,91 @@
+diff --git a/linux/alsa/JackAlsaDriver.cpp b/linux/alsa/JackAlsaDriver.cpp
+index 62d9f43..082a79c 100644
+--- a/linux/alsa/JackAlsaDriver.cpp
++++ b/linux/alsa/JackAlsaDriver.cpp
+@@ -409,7 +409,7 @@ int JackAlsaDriver::Read()
+ 
+ retry:
+ 
+-    nframes = alsa_driver_wait((alsa_driver_t *)fDriver, -1, &wait_status, &fDelayedUsecs);
++    nframes = alsa_driver_wait((alsa_driver_t *)fDriver, -1, &wait_status);
+ 
+     if (wait_status < 0)
+         return -1;		/* driver failed */
+diff --git a/linux/alsa/alsa_driver.c b/linux/alsa/alsa_driver.c
+index 7460efd..a6db009 100644
+--- a/linux/alsa/alsa_driver.c
++++ b/linux/alsa/alsa_driver.c
+@@ -1169,7 +1169,7 @@ alsa_driver_restart (alsa_driver_t *driver)
+ }
+ 
+ static int
+-alsa_driver_xrun_recovery (alsa_driver_t *driver, float *delayed_usecs)
++alsa_driver_xrun_recovery (alsa_driver_t *driver)
+ {
+ 	snd_pcm_status_t *status;
+ 	int res;
+@@ -1206,13 +1206,7 @@ alsa_driver_xrun_recovery (alsa_driver_t *driver, float *delayed_usecs)
+ 
+ 	if (snd_pcm_status_get_state(status) == SND_PCM_STATE_XRUN
+ 	    && driver->process_count > XRUN_REPORT_DELAY) {
+-		struct timeval now, diff, tstamp;
+ 		driver->xrun_count++;
+-		snd_pcm_status_get_tstamp(status,&now);
+-		snd_pcm_status_get_trigger_tstamp(status, &tstamp);
+-		timersub(&now, &tstamp, &diff);
+-		*delayed_usecs = diff.tv_sec * 1000000.0 + diff.tv_usec;
+-		jack_log("**** alsa_pcm: xrun of at least %.3f msecs",*delayed_usecs / 1000.0);
+ 	}
+ 
+ 	if (alsa_driver_restart (driver)) {
+@@ -1251,8 +1245,7 @@ alsa_driver_set_clock_sync_status (alsa_driver_t *driver, channel_t chn,
+ static int under_gdb = FALSE;
+ 
+ jack_nframes_t
+-alsa_driver_wait (alsa_driver_t *driver, int extra_fd, int *status, float
+-		  *delayed_usecs)
++alsa_driver_wait (alsa_driver_t *driver, int extra_fd, int *status)
+ {
+ 	snd_pcm_sframes_t avail = 0;
+ 	snd_pcm_sframes_t capture_avail = 0;
+@@ -1265,7 +1258,6 @@ alsa_driver_wait (alsa_driver_t *driver, int extra_fd, int *status, float
+ 	jack_time_t poll_ret = 0;
+ 
+ 	*status = -1;
+-	*delayed_usecs = 0;
+ 
+ 	need_capture = driver->capture_handle ? 1 : 0;
+ 
+@@ -1357,9 +1349,6 @@ alsa_driver_wait (alsa_driver_t *driver, int extra_fd, int *status, float
+         SetTime(poll_ret);
+ 
+ 		if (extra_fd < 0) {
+-			if (driver->poll_next && poll_ret > driver->poll_next) {
+-				*delayed_usecs = poll_ret - driver->poll_next;
+-			}
+ 			driver->poll_last = poll_ret;
+ 			driver->poll_next = poll_ret + driver->period_usecs;
+ // JACK2
+@@ -1479,7 +1468,7 @@ alsa_driver_wait (alsa_driver_t *driver, int extra_fd, int *status, float
+ 	}
+ 
+ 	if (xrun_detected) {
+-		*status = alsa_driver_xrun_recovery (driver, delayed_usecs);
++		*status = alsa_driver_xrun_recovery (driver);
+ 		return 0;
+ 	}
+ 
+diff --git a/linux/alsa/alsa_driver.h b/linux/alsa/alsa_driver.h
+index efe93de..b9d2daf 100644
+--- a/linux/alsa/alsa_driver.h
++++ b/linux/alsa/alsa_driver.h
+@@ -260,8 +260,7 @@ int
+ alsa_driver_stop (alsa_driver_t *driver);
+ 
+ jack_nframes_t
+-alsa_driver_wait (alsa_driver_t *driver, int extra_fd, int *status, float
+-		  *delayed_usecs);
++alsa_driver_wait (alsa_driver_t *driver, int extra_fd, int *status);
+ 
+ int
+ alsa_driver_read (alsa_driver_t *driver, jack_nframes_t nframes);
