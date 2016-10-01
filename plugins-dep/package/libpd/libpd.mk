@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LIBPD_VERSION = 019f864802cebc531f425ba6d1be8fd49f630a3e
+LIBPD_VERSION = 18ffc63898cc3b1c32e386cc60f02d1aaccb1395
 LIBPD_SITE = $(call github,libpd,libpd,$(LIBPD_VERSION))
 LIBPD_INSTALL_STAGING = YES
 
@@ -22,10 +22,6 @@ endef
 
 define LIBPD_BUILD_CMDS
 	$(LIBPD_TARGET_MAKE)
-endef
-
-define LIBPD_INSTALL_TARGET_CMDS
-	$(LIBPD_TARGET_MAKE) install prefix=$(TARGET_DIR)/usr
 endef
 
 define LIBPD_INSTALL_STAGING_CMDS
