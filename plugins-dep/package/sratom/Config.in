@@ -1,0 +1,4 @@
+config BR2_PACKAGE_SRATOM
+	bool "sratom"
+	select BR2_PACKAGE_LV2
+	select BR2_PACKAGE_SORD
