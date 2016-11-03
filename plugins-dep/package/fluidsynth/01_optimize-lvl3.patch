@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 50b36d2..62ddb09 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -150,7 +150,7 @@ if test "$GCC" = yes; then
+     CFLAGS="${CFLAGS} ${FCCFLAGS} -g -Wall -W -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wstrict-prototypes -Wno-unused-parameter -Wno-cast-qual"
+     AC_DEFINE(DEBUG, 1, [Define to activate debugging message]) 
+   else
+-    CFLAGS="${CFLAGS} ${FCCFLAGS} -O2 -fomit-frame-pointer -funroll-all-loops -finline-functions -Wall -W -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wstrict-prototypes -Winline -Wno-unused-parameter -Wno-cast-qual"
++    CFLAGS="${CFLAGS} ${FCCFLAGS} -O3 -fomit-frame-pointer -funroll-all-loops -finline-functions -Wall -W -Wpointer-arith -Wbad-function-cast -Wcast-qual -Wcast-align -Wstrict-prototypes -Winline -Wno-unused-parameter -Wno-cast-qual"
+     AC_DEFINE(DEBUG, 0, [Define to activate debugging message])
+   fi
+ fi
