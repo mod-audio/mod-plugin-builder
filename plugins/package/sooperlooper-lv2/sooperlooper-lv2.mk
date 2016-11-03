@@ -4,7 +4,7 @@
 #
 ######################################
 
-SOOPERLOOPER_LV2_VERSION = 1557047a6ed75b23d234ca6fd1b141e76d9b7a19
+SOOPERLOOPER_LV2_VERSION = 39c81b5e3996b3f10b89e333dab3a194b9ea5011
 SOOPERLOOPER_LV2_SITE = $(call github,moddevices,sooperlooper-lv2-plugin,$(SOOPERLOOPER_LV2_VERSION))
 SOOPERLOOPER_LV2_BUNDLES = sooperlooper.lv2
 
