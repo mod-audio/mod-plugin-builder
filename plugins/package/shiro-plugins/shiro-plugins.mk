@@ -4,7 +4,7 @@
 #
 ######################################
 
-SHIRO_PLUGINS_VERSION = 6b6a0d5f71240782fca5fd853a4fe8bc3ecd54d3
+SHIRO_PLUGINS_VERSION = 60a678ca6abdb7fa10b0ac8dd87e0e41052abe78
 SHIRO_PLUGINS_SITE = $(call github,ninodewit,SHIRO-Plugins,$(SHIRO_PLUGINS_VERSION))
 SHIRO_PLUGINS_BUNDLES = Harmless.lv2 Larynx.lv2 Modulay.lv2 Pitchotto.lv2 Shiroverb.lv2
 
