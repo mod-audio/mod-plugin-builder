@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXVOODOO_VERSION = 6d1097283f88c2c02f436ad64924f3b828f48546
+GXVOODOO_VERSION = e643626806fd62ed63e9f4f0a70afc38c02c981d
 GXVOODOO_SITE = $(call github,moddevices,GxVoodoFuzz.lv2,$(GXVOODOO_VERSION))
 GXVOODOO_BUNDLES = gx_voodoo.lv2
 

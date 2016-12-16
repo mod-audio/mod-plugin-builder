@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXHYPERION_VERSION = 28b566084ebfd16d3d61c5d6f572eb5230680c34
+GXHYPERION_VERSION = 6abb0a454270acb257d3fe8f1868b92da60d7513
 GXHYPERION_SITE = $(call github,moddevices,GxHyperion.lv2,$(GXHYPERION_VERSION))
 GXHYPERION_BUNDLES = gx_hyperion.lv2
 

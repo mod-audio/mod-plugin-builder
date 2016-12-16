@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXSFP_VERSION = ad44308d489dfe61eec75b89b8e745da131c89c4
+GXSFP_VERSION = 6137f76a83deaee4d61de6c4b7cbc7a8ea755f3d
 GXSFP_SITE = $(call github,moddevices,GxSuperFuzz.lv2,$(GXSFP_VERSION))
 GXSFP_BUNDLES = gx_sfp.lv2
 

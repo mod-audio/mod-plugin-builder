@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXSATURATE_VERSION = ec3e0f83b93feecdbc3a086773fe6f8a080c20cd
+GXSATURATE_VERSION = 8dcfa1cf253de13689e76b8a23359b7a1e1409d7
 GXSATURATE_SITE = $(call github,moddevices,GxSaturator.lv2,$(GXSATURATE_VERSION))
 GXSATURATE_BUNDLES = gx_saturate.lv2
 
