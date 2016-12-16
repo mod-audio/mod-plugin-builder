@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXOSMU_VERSION = a317ac978b692100393bb76d62403bf53973a7d0
+GXOSMU_VERSION = 475e81b08065324f26b65dbd7661603a91407c0e
 GXOSMU_SITE = $(call github,brummer10,GxOsMutantes.lv2,$(GXOSMU_VERSION))
 GXOSMU_BUNDLES = gx_osmu.lv2
 
