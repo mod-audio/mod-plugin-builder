@@ -4,9 +4,9 @@
 #
 ######################################
 
-ZAM_PLUGINS_VERSION = 21ccac0c15e1e54d482ff0931b55975a7e2ac62e
+ZAM_PLUGINS_VERSION = 3501810d403fdf5c35031dc3ac65ad56c13a8d2a
 ZAM_PLUGINS_SITE = $(call github,zamaudio,zam-plugins,$(ZAM_PLUGINS_VERSION))
-ZAM_PLUGINS_BUNDLES = ZamAutoSat.lv2 ZaMaximX2.lv2 ZamComp.lv2 ZamCompX2.lv2 ZamDelay.lv2 ZamEQ2.lv2 ZamGate.lv2 ZamGateX2.lv2 ZamGEQ31.lv2 ZamHeadX2.lv2 ZamTube.lv2 ZaMultiComp.lv2 ZaMultiCompX2.lv2
+ZAM_PLUGINS_BUNDLES = ZamAutoSat.lv2 ZamComp.lv2 ZamCompX2.lv2 ZamDelay.lv2 ZamEQ2.lv2 ZamGate.lv2 ZamGateX2.lv2 ZamGEQ31.lv2 ZamHeadX2.lv2 ZaMaximX2.lv2 ZaMultiComp.lv2 ZaMultiCompX2.lv2 ZamTube.lv2 ZamDynamicEQ.lv2 ZamPhono.lv2
 
 ZAM_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 
@@ -26,6 +26,7 @@ endef
 
 define ZAM_PLUGINS_INSTALL_TARGET_CMDS
 	$(ZAM_PLUGINS_TARGET_MAKE) install PREFIX=/usr DESTDIR=$(TARGET_DIR)
+	# TODO ZamDynamicEQ.lv2 ZamPhono.lv2
 	cp -rL $($(PKG)_PKGDIR)/ZamAutoSat.lv2/*    $(TARGET_DIR)/usr/lib/lv2/ZamAutoSat.lv2/
 	cp -rL $($(PKG)_PKGDIR)/ZamComp.lv2/*       $(TARGET_DIR)/usr/lib/lv2/ZamComp.lv2/
 	cp -rL $($(PKG)_PKGDIR)/ZamCompX2.lv2/*     $(TARGET_DIR)/usr/lib/lv2/ZamCompX2.lv2/
