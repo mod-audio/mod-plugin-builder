@@ -1,0 +1,13 @@
+diff --git a/example-clients/wait.c b/example-clients/wait.c
+index f3b9cb5..ad6bcb0 100644
+--- a/example-clients/wait.c
++++ b/example-clients/wait.c
+@@ -132,7 +132,7 @@ main(int argc, char *argv[])
+ #ifdef WIN32
+ 		Sleep(1*1000);
+ #else
+-		sleep(1);
++		usleep(250 * 1000); // 250ms
+ #endif
+ 	}
+ 

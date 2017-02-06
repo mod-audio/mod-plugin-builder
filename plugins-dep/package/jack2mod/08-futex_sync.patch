@@ -1,61 +1,38 @@
-From eb479ef0be59ed656fecf1b2505e21c4884e86e0 Mon Sep 17 00:00:00 2001
-From: falkTX <falktx@gmail.com>
-Date: Thu, 23 Jun 2016 11:38:32 +0200
-Subject: [PATCH] Use linux futex as JackSynchro
-
----
- common/JackInternalClient.cpp |  17 ++++
- common/JackInternalClient.h   |   3 +
- common/wscript                |   2 +-
- linux/JackLinuxFutex.cpp      | 207 ++++++++++++++++++++++++++++++++++++++++++
- linux/JackLinuxFutex.h        |  78 ++++++++++++++++
- linux/JackPlatformPlug_os.h   |   4 +-
- 6 files changed, 308 insertions(+), 3 deletions(-)
- create mode 100644 linux/JackLinuxFutex.cpp
- create mode 100644 linux/JackLinuxFutex.h
-
-diff --git a/common/JackInternalClient.cpp b/common/JackInternalClient.cpp
-index 0668516..a1c5a69 100644
---- a/common/JackInternalClient.cpp
-+++ b/common/JackInternalClient.cpp
-@@ -117,6 +117,23 @@ void JackInternalClient::ShutDown(jack_status_t code, const char* message)
-     JackClient::ShutDown(code, message);
- }
+diff --git a/common/JackEngine.cpp b/common/JackEngine.cpp
+index 1507659..0f05435 100644
+--- a/common/JackEngine.cpp
++++ b/common/JackEngine.cpp
+@@ -615,7 +615,7 @@ int JackEngine::ClientExternalOpen(const char* name, int pid, int uuid, int* ref
  
-+int JackInternalClient::Activate()
-+{
-+#ifdef __linux__
-+    fSynchroTable[fClientControl.fRefNum].MakePrivate(true);
-+#endif
-+    return JackClient::Activate();
-+}
-+
-+int JackInternalClient::Deactivate()
-+{
-+    const int ret = JackClient::Deactivate();
-+#ifdef __linux__
-+    fSynchroTable[fClientControl.fRefNum].MakePrivate(false);
-+#endif
-+    return ret;
-+}
-+
- JackGraphManager* JackInternalClient::GetGraphManager() const
+     JackExternalClient* client = new JackExternalClient();
+ 
+-    if (!fSynchroTable[refnum].Allocate(real_name, fEngineControl->fServerName, 0)) {
++    if (!fSynchroTable[refnum].Allocate(real_name, fEngineControl->fServerName, 0, false)) {
+         jack_error("Cannot allocate synchro");
+         goto error;
+     }
+@@ -665,7 +665,7 @@ int JackEngine::ClientInternalOpen(const char* name, int* ref, JackEngineControl
+         goto error;
+     }
+ 
+-    if (!fSynchroTable[refnum].Allocate(name, fEngineControl->fServerName, 0)) {
++    if (!fSynchroTable[refnum].Allocate(name, fEngineControl->fServerName, 0, true)) {
+         jack_error("Cannot allocate synchro");
+         goto error;
+     }
+diff --git a/common/JackMidiAsyncWaitQueue.cpp b/common/JackMidiAsyncWaitQueue.cpp
+index 016737c..6d63a4d 100644
+--- a/common/JackMidiAsyncWaitQueue.cpp
++++ b/common/JackMidiAsyncWaitQueue.cpp
+@@ -29,7 +29,7 @@ JackMidiAsyncWaitQueue::JackMidiAsyncWaitQueue(size_t max_bytes,
+                                                size_t max_messages):
+     JackMidiAsyncQueue(max_bytes, max_messages)
  {
-     assert(fGraphManager);
-diff --git a/common/JackInternalClient.h b/common/JackInternalClient.h
-index 28c11d4..81e7b9e 100644
---- a/common/JackInternalClient.h
-+++ b/common/JackInternalClient.h
-@@ -49,6 +49,9 @@ class JackInternalClient : public JackClient
-         int Open(const char* server_name, const char* name, int uuid, jack_options_t options, jack_status_t* status);
-         void ShutDown(jack_status_t code, const char* message);
- 
-+        virtual int Activate();
-+        virtual int Deactivate();
-+
-         JackGraphManager* GetGraphManager() const;
-         JackEngineControl* GetEngineControl() const;
-         JackClientControl* GetClientControl() const;
+-    if (semaphore.Allocate("JackMidiAsyncWaitQueue", "midi-thread", 0)) {
++    if (semaphore.Allocate("JackMidiAsyncWaitQueue", "midi-thread", 0, true)) {
+         throw std::bad_alloc();
+     }
+ }
 diff --git a/common/wscript b/common/wscript
 index b64d275..2cff1b5 100644
 --- a/common/wscript
@@ -74,10 +51,10 @@ index b64d275..2cff1b5 100644
          includes = ['../linux', '../posix'] + includes
 diff --git a/linux/JackLinuxFutex.cpp b/linux/JackLinuxFutex.cpp
 new file mode 100644
-index 0000000..2c109fe
+index 0000000..c5f4d09
 --- /dev/null
 +++ b/linux/JackLinuxFutex.cpp
-@@ -0,0 +1,207 @@
+@@ -0,0 +1,247 @@
 +/*
 +Copyright (C) 2004-2008 Grame
 +Copyright (C) 2016 Filipe Coelho
@@ -115,11 +92,15 @@ index 0000000..2c109fe
 +{
 +    char ext_client_name[SYNC_MAX_NAME_SIZE + 1];
 +    JackTools::RewriteName(client_name, ext_client_name);
++#if 1
++    snprintf(res, size, "jack_sem.%s", ext_client_name);
++#else
 +    if (getenv("JACK_PROMISCUOUS_SERVER")) {
 +        snprintf(res, size, "jack_sem.%s_%s", server_name, ext_client_name);
 +    } else {
 +        snprintf(res, size, "jack_sem.%d_%s_%s", JackTools::GetUID(), server_name, ext_client_name);
 +    }
++#endif
 +}
 +
 +bool JackLinuxFutex::Signal()
@@ -133,12 +114,13 @@ index 0000000..2c109fe
 +        return true;
 +    }
 +
-+    if (! __sync_bool_compare_and_swap(fFutex, 0, 1)) {
++    if (! __sync_bool_compare_and_swap(&fFutex->futex, 0, 1))
++    {
 +        // already unlocked, do not wake futex
-+        return true;
++        if (! fFutex->internal) return true;
 +    }
 +
-+    ::syscall(__NR_futex, fFutex, fPrivate ? FUTEX_WAKE_PRIVATE : FUTEX_WAKE, 1, NULL, NULL, 0);
++    ::syscall(__NR_futex, fFutex, fFutex->internal ? FUTEX_WAKE_PRIVATE : FUTEX_WAKE, 1, NULL, NULL, 0);
 +    return true;
 +}
 +
@@ -154,12 +136,18 @@ index 0000000..2c109fe
 +        return false;
 +    }
 +
++    if (fFutex->needsChange)
++    {
++        fFutex->needsChange = false;
++        fFutex->internal = !fFutex->internal;
++    }
++
 +    for (;;)
 +    {
-+        if (__sync_bool_compare_and_swap(fFutex, 1, 0))
++        if (__sync_bool_compare_and_swap(&fFutex->futex, 1, 0))
 +            return true;
 +
-+        if (::syscall(__NR_futex, fFutex, fPrivate ? FUTEX_WAIT_PRIVATE : FUTEX_WAIT, 0, NULL, NULL, 0) != 0 && errno != EWOULDBLOCK)
++        if (::syscall(__NR_futex, fFutex, fFutex->internal ? FUTEX_WAIT_PRIVATE : FUTEX_WAIT, 0, NULL, NULL, 0) != 0 && errno != EWOULDBLOCK)
 +            return false;
 +    }
 +}
@@ -171,6 +159,12 @@ index 0000000..2c109fe
 +        return false;
 +     }
 +
++    if (fFutex->needsChange)
++    {
++        fFutex->needsChange = false;
++        fFutex->internal = !fFutex->internal;
++    }
++
 +    const uint secs  =  usec / 1000000;
 +    const int  nsecs = (usec % 1000000) * 1000;
 +
@@ -178,16 +172,16 @@ index 0000000..2c109fe
 +
 +    for (;;)
 +    {
-+        if (__sync_bool_compare_and_swap(fFutex, 1, 0))
++        if (__sync_bool_compare_and_swap(&fFutex->futex, 1, 0))
 +            return true;
 +
-+        if (::syscall(__NR_futex, fFutex, fPrivate ? FUTEX_WAIT_PRIVATE : FUTEX_WAIT, 0, &timeout, NULL, 0) != 0 && errno != EWOULDBLOCK)
++        if (::syscall(__NR_futex, fFutex, fFutex->internal ? FUTEX_WAIT_PRIVATE : FUTEX_WAIT, 0, &timeout, NULL, 0) != 0 && errno != EWOULDBLOCK)
 +            return false;
 +    }
 +}
 +
 +// Server side : publish the futex in the global namespace
-+bool JackLinuxFutex::Allocate(const char* name, const char* server_name, int value)
++bool JackLinuxFutex::Allocate(const char* name, const char* server_name, int value, bool internal)
 +{
 +    BuildName(name, server_name, fName, sizeof(fName));
 +    jack_log("JackLinuxFutex::Allocate name = %s val = %ld", fName, value);
@@ -197,9 +191,9 @@ index 0000000..2c109fe
 +        return false;
 +    }
 +
-+    ftruncate(fSharedMem, sizeof(int));
++    ftruncate(fSharedMem, sizeof(FutexData));
 +
-+    if ((fFutex = (int*)mmap(NULL, sizeof(int), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, fSharedMem, 0)) == NULL) {
++    if ((fFutex = (FutexData*)mmap(NULL, sizeof(FutexData), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, fSharedMem, 0)) == NULL) {
 +        jack_error("Allocate: can't check in named futex name = %s err = %s", fName, strerror(errno));
 +        close(fSharedMem);
 +        fSharedMem = -1;
@@ -207,12 +201,18 @@ index 0000000..2c109fe
 +        return false;
 +    }
 +
-+    *fFutex = value;
++    fPrivate = internal;
++
++    fFutex->futex = value;
++    fFutex->internal = internal;
++    fFutex->wasInternal = internal;
++    fFutex->needsChange = false;
++    fFutex->externalCount = 0;
 +    return true;
 +}
 +
 +// Client side : get the published futex from server
-+bool JackLinuxFutex::ConnectInput(const char* name, const char* server_name)
++bool JackLinuxFutex::Connect(const char* name, const char* server_name)
 +{
 +    BuildName(name, server_name, fName, sizeof(fName));
 +    jack_log("JackLinuxFutex::Connect name = %s", fName);
@@ -228,24 +228,35 @@ index 0000000..2c109fe
 +        return false;
 +    }
 +
-+    if ((fFutex = (int*)mmap(NULL, sizeof(int), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, fSharedMem, 0)) == NULL) {
++    if ((fFutex = (FutexData*)mmap(NULL, sizeof(FutexData), PROT_READ|PROT_WRITE, MAP_SHARED|MAP_LOCKED, fSharedMem, 0)) == NULL) {
 +        jack_error("Connect: can't connect named futex name = %s err = %s", fName, strerror(errno));
 +        close(fSharedMem);
 +        fSharedMem = -1;
 +        return false;
 +    }
 +
++    if (! fPrivate && fFutex->wasInternal)
++    {
++        const char* externalSync = getenv("JACK_INTERNAL_CLIENT_SYNC");
++
++        if (externalSync != NULL && strstr(fName, externalSync) != NULL && ++fFutex->externalCount == 1)
++        {
++            jack_error("Note: client %s running as external client temporarily", fName);
++            fFutex->needsChange = true;
++        }
++    }
++
 +    return true;
 +}
 +
-+bool JackLinuxFutex::Connect(const char* name, const char* server_name)
++bool JackLinuxFutex::ConnectInput(const char* name, const char* server_name)
 +{
-+    return ConnectInput(name, server_name);
++    return Connect(name, server_name);
 +}
 +
 +bool JackLinuxFutex::ConnectOutput(const char* name, const char* server_name)
 +{
-+    return ConnectInput(name, server_name);
++    return Connect(name, server_name);
 +}
 +
 +bool JackLinuxFutex::Disconnect()
@@ -254,7 +265,18 @@ index 0000000..2c109fe
 +        return true;
 +    }
 +
-+    munmap(fFutex, sizeof(int));
++    if (! fPrivate && fFutex->wasInternal)
++    {
++        const char* externalSync = getenv("JACK_INTERNAL_CLIENT_SYNC");
++
++        if (externalSync != NULL && strstr(fName, externalSync) != NULL && --fFutex->externalCount == 0)
++        {
++            jack_error("Note: client %s now running as internal client again", fName);
++            fFutex->needsChange = true;
++        }
++    }
++
++    munmap(fFutex, sizeof(FutexData));
 +    fFutex = NULL;
 +
 +    close(fSharedMem);
@@ -269,7 +291,7 @@ index 0000000..2c109fe
 +        return;
 +    }
 +
-+    munmap(fFutex, sizeof(int));
++    munmap(fFutex, sizeof(FutexData));
 +    fFutex = NULL;
 +
 +    close(fSharedMem);
@@ -278,19 +300,14 @@ index 0000000..2c109fe
 +    shm_unlink(fName);
 +}
 +
-+void JackLinuxFutex::MakePrivate(bool priv)
-+{
-+    fPrivate = priv;
-+}
-+
 +} // end of namespace
 +
 diff --git a/linux/JackLinuxFutex.h b/linux/JackLinuxFutex.h
 new file mode 100644
-index 0000000..283ba1a
+index 0000000..d549f8c
 --- /dev/null
 +++ b/linux/JackLinuxFutex.h
-@@ -0,0 +1,78 @@
+@@ -0,0 +1,85 @@
 +/*
 +Copyright (C) 2004-2008 Grame
 +Copyright (C) 2016 Filipe Coelho
@@ -335,9 +352,16 @@ index 0000000..283ba1a
 +{
 +
 +    private:
++        struct FutexData {
++            int futex;         // futex, needs to be 1st member
++            bool internal;     // current internal state
++            bool wasInternal;  // initial internal state, only changes in allocate
++            bool needsChange;  // change state on next wait call
++            int externalCount; // how many external clients have connected
++        };
 +
 +        int fSharedMem;
-+        int* fFutex;
++        FutexData* fFutex;
 +        bool fPrivate;
 +
 +    protected:
@@ -354,7 +378,7 @@ index 0000000..283ba1a
 +        bool Wait();
 +        bool TimedWait(long usec);
 +
-+        bool Allocate(const char* name, const char* server_name, int value);
++        bool Allocate(const char* name, const char* server_name, int value, bool internal);
 +        bool Connect(const char* name, const char* server_name);
 +        bool ConnectInput(const char* name, const char* server_name);
 +        bool ConnectOutput(const char* name, const char* server_name);
