@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_FIL4_VERSION = f134780092fe07ff5bfc96bb6ad6612c6e53deb6
+X42_FIL4_VERSION = 09d7b9f076cf602fed5af0876fca37c358c3b369
 X42_FIL4_SITE = $(call github,x42,fil4.lv2,$(X42_FIL4_VERSION))
 X42_FIL4_DEPENDENCIES = fftwf
 X42_FIL4_BUNDLES = fil4.lv2
