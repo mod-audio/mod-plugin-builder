@@ -4,7 +4,7 @@
 #
 ######################################
 
-DPF_PLUGINS_VERSION = 5f35525a179974fb03bba424e72ab626e5c97e63
+DPF_PLUGINS_VERSION = fe9e89e26085b973edd6edc1f6fa13588aa2472d
 DPF_PLUGINS_SITE = $(call github,DISTRHO,DPF-Plugins,$(DPF_PLUGINS_VERSION))
 DPF_PLUGINS_BUNDLES = 3BandEQ.lv2 3BandSplitter.lv2 AmplitudeImposer.lv2 CycleShifter.lv2 Kars.lv2 MaBitcrush.lv2 MaFreeverb.lv2 MaGigaverb.lv2 MaPitchshift.lv2 MVerb.lv2 Nekobi.lv2 PingPongPan.lv2 SoulForce.lv2
 
