@@ -19,9 +19,11 @@ fi
 
 cd ${BUILD_DIR}/${CT_NG_VERSION}
 
-if [ -d patches/gcc/4.8.5 ] && [ ! -f patches/gcc/4.8.5/132-build_gcc-5_with_gcc-6.patch ]; then
-    wget https://raw.githubusercontent.com/jcmvbkbc/crosstool-NG/ecfc19a597d76c0eea65148b08d7ccb505cdcac6/patches/gcc/4.8.5/132-build_gcc-5_with_gcc-6.patch
-    mv 132-build_gcc-5_with_gcc-6.patch patches/gcc/4.8.5/
+if [ ! -f patches/gcc/4.9.3/132-build_gcc-5_with_gcc-6.patch ]; then
+    wget https://raw.githubusercontent.com/crosstool-ng/crosstool-ng/5a5fcbe148acf35372ecac145816c3515e6b8839/patches/gcc/5.3.0/130-build_gcc-5_with_gcc-6.patch
+    cp 130-build_gcc-5_with_gcc-6.patch patches/gcc/4.9.3/
+    cp 130-build_gcc-5_with_gcc-6.patch patches/gcc/5.2.0/
+    rm 130-build_gcc-5_with_gcc-6.patch
 fi
 
 if [ ! -f .config ]; then
