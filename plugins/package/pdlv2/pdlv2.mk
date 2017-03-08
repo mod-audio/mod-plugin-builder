@@ -4,8 +4,8 @@
 #
 ######################################
 
-PDLV2_VERSION = f8b8de956f649e481424b28cec9ca78174b21631
-PDLV2_SITE = $(call github,moddevices,pdlv2,$(PDLV2_VERSION))
+PDLV2_VERSION = 5951a0f0cd7b5d2bb2bc8c1cb9785df969a36d4b
+PDLV2_SITE = $(call github,x37v,pdlv2,$(PDLV2_VERSION))
 PDLV2_DEPENDENCIES = libpd lvtk
 PDLV2_BUNDLES = pdlv2-autopan.lv2 pdlv2-demo_distortion.lv2 pdlv2-demo_sine_synth.lv2 pdlv2-djfilter.lv2 pdlv2-midi_demo.lv2
 
