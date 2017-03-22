@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_MIDI_UTILITIES_VERSION = 66dde869ffc09326dccab14e4b227ff9738c591b
+MOD_MIDI_UTILITIES_VERSION = 10c108a74fd0895a9108d295a1fa01205a5bc1f3
 MOD_MIDI_UTILITIES_SITE = $(call github,moddevices,mod-midi-utilities,$(MOD_MIDI_UTILITIES_VERSION))
 MOD_MIDI_UTILITIES_BUNDLES = midi-switchbox.lv2 peak-to-cc.lv2
 
