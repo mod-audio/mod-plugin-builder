@@ -1,0 +1,13 @@
+diff --git a/src/Containers/NotePool.cpp b/src/Containers/NotePool.cpp
+index 2f6c351..9c17c37 100644
+--- a/src/Containers/NotePool.cpp
++++ b/src/Containers/NotePool.cpp
+@@ -153,7 +153,7 @@ void NotePool::insertNote(uint8_t note, uint8_t sendto, SynthDescriptor desc, bo
+ {
+     //Get first free note descriptor
+     int desc_id = getMergeableDescriptor(note, sendto, legato, ndesc);
+-    assert(desc_id != -1);
++    if (desc_id == -1) return;
+ 
+     ndesc[desc_id].note         = note;
+     ndesc[desc_id].sendto       = sendto;

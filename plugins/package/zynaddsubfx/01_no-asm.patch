@@ -14,9 +14,9 @@ index e9517e5..6339a1c 100644
  # NOTE: These cache variables should normally not be changed in this
  # file, but either in in CMakeCache.txt before compile, or by passing
 @@ -239,10 +235,6 @@ add_definitions(
- 	 -Wall
- 	 -Wextra
- 	 )
+     add_definitions(--system-header-prefix="FL/")
+ endif()
+ 
 -if(NOT AVOID_ASM)
 -	message(STATUS "Compiling with x86 opcode support")
 -    add_definitions(-DASM_F2I_YES)

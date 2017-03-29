@@ -4,7 +4,7 @@
 #
 ######################################
 
-ZYNADDSUBFX_VERSION = 6f8d0ca068adf4dfff517677d5315293bd4f9800
+ZYNADDSUBFX_VERSION = 67366a08a8362af15ea60f6fe39f4ad9918af08f
 ZYNADDSUBFX_SITE = git://git.code.sf.net/p/zynaddsubfx/code
 ZYNADDSUBFX_SITE_METHOD = git
 ZYNADDSUBFX_DEPENDENCIES = fftw mxml liblo zlib

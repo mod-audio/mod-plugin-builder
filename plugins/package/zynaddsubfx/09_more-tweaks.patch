@@ -1,0 +1,32 @@
+diff --git a/src/globals.h b/src/globals.h
+index 852fa1b..1d1d6c4 100644
+--- a/src/globals.h
++++ b/src/globals.h
+@@ -162,14 +162,14 @@ typedef std::complex<fftwf_real> fft_t;
+ /*
+  * Maximum filter stages
+  */
+-#define MAX_FILTER_STAGES 5
++#define MAX_FILTER_STAGES 2
+ 
+ /*
+  * Formant filter (FF) limits
+  */
+-#define FF_MAX_VOWELS 6
+-#define FF_MAX_FORMANTS 12
+-#define FF_MAX_SEQUENCE 8
++#define FF_MAX_VOWELS 3
++#define FF_MAX_FORMANTS 6
++#define FF_MAX_SEQUENCE 4
+ 
+ #define MAX_PRESETTYPE_SIZE 30
+ 
+@@ -291,7 +291,7 @@ public:
+ struct SYNTH_T {
+ 
+     SYNTH_T(void)
+-        :samplerate(44100), buffersize(256), oscilsize(1024)
++        :samplerate(48000), buffersize(128), oscilsize(512)
+     {
+         alias(false);
+     }

@@ -1,0 +1,247 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 6561ad3..2e9a735 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -30,7 +30,7 @@ if(PKG_CONFIG_FOUND AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
+     pkg_check_modules(NTK ntk)
+     pkg_check_modules(NTK_IMAGES ntk_images)
+ 
+-    pkg_check_modules(FFTW REQUIRED fftw3)
++    pkg_check_modules(FFTWF REQUIRED fftw3f)
+     pkg_check_modules(MXML REQUIRED mxml)
+ 
+     pkg_check_modules(PORTAUDIO portaudio-2.0>=19)
+@@ -42,7 +42,7 @@ if(PKG_CONFIG_FOUND AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
+     pkg_search_module(LIBLO liblo>=0.26 REQUIRED)
+     mark_as_advanced(LIBLO_LIBRARIES)
+ else()
+-    find_package(FFTW REQUIRED)
++    find_package(FFTWF REQUIRED)
+     find_package(MXML REQUIRED)
+     find_package(LIBLO REQUIRED)
+     find_package(PORTAUDIO)
+@@ -402,7 +402,7 @@ endif()
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/zyn-version.h.in
+     ${CMAKE_CURRENT_BINARY_DIR}/zyn-version.h)
+ 
+-link_directories(${AUDIO_LIBRARY_DIRS} ${ZLIB_LIBRARY_DIRS} ${FFTW_LIBRARY_DIRS} ${MXML_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS})
++link_directories(${AUDIO_LIBRARY_DIRS} ${ZLIB_LIBRARY_DIRS} ${FFTWF_LIBRARY_DIRS} ${MXML_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS})
+ 
+ include_directories(
+ 	${CMAKE_CURRENT_SOURCE_DIR}
+@@ -455,7 +455,7 @@ endif()
+ 
+ target_link_libraries(zynaddsubfx_core
+ 	${ZLIB_LIBRARIES}
+-	${FFTW_LIBRARIES}
++	${FFTWF_LIBRARIES}
+ 	${MXML_LIBRARIES}
+ 	${OS_LIBRARIES}
+     ${PTHREAD_LIBRARY}
+@@ -532,7 +532,7 @@ endmacro()
+ package_status(PKG_CONFIG_FOUND "PkgConfig" "found"   ${Red})
+ package_status(ZLIB_FOUND       "zlib     " "found"   ${Red})
+ package_status(MXML_FOUND       "mxml     " "found"   ${Red})
+-package_status(FFTW_FOUND       "fftw3    " "found"   ${Red})
++package_status(FFTWF_FOUND      "fftw3f   " "found"   ${Red})
+ package_status(LIBLO_FOUND      "liblo    " "found"   ${Red})
+ package_status(X11_FOUND        "x11      " "found"   ${Yellow})
+ package_status(X11_Xpm_FOUND    "xpm      " "found"   ${Yellow})
+@@ -557,4 +557,4 @@ package_status(PaEnable         "PA       " "enabled" ${Yellow})
+ package_status(HAVE_ASYNC       "c++ async" "usable"  ${Yellow})
+ 
+ 
+-message(STATUS "Link libraries: ${ZLIB_LIBRARY} ${FFTW_LIBRARY} ${MXML_LIBRARIES} ${AUDIO_LIBRARIES} ${OS_LIBRARIES}")
++message(STATUS "Link libraries: ${ZLIB_LIBRARY} ${FFTWF_LIBRARY} ${MXML_LIBRARIES} ${AUDIO_LIBRARIES} ${OS_LIBRARIES}")
+diff --git a/src/DSP/FFTwrapper.cpp b/src/DSP/FFTwrapper.cpp
+index 5e7edcc..ec369c3 100644
+--- a/src/DSP/FFTwrapper.cpp
++++ b/src/DSP/FFTwrapper.cpp
+@@ -20,23 +20,23 @@
+ FFTwrapper::FFTwrapper(int fftsize_)
+ {
+     fftsize  = fftsize_;
+-    time     = new fftw_real[fftsize];
+-    fft      = new fftw_complex[fftsize + 1];
++    time     = new fftwf_real[fftsize];
++    fft      = new fftwf_complex[fftsize + 1];
+ 
+-    planfftw = fftw_plan_dft_r2c_1d(fftsize,
+-                                    time,
+-                                    fft,
+-                                    FFTW_ESTIMATE);
+-    planfftw_inv = fftw_plan_dft_c2r_1d(fftsize,
+-                                        fft,
+-                                        time,
+-                                        FFTW_ESTIMATE);
++    planfftw = fftwf_plan_dft_r2c_1d(fftsize,
++                                     time,
++                                     fft,
++                                     FFTW_ESTIMATE);
++    planfftw_inv = fftwf_plan_dft_c2r_1d(fftsize,
++                                         fft,
++                                         time,
++                                         FFTW_ESTIMATE);
+ }
+ 
+ FFTwrapper::~FFTwrapper()
+ {
+-    fftw_destroy_plan(planfftw);
+-    fftw_destroy_plan(planfftw_inv);
++    fftwf_destroy_plan(planfftw);
++    fftwf_destroy_plan(planfftw_inv);
+ 
+     delete [] time;
+     delete [] fft;
+@@ -46,26 +46,26 @@ void FFTwrapper::smps2freqs(const float *smps, fft_t *freqs)
+ {
+     //Load data
+     for(int i = 0; i < fftsize; ++i)
+-        time[i] = static_cast<double>(smps[i]);
++        time[i] = static_cast<float>(smps[i]);
+ 
+     //DFT
+-    fftw_execute(planfftw);
++    fftwf_execute(planfftw);
+ 
+     //Grab data
+-    memcpy((void *)freqs, (const void *)fft, fftsize * sizeof(double));
++    memcpy((void *)freqs, (const void *)fft, fftsize * sizeof(float));
+ }
+ 
+ void FFTwrapper::freqs2smps(const fft_t *freqs, float *smps)
+ {
+     //Load data
+-    memcpy((void *)fft, (const void *)freqs, fftsize * sizeof(double));
++    memcpy((void *)fft, (const void *)freqs, fftsize * sizeof(float));
+ 
+     //clear unused freq channel
+     fft[fftsize / 2][0] = 0.0f;
+     fft[fftsize / 2][1] = 0.0f;
+ 
+     //IDFT
+-    fftw_execute(planfftw_inv);
++    fftwf_execute(planfftw_inv);
+ 
+     //Grab data
+     for(int i = 0; i < fftsize; ++i)
+@@ -74,5 +74,5 @@ void FFTwrapper::freqs2smps(const fft_t *freqs, float *smps)
+ 
+ void FFT_cleanup()
+ {
+-    fftw_cleanup();
++    fftwf_cleanup();
+ }
+diff --git a/src/DSP/FFTwrapper.h b/src/DSP/FFTwrapper.h
+index 418bfb8..53df987 100644
+--- a/src/DSP/FFTwrapper.h
++++ b/src/DSP/FFTwrapper.h
+@@ -33,9 +33,9 @@ class FFTwrapper
+         void freqs2smps(const fft_t *freqs, float *smps);
+     private:
+         int fftsize;
+-        fftw_real    *time;
+-        fftw_complex *fft;
+-        fftw_plan     planfftw, planfftw_inv;
++        fftwf_real    *time;
++        fftwf_complex *fft;
++        fftwf_plan     planfftw, planfftw_inv;
+ };
+ 
+ /*
+diff --git a/src/Effects/EQ.cpp b/src/Effects/EQ.cpp
+index 96bf13a..a32e281 100644
+--- a/src/Effects/EQ.cpp
++++ b/src/Effects/EQ.cpp
+@@ -285,8 +285,8 @@ void EQ::getFilter(float *a, float *b) const
+         auto &F = filter[i];
+         if(F.Ptype == 0)
+             continue;
+-        const double Fb[3] = {F.l->coeff.c[0], F.l->coeff.c[1], F.l->coeff.c[2]};
+-        const double Fa[3] = {1.0f, -F.l->coeff.d[1], -F.l->coeff.d[2]};
++        const float Fb[3] = {F.l->coeff.c[0], F.l->coeff.c[1], F.l->coeff.c[2]};
++        const float Fa[3] = {1.0f, -F.l->coeff.d[1], -F.l->coeff.d[2]};
+ 
+         for(int j=0; j<F.Pstages+1; ++j) {
+             for(int k=0; k<3; ++k) {
+diff --git a/src/Misc/Time.h b/src/Misc/Time.h
+index fc22842..9a05bcf 100644
+--- a/src/Misc/Time.h
++++ b/src/Misc/Time.h
+@@ -38,7 +38,7 @@ class RelTime
+             :t(t_)
+         {
+             //Calculate time of event
+-            double deltaFrames = sec*t.framesPerSec();
++            float deltaFrames = sec*t.framesPerSec();
+             int64_t tmp = (int64_t)deltaFrames;
+             frame = t.time() + tmp;
+             sample = t.samplesPerFrame()*(deltaFrames-tmp);
+diff --git a/src/Synth/OscilGen.cpp b/src/Synth/OscilGen.cpp
+index b718e71..7a4b3f5 100644
+--- a/src/Synth/OscilGen.cpp
++++ b/src/Synth/OscilGen.cpp
+@@ -749,7 +749,7 @@ void OscilGen::spectrumadjust(fft_t *freqs)
+                     mag = 1.0f;
+                 break;
+         }
+-        freqs[i] = FFTpolar<fftw_real>(mag, phase);
++        freqs[i] = FFTpolar<fftwf_real>(mag, phase);
+     }
+ }
+ 
+@@ -850,7 +850,7 @@ void OscilGen::prepare(fft_t *freqs)
+                 int k = i * (j + 1);
+                 if(k >= synth.oscilsize / 2)
+                     break;
+-                freqs[k] += basefuncFFTfreqs[i] * FFTpolar<fftw_real>(
++                freqs[k] += basefuncFFTfreqs[i] * FFTpolar<fftwf_real>(
+                     hmag[j],
+                     hphase[j] * k);
+             }
+@@ -943,7 +943,7 @@ void OscilGen::adaptiveharmonicpostprocess(fft_t *f, int size)
+     par = 1.0f - powf((1.0f - par), 1.5f);
+ 
+     for(int i = 0; i < size; ++i) {
+-        inf[i] = f[i] * double(par);
++        inf[i] = f[i] * par;
+         f[i]  *= (1.0f - par);
+     }
+ 
+@@ -1064,7 +1064,7 @@ short int OscilGen::get(float *smps, float freqHz, int resonance)
+         const float rnd = PI * powf((Prand - 64.0f) / 64.0f, 2.0f);
+         for(int i = 1; i < nyquist - 1; ++i) //to Nyquist only for AntiAliasing
+             outoscilFFTfreqs[i] *=
+-                FFTpolar<fftw_real>(1.0f, (float)(rnd * i * RND));
++                FFTpolar<fftwf_real>(1.0f, (float)(rnd * i * RND));
+     }
+ 
+     //Harmonic Amplitude Randomness
+diff --git a/src/Tests/CMakeLists.txt b/src/Tests/CMakeLists.txt
+index ccba326..722a0b8 100644
+--- a/src/Tests/CMakeLists.txt
++++ b/src/Tests/CMakeLists.txt
+@@ -29,7 +29,7 @@ CXXTEST_ADD_TEST(MemoryStressTest MemoryStressTest.cpp
+ 
+ #Extra libraries added to make test and full compilation use the same library
+ #links for quirky compilers
+-set(test_lib zynaddsubfx_core ${GUI_LIBRARIES} ${ZLIB_LIBRARY} ${FFTW_LIBRARIES} ${MXML_LIBRARIES} pthread)
++set(test_lib zynaddsubfx_core ${GUI_LIBRARIES} ${ZLIB_LIBRARY} ${FFTWF_LIBRARIES} ${MXML_LIBRARIES} pthread)
+ 
+ message(STATUS "Linking tests with: ${test_lib}")
+ target_link_libraries(ADnoteTest     ${test_lib})
+diff --git a/src/globals.h b/src/globals.h
+index 71a8c14..852fa1b 100644
+--- a/src/globals.h
++++ b/src/globals.h
+@@ -68,8 +68,8 @@ namespace std {
+ };
+ #endif
+ 
+-typedef double fftw_real;
+-typedef std::complex<fftw_real> fft_t;
++typedef float fftwf_real;
++typedef std::complex<fftwf_real> fft_t;
+ 
+ /**
+  * The number of harmonics of additive synth

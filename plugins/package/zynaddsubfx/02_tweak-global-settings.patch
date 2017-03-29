@@ -7,21 +7,21 @@ index cf8f639..f8a294b 100644
   * This must be smaller than OSCIL_SIZE/2
   */
 -#define MAX_AD_HARMONICS 128
-+#define MAX_AD_HARMONICS 16
++#define MAX_AD_HARMONICS 8
  
  
  /**
   * The number of harmonics of substractive
   */
 -#define MAX_SUB_HARMONICS 64
-+#define MAX_SUB_HARMONICS 8
++#define MAX_SUB_HARMONICS 4
  
  
  /*
   * The maximum number of samples that are used for 1 PADsynth instrument(or item)
   */
 -#define PAD_MAX_SAMPLES 64
-+#define PAD_MAX_SAMPLES 8
++#define PAD_MAX_SAMPLES 4
  
  
  /*
@@ -37,7 +37,7 @@ index cf8f639..f8a294b 100644
   * The polyphony (notes)
   */
 -#define POLYPHONY 60
-+#define POLYPHONY 15
++#define POLYPHONY 8
  
  /*
   * Number of system effects

@@ -1,0 +1,13 @@
+diff --git a/src/Misc/MiddleWare.cpp b/src/Misc/MiddleWare.cpp
+index a20f898..9b472f7 100644
+--- a/src/Misc/MiddleWare.cpp
++++ b/src/Misc/MiddleWare.cpp
+@@ -501,7 +501,7 @@ public:
+         assert(actual_load[npart] <= pending_load[npart]);
+ 
+         //load part in async fashion when possible
+-#ifndef WIN32
++#if 0
+         auto alloc = std::async(std::launch::async,
+                 [master,filename,this,npart](){
+                 Part *p = new Part(*master->memory, synth,
