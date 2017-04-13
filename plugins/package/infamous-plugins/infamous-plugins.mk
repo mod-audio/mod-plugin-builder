@@ -12,10 +12,6 @@ INFAMOUS_PLUGINS_BUNDLES = ewham.lv2 stuck.lv2 powercut.lv2 bentdelay.lv2 hip2b.
 define INFAMOUS_PLUGINS_POST_INSTALL_TARGET_TTLFILES
 	cp -rL $($(PKG)_PKGDIR)/ewham.lv2/* $(TARGET_DIR)/usr/lib/lv2/ewham.lv2/
 	cp -rL $($(PKG)_PKGDIR)/stuck.lv2/* $(TARGET_DIR)/usr/lib/lv2/stuck.lv2/
- 	cp -rL $($(PKG)_PKGDIR)/powercut.lv2/* $(TARGET_DIR)/usr/lib/lv2/powercut.lv2/
- 	cp -rL $($(PKG)_PKGDIR)/bentdelay.lv2/* $(TARGET_DIR)/usr/lib/lv2/bentdelay.lv2/
- 	cp -rL $($(PKG)_PKGDIR)/hip2b.lv2/* $(TARGET_DIR)/usr/lib/lv2/hip2b.lv2/
- 	cp -rL $($(PKG)_PKGDIR)/mindi.lv2/* $(TARGET_DIR)/usr/lib/lv2/mindi.lv2/
 endef
 
 INFAMOUS_PLUGINS_POST_INSTALL_TARGET_HOOKS += INFAMOUS_PLUGINS_POST_INSTALL_TARGET_TTLFILES
