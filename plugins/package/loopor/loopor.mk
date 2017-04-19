@@ -4,7 +4,7 @@
 #
 ######################################
 
-LOOPOR_VERSION = b98923d38e3bc0e979addf4bfcb05677a9829f8a
+LOOPOR_VERSION = 1de7fb59c2ab455d15098c08fd363995470e3ae5
 LOOPOR_SITE = $(call github,stevie67,loopor,$(LOOPOR_VERSION))
 LOOPOR_BUNDLES = loopor.lv2
 
