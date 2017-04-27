@@ -6,7 +6,7 @@ and a control port which contains a single `float`.
 
 LV2 plugins are defined in two parts: code and data.
 The code is written in C, or any C compatible language such as C++.
-Static data is described separately in the human and machine friendly [http://www.w3.org/TeamSubmission/turtle/](Turtle) syntax.
+Static data is described separately in the human and machine friendly [Turtle](http://www.w3.org/TeamSubmission/turtle/) syntax.
 
 Generally, the goal is to keep code minimal,
 and describe as much as possible in the static data.
