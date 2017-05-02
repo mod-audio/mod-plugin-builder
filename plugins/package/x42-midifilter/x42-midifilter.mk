@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_MIDIFILTER_VERSION = aca8a1436a988932208c37de41e1e115eaaaad66
+X42_MIDIFILTER_VERSION = 57e937f3132742d96a9654a8424e07c7390923dd
 X42_MIDIFILTER_SITE = $(call github,x42,midifilter.lv2,$(X42_MIDIFILTER_VERSION))
 X42_MIDIFILTER_BUNDLES = midifilter.lv2
 
