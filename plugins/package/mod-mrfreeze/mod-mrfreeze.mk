@@ -4,13 +4,12 @@
 #
 ######################################
 
-MOD_MRFREEZE_VERSION = f1660a43d08b5672df53ace6a238236898310f31
+MOD_MRFREEZE_VERSION = 3d07ae1f2eb672cc7d3b1d36b979e87c652b397e
 MOD_MRFREEZE_SITE = $(call github,romi1502,MrFreeze,$(MOD_MRFREEZE_VERSION))
-MOD_MRFREEZE_DEPENDENCIES = armadillo fftwf host-fftwf host-python host-python-mpmath #fftwf-wisdom
+MOD_MRFREEZE_DEPENDENCIES = armadillo fftwf host-fftwf host-python host-python-mpmath eigen
 MOD_MRFREEZE_BUNDLES = mod-mrfreeze.lv2
 
 define MOD_MRFREEZE_PREBUILD_STEP
-	cd $(@D); ./configure.sh; cd -;
 	cp $($(PKG)_PKGDIR)/mrfreeze.wisdom.duo $(@D)/mrfreeze.wisdom
 endef
 
