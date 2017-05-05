@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_MCLK_VERSION = e3d22b9a415637c274617fc797474783a5d067f8
+X42_MCLK_VERSION = e483c8da9714976a62e06c6f0f927166379216f6
 X42_MCLK_SITE = $(call github,x42,mclk.lv2,$(X42_MCLK_VERSION))
 X42_MCLK_BUNDLES = mclk.lv2
 

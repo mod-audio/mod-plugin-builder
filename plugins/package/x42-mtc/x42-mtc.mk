@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_MTC_VERSION = 4a6064cea1c015d67a9b52659b1059d703e226f7
+X42_MTC_VERSION = 917a8a60f6262c3ac870deb03596312f84acef69
 X42_MTC_SITE = $(call github,x42,mtc.lv2,$(X42_MTC_VERSION))
 X42_MTC_BUNDLES = mtc.lv2
 

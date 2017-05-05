@@ -1,0 +1,28 @@
+diff --git a/Makefile b/Makefile
+index 109f9ef..6ed361f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -14,8 +14,8 @@ RW=$(abspath $(ROBTK))/
+ export RW
+ endif
+ 
+-ifneq ($(MOD),)
+-  SUBDIRS = b_whirl b_synth
++ifneq ($(MOD_BUILD),)
++  SUBDIRS = b_overdrive b_whirl b_reverb b_synth
+ else
+   SUBDIRS = b_overdrive b_whirl b_reverb b_conv src b_synth ui
+ endif
+diff --git a/common.mak b/common.mak
+index e17b007..18fc8fb 100644
+--- a/common.mak
++++ b/common.mak
+@@ -126,7 +126,7 @@ else
+   endif
+ endif
+ 
+-ifeq ($(MOD),)
++ifeq ($(MOD_BUILD),)
+   HAVE_UI=$(shell pkg-config --exists $(PKG_GL_LIBS) ftgl && echo $(FONT_FOUND))
+ else
+   HAVE_UI=no
