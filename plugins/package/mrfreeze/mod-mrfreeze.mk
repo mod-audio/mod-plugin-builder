@@ -23,9 +23,7 @@ endef
 
 define MOD_MRFREEZE_INSTALL_TARGET_CMDS
 	$(MOD_MRFREEZE_TARGET_MAKE) install DESTDIR=$(TARGET_DIR) INSTALL_PATH=/usr/lib/lv2
-	echo $($(PKG)_PKGDIR)/mod-mrfreeze.lv2/*
-	echo $(TARGET_DIR)/usr/lib/lv2/mod-mrfreeze.lv2/
-	cp -rL $($(PKG)_PKGDIR)/mod-mrfreeze.lv2/*   $(TARGET_DIR)/usr/lib/lv2/mod-mrfreeze.lv2/
+	#cp -rL $($(PKG)_PKGDIR)/mod-mrfreeze.lv2/*   $(TARGET_DIR)/usr/lib/lv2/mod-mrfreeze.lv2/
 endef
 
 $(eval $(generic-package))
