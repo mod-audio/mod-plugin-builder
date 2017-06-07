@@ -16,6 +16,7 @@ endef
 
 define X42_TINYGAIN_INSTALL_TARGET_CMDS
 	$(X42_TINYGAIN_TARGET_MAKE) install DESTDIR=$(TARGET_DIR)
+	cp -rL $($(PKG)_PKGDIR)/tinygain.lv2/* $(TARGET_DIR)/usr/lib/lv2/tinygain.lv2/
 endef
 
 $(eval $(generic-package))
