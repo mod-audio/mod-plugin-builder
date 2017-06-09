@@ -4,9 +4,9 @@
 #
 ######################################
 
-AMS_LV2_VERSION = 3564bd6d475320e68f7058c2dffd12cc03d35503
+AMS_LV2_VERSION = 0f60ee0a0e6df64877210dfee2d30f126dc3137f
 AMS_LV2_SITE = $(call github,blablack,ams-lv2,$(AMS_LV2_VERSION))
-AMS_LV2_DEPENDENCIES = fftw lvtk
+AMS_LV2_DEPENDENCIES = fftw lvtk-1
 AMS_LV2_BUNDLES = ams.lv2
 
 AMS_LV2_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python ./waf
