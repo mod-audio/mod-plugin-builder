@@ -1,3 +1,4 @@
 config BR2_PACKAGE_LVTK_1
 	bool "lvtk-1"
+	select BR2_PACKAGE_BOOST
 	select BR2_PACKAGE_LV2

@@ -6,7 +6,7 @@
 
 LVTK_1_VERSION = c105fd5077b4f7d963ad543b9979b94b9b052551
 LVTK_1_SITE = $(call github,lvtk,lvtk,$(LVTK_1_VERSION))
-LVTK_1_DEPENDENCIES = lv2 host-python
+LVTK_1_DEPENDENCIES = boost lv2 host-python
 LVTK_1_INSTALL_STAGING = YES
 
 LVTK_1_WAF = $(HOST_DIR)/usr/bin/python2 ./waf
@@ -15,6 +15,7 @@ define LVTK_1_CONFIGURE_CMDS
 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(LVTK_1_WAF) configure \
 		--prefix=/usr      \
 		--disable-examples \
+		--disable-tools    \
 		--disable-ui)
 endef
 

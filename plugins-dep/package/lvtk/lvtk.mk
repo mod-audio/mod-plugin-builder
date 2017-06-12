@@ -6,7 +6,7 @@
 
 LVTK_VERSION = 6bfe981dfb5b27ea199dd4f6801b5305ca0355f9
 LVTK_SITE = $(call github,lvtk,lvtk,$(LVTK_VERSION))
-LVTK_DEPENDENCIES = lv2 host-python
+LVTK_DEPENDENCIES = boost lv2 host-python
 LVTK_INSTALL_STAGING = YES
 
 LVTK_WAF = $(HOST_DIR)/usr/bin/python2 ./waf
