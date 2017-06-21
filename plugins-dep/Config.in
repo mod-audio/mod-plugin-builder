@@ -1,5 +1,6 @@
-source "$BR2_EXTERNAL/package/fluidsynth/Config.in"
+source "$BR2_EXTERNAL/package/dpf/Config.in"
 source "$BR2_EXTERNAL/package/fftwf/Config.in"
+source "$BR2_EXTERNAL/package/fluidsynth/Config.in"
 source "$BR2_EXTERNAL/package/jack2mod/Config.in"
 source "$BR2_EXTERNAL/package/libgig/Config.in"
 source "$BR2_EXTERNAL/package/libpd/Config.in"
