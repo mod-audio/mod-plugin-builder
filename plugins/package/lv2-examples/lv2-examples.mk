@@ -21,6 +21,7 @@ endef
 
 define LV2_EXAMPLES_INSTALL_TARGET_CMDS
 	(cd $(@D); $(LV2_EXAMPLES_TARGET_WAF) install --destdir=$(TARGET_DIR))
+	cp -rL $($(PKG)_PKGDIR)/eg-metro.lv2/* $(TARGET_DIR)/usr/lib/lv2/eg-metro.lv2/
 endef
 
 $(eval $(generic-package))
