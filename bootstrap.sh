@@ -79,6 +79,10 @@ for dir in `ls ${SOURCE_DIR}/global-packages`; do
     cp -r ${SOURCE_DIR}/global-packages/${dir} package/${dir}
 done
 
+if [ ! -f package/libglib2/001-glib-gdate-suppress-string-format-literal-warning.patch ]; then
+    cp ${SOURCE_DIR}/patches/001-glib-gdate-suppress-string-format-literal-warning.patch package/libglib2/
+fi
+
 make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} modduo_defconfig
 
 if [[ "${build}" == "plugins-dep" ]]; then
