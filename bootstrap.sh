@@ -19,7 +19,6 @@ fi
 
 cd ${BUILD_DIR}/${CT_NG_VERSION}
 
-
 if [ ! -f patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch ]; then
     cp ${SOURCE_DIR}/patches/0001-fixed-build-with-gcc-6.patch patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch
 fi
@@ -82,6 +81,10 @@ done
 if [ ! -f package/libglib2/001-glib-gdate-suppress-string-format-literal-warning.patch ]; then
     cp ${SOURCE_DIR}/patches/001-glib-gdate-suppress-string-format-literal-warning.patch package/libglib2/
 fi
+
+# apply superseded patch from https://patchwork.ozlabs.org/patch/714012/
+# fixes python modules build when local ssl is present
+cp ${SOURCE_DIR}/patches/111-optional-ssl.patch package/python/
 
 make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} modduo_defconfig
 
