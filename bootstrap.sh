@@ -19,11 +19,8 @@ fi
 
 cd ${BUILD_DIR}/${CT_NG_VERSION}
 
-if [ ! -f patches/gcc/4.9.3/132-build_gcc-5_with_gcc-6.patch ]; then
-    wget https://raw.githubusercontent.com/crosstool-ng/crosstool-ng/5a5fcbe148acf35372ecac145816c3515e6b8839/patches/gcc/5.3.0/130-build_gcc-5_with_gcc-6.patch
-    cp 130-build_gcc-5_with_gcc-6.patch patches/gcc/4.9.3/
-    cp 130-build_gcc-5_with_gcc-6.patch patches/gcc/5.2.0/
-    rm 130-build_gcc-5_with_gcc-6.patch
+if [ ! -f patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch ]; then
+    cp ${SOURCE_DIR}/patches/0001-fixed-build-with-gcc-6.patch patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch
 fi
 
 if [ ! -f .config ]; then
@@ -80,6 +77,14 @@ for dir in `ls ${SOURCE_DIR}/global-packages`; do
     rm -rf package/${dir}
     cp -r ${SOURCE_DIR}/global-packages/${dir} package/${dir}
 done
+
+if [ ! -f package/libglib2/001-glib-gdate-suppress-string-format-literal-warning.patch ]; then
+    cp ${SOURCE_DIR}/patches/001-glib-gdate-suppress-string-format-literal-warning.patch package/libglib2/
+fi
+
+# apply superseded patch from https://patchwork.ozlabs.org/patch/714012/
+# fixes python modules build when local ssl is present
+cp ${SOURCE_DIR}/patches/111-optional-ssl.patch package/python/
 
 make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} modduo_defconfig
 
