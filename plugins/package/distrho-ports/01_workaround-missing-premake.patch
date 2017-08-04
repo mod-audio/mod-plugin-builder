@@ -1,0 +1,20 @@
+diff --git a/scripts/premake-update.sh b/premake-update.sh
+index 5290d5a..6db0525 100755
+--- a/scripts/premake-update.sh
++++ b/scripts/premake-update.sh
+@@ -26,9 +26,14 @@ if [ -d ../libs ]; then
+   cd ..
+ fi
+ 
++if [ ! -f premake ]; then
++  wget https://github.com/kunitoki/juced/raw/master/tools/linux/premake; chmod +x premake
++fi
++PREMAKE=$(pwd)/premake
++
+ run_premake()
+ {
+-  premake --os $1 --target gnu --cc gcc
++  $PREMAKE --os $1 --target gnu --cc gcc
+ 
+   if [ $MAC == 1 ]; then
+     sed -i -e "s|BLDCMD = ar -rcs \$(OUTDIR)/\$(TARGET) \$(OBJECTS) \$(TARGET_ARCH)|BLDCMD = ar -rcs \$(OUTDIR)/\$(TARGET) \$(OBJECTS)|" `find . -name \*.make`
