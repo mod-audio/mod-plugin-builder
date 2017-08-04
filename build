@@ -35,7 +35,7 @@ if [[ "${build}" == "plugins-dep" ]]; then
       exit 0
     fi
 
-    if [[ "${action}" != *"-dirclean" ]] && [[ "${action}" != "menuconfig" ]]; then
+    if [[ "${action}" != *"-dirclean" ]] && [[ "${action}" != *"-rebuild" ]] && [[ "${action}" != "menuconfig" ]]; then
       action=$(basename ${action} | sed "s|\.mk||")
       pkgname=$(echo ${action} | tr a-z- A-Z_)
 

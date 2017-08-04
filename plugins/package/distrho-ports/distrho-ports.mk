@@ -4,28 +4,24 @@
 #
 ######################################
 
-DISTRHO_PORTS_VERSION = 82524089a53a9f3ac10a95fabcae2ae61cc5137f
+DISTRHO_PORTS_VERSION = 5fc083166e0837df9011c0212491b6bffcc1edfd
 DISTRHO_PORTS_SITE = $(call github,DISTRHO,DISTRHO-Ports,$(DISTRHO_PORTS_VERSION))
-DISTRHO_PORTS_DEPENDENCIES = alsa-lib xlib_libX11 xlib_libXcursor xlib_libXext
-DISTRHO_PORTS_BUNDLES = 
+DISTRHO_PORTS_BUNDLES = drowaudio-distortion.lv2 drowaudio-distortionshaper.lv2 drowaudio-flanger.lv2 drowaudio-reverb.lv2 drowaudio-tremolo.lv2 Luftikus.lv2 Obxd.lv2 TAL-Dub-3.lv2 TAL-Filter-2.lv2 TAL-Filter.lv2 TAL-NoiseMaker.lv2 TAL-Reverb-2.lv2 TAL-Reverb-3.lv2 TAL-Reverb.lv2 TAL-Vocoder-2.lv2 TheFunction.lv2 ThePilgrim.lv2 Vex.lv2 Wolpertinger.lv2
 
-DISTRHO_PORTS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE)
+DISTRHO_PORTS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) LINUX_EMBED=true -C $(@D)
 
 define DISTRHO_PORTS_CONFIGURE_CMDS
-#        (cd $(@D); NOOPTIMIZATIONS=1 ./scripts/premake-update.sh linux)
-	sed -i "s/JUCE_PLUGINHOST_LADSPA 1/JUCE_PLUGINHOST_LADSPA 0/" $(@D)/libs/juce/build-juce/AppConfig.h
-	sed -i "s/JUCE_PLUGINHOST_VST 1/JUCE_PLUGINHOST_VST 0/" $(@D)/libs/juce/build-juce/AppConfig.h
+       (cd $(@D); LINUX_EMBED=1 ./scripts/premake-update.sh linux)
 endef
 
 define DISTRHO_PORTS_BUILD_CMDS
-	$(DISTRHO_PORTS_TARGET_MAKE) -C $(@D)/libs/juce
-	$(DISTRHO_PORTS_TARGET_MAKE) -C $(@D)/ports/tal-noisemaker/LV2/
+	$(DISTRHO_PORTS_TARGET_MAKE) lv2
 endef
 
 define DISTRHO_PORTS_INSTALL_TARGET_CMDS
 	install -d $(TARGET_DIR)/usr/lib/lv2/
 	cp -r $(@D)/bin/lv2/*.lv2/        $(TARGET_DIR)/usr/lib/lv2/
-	cp -r $(@D)/static-lv2-ttl/*.lv2/ $(TARGET_DIR)/usr/lib/lv2/
+# 	cp -r $(@D)/static-lv2-ttl/*.lv2/ $(TARGET_DIR)/usr/lib/lv2/
 endef
 
 $(eval $(generic-package))
