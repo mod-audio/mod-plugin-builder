@@ -4,7 +4,7 @@
 #
 ######################################
 
-SETBFREE_VERSION = 9c04792f1c16725eb978527add672eae2f938f26
+SETBFREE_VERSION = 30f1ec6267afb0ee17b472db0c4826d5bd96fad8
 SETBFREE_SITE = $(call github,pantherb,setBfree,$(SETBFREE_VERSION))
 SETBFREE_DEPENDENCIES = fftwf libsndfile zita-convolver
 SETBFREE_BUNDLES = b_overdrive b_reverb b_synth b_whirl b_whirl_xt

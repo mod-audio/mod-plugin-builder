@@ -4,7 +4,7 @@
 #
 ######################################
 
-SETBFREE_MOD_VERSION = 9c04792f1c16725eb978527add672eae2f938f26
+SETBFREE_MOD_VERSION = 30f1ec6267afb0ee17b472db0c4826d5bd96fad8
 SETBFREE_MOD_SITE = $(call github,pantherb,setBfree,$(SETBFREE_MOD_VERSION))
 SETBFREE_MOD_DEPENDENCIES = fftwf libsndfile zita-convolver
 SETBFREE_MOD_BUNDLES = b_whirl_mod
