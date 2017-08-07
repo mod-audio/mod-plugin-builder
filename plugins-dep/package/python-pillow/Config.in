@@ -1,0 +1,11 @@
+config BR2_PACKAGE_PYTHON_PILLOW
+        bool "python-pillow"
+        select BR2_PACKAGE_ZLIB
+        select BR2_PACKAGE_JPEG
+        select BR2_PACKAGE_PNG
+        help
+          The Python Imaging Library (PIL) adds image processing capabilities to your
+          Python interpreter. This library supports many file formats, and provides
+          powerful image processing and graphics capabilities.
+
+          http://www.pythonware.com/products/pil/
