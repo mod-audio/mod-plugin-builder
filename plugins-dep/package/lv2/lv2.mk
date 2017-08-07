@@ -4,15 +4,17 @@
 #
 ################################################################################
 
-LV2_VERSION = 2811f4211c8314903da632de665a8e3fd17b5a51
+LV2_VERSION = 39c7c726cd52b2863fcea356cafe1bcab2ba7f37
 LV2_SITE = $(call github,drobilla,lv2,$(LV2_VERSION))
 LV2_LICENSE = ISC License
 LV2_LICENSE_FILES = COPYING
 LV2_INSTALL_STAGING = YES
 LV2_DEPENDENCIES = host-python
 
-LV2_HOST_WAF   = $(HOST_MAKE_ENV)   $(HOST_CONFIGURE_OPTS)   $(HOST_DIR)/usr/bin/python2 ./waf
-LV2_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf
+LV2_WAF = $(HOST_DIR)/usr/bin/python ./waf
+
+LV2_HOST_WAF   = $(HOST_MAKE_ENV)   $(HOST_CONFIGURE_OPTS)   $(LV2_WAF)
+LV2_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(LV2_WAF)
 
 define HOST_LV2_CONFIGURE_CMDS
 	(cd $(@D); $(LV2_HOST_WAF) configure --prefix=/usr --no-plugins)
@@ -42,4 +44,3 @@ endef
 
 $(eval $(generic-package))
 $(eval $(host-generic-package))
-

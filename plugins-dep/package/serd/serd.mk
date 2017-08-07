@@ -4,11 +4,11 @@
 #
 ################################################################################
 
-SERD_VERSION = 83de3f80ca6cbbaac35c003bba9d6625db525939
-SERD_SITE = http://git.drobilla.net/serd.git
-SERD_SITE_METHOD = git
+SERD_VERSION = 32f10751605e7124e415d38feb4d8176288c03ad
+SERD_SITE = $(call github,drobilla,serd,$(SERD_VERSION))
 SERD_DEPENDENCIES = host-python
 SERD_INSTALL_STAGING = YES
+SERD_DEPENDENCIES = host-python
 
 SERD_WAF = $(HOST_DIR)/usr/bin/python ./waf
 

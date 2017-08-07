@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SRATOM_VERSION = f62a6d15cb63ffe266ec3cd133245df8947191b2
+SRATOM_VERSION = b9717ab942b38f023cee99b3c108514a651b2b51
 SRATOM_SITE = http://git.drobilla.net/sratom.git
 SRATOM_SITE_METHOD = git
 SRATOM_DEPENDENCIES = lv2 sord

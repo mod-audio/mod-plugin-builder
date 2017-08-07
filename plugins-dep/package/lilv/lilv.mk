@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LILV_VERSION = c98879fd3562c48049c2c65369050f267c8358d6
+LILV_VERSION = a208ffd4776ebc9072bfca2603d6931e24917ccf
 LILV_SITE = http://git.drobilla.net/lilv.git
 LILV_SITE_METHOD = git
 LILV_DEPENDENCIES = sratom
