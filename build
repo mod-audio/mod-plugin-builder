@@ -69,7 +69,7 @@ mkdir -p /tmp/skeleton
 # now building...
 
 cd ${BUILD_DIR}/${BUILDROOT_VERSION}
-make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} modduo_defconfig &>/dev/null
+make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${platform}_defconfig &>/dev/null
 make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${action}
 
 #######################################################################################################################

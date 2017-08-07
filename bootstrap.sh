@@ -24,7 +24,7 @@ if [ ! -f patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch ]; then
 fi
 
 if [ ! -f .config ]; then
-  cp ${SOURCE_DIR}/toolchain/modduo.config .config
+  cp ${SOURCE_DIR}/toolchain/${platform}.config .config
   sed -i "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
   sed -i "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
 fi
@@ -86,7 +86,7 @@ fi
 # fixes python modules build when local ssl is present
 cp ${SOURCE_DIR}/patches/111-optional-ssl.patch package/python/
 
-make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} modduo_defconfig
+make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${platform}_defconfig
 
 if [[ "${build}" == "plugins-dep" ]]; then
   make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build}

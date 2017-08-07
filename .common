@@ -9,6 +9,7 @@ set -e
 # environment variables
 
 build=${build:=plugins-dep}
+platform=${platform:=modduo}
 WORKDIR=${WORKDIR:=~/mod-workdir}
 
 #######################################################################################################################
