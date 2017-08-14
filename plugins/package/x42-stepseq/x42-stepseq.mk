@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_STEPSEQ_VERSION = b9e02d81415b664069ac2b98d776e256e11b0c53
+X42_STEPSEQ_VERSION = b009812fd0af471b647c179c50ca0941c87ff6a4
 X42_STEPSEQ_SITE = $(call github,x42,stepseq.lv2,$(X42_STEPSEQ_VERSION))
 X42_STEPSEQ_BUNDLES = stepseq_s8n4.lv2 stepseq_s8n8.lv2 stepseq_s8n16.lv2
 
