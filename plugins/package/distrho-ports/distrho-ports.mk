@@ -4,7 +4,7 @@
 #
 ######################################
 
-DISTRHO_PORTS_VERSION = f591a1066cd3929536699bb516caa4b5efd9d025
+DISTRHO_PORTS_VERSION = b8e70c2619f4f82bce214b6d9262b54df6efcfd3
 DISTRHO_PORTS_SITE = $(call github,DISTRHO,DISTRHO-Ports,$(DISTRHO_PORTS_VERSION))
 DISTRHO_PORTS_BUNDLES = drowaudio-distortion.lv2 drowaudio-distortionshaper.lv2 drowaudio-flanger.lv2 drowaudio-reverb.lv2 drowaudio-tremolo.lv2 Luftikus.lv2 Obxd.lv2 TAL-Dub-3.lv2 TAL-Filter-2.lv2 TAL-Filter.lv2 TAL-NoiseMaker.lv2 TAL-Reverb-2.lv2 TAL-Reverb-3.lv2 TAL-Reverb.lv2 TAL-Vocoder-2.lv2 TheFunction.lv2 ThePilgrim.lv2 Vex.lv2 Wolpertinger.lv2
 
