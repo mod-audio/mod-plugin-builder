@@ -4,7 +4,7 @@
 #
 ######################################
 
-INFAMOUS_PLUGINS_VERSION = a0317b74a1a99bf5b6ab14343404feaa9c6ee0ca
+INFAMOUS_PLUGINS_VERSION = 364ee20c722e23b3fffe10cd4bd8a463bf3c0946
 INFAMOUS_PLUGINS_SITE = $(call github,ssj71,infamousPlugins,$(INFAMOUS_PLUGINS_VERSION))
 #envfollower.lv2 ewham.lv2 casynth.lv2 cheapdist.lv2 hip2b.lv2 lushlife.lv2 powercut.lv2 powerup.lv2 stuck.lv2 bentdelay.lv2
 INFAMOUS_PLUGINS_BUNDLES = ewham.lv2 stuck.lv2 powercut.lv2 bentdelay.lv2 hip2b.lv2 mindi.lv2
