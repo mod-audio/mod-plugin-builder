@@ -8,7 +8,7 @@
 typedef struct {
     const float* input;
     float* output;
-    uint32_t cnt;
+    uint32_t run_count;
 } Plugin;
 
 static LV2_Handle plugin_instantiate(const LV2_Descriptor* d, double sr, const char* b, const LV2_Feature* const* f)
@@ -37,16 +37,16 @@ static void plugin_connect_port(LV2_Handle instance, uint32_t port, void* data_l
     }
 }
 
-static void plugin_run(LV2_Handle instance, uint32_t sample_count)
+static void plugin_run(LV2_Handle instance, uint32_t nsamples)
 {
     Plugin* const plugin = (Plugin*)instance;
 
-    plugin->cnt = mod_license_run_begin(plugin->cnt, sample_count);
+    plugin->run_count = mod_license_run_begin(plugin->run_count, nsamples);
 
     if (plugin->input != plugin->output)
-        memcpy(plugin->output, plugin->input, sizeof(float)*sample_count);
+        memcpy(plugin->output, plugin->input, sizeof(float)*nsamples);
 
-    mod_license_run_noise(plugin->cnt, plugin->output, sample_count, 0);
+    mod_license_run_noise(plugin->run_count, plugin->output, nsamples, 0);
 }
 
 static void plugin_cleanup(LV2_Handle instance)
