@@ -41,6 +41,7 @@ define CAPS_LV2_INSTALL_TARGET_CMDS
 	cp -rL $($(PKG)_PKGDIR)/mod-caps-Spice.lv2/*      $(TARGET_DIR)/usr/lib/lv2/mod-caps-Spice.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-caps-SpiceX2.lv2/*    $(TARGET_DIR)/usr/lib/lv2/mod-caps-SpiceX2.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-caps-ToneStack.lv2/*  $(TARGET_DIR)/usr/lib/lv2/mod-caps-ToneStack.lv2/
+	cp -rL $($(PKG)_PKGDIR)/mod-caps-White.lv2/*	  $(TARGET_DIR)/usr/lib/lv2/mod-caps-White.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-caps-Wider.lv2/*      $(TARGET_DIR)/usr/lib/lv2/mod-caps-Wider.lv2/
 endef
 
