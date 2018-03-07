@@ -4,7 +4,7 @@
 #
 ######################################
 
-DEXED_VERSION = 6801e49fcabe2cd6925be2e0045ad5e83320548b
+DEXED_VERSION = f3518feb75c6039d94a60b99aff2126bd197296b
 DEXED_SITE = $(call github,dcoredump,dexed,$(DEXED_VERSION))
 DEXED_DEPENDENCIES = lvtk
 DEXED_BUNDLES = dexed.lv2
