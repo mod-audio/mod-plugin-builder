@@ -4,7 +4,7 @@
 #
 ######################################
 
-REMAINCALM_PLUGINS_VERSION = 065d20bf262d7f7c171cb9eeb8d4d07a70c35c15
+REMAINCALM_PLUGINS_VERSION = 19fc07771baff665559ee626c7bfb2ee36311ab1
 REMAINCALM_PLUGINS_SITE = $(call github,remaincalm,dpfports,$(REMAINCALM_PLUGINS_VERSION))
 REMAINCALM_PLUGINS_BUNDLES = avocado.lv2 floaty.lv2 mud.lv2 paranoia.lv2
 
