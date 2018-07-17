@@ -71,3 +71,9 @@ Please install libtool-bin and re-run bootstrap.sh.
 
 
 There's a more detailed [HowTo](http://wiki.moddevices.com/wiki/How_To_Build_and_Deploy_LV2_Plugin_to_MOD_Duo) explaining how to compile an LV2 Plugin using mod-plugin-builder.
+
+
+### Note about Camomile
+
+The Camomile integration is under testing phase. Check the [PR notes](https://github.com/moddevices/mod-plugin-builder/pull/28) for more details. 
+
