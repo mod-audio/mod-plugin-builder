@@ -46,7 +46,7 @@ static void plugin_run(LV2_Handle instance, uint32_t nsamples)
     if (plugin->input != plugin->output)
         memcpy(plugin->output, plugin->input, sizeof(float)*nsamples);
 
-    mod_license_run_noise(plugin->run_count, plugin->output, nsamples, 0);
+    mod_license_run_silence(plugin->run_count, plugin->output, nsamples, 0);
 }
 
 static void plugin_cleanup(LV2_Handle instance)
