@@ -1,0 +1,32 @@
+diff --git a/dpf/utils/generate-ttl.sh b/dpf/utils/generate-ttl.sh
+index dc7de63..af1b5ed 100755
+--- a/dpf/utils/generate-ttl.sh
++++ b/dpf/utils/generate-ttl.sh
+@@ -28,6 +28,6 @@ FOLDERS=`find . -type d -name \*.lv2`
+ for i in $FOLDERS; do
+   cd $i
+   FILE=`ls *.$EXT | sort | head -n 1`
+-  $GEN ./$FILE
++  qemu-arm $GEN ./$FILE
+   cd ..
+ done
+
+diff --git a/dpf/utils/generate-ttl.sh b/dpf/utils/generate-ttl.sh
+index af1b5ed..2d0f520 100755
+--- a/dpf/utils/generate-ttl.sh
++++ b/dpf/utils/generate-ttl.sh
+@@ -23,6 +23,14 @@ else
+   fi
+ fi
+ 
++command -v qemu-arm | grep qemu-arm
++if [ $? -eq 0 ]
++then
++	echo "qemu is installed"
++else
++	echo "can't find package 'qemu'"
++fi 
++
+ FOLDERS=`find . -type d -name \*.lv2`
+ 
+ for i in $FOLDERS; do
