@@ -4,7 +4,7 @@
 #
 ######################################
 
-CALF_VERSION = 0.0.60
+CALF_VERSION = 0.90.1
 CALF_SITE = http://calf-studio-gear.org/files/
 CALF_SOURCE = calf-$(CALF_VERSION).tar.gz
 CALF_DEPENDENCIES = cairo expat libglib2

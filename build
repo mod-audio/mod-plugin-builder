@@ -47,9 +47,10 @@ if [[ "${build}" == "plugins-dep" ]]; then
         error "Requested package has no 'mk' file"
         exit 1
       fi
-
+     
       bundles=($(cat plugins/package/${action}/${action}.mk | awk 'sub("'${pkgname}'_BUNDLES = ","")'))
-
+      echo ${bundles}
+      echo ${action}
       if [[ "${bundles}" == "" ]]; then
         error "Requested package has no bundles"
         exit 1
