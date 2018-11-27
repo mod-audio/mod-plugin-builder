@@ -1,0 +1,48 @@
+diff -ENwbur calf-0.0.60/gui/Makefile.am calf-0.0.60/gui/Makefile.am
+--- calf-0.0.60/gui/Makefile.am	2014-12-31 20:28:06.000000000 +0000
++++ calf-0.0.60/gui/Makefile.am	2018-11-27 09:22:42.547040452 +0000
+@@ -6,7 +6,7 @@
+ 
+ install-data-hook:
+ 	install -c -m 644 $(srcdir)/*.png $(DESTDIR)$(pkgdatadir)
+-	$(top_builddir)/src/calfmakerdf -m gui -p $(DESTDIR)$(pkgdatadir)
++	qemu-arm $(top_builddir)/src/calfmakerdf -m gui -p $(DESTDIR)$(pkgdatadir)
+ 	install -c -m 644 $(srcdir)/gui-*.xml $(DESTDIR)$(pkgdatadir)
+ 	sed 's#@guidatadir@#$(pkgdatadir)#g' $(srcdir)/calf.rc.in >$(top_builddir)/calf.rc
+ 	install -c -m 644 $(top_builddir)/calf.rc $(DESTDIR)$(pkgdatadir)
+diff -ENwbur calf-0.0.60/gui/Makefile.in calf-0.0.60/gui/Makefile.in
+--- calf-0.0.60/gui/Makefile.in	2015-03-29 13:15:49.000000000 +0000
++++ calf-0.0.60/gui/Makefile.in	2018-11-27 09:23:17.492944811 +0000
+@@ -628,7 +628,7 @@
+ 
+ install-data-hook:
+ 	install -c -m 644 $(srcdir)/*.png $(DESTDIR)$(pkgdatadir)
+-	$(top_builddir)/src/calfmakerdf -m gui -p $(DESTDIR)$(pkgdatadir)
++	qemu-arm $(top_builddir)/src/calfmakerdf -m gui -p $(DESTDIR)$(pkgdatadir)
+ 	install -c -m 644 $(srcdir)/gui-*.xml $(DESTDIR)$(pkgdatadir)
+ 	sed 's#@guidatadir@#$(pkgdatadir)#g' $(srcdir)/calf.rc.in >$(top_builddir)/calf.rc
+ 	install -c -m 644 $(top_builddir)/calf.rc $(DESTDIR)$(pkgdatadir)
+diff -ENwbur calf-0.0.60/src/Makefile.am calf-0.0.60/src/Makefile.am
+--- calf-0.0.60/src/Makefile.am	2015-01-24 18:21:15.000000000 +0000
++++ calf-0.0.60/src/Makefile.am	2018-11-27 09:20:09.655076076 +0000
+@@ -82,7 +82,7 @@
+ 	install -c -m 755 $(top_builddir)/src/.libs/calflv2gui.so $(DESTDIR)$(lv2dir)/calflv2gui.so
+ endif
+ 	rm -f $(DESTDIR)$(lv2dir)/*.ttl
+-	$(top_builddir)/src/calfmakerdf -m ttl -p $(DESTDIR)$(lv2dir)/ -d $(DESTDIR)$(pkgdatadir)/
++	qemu-arm $(top_builddir)/src/calfmakerdf -m ttl -p $(DESTDIR)$(lv2dir)/ -d $(DESTDIR)$(pkgdatadir)/
+ if USE_SORDI
+ 	for f in $(DESTDIR)$(lv2dir)/*.ttl; do sout=`sordi -o turtle "$$f"`; if test $$? != 0; then echo "RDF file $$f is corrupted:"; echo $$sout"<<<"; fi; done
+ endif
+diff -ENwbur calf-0.0.60/src/Makefile.in calf-0.0.60/src/Makefile.in
+--- calf-0.0.60/src/Makefile.in	2015-03-29 13:15:49.000000000 +0000
++++ calf-0.0.60/src/Makefile.in	2018-11-27 09:22:11.084225840 +0000
+@@ -1017,7 +1017,7 @@
+ @USE_LV2_TRUE@	ln -sf $(pkglibdir)/calf.so $(DESTDIR)$(lv2dir)/calf.so
+ @USE_LV2_GUI_TRUE@@USE_LV2_TRUE@	install -c -m 755 $(top_builddir)/src/.libs/calflv2gui.so $(DESTDIR)$(lv2dir)/calflv2gui.so
+ @USE_LV2_TRUE@	rm -f $(DESTDIR)$(lv2dir)/*.ttl
+-@USE_LV2_TRUE@	$(top_builddir)/src/calfmakerdf -m ttl -p $(DESTDIR)$(lv2dir)/ -d $(DESTDIR)$(pkgdatadir)/
++@USE_LV2_TRUE@	qemu-arm $(top_builddir)/src/calfmakerdf -m ttl -p $(DESTDIR)$(lv2dir)/ -d $(DESTDIR)$(pkgdatadir)/
+ @USE_LV2_TRUE@@USE_SORDI_TRUE@	for f in $(DESTDIR)$(lv2dir)/*.ttl; do sout=`sordi -o turtle "$$f"`; if test $$? != 0; then echo "RDF file $$f is corrupted:"; echo $$sout"<<<"; fi; done
+ 
+ #remove calf.so, calf.rdf and - if empty - ladspa dir in usr/share
