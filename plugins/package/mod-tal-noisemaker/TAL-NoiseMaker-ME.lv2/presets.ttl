@@ -6,7 +6,7 @@
 @prefix state: <http://lv2plug.in/ns/ext/state#> .
 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 
-<http://kunz.corrupt.ch/products/tal-noisemaker#preset001> a pset:Preset ;
+<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#preset001> a pset:Preset ;
     state:state [
         <urn:juce:stateString>
 """
@@ -40,10 +40,6 @@
     ] ;
 
     lv2:port [
-        lv2:symbol "unused" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
         lv2:symbol "volume" ;
         pset:value 0.408000 ;
     ] ,
@@ -274,76 +270,5 @@
     [
         lv2:symbol "oscbitcrusher" ;
         pset:value 1.000000 ;
-    ] ,
-    [
-        lv2:symbol "highpass" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "detune" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "vintagenoise" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_63" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "unused_2" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "envelopeeditordest1" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "envelopeeditorspeed" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "envelopeeditoramount" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "envelopeoneshot" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "envelopefixtempo" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_70" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_71" ;
-        pset:value 1.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_72" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_73" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_74" ;
-        pset:value 1.000000 ;
-    ] ,
-    [
-        lv2:symbol "filterdrive" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_76" ;
-        pset:value 0.000000 ;
-    ] ,
-    [
-        lv2:symbol "lv2_port_77" ;
-        pset:value 0.000000 ;
     ] .
+    
