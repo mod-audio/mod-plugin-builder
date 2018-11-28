@@ -7,7 +7,7 @@
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix units: <http://lv2plug.in/ns/extensions/units#>.
 
-<http://kunz.corrupt.ch/products/tal-noisemaker>
+<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker>
     a lv2:InstrumentPlugin, lv2:Plugin ;
     lv2:requiredFeature <http://lv2plug.in/ns/ext/buf-size#boundedBlockLength> ,
                         <http://lv2plug.in/ns/ext/urid#map> ;
@@ -15,8 +15,8 @@
                       <http://lv2plug.in/ns/ext/state#interface> ,
                       <http://kxstudio.sf.net/ns/lv2ext/programs#Interface> ;
 
-    ui:ui <http://kunz.corrupt.ch/products/tal-noisemaker#ExternalUI> ,
-          <http://kunz.corrupt.ch/products/tal-noisemaker#ParentUI> ;
+    ui:ui <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#ExternalUI> ,
+          <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#ParentUI> ;
 
     lv2:port [
         a lv2:InputPort, atom:AtomPort ;
@@ -491,19 +491,19 @@
             rdf:value 3;
         ],
         [
-            rdfs:label "Osc 1 & 2";
+            rdfs:label "PW";
             rdf:value 4;
         ],
         [
-            rdfs:label "PW";
+            rdfs:label "FM";
             rdf:value 5;
         ],
         [
-            rdfs:label "PM";
+            rdfs:label "LFO 2 r";
             rdf:value 6;
         ],
         [
-            rdfs:label "LFO 2 r";
+            rdfs:label "Osc 1 & 2";
             rdf:value 7;
         ]; 
     ] ,
@@ -534,19 +534,19 @@
             rdf:value 3;
         ],
         [
-            rdfs:label "Osc 1 & 2";
+            rdfs:label "Pan";
             rdf:value 4;
         ],
         [
-            rdfs:label "LFO 1 r";
+            rdfs:label "Volume";
             rdf:value 5;
         ],
         [
-            rdfs:label "Pan";
+            rdfs:label "LFO 1 r";
             rdf:value 6;
         ],
         [
-            rdfs:label "Volume";
+            rdfs:label "Osc 1 & 2";
             rdf:value 7;
         ]; 
     ] ,
@@ -789,11 +789,11 @@
         lv2:index 61 ;
         lv2:symbol "oscbitcrusher" ;
         lv2:name "oscbitcrusher" ;
-        lv2:default 1.000000 ;
+        lv2:default 0.000000 ;
         lv2:minimum 0.0 ;
         lv2:maximum 1.0 ;
     ] ;
 
-    doap:name "Noize Mak3r" ;
+    doap:name "Noise Maker - ME" ;
     doap:maintainer [ foaf:name "TAL-Togu Audio Line" ] .
 
