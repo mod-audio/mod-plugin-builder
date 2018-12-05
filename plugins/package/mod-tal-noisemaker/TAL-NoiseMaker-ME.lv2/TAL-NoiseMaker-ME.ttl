@@ -1,3 +1,4 @@
+@prefix epp:   <http://lv2plug.in/ns/ext/port-props/#>.
 @prefix atom: <http://lv2plug.in/ns/ext/atom#> .
 @prefix doap: <http://usefulinc.com/ns/doap#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -264,26 +265,28 @@
         lv2:index 22 ;
         lv2:symbol "osc1tune" ;
         lv2:name "osc1tune" ;
-        lv2:default 0.250000 ;
-        lv2:minimum 0.0 ;
-        lv2:maximum 1.0 ;
+        lv2:default -12 ;
+        lv2:minimum -24 ;
+        lv2:maximum 24 ;
+        lv2:portProperty lv2:integer;
     ] ,
     [
         a lv2:InputPort, lv2:ControlPort ;
         lv2:index 23 ;
         lv2:symbol "osc2tune" ;
         lv2:name "osc2tune" ;
-        lv2:default 0.500000 ;
-        lv2:minimum 0.0 ;
-        lv2:maximum 1.0 ;
+        lv2:default 0 ;
+        lv2:minimum -24 ;
+        lv2:maximum 24 ;
+        lv2:portProperty lv2:integer;
     ] ,
     [
         a lv2:InputPort, lv2:ControlPort ;
         lv2:index 24 ;
         lv2:symbol "osc1finetune" ;
         lv2:name "osc1finetune" ;
-        lv2:default 0.500000 ;
-        lv2:minimum 0.0 ;
+        lv2:default 0.000000 ;
+        lv2:minimum -1.0 ;
         lv2:maximum 1.0 ;
     ] ,
     [
@@ -291,8 +294,8 @@
         lv2:index 25 ;
         lv2:symbol "osc2finetune" ;
         lv2:name "osc2finetune" ;
-        lv2:default 0.500000 ;
-        lv2:minimum 0.0 ;
+        lv2:default 0.000000 ;
+        lv2:minimum -1.0 ;
         lv2:maximum 1.0 ;
     ] ,
     [
@@ -645,9 +648,35 @@
         lv2:index 47 ;
         lv2:symbol "freeaddestination" ;
         lv2:name "freeaddestination" ;
-        lv2:default 0.000000 ;
-        lv2:minimum 0.0 ;
-        lv2:maximum 1.0 ;
+        lv2:default 1 ;
+        lv2:minimum 1 ;
+        lv2:maximum 6 ;
+        lv2:portProperty lv2:enumeration, lv2:integer;
+        lv2:scalePoint
+        [
+            rdfs:label "off";
+            rdf:value 1;
+        ],
+        [
+            rdfs:label "Filter";
+            rdf:value 2;
+        ],
+        [
+            rdfs:label "Osc 1";
+            rdf:value 3;
+        ],
+        [
+            rdfs:label "Osc 2";
+            rdf:value 4;
+        ],
+        [
+            rdfs:label "PW";
+            rdf:value 5;
+        ],
+        [
+            rdfs:label "FM";
+            rdf:value 6;
+        ] ;
     ] ,
     [
         a lv2:InputPort, lv2:ControlPort ;

@@ -3,41 +3,8 @@
 @prefix pset:  <http://lv2plug.in/ns/ext/presets#> .
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix state: <http://lv2plug.in/ns/ext/state#> .
-@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
 
 <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#preset001> a pset:Preset ;
-    state:state [
-        <urn:juce:stateString>
-"""
-<?xml version="1.0" encoding="UTF-8"?>
-
-<tal curprogram="0" version="1.6999999999999999556">
-  <programs>
-    <program programname="! Startup Noise Maker MOD Edition" volume="0.40800002217292785645"
-             filtertype="0" cutoff="1" resonance="0" osc1volume="0.80000001192092895508"
-             osc2volume="0" osc3volume="0.80000001192092895508" osc1waveform="0"
-             osc2waveform="0" oscsync="0" oscmastertune="0.5" osc1tune="0.25"
-             osc2tune="0.5" osc1finetune="0.5" osc2finetune="0.5" portamento="0"
-             keyfollow="0" filtercontour="0.5" filterattack="0" filterdecay="0"
-             filtersustain="1" filterrelease="0" ampattack="0" ampdecay="0"
-             ampsustain="1" amprelease="0" voices="0" portamentomode="0" lfo1waveform="0"
-             lfo2waveform="0" lfo1rate="0" lfo2rate="0" lfo1amount="0.5" lfo2amount="0.5"
-             lfo1destination="0" lfo2destination="0" lfo1phase="0" lfo2phase="0"
-             osc1pw="0.5" osc2fm="0" osc1phase="0.5" osc2phase="0" transpose="0.5"
-             freeadattack="0" freeaddecay="0" freeadamount="0" freeaddestination="0"
-             lfo1sync="0" lfo1keytrigger="0" lfo2sync="0" lfo2keytrigger="0"
-             velocityvolume="0" velocitycontour="0" velocitycutoff="0" pitchwheelcutoff="0"
-             pitchwheelpitch="0" highpass="0" detune="0" vintagenoise="0"
-             ringmodulation="0" envelopeeditordest1="0" envelopeeditorspeed="0"
-             envelopeeditoramount="0" envelopeoneshot="0" envelopefixtempo="0"
-             tab1open="1" tab2open="0" tab3open="0" tab4open="1">
-      <splinePoints/>
-    </program>
-  </programs>
-</tal>
-"""
-    ] ;
 
     lv2:port [
         lv2:symbol "volume" ;
@@ -45,7 +12,7 @@
     ] ,
     [
         lv2:symbol "filtertype" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "cutoff" ;
@@ -129,11 +96,11 @@
     ] ,
     [
         lv2:symbol "osc1waveform" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "osc2waveform" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "oscsync" ;
@@ -141,11 +108,11 @@
     ] ,
     [
         lv2:symbol "lfo1waveform" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "lfo2waveform" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "lfo1rate" ;
@@ -165,11 +132,11 @@
     ] ,
     [
         lv2:symbol "lfo1destination" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "lfo2destination" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "lfo1phase" ;
@@ -213,7 +180,7 @@
     ] ,
     [
         lv2:symbol "freeaddestination" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "lfo1sync" ;
@@ -241,7 +208,7 @@
     ] ,
     [
         lv2:symbol "voices" ;
-        pset:value 0.000000 ;
+        pset:value 0.0 ;
     ] ,
     [
         lv2:symbol "velocityvolume" ;
