@@ -1,0 +1,32 @@
+diff --git a/MOD/gx_vstb.ttl b/MOD/gx_vstb.ttl
+index 7d18dcc..1492832 100755
+--- a/MOD/gx_vstb.ttl
++++ b/MOD/gx_vstb.ttl
+@@ -58,15 +58,19 @@
+ 
+     
+ rdfs:comment """
+-Analog simulation of the Vox (*) Suppa Tone Bender pedal.
++The SuppaToneBender is modeled after the The Vox SuppaToneBender(*).
+ 
+-(*) Other product names modeled in this software are trademarks
+-of their respective companies that do not endorse and are not associated
+-or affiliated with this simulation.
+-Vox is trademark or trade name of other manufacturer and was used
+-merely to identify the product whose sound was reviewed in the creation
+-of this product.
+-All other trademarks are the property of their respective holders.'
++The Vox Suppa Tonebender(*), or as it is also known, the MKIII ToneBender, was the first in a series of tonebenders that offered a tone control. While the pedal still featured a very similar schematic to the Big Muff Pi, the change in internal components gave it its unique sound. The original pedal was first released in 1969 and was discontinued in 1976 due to the decrease of popularity of the germanium components. 
++
++Features:
++
++Modeled by the Guitarix team
++
++Based on the Vox Suppa ToneBender(*)
++
++(*) 'Other product names modeled in this software are trademarks of their respective companies that do not endorse and are not associated or affiliated with MOD.
++
++The Vox Suppa ToneBender is a trademark or trade name of another manufacturer and was used merely to identify the product whose sound was reviewed in the creation of this product. All other trademarks are the property of their respective holders.'
+ """;
+ 
+     lv2:port  [
