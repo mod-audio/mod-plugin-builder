@@ -1,0 +1,25 @@
+diff --git a/MOD/gx_sd2lead.ttl b/MOD/gx_sd2lead.ttl
+index 9e5bbab..2b6075e 100644
+--- a/MOD/gx_sd2lead.ttl
++++ b/MOD/gx_sd2lead.ttl
+@@ -56,7 +56,19 @@
+     mod:label "GxSD2Lead" ;
+ 
+ rdfs:comment """
+-SD2 overdrive pedal simulation
++The SD-2 Lead is modeled after the The BOSS SD-2(*).
++
++The Boss SD-2(*) is a pedal that, just as the DS-1, gained a lot of popularity. From a nice subtle natural overdrive to a more distortion-like sound, the SD-2 hits the spot. With the drive knob turned down, it is even usable as a clean boost. 
++
++Features:
++
++Modeled by the Guitarix team
++
++Based on the BOSS SD-2(*)
++
++(*) 'Other product names modeled in this software are trademarks of their respective companies that do not endorse and are not associated or affiliated with MOD.
++
++The BOSS SD-2  is a trademark or trade name of another manufacturer and was used merely to identify the product whose sound was reviewed in the creation of this product. All other trademarks are the property of their respective holders.’ 
+ """;
+ 
+     lv2:port  [
