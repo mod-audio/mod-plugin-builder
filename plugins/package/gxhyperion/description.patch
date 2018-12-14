@@ -1,0 +1,25 @@
+diff --git a/MOD/gx_hyperion.ttl b/MOD/gx_hyperion.ttl
+index d18d82e..b56e7bb 100755
+--- a/GxHyperion.lv2/MOD/gx_hyperion.ttl
++++ b/MOD/gx_hyperion.ttl
+@@ -58,7 +58,19 @@
+ 
+     
+ rdfs:comment """
+-Simulation of the Hyperion Bass Fuzz Pedal
++The Hyperion is modeled after the The Hyperion Bass Fuzz(*).
++
++The Hyperion Bass Fuzz(*) is a bass fuzz that has the nickname “Big Muff killer” due to its heavy fuzz. It has a standard two-knob interface that allows for summoning deep, sustained fuzz and nuanced pick articulation depending on how the pregain is set. With its really fat low end sound it is mostly used for bass, but it suits the guitar just as well! The hyperion is perfect for psych rock, stoner metal, or shoegaze.  
++
++Features:
++
++Modeled by the Guitarix team
++
++Based on the The Hyperion Bass Fuzz(*)
++
++(*) 'Other product names modeled in this software are trademarks of their respective companies that do not endorse and are not associated or affiliated with MOD.
++
++The Hyperion Bass Fuzz is a trademark or trade name of another manufacturer and was used merely to identify the product whose sound was reviewed in the creation of this product. All other trademarks are the property of their respective holders.
+ """;
+ 
+     lv2:port  [
