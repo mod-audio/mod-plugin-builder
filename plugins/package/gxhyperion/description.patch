@@ -1,6 +1,6 @@
 diff --git a/MOD/gx_hyperion.ttl b/MOD/gx_hyperion.ttl
 index d18d82e..b56e7bb 100755
---- a/GxHyperion.lv2/MOD/gx_hyperion.ttl
+--- a/MOD/gx_hyperion.ttl
 +++ b/MOD/gx_hyperion.ttl
 @@ -58,7 +58,19 @@
  
