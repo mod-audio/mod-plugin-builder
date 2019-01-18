@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXVBASS_VERSION = b9cedb51b8f044282500eb081b47d3675c5b246b
+GXVBASS_VERSION = 95bc7fb3bfa97144a21a710a344ab16939c38b7f
 GXVBASS_SITE = $(call github,brummer10,GxVBassPreAmp.lv2,$(GXVBASS_VERSION))
 GXVBASS_BUNDLES = gx_voxbass.lv2
 

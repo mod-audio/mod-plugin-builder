@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXBOTTLEROCKET_VERSION = 8a6174b5a9b6348da4e68e1f53dc54167755473f
+GXBOTTLEROCKET_VERSION = 0be3709ad509ae864687ce498fc2f20ad252c9fe
 GXBOTTLEROCKET_SITE = $(call github,brummer10,GxBottleRocket.lv2,$(GXBOTTLEROCKET_VERSION))
 GXBOTTLEROCKET_BUNDLES = gx_bottlerocket.lv2
 

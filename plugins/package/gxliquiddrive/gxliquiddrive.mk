@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXLIQUIDDRIVE_VERSION = 5a3965800a550341f130c807312200bff79e66cf
+GXLIQUIDDRIVE_VERSION = e12a9d94b6623343a2e0b81b6e73276f5fa0e9ad
 GXLIQUIDDRIVE_SITE = $(call github,brummer10,GxLiquidDrive.lv2,$(GXLIQUIDDRIVE_VERSION))
 GXLIQUIDDRIVE_BUNDLES = gx_liquiddrive.lv2
 
