@@ -1,3 +1,4 @@
+source "$BR2_EXTERNAL/package/camomile/Config.in"
 source "$BR2_EXTERNAL/package/dpf/Config.in"
 source "$BR2_EXTERNAL/package/fftwf/Config.in"
 source "$BR2_EXTERNAL/package/fluidsynth/Config.in"

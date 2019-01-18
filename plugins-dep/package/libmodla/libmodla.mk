@@ -4,7 +4,7 @@
 #
 ######################################
 
-LIBMODLA_VERSION = v1.1.0
+LIBMODLA_VERSION = v1.2.1
 LIBMODLA_SITE = http://web1.moddevices.com/shared/
 LIBMODLA_SOURCE = libmodla-$(LIBMODLA_VERSION).tar.gz
 LIBMODLA_INSTALL_STAGING = YES

@@ -1,0 +1,241 @@
+@prefix atom:  <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix pset:  <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#preset001> a pset:Preset ;
+
+    lv2:port [
+        lv2:symbol "volume" ;
+        pset:value 0.408000 ;
+    ] ,
+    [
+        lv2:symbol "filtertype" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "cutoff" ;
+        pset:value 1.000000 ;
+    ] ,
+    [
+        lv2:symbol "resonance" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "keyfollow" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "filtercontour" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "filterattack" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "filterdecay" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "filtersustain" ;
+        pset:value 1.000000 ;
+    ] ,
+    [
+        lv2:symbol "filterrelease" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "ampattack" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "ampdecay" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "ampsustain" ;
+        pset:value 1.000000 ;
+    ] ,
+    [
+        lv2:symbol "amprelease" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "osc1volume" ;
+        pset:value 0.800000 ;
+    ] ,
+    [
+        lv2:symbol "osc2volume" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "osc3volume" ;
+        pset:value 0.800000 ;
+    ] ,
+    [
+        lv2:symbol "oscmastertune" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "osc1tune" ;
+        pset:value 0.250000 ;
+    ] ,
+    [
+        lv2:symbol "osc2tune" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "osc1finetune" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "osc2finetune" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "osc1waveform" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "osc2waveform" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "oscsync" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "lfo1waveform" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "lfo2waveform" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "lfo1rate" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "lfo2rate" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "lfo1amount" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "lfo2amount" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "lfo1destination" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "lfo2destination" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "lfo1phase" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "lfo2phase" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "osc2fm" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "osc2phase" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "osc1pw" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "osc1phase" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "transpose" ;
+        pset:value 0.500000 ;
+    ] ,
+    [
+        lv2:symbol "freeadattack" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "freeaddecay" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "freeadamount" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "freeaddestination" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "lfo1sync" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "lfo1keytrigger" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "lfo2sync" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "lfo2keytrigger" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "portamento" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "portamentomode" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "voices" ;
+        pset:value 0.0 ;
+    ] ,
+    [
+        lv2:symbol "velocityvolume" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "velocitycontour" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "velocitycutoff" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "pitchwheelcutoff" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "pitchwheelpitch" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "ringmodulation" ;
+        pset:value 0.000000 ;
+    ] ,
+    [
+        lv2:symbol "oscbitcrusher" ;
+        pset:value 1.000000 ;
+    ] .
+    
