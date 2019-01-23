@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXSVT_VERSION = e1d2bb00a393c06f92b92f19b98e63b9af8140cc
+GXSVT_VERSION = 437ca624f168c02c8694062236d9abe8adecd75d
 GXSVT_SITE = $(call github,brummer10,GxSVT.lv2,$(GXSVT_VERSION))
 GXSVT_BUNDLES = gx_ampegsvt.lv2
 

@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXSD2LEAD_VERSION = 4efa04230d024268db1e975d75d35c631806d915
+GXSD2LEAD_VERSION = 4f219a123a15200d864b92703bc8d3811fedb5d4
 GXSD2LEAD_SITE = $(call github,brummer10,GxSD2Lead.lv2,$(GXSD2LEAD_VERSION))
 GXSD2LEAD_BUNDLES = gx_sd2lead.lv2
 

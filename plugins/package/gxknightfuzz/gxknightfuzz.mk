@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXKNIGHTFUZZ_VERSION = 792e4aafcafed83ae5f073bc498a0db15fb0d981
+GXKNIGHTFUZZ_VERSION = 0cd6814db2000ee010a9398e4621fb41b309e4ff
 GXKNIGHTFUZZ_SITE = $(call github,brummer10,GxKnightFuzz.lv2,$(GXKNIGHTFUZZ_VERSION))
 GXKNIGHTFUZZ_BUNDLES = gx_KnightFuzz.lv2
 
