@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXSUNFACE_VERSION = 367639733df82ba2c0a3b5ddaa6b9ed59d9c3323
+GXSUNFACE_VERSION = b2fc690d918837f24412d32f50ba98f695bdd3cb
 GXSUNFACE_SITE = $(call github,brummer10,GxSunFace.lv2,$(GXSUNFACE_VERSION))
 GXSUNFACE_BUNDLES = gx_SunFace.lv2
 

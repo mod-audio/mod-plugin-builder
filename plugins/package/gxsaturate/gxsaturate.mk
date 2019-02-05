@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXSATURATE_VERSION = 9d253531b6d2aae6e507f61c92962fc23f66dbc4
+GXSATURATE_VERSION = 52bf9e3042e3adf56f6d253a245218818b530359
 GXSATURATE_SITE = $(call github,brummer10,GxSaturator.lv2,$(GXSATURATE_VERSION))
 GXSATURATE_BUNDLES = gx_saturate.lv2
 

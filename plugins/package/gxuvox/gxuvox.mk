@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXUVOX_VERSION = 1af731359e9a8bd47f5e6f87e56829e95660fb89
+GXUVOX_VERSION = a7ad702c586b9e9ecd1a50a434720f702cd7332f
 GXUVOX_SITE = $(call github,brummer10,GxUVox720k.lv2,$(GXUVOX_VERSION))
 GXUVOX_BUNDLES = gx_uvox.lv2
 

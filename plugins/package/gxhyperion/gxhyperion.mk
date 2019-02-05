@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXHYPERION_VERSION = aae0e12fad96af5345bc4e8c6081c0fc65d46205
+GXHYPERION_VERSION = dd863082443222fe06196660f9d57026556ec698
 GXHYPERION_SITE = $(call github,brummer10,GxHyperion.lv2,$(GXHYPERION_VERSION))
 GXHYPERION_BUNDLES = gx_hyperion.lv2
 

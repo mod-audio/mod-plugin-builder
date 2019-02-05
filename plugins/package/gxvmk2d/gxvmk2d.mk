@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXVMK2D_VERSION = 5f61c3d0dd8bca6fb622295a2af2a5ecba0dbfdd
+GXVMK2D_VERSION = c5bd4a74c7c19f381ecee73ca908500426668f51
 GXVMK2D_SITE = $(call github,brummer10,GxVmk2.lv2,$(GXVMK2D_VERSION))
 GXVMK2D_BUNDLES = gx_vmk2d.lv2
 
