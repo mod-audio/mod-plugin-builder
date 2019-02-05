@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXTONEMACHINE_VERSION = bb32739039ddd1c83fdc901b7febbf92cf7a5a67
+GXTONEMACHINE_VERSION = efa8681a59b2fc69fed959efcf0234db1578f0c5
 GXTONEMACHINE_SITE = $(call github,brummer10,GxToneMachine.lv2,$(GXTONEMACHINE_VERSION))
 GXTONEMACHINE_BUNDLES = gx_tonemachine.lv2
 

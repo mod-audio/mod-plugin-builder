@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXVOODOO_VERSION = 2d631480bc77ba2363f32cd1fb4e5cf411c029be
+GXVOODOO_VERSION = 7356f5aae5e741dae1d2e64c4518525057325be4
 GXVOODOO_SITE = $(call github,brummer10,GxVoodoFuzz.lv2,$(GXVOODOO_VERSION))
 GXVOODOO_BUNDLES = gx_voodoo.lv2
 

@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXSD1_VERSION = 456418cfead9b9efc726634323d66ee62e8f8f36
+GXSD1_VERSION = 9c8d6a4d7cd4218150e41e66c4c541ab0e06e748
 GXSD1_SITE = $(call github,brummer10,GxSD1.lv2,$(GXSD1_VERSION))
 GXSD1_BUNDLES = gx_sd1sim.lv2
 

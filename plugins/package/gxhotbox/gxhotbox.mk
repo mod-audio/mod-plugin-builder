@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXHOTBOX_VERSION = 3df0a127c1f0563ae9e089335dde30df333c4241
+GXHOTBOX_VERSION = 09d0a85367c6952d26926bf0fd8d1b2b025476a4
 GXHOTBOX_SITE = $(call github,brummer10,GxHotBox.lv2,$(GXHOTBOX_VERSION))
 GXHOTBOX_BUNDLES = gx_hotbox.lv2
 

@@ -4,7 +4,7 @@
 #
 ######################################
 
-GXVSTB_VERSION = 07692d155552ee7b0e2d9a2d626f15b552a3c526
+GXVSTB_VERSION = 0fd30518846be377b7c4ce1228a90756f4fa4b72
 GXVSTB_SITE = $(call github,brummer10,GxSuppaToneBender.lv2,$(GXVSTB_VERSION))
 GXVSTB_BUNDLES = gx_vstb.lv2
 
