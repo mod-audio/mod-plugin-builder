@@ -1,10 +1,10 @@
 diff --git a/kernel/planner.c b/kernel/planner.c
-index 172c398..4dabb04 100644
+index 9c71290..10473ca 100644
 --- a/kernel/planner.c
 +++ b/kernel/planner.c
 @@ -20,6 +20,7 @@
  
- #include "ifftw.h"
+ #include "kernel/ifftw.h"
  #include <string.h>
 +#include <stdio.h>
  

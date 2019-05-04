@@ -1,8 +1,8 @@
 diff --git a/simd-support/neon.c b/simd-support/neon.c
-index 4bc3863..831bdfe 100644
+index 196959c..fe04dd4 100644
 --- a/simd-support/neon.c
 +++ b/simd-support/neon.c
-@@ -23,56 +23,9 @@
+@@ -23,54 +23,9 @@
  
  #if HAVE_NEON
  
@@ -35,8 +35,6 @@ index 4bc3863..831bdfe 100644
 -	    return 1;
 -       }
 -  }
--
--  extern void X(check_alignment_of_sse2_pm)(void);
 -
 -  int X(have_simd_neon)(void)
 -  {
