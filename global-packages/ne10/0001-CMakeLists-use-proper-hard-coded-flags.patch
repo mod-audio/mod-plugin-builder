@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fc2a5e3..1b39e17 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -135,8 +135,8 @@ if(ANDROID_PLATFORM)
+     ${CMAKE_C_FLAGS}")
+ elseif(GNULINUX_PLATFORM)
+     if(${NE10_TARGET_ARCH} STREQUAL "armv7")
+-      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=vfp3 -funsafe-math-optimizations")
+-      set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -march=armv7-a -mfpu=neon")
++      set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=vfp3 -funsafe-math-optimizations")
++      set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS} -mthumb-interwork -mthumb -mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon")
+       # Turn on asm optimization for Linux on ARM v7.
+       set(NE10_ASM_OPTIMIZATION on)
+     endif()

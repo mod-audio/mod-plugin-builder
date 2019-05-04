@@ -1,0 +1,1991 @@
+From 94677e6c0b761c64cabd7ac697ba9c6b350a9902 Mon Sep 17 00:00:00 2001
+From: Joe Savage <joe@reinterpretcast.com>
+Date: Wed, 12 Oct 2016 10:20:18 +0100
+Subject: [PATCH] fix a bunch of compiler warnings, disable strict aliasing
+ opts
+
+Includes a fix for the pointer casting issue projectNe10/Ne10#123.
+---
+ CMakeLists.txt                                     |   4 +-
+ inc/NE10_physics.h                                 |   2 +
+ modules/dsp/NE10_fft.c                             |   8 +-
+ modules/dsp/NE10_fft_float32.c                     |  10 +-
+ .../dsp/NE10_fft_generic_float32.neonintrinsic.cpp |   2 +
+ modules/dsp/NE10_fft_int16.c                       |   8 +-
+ modules/dsp/NE10_fft_int32.c                       |   8 +-
+ modules/dsp/NE10_fir.c                             |   7 +-
+ modules/dsp/test/test_suite_fft_float32.c          |   1 -
+ modules/dsp/test/test_suite_fft_int16.c            |   2 -
+ modules/dsp/test/test_suite_fft_int32.c            |   2 -
+ modules/dsp/test/test_suite_fir.c                  |  18 +--
+ modules/dsp/test/test_suite_fir_decimate.c         |  23 +--
+ modules/dsp/test/test_suite_fir_interpolate.c      |  17 ++-
+ modules/dsp/test/test_suite_fir_lattice.c          |  17 +--
+ modules/dsp/test/test_suite_fir_sparse.c           |  43 +++---
+ modules/dsp/test/test_suite_iir.c                  |  20 +--
+ modules/imgproc/NE10_resize.c                      |   2 -
+ modules/imgproc/NE10_resize.neon.c                 |   4 +-
+ modules/imgproc/NE10_rotate.c                      |   2 -
+ modules/imgproc/test/test_suite_resize.c           |  23 ++-
+ modules/imgproc/test/test_suite_rotate.c           |  13 +-
+ modules/math/NE10_divc.neon.c                      |   2 -
+ modules/math/test/test_suite_math.c                | 154 +++++++++++----------
+ modules/physics/NE10_physics.c                     |   2 -
+ modules/physics/test/test_suite_physics.c          |  34 ++---
+ test/src/NE10_random.c                             |   3 -
+ 27 files changed, 203 insertions(+), 228 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fc2a5e3..8336cac 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -92,10 +92,10 @@ option(NE10_ENABLE_IMGPROC "Build image processing functionalities to NE10" ON)
+ set(NE10_VERSION 10)
+ 
+ if(BUILD_DEBUG)
+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -Wall -g -DDEBUG")
++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -O0 -DDEBUG -g -Wall -Wno-unused-but-set-variable")
+     message("-- Building type: DEBUG")
+ else(BUILD_DEBUG)
+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -DNDEBUG")
++    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-strict-aliasing -O2 -DNDEBUG")
+     message("-- Building type: RELEASE")
+ endif(BUILD_DEBUG)
+ 
+diff --git a/inc/NE10_physics.h b/inc/NE10_physics.h
+index 5f7c995..3e8e365 100644
+--- a/inc/NE10_physics.h
++++ b/inc/NE10_physics.h
+@@ -39,6 +39,8 @@
+ extern "C" {
+ #endif
+ 
++    ne10_result_t ne10_init_physics (ne10_int32_t is_NEON_available);
++
+ ///////////////////////////
+ // function prototypes:
+ ///////////////////////////
+diff --git a/modules/dsp/NE10_fft.c b/modules/dsp/NE10_fft.c
+index 1adec5e..37a1321 100644
+--- a/modules/dsp/NE10_fft.c
++++ b/modules/dsp/NE10_fft.c
+@@ -94,14 +94,14 @@ ne10_int32_t ne10_factor (ne10_int32_t n,
+             case 8:
+                 p = 8;
+                 break;
+-            case 40:
+-                p = 5;
+-                alg_flag = NE10_FFT_ALG_ANY;
+-                break;
+             case 24:
+                 p = 3;
+                 alg_flag = NE10_FFT_ALG_ANY;
+                 break;
++            default: // n == 40
++                p = 5;
++                alg_flag = NE10_FFT_ALG_ANY;
++                break;
+             }
+         }
+         else if ((n % 4) == 0)
+diff --git a/modules/dsp/NE10_fft_float32.c b/modules/dsp/NE10_fft_float32.c
+index f22d126..e701d41 100644
+--- a/modules/dsp/NE10_fft_float32.c
++++ b/modules/dsp/NE10_fft_float32.c
+@@ -71,11 +71,12 @@ static void ne10_mixed_radix_butterfly_float32_c (ne10_fft_cpx_float32_t * Fout,
+     const ne10_float32_t TW_81 = 0.70710678;
+     const ne10_float32_t TW_81N = -0.70710678;
+ 
+-    // init fstride, mstride, N
++    // init fstride, mstride, N, tw
+     stage_count = factors[0];
+     fstride = factors[1];
+     mstride = factors[ (stage_count << 1) - 1 ];
+     N = factors[ stage_count << 1 ]; // radix
++    tw = twiddles;
+ 
+     // the first stage
+     Fin1 = Fin;
+@@ -84,7 +85,6 @@ static void ne10_mixed_radix_butterfly_float32_c (ne10_fft_cpx_float32_t * Fout,
+     {
+         // radix 8
+         N = fstride >> 1; // 1/4 of length of FFT
+-        tw = twiddles;
+         fstride1 = fstride >> 2;
+ 
+         Fin1 = Fin;
+@@ -253,7 +253,6 @@ static void ne10_mixed_radix_butterfly_float32_c (ne10_fft_cpx_float32_t * Fout,
+ 
+         // update address for other stages
+         stage_count--;
+-        tw = twiddles;
+         fstride >>= 2;
+ 
+         // swap
+@@ -463,12 +462,13 @@ static void ne10_mixed_radix_butterfly_inverse_float32_c (ne10_fft_cpx_float32_t
+     const ne10_float32_t TW_81 = 0.70710678;
+     const ne10_float32_t TW_81N = -0.70710678;
+ 
+-    // init fstride, mstride, N
++    // init fstride, mstride, N, one_by_nfft, tw
+     stage_count = factors[0];
+     fstride = factors[1];
+     mstride = factors[ (stage_count << 1) - 1 ];
+     N = factors[ stage_count << 1 ]; // radix
+     one_by_nfft = (1.0f / (ne10_float32_t) (fstride * N));
++    tw = twiddles;
+ 
+     // the first stage
+     Fin1 = Fin;
+@@ -477,7 +477,6 @@ static void ne10_mixed_radix_butterfly_inverse_float32_c (ne10_fft_cpx_float32_t
+     {
+         // radix 8
+         N = fstride >> 1; // 1/4 of length of FFT
+-        tw = twiddles;
+         fstride1 = fstride >> 2;
+ 
+         Fin1 = Fin;
+@@ -656,7 +655,6 @@ static void ne10_mixed_radix_butterfly_inverse_float32_c (ne10_fft_cpx_float32_t
+ 
+         // update address for other stages
+         stage_count--;
+-        tw = twiddles;
+         fstride >>= 2;
+ 
+         if (stage_count == 0)
+diff --git a/modules/dsp/NE10_fft_generic_float32.neonintrinsic.cpp b/modules/dsp/NE10_fft_generic_float32.neonintrinsic.cpp
+index 275c68a..db71674 100644
+--- a/modules/dsp/NE10_fft_generic_float32.neonintrinsic.cpp
++++ b/modules/dsp/NE10_fft_generic_float32.neonintrinsic.cpp
+@@ -569,7 +569,9 @@ static void ne10_radix_4_butterfly_float32_neon (CPLX *Fout,
+         const ne10_int32_t nfft)
+ {
+     CPLX in[4];
++    #ifdef NE10_INLINE_ASM_OPT
+     CPLX s[4];
++    #endif
+ 
+     const ne10_int32_t in_step = nfft / 4;
+     ne10_int32_t f_count;
+diff --git a/modules/dsp/NE10_fft_int16.c b/modules/dsp/NE10_fft_int16.c
+index 3806f2e..d2a6632 100644
+--- a/modules/dsp/NE10_fft_int16.c
++++ b/modules/dsp/NE10_fft_int16.c
+@@ -75,11 +75,12 @@ static void ne10_mixed_radix_butterfly_int16_c (ne10_fft_cpx_int16_t * Fout,
+ 
+ 
+ 
+-    // init fstride, mstride, N
++    // init fstride, mstride, N, tw
+     stage_count = factors[0];
+     fstride = factors[1];
+     mstride = factors[ (stage_count << 1) - 1 ];
+     N = factors[ stage_count << 1 ]; // radix
++    tw = twiddles;
+ 
+     // the first stage
+     Fin1 = Fin;
+@@ -88,7 +89,6 @@ static void ne10_mixed_radix_butterfly_int16_c (ne10_fft_cpx_int16_t * Fout,
+     {
+         // radix 8
+         N = fstride >> 1; // 1/4 of length of FFT
+-        tw = twiddles;
+         fstride1 = fstride >> 2;
+ 
+         Fin1 = Fin;
+@@ -280,7 +280,6 @@ static void ne10_mixed_radix_butterfly_int16_c (ne10_fft_cpx_int16_t * Fout,
+ 
+         // update address for other stages
+         stage_count--;
+-        tw = twiddles;
+         fstride >>= 2;
+         // end of first stage
+     }
+@@ -515,6 +514,7 @@ static void ne10_mixed_radix_butterfly_inverse_int16_c (ne10_fft_cpx_int16_t * F
+     fstride = factors[1];
+     mstride = factors[ (stage_count << 1) - 1 ];
+     N = factors[ stage_count << 1 ]; // radix
++    tw = twiddles;
+ 
+     // the first stage
+     Fin1 = Fin;
+@@ -523,7 +523,6 @@ static void ne10_mixed_radix_butterfly_inverse_int16_c (ne10_fft_cpx_int16_t * F
+     {
+         // radix 8
+         N = fstride >> 1; // 1/4 of length of FFT
+-        tw = twiddles;
+         fstride1 = fstride >> 2;
+ 
+         Fin1 = Fin;
+@@ -711,7 +710,6 @@ static void ne10_mixed_radix_butterfly_inverse_int16_c (ne10_fft_cpx_int16_t * F
+         N = fstride; // 1/4 of length of FFT
+         // update address for other stages
+         stage_count--;
+-        tw = twiddles;
+         fstride >>= 2;
+ 
+         // swap
+diff --git a/modules/dsp/NE10_fft_int32.c b/modules/dsp/NE10_fft_int32.c
+index 7207146..c67fe69 100644
+--- a/modules/dsp/NE10_fft_int32.c
++++ b/modules/dsp/NE10_fft_int32.c
+@@ -75,11 +75,12 @@ static void ne10_mixed_radix_butterfly_int32_c (ne10_fft_cpx_int32_t * Fout,
+ 
+ 
+ 
+-    // init fstride, mstride, N
++    // init fstride, mstride, N, tw
+     stage_count = factors[0];
+     fstride = factors[1];
+     mstride = factors[ (stage_count << 1) - 1 ];
+     N = factors[ stage_count << 1 ]; // radix
++    tw = twiddles;
+ 
+     // the first stage
+     Fin1 = Fin;
+@@ -88,7 +89,6 @@ static void ne10_mixed_radix_butterfly_int32_c (ne10_fft_cpx_int32_t * Fout,
+     {
+         // radix 8
+         N = fstride >> 1; // 1/4 of length of FFT
+-        tw = twiddles;
+         fstride1 = fstride >> 2;
+ 
+         Fin1 = Fin;
+@@ -280,7 +280,6 @@ static void ne10_mixed_radix_butterfly_int32_c (ne10_fft_cpx_int32_t * Fout,
+ 
+         // update address for other stages
+         stage_count--;
+-        tw = twiddles;
+         fstride >>= 2;
+         // end of first stage
+     }
+@@ -515,6 +514,7 @@ static void ne10_mixed_radix_butterfly_inverse_int32_c (ne10_fft_cpx_int32_t * F
+     fstride = factors[1];
+     mstride = factors[ (stage_count << 1) - 1 ];
+     N = factors[ stage_count << 1 ]; // radix
++    tw = twiddles;
+ 
+     // the first stage
+     Fin1 = Fin;
+@@ -523,7 +523,6 @@ static void ne10_mixed_radix_butterfly_inverse_int32_c (ne10_fft_cpx_int32_t * F
+     {
+         // radix 8
+         N = fstride >> 1; // 1/4 of length of FFT
+-        tw = twiddles;
+         fstride1 = fstride >> 2;
+ 
+         Fin1 = Fin;
+@@ -711,7 +710,6 @@ static void ne10_mixed_radix_butterfly_inverse_int32_c (ne10_fft_cpx_int32_t * F
+         N = fstride; // 1/4 of length of FFT
+         // update address for other stages
+         stage_count--;
+-        tw = twiddles;
+         fstride >>= 2;
+ 
+         // swap
+diff --git a/modules/dsp/NE10_fir.c b/modules/dsp/NE10_fir.c
+index fd6de71..2654b68 100644
+--- a/modules/dsp/NE10_fir.c
++++ b/modules/dsp/NE10_fir.c
+@@ -1325,12 +1325,12 @@ static void ne10_circular_read_float (ne10_int32_t * circBuffer,
+                                       ne10_uint32_t blockSize)
+ {
+     ne10_uint32_t i = 0u;
+-    ne10_int32_t rOffset, dst_end;
++    ne10_int32_t rOffset, *dst_end;
+ 
+     /* Copy the value of Index pointer that points
+      * to the current location from where the input samples to be read */
+     rOffset = *readOffset;
+-    dst_end = (ne10_int32_t) (dst_base + dst_length);
++    dst_end = dst_base + dst_length;
+ 
+     /* Loop over the blockSize */
+     i = blockSize;
+@@ -1343,7 +1343,7 @@ static void ne10_circular_read_float (ne10_int32_t * circBuffer,
+         /* Update the input pointer */
+         dst += dstInc;
+ 
+-        if (dst == (ne10_int32_t *) dst_end)
++        if (dst == dst_end)
+         {
+             dst = dst_base;
+         }
+@@ -1601,4 +1601,3 @@ void ne10_fir_sparse_float_c (ne10_fir_sparse_instance_f32_t * S,
+ 
+ }
+ /** @} */ //end of FIR_sparse group
+-
+diff --git a/modules/dsp/test/test_suite_fft_float32.c b/modules/dsp/test/test_suite_fft_float32.c
+index a24ab9c..083de30 100644
+--- a/modules/dsp/test/test_suite_fft_float32.c
++++ b/modules/dsp/test/test_suite_fft_float32.c
+@@ -88,7 +88,6 @@ static ne10_int32_t test_c2c_alloc (ne10_int32_t fftSize);
+ 
+ void test_fft_c2c_1d_float32_conformance()
+ {
+-    ne10_int32_t i = 0;
+     ne10_int32_t fftSize = 0;
+     ne10_int32_t flag_result = NE10_OK;
+ 
+diff --git a/modules/dsp/test/test_suite_fft_int16.c b/modules/dsp/test/test_suite_fft_int16.c
+index c3528aa..1d32fee 100644
+--- a/modules/dsp/test/test_suite_fft_int16.c
++++ b/modules/dsp/test/test_suite_fft_int16.c
+@@ -73,8 +73,6 @@ static ne10_float32_t snr = 0.0f;
+ 
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+-static ne10_int64_t time_overhead_c = 0;
+-static ne10_int64_t time_overhead_neon = 0;
+ static ne10_float32_t time_speedup = 0.0f;
+ static ne10_float32_t time_savings = 0.0f;
+ 
+diff --git a/modules/dsp/test/test_suite_fft_int32.c b/modules/dsp/test/test_suite_fft_int32.c
+index 1266828..d9878cc 100644
+--- a/modules/dsp/test/test_suite_fft_int32.c
++++ b/modules/dsp/test/test_suite_fft_int32.c
+@@ -73,8 +73,6 @@ static ne10_float32_t snr = 0.0f;
+ 
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+-static ne10_int64_t time_overhead_c = 0;
+-static ne10_int64_t time_overhead_neon = 0;
+ static ne10_float32_t time_speedup = 0.0f;
+ static ne10_float32_t time_savings = 0.0f;
+ 
+diff --git a/modules/dsp/test/test_suite_fir.c b/modules/dsp/test/test_suite_fir.c
+index 35a53d5..e0a578e 100644
+--- a/modules/dsp/test/test_suite_fir.c
++++ b/modules/dsp/test/test_suite_fir.c
+@@ -64,8 +64,9 @@ static ne10_float32_t * guarded_fir_state_neon = NULL;
+ static ne10_float32_t * fir_state_c = NULL;
+ static ne10_float32_t * fir_state_neon = NULL;
+ 
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static ne10_float32_t snr = 0.0f;
+-
++#endif
+ #ifdef PERFORMANCE_TEST
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+@@ -100,7 +101,7 @@ static ne10_float32_t testCoeffs7_f32[7] =
+ ** Coefficients for 1-tap filter for F32
+ ** ------------------------------------------------------------------- */
+ 
+-ne10_float32_t testCoeffs1_f32 = -0.432564811528220680;
++static ne10_float32_t testCoeffs1_f32 = -0.432564811528220680;
+ 
+ /* ----------------------------------------------------------------------
+ ** Coefficients for 32-tap filter for F32
+@@ -176,6 +177,7 @@ typedef struct
+ } test_config;
+ 
+ /* Test configurationsfor conformance test, 100% Code Coverage */
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static test_config CONFIG[] =
+ {
+     {64, 32, 5, &testCoeffs32_f32[0], &testInput_f32[0]},
+@@ -190,30 +192,28 @@ static test_config CONFIG[] =
+     {8, 4, 1, &testCoeffs4_f32[0], &testInput_f32[0]},
+     {9, 4, 1, &testCoeffs4_f32[0], &testInput_f32[0]},
+ };
++#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
++#endif
+ /* Test configurations for performance test */
++#ifdef PERFORMANCE_TEST
+ static test_config CONFIG_PERF[] =
+ {
+     {64, 32, 5, &testCoeffs32_f32[0], &testInput_f32[0]},
+     {64, 3, 5, &testCoeffs3_f32[0], &testInput_f32[0]},
+     {64, 7, 5, &testCoeffs7_f32[0], &testInput_f32[0]},
+ };
+-
+-#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
+ #define NUM_PERF_TESTS (sizeof(CONFIG_PERF) / sizeof(CONFIG_PERF[0]) )
++#endif
+ 
+ void test_fir_case0()
+ {
+-    ne10_float32_t *p_src = testInput_f32;
+     ne10_fir_instance_f32_t SC, SN;
+ 
+     ne10_uint16_t loop = 0;
+     ne10_uint16_t block = 0;
+-    ne10_uint16_t k = 0;
+     ne10_uint16_t i = 0;
+-    ne10_uint16_t pos = 0;
+ 
+     test_config *config;
+-    ne10_result_t status = NE10_OK;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -237,6 +237,7 @@ void test_fir_case0()
+      */
+ #ifdef ENABLE_NE10_FIR_FLOAT_NEON
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_uint16_t pos = 0;
+     for (loop = 0; loop < NUM_TESTS; loop++)
+     {
+         config = &CONFIG[loop];
+@@ -290,6 +291,7 @@ void test_fir_case0()
+ #endif // ENABLE_NE10_FIR_FLOAT_NEON
+ 
+ #ifdef PERFORMANCE_TEST
++    ne10_uint16_t k;
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "FIR Length&Taps", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+     for (loop = 0; loop < NUM_PERF_TESTS; loop++)
+     {
+diff --git a/modules/dsp/test/test_suite_fir_decimate.c b/modules/dsp/test/test_suite_fir_decimate.c
+index 3475ac9..01b8ebf 100644
+--- a/modules/dsp/test/test_suite_fir_decimate.c
++++ b/modules/dsp/test/test_suite_fir_decimate.c
+@@ -64,8 +64,9 @@ static ne10_float32_t * guarded_fir_state_neon = NULL;
+ static ne10_float32_t * fir_state_c = NULL;
+ static ne10_float32_t * fir_state_neon = NULL;
+ 
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static ne10_float32_t snr = 0.0f;
+-
++#endif
+ #ifdef PERFORMANCE_TEST
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+@@ -77,10 +78,10 @@ static ne10_float32_t time_savings = 0.0f;
+ ** Coefficients for 3-tap filter  for F32
+ ** ------------------------------------------------------------------- */
+ 
+-static ne10_float32_t testCoeffs3_f32[3] =
+-{
+-    -0.085191,  0.009420,   0.086440
+-};
++// static ne10_float32_t testCoeffs3_f32[3] =
++// {
++//     -0.085191,  0.009420,   0.086440
++// };
+ 
+ /* ----------------------------------------------------------------------
+ ** Coefficients for 7-tap filter for F32
+@@ -170,6 +171,7 @@ typedef struct
+ } test_config;
+ 
+ /* All Test configurations, 100% Code Coverage */
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static test_config CONFIG[] = {{0, 1, 2, 80, &testCoeffs1_f32, &testInput_f32[0]},
+     //{0, 1, 0, 80, &testCoeffs1_f32, &testInput_f32[0]},
+     {4, 1, 2, 80, &testCoeffs1_f32, &testInput_f32[0]},
+@@ -181,26 +183,25 @@ static test_config CONFIG[] = {{0, 1, 2, 80, &testCoeffs1_f32, &testInput_f32[0]
+     {64, 32, 4, 5, &testCoeffs32_f32[0], &testInput_f32[0]},
+     {32, 32, 4, 10, &testCoeffs32_f32[0], &testInput_f32[0]}
+ };
++#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
++#endif
++#ifdef PERFORMANCE_TEST
+ static test_config CONFIG_PERF[] =
+ {
+     {64, 7, 2, 5, &testCoeffs7_f32[0], &testInput_f32[0]},
+     {64, 32, 4, 5, &testCoeffs32_f32[0], &testInput_f32[0]},
+     {32, 32, 4, 10, &testCoeffs32_f32[0], &testInput_f32[0]}
+ };
+-
+-#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
+ #define NUM_PERF_TESTS (sizeof(CONFIG_PERF) / sizeof(CONFIG_PERF[0]) )
++#endif
+ 
+ void test_fir_decimate_case0()
+ {
+-    ne10_float32_t *p_src = testInput_f32;
+     ne10_fir_decimate_instance_f32_t SC, SN;
+ 
+     ne10_uint16_t loop = 0;
+     ne10_uint16_t block = 0;
+-    ne10_uint16_t k = 0;
+     ne10_uint16_t i = 0;
+-    ne10_uint16_t pos = 0;
+     ne10_uint16_t length = 0;
+ 
+     test_config *config;
+@@ -223,6 +224,7 @@ void test_fir_decimate_case0()
+ 
+ #ifdef ENABLE_NE10_FIR_DECIMATE_FLOAT_NEON
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_uint16_t pos = 0;
+     for (loop = 0; loop < NUM_TESTS; loop++)
+     {
+         config = &CONFIG[loop];
+@@ -289,6 +291,7 @@ void test_fir_decimate_case0()
+ #endif // ENABLE_NE10_FIR_DECIMATE_FLOAT_NEON
+ 
+ #ifdef PERFORMANCE_TEST
++    ne10_uint16_t k;
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "FIR Length&Taps", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+     for (loop = 0; loop < NUM_PERF_TESTS; loop++)
+     {
+diff --git a/modules/dsp/test/test_suite_fir_interpolate.c b/modules/dsp/test/test_suite_fir_interpolate.c
+index 3917132..33c9e83 100644
+--- a/modules/dsp/test/test_suite_fir_interpolate.c
++++ b/modules/dsp/test/test_suite_fir_interpolate.c
+@@ -64,8 +64,9 @@ static ne10_float32_t * guarded_fir_state_neon = NULL;
+ static ne10_float32_t * fir_state_c = NULL;
+ static ne10_float32_t * fir_state_neon = NULL;
+ 
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static ne10_float32_t snr = 0.0f;
+-
++#endif
+ #ifdef PERFORMANCE_TEST
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+@@ -98,7 +99,7 @@ static ne10_float32_t testCoeffs8_f32[8] =
+ ** Coefficients for 1-tap filter for F32
+ ** ------------------------------------------------------------------- */
+ 
+-static ne10_float32_t testCoeffs1_f32 = 0.086440;
++// static ne10_float32_t testCoeffs1_f32 = 0.086440;
+ 
+ /* ----------------------------------------------------------------------
+ ** Coefficients for 27-tap filter for F32
+@@ -149,6 +150,7 @@ typedef struct
+ } test_config;
+ 
+ /* All Test configurations, 100% Code Coverage */
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static test_config CONFIG[] = {{0, 1, 1, 10, &testCoeffs6_f32[0], &testInput_f32[0]},
+     {8, 6, 6, 10, &testCoeffs6_f32[0], &testInput_f32[0]},
+     {8, 8, 2, 10, &testCoeffs8_f32[0], &testInput_f32[0]},
+@@ -159,6 +161,9 @@ static test_config CONFIG[] = {{0, 1, 1, 10, &testCoeffs6_f32[0], &testInput_f32
+     {80, 27, 4, 1, &testCoeffs27_f32[0], &testInput_f32[0]},
+     {80, 32, 4, 1, &testCoeffs32_f32[0], &testInput_f32[0]}
+ };
++#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
++#endif
++#ifdef PERFORMANCE_TEST
+ static test_config CONFIG_PERF[] =
+ {
+     {8, 27, 3, 10, &testCoeffs27_f32[0], &testInput_f32[0]},
+@@ -166,21 +171,17 @@ static test_config CONFIG_PERF[] =
+     {80, 27, 3, 1, &testCoeffs27_f32[0], &testInput_f32[0]},
+     {80, 32, 4, 1, &testCoeffs32_f32[0], &testInput_f32[0]}
+ };
+-
+-#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
+ #define NUM_PERF_TESTS (sizeof(CONFIG_PERF) / sizeof(CONFIG_PERF[0]) )
++#endif
+ 
+ 
+ void test_fir_interpolate_case0()
+ {
+-    ne10_float32_t *p_src = testInput_f32;
+     ne10_fir_interpolate_instance_f32_t SC, SN;
+ 
+     ne10_uint16_t loop = 0;
+     ne10_uint16_t block = 0;
+-    ne10_uint16_t k = 0;
+     ne10_uint16_t i = 0;
+-    ne10_uint16_t pos = 0;
+     ne10_uint16_t length = 0;
+ 
+     test_config *config;
+@@ -203,6 +204,7 @@ void test_fir_interpolate_case0()
+ 
+ #ifdef ENABLE_NE10_FIR_INTERPOLATE_FLOAT_NEON
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_uint16_t pos = 0;
+     for (loop = 0; loop < NUM_TESTS; loop++)
+     {
+         config = &CONFIG[loop];
+@@ -269,6 +271,7 @@ void test_fir_interpolate_case0()
+ #endif // ENABLE_NE10_FIR_INTERPOLATE_FLOAT_NEON
+ 
+ #ifdef PERFORMANCE_TEST
++    ne10_uint16_t k;
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "FIR Length&Taps", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+     for (loop = 0; loop < NUM_PERF_TESTS; loop++)
+     {
+diff --git a/modules/dsp/test/test_suite_fir_lattice.c b/modules/dsp/test/test_suite_fir_lattice.c
+index 95075e4..e419d39 100644
+--- a/modules/dsp/test/test_suite_fir_lattice.c
++++ b/modules/dsp/test/test_suite_fir_lattice.c
+@@ -64,8 +64,9 @@ static ne10_float32_t * guarded_fir_state_neon = NULL;
+ static ne10_float32_t * fir_state_c = NULL;
+ static ne10_float32_t * fir_state_neon = NULL;
+ 
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static ne10_float32_t snr = 0.0f;
+-
++#endif
+ #ifdef PERFORMANCE_TEST
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+@@ -82,7 +83,6 @@ static ne10_float32_t testCoeffs9_f32[9] =
+     0.833201
+ };
+ 
+-
+ /* ----------------------------------------------------------------------
+ ** Coefficients of 7-tap filter
+ ** ------------------------------------------------------------------- */
+@@ -174,6 +174,7 @@ typedef struct
+ } test_config;
+ 
+ /* All Test configurations, 100% Code Coverage */
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static test_config CONFIG[] =
+ {
+     {2, 31, 160, &testCoeffs31_f32[0], &testInput_f32[0]},
+@@ -191,7 +192,9 @@ static test_config CONFIG[] =
+     {64, 3, 5, &testCoeffs31_f32[0], &testInput_f32[0]},
+     {64, 1, 5, &testCoeffs31_f32[0], &testInput_f32[0]},
+ };
+-
++#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
++#endif
++#ifdef PERFORMANCE_TEST
+ static test_config CONFIG_PERF[] =
+ {
+     {32, 3, 10, &testCoeffs31_f32[0], &testInput_f32[0]},
+@@ -199,21 +202,17 @@ static test_config CONFIG_PERF[] =
+     {64, 3, 5, &testCoeffs31_f32[0], &testInput_f32[0]},
+     {64, 1, 5, &testCoeffs31_f32[0], &testInput_f32[0]},
+ };
+-
+-#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
+ #define NUM_PERF_TESTS (sizeof(CONFIG_PERF) / sizeof(CONFIG_PERF[0]) )
++#endif
+ 
+ 
+ void test_fir_lattice_case0()
+ {
+-    ne10_float32_t *p_src = testInput_f32;
+     ne10_fir_lattice_instance_f32_t SC, SN;
+ 
+     ne10_uint16_t loop = 0;
+     ne10_uint16_t block = 0;
+-    ne10_uint16_t k = 0;
+     ne10_uint16_t i = 0;
+-    ne10_uint16_t pos = 0;
+ 
+     test_config *config;
+     ne10_result_t status_c = NE10_OK;
+@@ -235,6 +234,7 @@ void test_fir_lattice_case0()
+ 
+ #ifdef ENABLE_NE10_FIR_LATTICE_FLOAT_NEON
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_uint16_t pos = 0;
+     for (loop = 0; loop < NUM_TESTS; loop++)
+     {
+         config = &CONFIG[loop];
+@@ -292,6 +292,7 @@ void test_fir_lattice_case0()
+ #endif // ENABLE_NE10_FIR_LATTICE_FLOAT_NEON
+ 
+ #ifdef PERFORMANCE_TEST
++    ne10_uint16_t k;
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "FIR Length&Taps", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+     for (loop = 0; loop < NUM_PERF_TESTS; loop++)
+     {
+diff --git a/modules/dsp/test/test_suite_fir_sparse.c b/modules/dsp/test/test_suite_fir_sparse.c
+index aa6e096..0d82baa 100644
+--- a/modules/dsp/test/test_suite_fir_sparse.c
++++ b/modules/dsp/test/test_suite_fir_sparse.c
+@@ -68,8 +68,9 @@ static ne10_float32_t * fir_state_neon = NULL;
+ static ne10_float32_t scratch_c[MAX_BLOCKSIZE] = {0};
+ static ne10_float32_t scratch_neon[MAX_BLOCKSIZE] = {0};
+ 
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static ne10_float32_t snr = 0.0f;
+-
++#endif
+ #ifdef PERFORMANCE_TEST
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+@@ -89,13 +90,13 @@ static ne10_float32_t testCoeffs5_f32[5] =
+ /* ----------------------------------------------------------------------
+ ** Coefficients for 32-tap filter for F32
+ ** ------------------------------------------------------------------- */
+-static ne10_float32_t testCoeffs32_f32[32] =
+-{
+-    1.749140,    0.132598,    0.325228,    -0.793809,    0.314924,    -0.527270,    0.932267,    1.164664,
+-    -2.045669,    -0.644373,    1.741066,    0.486768,    1.048829,    1.488575,    1.270501,    -1.856124,
+-    2.134321,    1.435847,    -0.917302,    -1.106077,    0.810571,    0.698543,    -0.401583,    1.268751,
+-    -0.783608,    0.213266,    0.787898,    0.896682,    -0.186917,    1.013182,    0.248435,    0.059608
+-};
++// static ne10_float32_t testCoeffs32_f32[32] =
++// {
++//     1.749140,    0.132598,    0.325228,    -0.793809,    0.314924,    -0.527270,    0.932267,    1.164664,
++//     -2.045669,    -0.644373,    1.741066,    0.486768,    1.048829,    1.488575,    1.270501,    -1.856124,
++//     2.134321,    1.435847,    -0.917302,    -1.106077,    0.810571,    0.698543,    -0.401583,    1.268751,
++//     -0.783608,    0.213266,    0.787898,    0.896682,    -0.186917,    1.013182,    0.248435,    0.059608
++// };
+ 
+ /* ----------------------------------------------------------------------
+ ** Delay offsets for 5-tap Sparse filter for F32
+@@ -108,13 +109,13 @@ static ne10_int32_t tapDelay5_f32[5] =
+ /* ----------------------------------------------------------------------
+ ** Delay offsets for 32-tap Sparse filter for F32
+ ** ------------------------------------------------------------------- */
+-static ne10_int32_t tapDelay32_f32[32] =
+-{
+-    95,    23,    61,    49,    89,    76,    46,    2,
+-    82,    44,    62,    79,    92,    74,    18,    41,
+-    94,    92,    41,    89,    6,     35,    81,    1,
+-    14,    20,    20,    60,    27,    20,    2,     75
+-};
++// static ne10_int32_t tapDelay32_f32[32] =
++// {
++//     95,    23,    61,    49,    89,    76,    46,    2,
++//     82,    44,    62,    79,    92,    74,    18,    41,
++//     94,    92,    41,    89,    6,     35,    81,    1,
++//     14,    20,    20,    60,    27,    20,    2,     75
++// };
+ 
+ /* ----------------------------------------------------------------------
+ ** Test input data for F32
+@@ -179,6 +180,7 @@ typedef struct
+ } test_config;
+ 
+ /* All Test configurations, 100% Code Coverage */
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static test_config CONFIG[] =
+ {
+     {0, 5, 160, 100, &tapDelay5_f32[0], &testCoeffs5_f32[0], &testInput_f32[0]},
+@@ -188,27 +190,26 @@ static test_config CONFIG[] =
+     {5, 5, 64, 100, &tapDelay5_f32[0], &testCoeffs5_f32[0], &testInput_f32[0]},
+     //{64, 32, 5, 100, &tapDelay32_f32[0], &testCoeffs32_f32[0], &testInput_f32[0]}
+ };
++#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
++#endif
++#ifdef PERFORMANCE_TEST
+ static test_config CONFIG_PERF[] =
+ {
+     {2, 5, 160, 100, &tapDelay5_f32[0], &testCoeffs5_f32[0], &testInput_f32[0]},
+     {64, 5, 5, 100, &tapDelay5_f32[0], &testCoeffs5_f32[0], &testInput_f32[0]},
+     {5, 5, 64, 100, &tapDelay5_f32[0], &testCoeffs5_f32[0], &testInput_f32[0]},
+ };
+-
+-#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
+ #define NUM_PERF_TESTS (sizeof(CONFIG_PERF) / sizeof(CONFIG_PERF[0]) )
++#endif
+ 
+ 
+ void test_fir_sparse_case0()
+ {
+-    ne10_float32_t *p_src = testInput_f32;
+     ne10_fir_sparse_instance_f32_t SC, SN;
+ 
+     ne10_uint16_t loop = 0;
+     ne10_uint16_t block = 0;
+-    ne10_uint16_t k = 0;
+     ne10_uint16_t i = 0;
+-    ne10_uint16_t pos = 0;
+ 
+     test_config *config;
+     ne10_result_t status_c = NE10_OK;
+@@ -230,6 +231,7 @@ void test_fir_sparse_case0()
+ 
+ #ifdef ENABLE_NE10_FIR_SPARSE_FLOAT_NEON
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_uint16_t pos = 0;
+     for (loop = 0; loop < NUM_TESTS; loop++)
+     {
+         config = &CONFIG[loop];
+@@ -290,6 +292,7 @@ void test_fir_sparse_case0()
+ #endif // ENABLE_NE10_FIR_SPARSE_FLOAT_NEON
+ 
+ #ifdef PERFORMANCE_TEST
++    ne10_uint16_t k;
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "FIR Length&Taps", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+     for (loop = 0; loop < NUM_PERF_TESTS; loop++)
+     {
+diff --git a/modules/dsp/test/test_suite_iir.c b/modules/dsp/test/test_suite_iir.c
+index 3c1eeb8..34f8776 100644
+--- a/modules/dsp/test/test_suite_iir.c
++++ b/modules/dsp/test/test_suite_iir.c
+@@ -97,7 +97,7 @@ static ne10_float32_t testvCoeffs8[9] =
+ 
+ static ne10_float32_t testkCoeffs10[10] = { 0.001770,    -0.021279,    0.109785,    -0.312208,    0.551053,    -0.711844,    0.797513,    -0.828316,
+         0.902786,    -0.741338
+-                                          };
++};
+ 
+ static ne10_float32_t testvCoeffs10[11] =
+ {
+@@ -201,7 +201,7 @@ typedef struct
+ } test_config;
+ 
+ /* All Test configurations, 100% Code Coverage */
+-
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static test_config CONFIG[] = {{32, 1, 10, &testkCoeffs1[0], &testvCoeffs1[0], &testInput_f32[0]},
+     {32, 9, 10, &testkCoeffs9[0], &testvCoeffs9[0], &testInput_f32[0]},
+     {2, 9, 160, &testkCoeffs9[0], &testvCoeffs9[0], &testInput_f32[0]},
+@@ -212,16 +212,17 @@ static test_config CONFIG[] = {{32, 1, 10, &testkCoeffs1[0], &testvCoeffs1[0], &
+     {32, 8, 10, &testkCoeffs8[0], &testvCoeffs8[0], &testInput_f32[0]},
+     {32, 33, 10, &testkCoeffs33[0], &testvCoeffs33[0], &testInput_f32[0]}
+ };
+-
++#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
++#endif
++#ifdef PERFORMANCE_TEST
+ static test_config CONFIG_PERF[] =
+ {
+     {2, 9, 160, &testkCoeffs9[0], &testvCoeffs9[0], &testInput_f32[0]},
+     {32, 9, 10, &testkCoeffs9[0], &testvCoeffs9[0], &testInput_f32[0]},
+     {32, 33, 10, &testkCoeffs33[0], &testvCoeffs33[0], &testInput_f32[0]}
+ };
+-
+-#define NUM_TESTS (sizeof(CONFIG) / sizeof(CONFIG[0]) )
+ #define NUM_PERF_TESTS (sizeof(CONFIG_PERF) / sizeof(CONFIG_PERF[0]) )
++#endif
+ 
+ //input and output
+ static ne10_float32_t * guarded_in_c = NULL;
+@@ -239,8 +240,9 @@ static ne10_float32_t * guarded_iir_state_neon = NULL;
+ static ne10_float32_t * iir_state_c = NULL;
+ static ne10_float32_t * iir_state_neon = NULL;
+ 
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static ne10_float32_t snr = 0.0f;
+-
++#endif
+ #ifdef PERFORMANCE_TEST
+ static ne10_int64_t time_c = 0;
+ static ne10_int64_t time_neon = 0;
+@@ -250,17 +252,13 @@ static ne10_float32_t time_savings = 0.0f;
+ 
+ void test_iir_lattice_case0()
+ {
+-    ne10_float32_t *p_src = testInput_f32;
+     ne10_iir_lattice_instance_f32_t SC, SN;
+ 
+     ne10_uint16_t loop = 0;
+     ne10_uint16_t block = 0;
+-    ne10_uint16_t k = 0;
+     ne10_uint16_t i = 0;
+-    ne10_uint16_t pos = 0;
+ 
+     test_config *config;
+-    ne10_result_t status = NE10_OK;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -278,6 +276,7 @@ void test_iir_lattice_case0()
+ 
+ #ifdef ENABLE_NE10_IIR_LATTICE_FLOAT_NEON
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_uint16_t pos = 0;
+     for (loop = 0; loop < NUM_TESTS; loop++)
+     {
+         config = &CONFIG[loop];
+@@ -333,6 +332,7 @@ void test_iir_lattice_case0()
+ #endif // ENABLE_NE10_IIR_LATTICE_FLOAT_NEON
+ 
+ #ifdef PERFORMANCE_TEST
++    ne10_uint16_t k;
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "IIR Length&Taps", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+     for (loop = 0; loop < NUM_PERF_TESTS; loop++)
+     {
+diff --git a/modules/imgproc/NE10_resize.c b/modules/imgproc/NE10_resize.c
+index 5478004..49eb380 100644
+--- a/modules/imgproc/NE10_resize.c
++++ b/modules/imgproc/NE10_resize.c
+@@ -383,7 +383,6 @@ void ne10_img_resize_bilinear_rgba_c (ne10_uint8_t* dst,
+     ne10_int32_t xmin = 0;
+     ne10_int32_t xmax = dstw;
+     ne10_int32_t width = dstw * cn;
+-    ne10_float32_t fx, fy;
+ 
+     ne10_int32_t ksize = 0, ksize2;
+     ksize = 2;
+@@ -525,7 +524,6 @@ void ne10_img_resize_bilinear_rgba_neon (ne10_uint8_t* dst,
+     ne10_int32_t xmin = 0;
+     ne10_int32_t xmax = dstw;
+     ne10_int32_t width = dstw * cn;
+-    ne10_float32_t fx, fy;
+ 
+     ne10_int32_t ksize = 0, ksize2;
+     ksize = 2;
+diff --git a/modules/imgproc/NE10_resize.neon.c b/modules/imgproc/NE10_resize.neon.c
+index ce3f144..39c435a 100644
+--- a/modules/imgproc/NE10_resize.neon.c
++++ b/modules/imgproc/NE10_resize.neon.c
+@@ -152,7 +152,7 @@ void ne10_img_vresize_linear_neon (const int** src, unsigned char* dst, const sh
+     uint16x8_t qT_01234567;
+     uint8x8_t dT_01234567, dDst_01234567;
+ 
+-    int32x2_t dBeta;
++    int32x2_t dBeta = {};
+     dBeta = vset_lane_s32 ( (int) (beta[0]), dBeta, 0);
+     dBeta = vset_lane_s32 ( (int) (beta[1]), dBeta, 1);
+ 
+@@ -229,5 +229,3 @@ void ne10_img_vresize_linear_neon (const int** src, unsigned char* dst, const sh
+         vst1_u8 (&dst[x], dMask);
+     }
+ }
+-
+-
+diff --git a/modules/imgproc/NE10_rotate.c b/modules/imgproc/NE10_rotate.c
+index 0edebfe..0670820 100644
+--- a/modules/imgproc/NE10_rotate.c
++++ b/modules/imgproc/NE10_rotate.c
+@@ -242,7 +242,6 @@ void ne10_img_rotate_rgba_c (ne10_uint8_t* dst,
+     ne10_int32_t srch = src_height;
+     ne10_int32_t dstw = (srch * fabs (a)) + (srcw * fabs (b)) + 1;
+     ne10_int32_t dsth = (srch * fabs (b)) + (srcw * fabs (a)) + 1;
+-    ne10_int32_t i;
+     ne10_float32_t m[6];
+     ne10_float32_t dx = (dstw - 1) * 0.5;
+     ne10_float32_t dy = (dsth - 1) * 0.5;
+@@ -295,7 +294,6 @@ void ne10_img_rotate_rgba_neon (ne10_uint8_t* dst,
+     ne10_int32_t srch = src_height;
+     ne10_int32_t dstw = (srch * fabs (a)) + (srcw * fabs (b)) + 1;
+     ne10_int32_t dsth = (srch * fabs (b)) + (srcw * fabs (a)) + 1;
+-    ne10_int32_t i;
+     ne10_float32_t m[6];
+     ne10_float32_t dx = (dstw - 1) * 0.5;
+     ne10_float32_t dy = (dsth - 1) * 0.5;
+diff --git a/modules/imgproc/test/test_suite_resize.c b/modules/imgproc/test/test_suite_resize.c
+index 5a798de..884b6d5 100644
+--- a/modules/imgproc/test/test_suite_resize.c
++++ b/modules/imgproc/test/test_suite_resize.c
+@@ -58,19 +58,17 @@ static ne10_uint8_t * in_neon = NULL;
+ static ne10_uint8_t * out_c = NULL;
+ static ne10_uint8_t * out_neon = NULL;
+ 
+-static ne10_float32_t snr = 0.0f;
+-
+ void test_resize_conformance_case()
+ {
+     ne10_int32_t srcw;
+     ne10_int32_t srch;
+     ne10_int32_t dstw;
+     ne10_int32_t dsth;
+-    ne10_int32_t i;
+     ne10_int32_t w, h;
++    ne10_float32_t PSNR;
++    ne10_int32_t i;
+     ne10_int32_t channels = 4;
+     ne10_int32_t pic_size = MEM_SIZE * MEM_SIZE * channels * sizeof (ne10_uint8_t);
+-    ne10_float32_t PSNR = 0.0f;
+ 
+     /* init input memory */
+     in_c = NE10_MALLOC (pic_size);
+@@ -84,10 +82,10 @@ void test_resize_conformance_case()
+     {
+         in_c[i] = in_neon[i] = (rand() & 0xff);
+     }
+-#if defined(SMOKE_TEST)
+-    for (h = 96; h < MEM_SIZE; h++)
++#if defined(REGRESSION_TEST)
++    for (h = 1; h < MEM_SIZE; h++)
+     {
+-        for (w = 96; w < MEM_SIZE; w++)
++        for (w = 1; w < MEM_SIZE; w++)
+         {
+             srcw = h;
+             srch = h;
+@@ -104,12 +102,10 @@ void test_resize_conformance_case()
+             assert_false ( (PSNR < PSNR_THRESHOLD));
+         }
+     }
+-#endif
+-
+-#if defined(REGRESSION_TEST)
+-    for (h = 1; h < MEM_SIZE; h++)
++#else // defined(SMOKE_TEST)
++    for (h = 96; h < MEM_SIZE; h++)
+     {
+-        for (w = 1; w < MEM_SIZE; w++)
++        for (w = 96; w < MEM_SIZE; w++)
+         {
+             srcw = h;
+             srch = h;
+@@ -227,6 +223,3 @@ void test_fixture_resize (void)
+ 
+     test_fixture_end();                 // ends a fixture
+ }
+-
+-
+-
+diff --git a/modules/imgproc/test/test_suite_rotate.c b/modules/imgproc/test/test_suite_rotate.c
+index 204a202..c4a3f28 100644
+--- a/modules/imgproc/test/test_suite_rotate.c
++++ b/modules/imgproc/test/test_suite_rotate.c
+@@ -61,8 +61,6 @@ static ne10_uint8_t * in_neon = NULL;
+ static ne10_uint8_t * out_c = NULL;
+ static ne10_uint8_t * out_neon = NULL;
+ 
+-static ne10_float32_t psnr = 0.0f;
+-
+ #ifdef ENABLE_NE10_IMG_ROTATE_RGBA_NEON
+ void test_rotate_conformance_case()
+ {
+@@ -73,8 +71,8 @@ void test_rotate_conformance_case()
+     ne10_float32_t PSNR = 0.0f;
+     ne10_int32_t srcw = SRC_WIDTH;
+     ne10_int32_t srch = SRC_HEIGHT;
+-    ne10_int32_t dstw_c, dsth_c;
+-    ne10_int32_t dstw_neon, dsth_neon;
++    ne10_uint32_t dstw_c, dsth_c;
++    ne10_uint32_t dstw_neon, dsth_neon;
+     ne10_int32_t angle;
+ 
+     /* init input memory */
+@@ -119,8 +117,8 @@ void test_rotate_performance_case()
+     ne10_int32_t out_size = DST_HEIGHT * DST_WIDTH * channels;
+     ne10_int32_t srcw = SRC_WIDTH;
+     ne10_int32_t srch = SRC_HEIGHT;
+-    ne10_int32_t dstw_c, dsth_c;
+-    ne10_int32_t dstw_neon, dsth_neon;
++    ne10_uint32_t dstw_c, dsth_c;
++    ne10_uint32_t dstw_neon, dsth_neon;
+     ne10_int32_t angle;
+     ne10_int64_t time_c = 0;
+     ne10_int64_t time_neon = 0;
+@@ -204,6 +202,3 @@ void test_fixture_rotate (void)
+ 
+     test_fixture_end();                 // ends a fixture
+ }
+-
+-
+-
+diff --git a/modules/math/NE10_divc.neon.c b/modules/math/NE10_divc.neon.c
+index 79ae132..e867eaa 100644
+--- a/modules/math/NE10_divc.neon.c
++++ b/modules/math/NE10_divc.neon.c
+@@ -40,8 +40,6 @@
+ 
+ ne10_result_t ne10_divc_float_neon (ne10_float32_t * dst, ne10_float32_t * src, const ne10_float32_t cst, ne10_uint32_t count)
+ {
+-    ne10_uint32_t ii = 0;
+-    ne10_float32_t d[4];
+     NE10_XC_OPERATION_FLOAT_NEON
+     (
+         /* a single division operation */
+diff --git a/modules/math/test/test_suite_math.c b/modules/math/test/test_suite_math.c
+index 03bd494..e1aa3b6 100644
+--- a/modules/math/test/test_suite_math.c
++++ b/modules/math/test/test_suite_math.c
+@@ -46,6 +46,7 @@ ne10_func_4args_cst_t ftbl_4args_cst[MAX_FUNC_COUNT];
+ ne10_func_5args_cst_t ftbl_5args_cst[MAX_FUNC_COUNT];
+ 
+ //input and output
++#if defined (SMOKE_TEST)||(REGRESSION_TEST)
+ static ne10_float32_t * guarded_acc = NULL;
+ static ne10_float32_t * guarded_src1 = NULL;
+ static ne10_float32_t * guarded_src2 = NULL;
+@@ -59,6 +60,7 @@ static ne10_float32_t * guarded_dst_c = NULL;
+ static ne10_float32_t * guarded_dst_neon = NULL;
+ static ne10_float32_t * thedst_c = NULL;
+ static ne10_float32_t * thedst_neon = NULL;
++#endif
+ 
+ #ifdef PERFORMANCE_TEST
+ static ne10_float32_t * perftest_guarded_acc = NULL;
+@@ -86,10 +88,7 @@ void test_abs_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     /* init function table */
+     memset (ftbl_3args, 0, sizeof (ftbl_3args));
+@@ -105,6 +104,8 @@ void test_abs_case0()
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -132,6 +133,7 @@ void test_abs_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -183,10 +185,7 @@ void test_addc_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -203,6 +202,8 @@ void test_addc_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_addc_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -240,6 +241,7 @@ void test_addc_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -307,10 +309,7 @@ void test_add_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -326,6 +325,8 @@ void test_add_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_add_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -354,6 +355,7 @@ void test_add_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -409,10 +411,7 @@ void test_cross_case0()
+ {
+ #define MAX_VEC_COMPONENTS 3
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -422,6 +421,8 @@ void test_cross_case0()
+     ftbl_4args[ 5] = (ne10_func_4args_t) ne10_cross_vec3f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -450,6 +451,7 @@ void test_cross_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -505,10 +507,7 @@ void test_divc_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -525,6 +524,8 @@ void test_divc_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_divc_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -561,6 +562,7 @@ void test_divc_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -628,10 +630,7 @@ void test_div_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -647,6 +646,8 @@ void test_div_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_vdiv_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -675,6 +676,7 @@ void test_div_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -730,10 +732,7 @@ void test_dot_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -747,6 +746,7 @@ void test_dot_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_dot_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -761,7 +761,9 @@ void test_dot_case0()
+     {
+         for (loop = 0; loop < TEST_ITERATION; loop++)
+         {
+-            vec_size = func_loop + 1;
++#ifdef DEBUG_TRACE
++            ne10_int32_t vec_size = func_loop + 1;
++#endif
+ 
+             GUARD_ARRAY (thedst_c, loop);
+             GUARD_ARRAY (thedst_neon, loop);
+@@ -775,6 +777,7 @@ void test_dot_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -830,10 +833,7 @@ void test_len_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     /* init function table */
+     memset (ftbl_3args, 0, sizeof (ftbl_3args));
+@@ -847,6 +847,8 @@ void test_len_case0()
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -874,6 +876,7 @@ void test_len_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -925,10 +928,7 @@ void test_mlac_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -945,6 +945,8 @@ void test_mlac_case0()
+     ftbl_5args[ 7] = (ne10_func_5args_t) ne10_mlac_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -982,6 +984,7 @@ void test_mlac_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1053,10 +1056,7 @@ void test_mla_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1072,6 +1072,8 @@ void test_mla_case0()
+     ftbl_5args[ 7] = (ne10_func_5args_t) ne10_vmla_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1101,6 +1103,7 @@ void test_mla_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1160,10 +1163,7 @@ void test_mulc_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1180,6 +1180,8 @@ void test_mulc_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_mulc_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1216,6 +1218,7 @@ void test_mulc_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1283,10 +1286,7 @@ void test_mul_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1302,6 +1302,8 @@ void test_mul_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_vmul_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1330,6 +1332,7 @@ void test_mul_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1385,10 +1388,7 @@ void test_normalize_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     /* init function table */
+     memset (ftbl_3args, 0, sizeof (ftbl_3args));
+@@ -1402,6 +1402,8 @@ void test_normalize_case0()
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1429,6 +1431,7 @@ void test_normalize_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1480,10 +1483,7 @@ void test_rsbc_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1500,6 +1500,8 @@ void test_rsbc_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_rsbc_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1536,6 +1538,7 @@ void test_rsbc_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1603,10 +1606,7 @@ void test_setc_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1623,6 +1623,8 @@ void test_setc_case0()
+     ftbl_3args[ 7] = (ne10_func_3args_t) ne10_setc_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1658,6 +1660,7 @@ void test_setc_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1722,10 +1725,7 @@ void test_subc_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1742,6 +1742,8 @@ void test_subc_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_subc_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1778,6 +1780,7 @@ void test_subc_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1845,10 +1848,7 @@ void test_sub_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1864,6 +1864,8 @@ void test_sub_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_sub_vec4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1892,6 +1894,7 @@ void test_sub_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -1947,10 +1950,7 @@ void test_addmat_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -1964,6 +1964,8 @@ void test_addmat_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_addmat_4x4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -1992,6 +1994,7 @@ void test_addmat_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -2047,10 +2050,7 @@ void test_detmat_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -2064,6 +2064,8 @@ void test_detmat_case0()
+     ftbl_3args[ 7] = (ne10_func_3args_t) ne10_detmat_4x4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -2091,6 +2093,7 @@ void test_detmat_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -2142,10 +2145,7 @@ void test_identitymat_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -2159,6 +2159,8 @@ void test_identitymat_case0()
+     ftbl_2args[ 7] = (ne10_func_2args_t) ne10_identitymat_4x4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS * MAX_VEC_COMPONENTS;
+ 
+     /* init dst memory */
+@@ -2225,10 +2227,7 @@ void test_invmat_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -2242,6 +2241,8 @@ void test_invmat_case0()
+     ftbl_3args[ 7] = (ne10_func_3args_t) ne10_invmat_4x4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -2269,6 +2270,7 @@ void test_invmat_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -2320,10 +2322,7 @@ void test_mulmat_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -2337,6 +2336,8 @@ void test_mulmat_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_mulmat_4x4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -2365,6 +2366,7 @@ void test_mulmat_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -2420,10 +2422,7 @@ void test_submat_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -2437,6 +2436,8 @@ void test_submat_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_submat_4x4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -2465,6 +2466,7 @@ void test_submat_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -2520,10 +2522,7 @@ void test_transmat_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -2537,6 +2536,8 @@ void test_transmat_case0()
+     ftbl_3args[ 7] = (ne10_func_3args_t) ne10_transmat_4x4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -2564,6 +2565,7 @@ void test_transmat_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size; i++)
+                 {
+@@ -2615,10 +2617,7 @@ void test_mulcmatvec_case0()
+ {
+ #define MAX_VEC_COMPONENTS 4
+     ne10_int32_t loop;
+-    ne10_int32_t i;
+     ne10_int32_t func_loop;
+-    ne10_int32_t vec_size;
+-    ne10_int32_t pos;
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+ 
+@@ -2632,6 +2631,8 @@ void test_mulcmatvec_case0()
+     ftbl_4args[ 7] = (ne10_func_4args_t) ne10_mulcmatvec_cm4x4f_v4f_neon;
+ 
+ #if defined (SMOKE_TEST)||(REGRESSION_TEST)
++    ne10_int32_t vec_size;
++    ne10_int32_t pos;
+     const ne10_uint32_t fixed_length = TEST_ITERATION * MAX_VEC_COMPONENTS;
+ 
+     /* init src memory */
+@@ -2660,6 +2661,7 @@ void test_mulcmatvec_case0()
+             for (pos = 0; pos < loop; pos++)
+             {
+ #ifdef DEBUG_TRACE
++                ne10_int32_t i;
+                 fprintf (stdout, "func: %d loop count: %d position: %d \n", func_loop, loop, pos);
+                 for (i = 0; i < vec_size * vec_size; i++)
+                 {
+diff --git a/modules/physics/NE10_physics.c b/modules/physics/NE10_physics.c
+index 854256d..cc61773 100644
+--- a/modules/physics/NE10_physics.c
++++ b/modules/physics/NE10_physics.c
+@@ -183,8 +183,6 @@ void ne10_physics_apply_impulse_vec2f_c (ne10_vec3f_t *v_wa,
+         ne10_uint32_t count)
+ {
+     ne10_int32_t i;
+-    ne10_vec2f_t va;
+-    ne10_vec2f_t vb;
+ 
+     for (i = 0; i < count; i++)
+     {
+diff --git a/modules/physics/test/test_suite_physics.c b/modules/physics/test/test_suite_physics.c
+index 0c84a6a..21cf312 100644
+--- a/modules/physics/test/test_suite_physics.c
++++ b/modules/physics/test/test_suite_physics.c
+@@ -60,11 +60,11 @@ static void float_array_assignment (ne10_float32_t *array, ne10_int32_t len)
+ 
+ void test_compute_aabb_vec2f_conformance()
+ {
++#if defined ENABLE_NE10_PHYSICS_COMPUTE_AABB_VEC2F_NEON
+     ne10_vec2f_t radius = {0.2f, 0.2f};
+     ne10_vec2f_t *vertices_c, *vertices_neon;
+     ne10_mat2x2f_t aabb_c, aabb_neon;
+     ne10_mat2x2f_t xf;
+-    ne10_int32_t i;
+     ne10_int32_t vertex_count;
+     ne10_int32_t vec_size = sizeof (ne10_mat2x2f_t) / sizeof (ne10_float32_t);
+ 
+@@ -82,7 +82,6 @@ void test_compute_aabb_vec2f_conformance()
+     xf.c2.r1 = sin (tmp);
+     xf.c2.r2 = cos (tmp);
+ 
+-#ifdef ENABLE_NE10_PHYSICS_COMPUTE_AABB_VEC2F_NEON
+ #if defined (REGRESSION_TEST)
+     for (vertex_count = 1; vertex_count < TEST_LENGTH_SAMPLES; vertex_count++)
+     {
+@@ -93,9 +92,7 @@ void test_compute_aabb_vec2f_conformance()
+         printf ("----vertex_count %d\n", vertex_count);
+         assert_float_vec_equal ( (ne10_float32_t*) &aabb_c, (ne10_float32_t*) &aabb_neon, ERROR_MARGIN_LARGE, vec_size);
+     }
+-#endif
+-
+-#if defined (SMOKE_TEST)
++#else // defined (SMOKE_TEST)
+     for (vertex_count = 1; vertex_count < TEST_LENGTH_SAMPLES; vertex_count += 3)
+     {
+         //C version
+@@ -106,20 +103,20 @@ void test_compute_aabb_vec2f_conformance()
+         assert_float_vec_equal ( (ne10_float32_t*) &aabb_c, (ne10_float32_t*) &aabb_neon, ERROR_MARGIN_LARGE, vec_size);
+     }
+ #endif
+-#endif // ENABLE_NE10_PHYSICS_COMPUTE_AABB_VEC2F_NEON
+     free (vertices_c);
+     free (vertices_neon);
++#endif
+ }
+ 
+ void test_compute_aabb_vec2f_performance()
+ {
+     ne10_vec2f_t radius = {0.2f, 0.2f};
+     ne10_vec2f_t *vertices_c, *vertices_neon;
+-    ne10_mat2x2f_t aabb_c, aabb_neon;
++    ne10_mat2x2f_t aabb_c;
+     ne10_mat2x2f_t xf;
+     ne10_int32_t i;
+     ne10_int32_t vertex_count;
+-    ne10_int32_t vec_size = sizeof (ne10_mat2x2f_t) / sizeof (ne10_float32_t);
++    // ne10_int32_t vec_size = sizeof (ne10_mat2x2f_t) / sizeof (ne10_float32_t);
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "vertex count", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+@@ -149,6 +146,7 @@ void test_compute_aabb_vec2f_performance()
+ 
+ #ifdef ENABLE_NE10_PHYSICS_COMPUTE_AABB_VEC2F_NEON
+         //neon version
++        ne10_mat2x2f_t aabb_neon;
+         GET_TIME
+         (time_neon,
+         {
+@@ -168,6 +166,7 @@ void test_compute_aabb_vec2f_performance()
+ 
+ void test_relative_v_vec2f_conformance()
+ {
++#if defined ENABLE_NE10_PHYSICS_RELATIVE_V_VEC2F_NEON
+     ne10_vec2f_t *guarded_dv_c, *guarded_dv_neon;
+     ne10_vec2f_t *dv_c, *dv_neon;
+     ne10_vec3f_t *v_wa, *v_wb;
+@@ -194,7 +193,6 @@ void test_relative_v_vec2f_conformance()
+     dv_c = (ne10_vec2f_t*) ( (ne10_float32_t*) guarded_dv_c + ARRAY_GUARD_LEN);
+     dv_neon = (ne10_vec2f_t*) ( (ne10_float32_t*) guarded_dv_neon + ARRAY_GUARD_LEN);
+ 
+-#ifdef ENABLE_NE10_PHYSICS_RELATIVE_V_VEC2F_NEON
+ #if defined (REGRESSION_TEST)
+     for (count = 1; count < TEST_LENGTH_SAMPLES; count++)
+     {
+@@ -212,9 +210,7 @@ void test_relative_v_vec2f_conformance()
+         for (i = 0; i < count; i++)
+             assert_float_vec_equal ( (ne10_float32_t*) &dv_c[i], (ne10_float32_t*) &dv_neon[i], ERROR_MARGIN_LARGE, vec_size);
+     }
+-#endif
+-
+-#if defined (SMOKE_TEST)
++#else // defined (SMOKE_TEST)
+     for (count = 1; count < TEST_LENGTH_SAMPLES; count += 5)
+     {
+         GUARD_ARRAY ( (ne10_float32_t*) dv_c, count * vec_size);
+@@ -232,13 +228,13 @@ void test_relative_v_vec2f_conformance()
+             assert_float_vec_equal ( (ne10_float32_t*) &dv_c[i], (ne10_float32_t*) &dv_neon[i], ERROR_MARGIN_LARGE, vec_size);
+     }
+ #endif
+-#endif // ENABLE_NE10_PHYSICS_RELATIVE_V_VEC2F_NEON
+     free (v_wa);
+     free (v_wb);
+     free (ra);
+     free (rb);
+     free (guarded_dv_c);
+     free (guarded_dv_neon);
++#endif
+ }
+ 
+ void test_relative_v_vec2f_performance()
+@@ -249,7 +245,7 @@ void test_relative_v_vec2f_performance()
+     ne10_vec2f_t *ra, *rb;
+     ne10_int32_t i;
+     ne10_int32_t count;
+-    ne10_int32_t vec_size = sizeof (ne10_vec2f_t) / sizeof (ne10_float32_t);
++    // ne10_int32_t vec_size = sizeof (ne10_vec2f_t) / sizeof (ne10_float32_t);
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "count", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+@@ -306,6 +302,7 @@ void test_relative_v_vec2f_performance()
+ 
+ void test_apply_impulse_vec2f_conformance()
+ {
++#if defined ENABLE_NE10_PHYSICS_APPLY_IMPULSE_VEC2F_NEON
+     ne10_vec3f_t *guarded_v_wa_c, *guarded_v_wa_neon, *guarded_v_wb_c, *guarded_v_wb_neon;
+     ne10_vec3f_t *v_wa_c, *v_wa_neon, *v_wb_c, *v_wb_neon;
+     ne10_vec2f_t *ra, *rb, *ima, *imb, *p;
+@@ -341,7 +338,6 @@ void test_apply_impulse_vec2f_conformance()
+     memcpy (v_wa_neon, v_wa_c, TEST_LENGTH_SAMPLES * sizeof (ne10_vec3f_t));
+     memcpy (v_wb_neon, v_wb_c, TEST_LENGTH_SAMPLES * sizeof (ne10_vec3f_t));
+ 
+-#ifdef ENABLE_NE10_PHYSICS_APPLY_IMPULSE_VEC2F_NEON
+ #if defined (REGRESSION_TEST)
+     for (count = 1; count < TEST_LENGTH_SAMPLES; count++)
+     {
+@@ -367,9 +363,7 @@ void test_apply_impulse_vec2f_conformance()
+             assert_float_vec_equal ( (ne10_float32_t*) &v_wb_c[i], (ne10_float32_t*) &v_wb_neon[i], ERROR_MARGIN_LARGE, vec_size);
+         }
+     }
+-#endif
+-
+-#if defined (SMOKE_TEST)
++#else // defined (SMOKE_TEST)
+     for (count = 1; count < TEST_LENGTH_SAMPLES; count += 5)
+     {
+         GUARD_ARRAY ( (ne10_float32_t*) v_wa_c, count * vec_size);
+@@ -394,7 +388,6 @@ void test_apply_impulse_vec2f_conformance()
+         }
+     }
+ #endif
+-#endif // ENABLE_NE10_PHYSICS_APPLY_IMPULSE_VEC2F_NEON
+     free (ra);
+     free (rb);
+     free (ima);
+@@ -404,6 +397,7 @@ void test_apply_impulse_vec2f_conformance()
+     free (guarded_v_wa_neon);
+     free (guarded_v_wb_c);
+     free (guarded_v_wb_neon);
++#endif
+ }
+ 
+ void test_apply_impulse_vec2f_performance()
+@@ -413,7 +407,7 @@ void test_apply_impulse_vec2f_performance()
+     ne10_vec2f_t *ra, *rb, *ima, *imb, *p;
+     ne10_int32_t i;
+     ne10_int32_t count;
+-    ne10_int32_t vec_size = sizeof (ne10_vec3f_t) / sizeof (ne10_float32_t);
++    // ne10_int32_t vec_size = sizeof (ne10_vec3f_t) / sizeof (ne10_float32_t);
+ 
+     fprintf (stdout, "----------%30s start\n", __FUNCTION__);
+     fprintf (stdout, "%25s%20s%20s%20s%20s\n", "count", "C Time in ms", "NEON Time in ms", "Time Savings", "Performance Ratio");
+diff --git a/test/src/NE10_random.c b/test/src/NE10_random.c
+index 6e0a71a..6a93df8 100644
+--- a/test/src/NE10_random.c
++++ b/test/src/NE10_random.c
+@@ -96,7 +96,6 @@ void NE10_float_rng_init_g (NE10_float_rng_t* float_rng, uint32_t seed)
+ float NE10_float_rng_next_g (NE10_float_rng_t* float_rng)
+ {
+     uint32_t frc, exp, sgn, ret;
+-    float __ret;
+ 
+     do
+     {
+@@ -180,8 +179,6 @@ float NE10_float_rng_limit_max()
+ #define IS_TOO_SMALL_GT1(f) ((fabs(f)<1.0e-6)?1:0)
+ #define   IS_TOO_BIG_GT1(f) ((fabs(f)>1.0e+3)?1:0)
+ 
+-static NE10_float_rng_t __NE10_float_rng_limit_gt1; // local array for internal use only
+-
+ void NE10_float_rng_limit_gt1_init (uint32_t seed)
+ {
+     NE10_float_rng_init_g (&__NE10_float_rng_limit , seed);
