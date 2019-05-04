@@ -5,8 +5,7 @@
 ################################################################################
 
 LILV_VERSION = a208ffd4776ebc9072bfca2603d6931e24917ccf
-LILV_SITE = http://git.drobilla.net/lilv.git
-LILV_SITE_METHOD = git
+LILV_SITE = $(call github,drobilla,lilv,$(LILV_VERSION))
 LILV_DEPENDENCIES = sratom
 LILV_INSTALL_STAGING = YES
 
