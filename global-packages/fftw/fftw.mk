@@ -4,24 +4,35 @@
 #
 ################################################################################
 
-FFTW_VERSION = 3.3.5-2
-FFTW_SITE = https://github.com/falkTX/fftw3/releases/download/fftw-$(FFTW_VERSION)
-FFTW_SOURCE = fftw-$(FFTW_VERSION).tar.gz
-FFTW_LICENSE = GPLv2+
-FFTW_LICENSE_FILES = COPYING
+FFTW_VERSION = 3.3.8
+FFTW_SITE = http://www.fftw.org
 FFTW_INSTALL_STAGING = YES
+FFTW_LICENSE = GPL-2.0+
+FFTW_LICENSE_FILES = COPYING
 
-FFTW_CONF_OPTS  = --enable-openmp
-FFTW_CONF_OPTS += --enable-threads
-FFTW_CONF_OPTS += --disable-doc
-FFTW_CONF_OPTS += --disable-debug
-# FFTW_CONF_OPTS += --enable-generic-simd128
-# FFTW_CONF_OPTS += --enable-generic-simd256
-ifdef BR2_x86_64
-FFTW_CONF_OPTS += --enable-sse2
+# fortran support only enables generation and installation of fortran sources
+ifeq ($(BR2_TOOLCHAIN_HAS_FORTRAN),y)
+FFTW_COMMON_CONF_OPTS += --enable-fortran
+FFTW_COMMON_CONF_ENV += FLIBS="-lgfortran -lm"
+else
+FFTW_COMMON_CONF_OPTS += --disable-fortran
 endif
 
-FFTW_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -fstrict-aliasing" CXXFLAGS="$(TARGET_CXXFLAGS) -fstrict-aliasing"
+FFTW_COMMON_CFLAGS = $(TARGET_CFLAGS)
 
-$(eval $(autotools-package))
-$(eval $(host-autotools-package))
+# ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
+# FFTW_COMMON_CFLAGS += -O3 -ffast-math
+# endif
+
+# Generic optimisations
+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+FFTW_COMMON_CONF_OPTS += --enable-threads
+## On the Duo and Duo X we need a separate library for the threads! 
+##FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
+FFTW_COMMON_CONF_OPTS += --without-combined-threads
+else
+FFTW_COMMON_CONF_OPTS += --disable-threads
+endif
+FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
+
+include $(sort $(wildcard package/fftw/*/*.mk))
