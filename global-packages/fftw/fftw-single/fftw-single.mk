@@ -34,7 +34,12 @@ FFTW_SINGLE_CONF_OPTS += --disable-neon
 endif
 
 ifdef BR2_arm
+ifdef BR2_cortex_a7
 FFTW_SINGLE_CFLAGS += -mfpu=neon-vfpv4
+endif
+ifdef BR2_cortex_a53
+FFTW_SINGLE_CFLAGS += -mfpu=neon-fp-armv8
+endif
 endif
 
 $(eval $(autotools-package))
