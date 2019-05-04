@@ -1,0 +1,19 @@
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 2b34f42..3d477d7 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -159,6 +159,14 @@ config BR2_cortex_a15
+ 	select BR2_ARM_CPU_HAS_THUMB2
+ 	select BR2_ARM_CPU_ARMV7A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_cortex_a53
++	bool "cortex-A53"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB
