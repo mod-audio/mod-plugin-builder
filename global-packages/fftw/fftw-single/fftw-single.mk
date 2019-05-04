@@ -27,11 +27,14 @@ FFTW_SINGLE_CONF_OPTS += \
 	$(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
 
 # ARM optimisations
-# ifeq ($(BR2_ARM_CPU_HAS_NEON):$(BR2_ARM_SOFT_FLOAT),y:)
-# FFTW_SINGLE_CONF_OPTS += --enable-neon
-# FFTW_SINGLE_CFLAGS += -mfpu=neon
-# else
+ifeq ($(BR2_ARM_CPU_HAS_NEON):$(BR2_ARM_SOFT_FLOAT),y:)
+FFTW_SINGLE_CONF_OPTS += --enable-neon
+else
 FFTW_SINGLE_CONF_OPTS += --disable-neon
-# endif
+endif
+
+ifdef BR2_arm
+FFTW_SINGLE_CFLAGS += -mfpu=neon-vfpv4
+endif
 
 $(eval $(autotools-package))

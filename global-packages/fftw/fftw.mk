@@ -18,17 +18,16 @@ else
 FFTW_COMMON_CONF_OPTS += --disable-fortran
 endif
 
-FFTW_COMMON_CFLAGS = $(TARGET_CFLAGS)
+FFTW_COMMON_CFLAGS = $(TARGET_CFLAGS) -fstrict-aliasing
 
-# ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
-# FFTW_COMMON_CFLAGS += -O3 -ffast-math
-# endif
+ifeq ($(BR2_PACKAGE_FFTW_FAST),y)
+FFTW_COMMON_CFLAGS += -O3 -ffast-math
+endif
 
 # Generic optimisations
 ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
 FFTW_COMMON_CONF_OPTS += --enable-threads
-## On the Duo and Duo X we need a separate library for the threads! 
-##FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--without,--with)-combined-threads
+# On the Duo and Duo X we need a separate library for the threads!
 FFTW_COMMON_CONF_OPTS += --without-combined-threads
 else
 FFTW_COMMON_CONF_OPTS += --disable-threads
