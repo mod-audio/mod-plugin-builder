@@ -1,8 +1,66 @@
+diff --git a/arch/Config.in b/arch/Config.in
+index 401bd28..361778c 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -358,14 +358,10 @@ if BR2_arcle || BR2_arceb
+ source "arch/Config.in.arc"
+ endif
+ 
+-if BR2_arm || BR2_armeb
++if BR2_arm || BR2_armeb || BR2_aarch64 || BR2_aarch64_be
+ source "arch/Config.in.arm"
+ endif
+ 
+-if BR2_aarch64 || BR2_aarch64_be
+-source "arch/Config.in.aarch64"
+-endif
+-
+ if BR2_bfin
+ source "arch/Config.in.bfin"
+ endif
+diff --git a/arch/Config.in.aarch64 b/arch/Config.in.aarch64
+deleted file mode 100644
+index 34cd409..0000000
+--- a/arch/Config.in.aarch64
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_ARCH
+-	default "aarch64"	if BR2_aarch64
+-	default "aarch64_be"	if BR2_aarch64_be
+-
+-config BR2_ENDIAN
+-	default "LITTLE" if BR2_aarch64
+-	default "BIG"	 if BR2_aarch64_be
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 2b34f42..3d477d7 100644
+index 2b34f42..f7a53e6 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -159,6 +159,14 @@ config BR2_cortex_a15
+@@ -31,6 +31,10 @@ config BR2_ARM_CPU_HAS_VFPV4
+ 	bool
+ 	select BR2_ARM_CPU_HAS_VFPV3
+ 
++config BR2_ARM_CPU_HAS_FP_ARMV8
++	bool
++	select BR2_ARM_CPU_HAS_VFPV4
++
+ config BR2_ARM_CPU_HAS_ARM
+ 	bool
+ 
+@@ -52,9 +56,12 @@ config BR2_ARM_CPU_ARMV6
+ config BR2_ARM_CPU_ARMV7A
+ 	bool
+ 
++config BR2_ARM_CPU_ARMV8A
++	bool
++
+ choice
+ 	prompt "Target Architecture Variant"
+-	depends on BR2_arm || BR2_armeb
++	default BR2_cortex_a53 if BR2_ARCH_IS_64
+ 	default BR2_arm926t
+ 	help
+ 	  Specific CPU variant to use
+@@ -159,6 +166,14 @@ config BR2_cortex_a15
  	select BR2_ARM_CPU_HAS_THUMB2
  	select BR2_ARM_CPU_ARMV7A
  	select BR2_ARCH_HAS_MMU_OPTIONAL
@@ -11,9 +69,90 @@ index 2b34f42..3d477d7 100644
 +	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
 +	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
 +	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_HAS_FP_ARMV8 if !BR2_ARCH_IS_64
 +	select BR2_ARM_CPU_ARMV8A
 +	select BR2_ARCH_HAS_MMU_OPTIONAL
  config BR2_cortex_m3
  	bool "cortex-M3"
  	select BR2_ARM_CPU_HAS_THUMB
+@@ -269,7 +284,7 @@ endchoice
+ 
+ choice
+ 	prompt "Floating point strategy"
+-	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
++	default BR2_ARM_FPU_FP_ARMV8 if BR2_ARM_CPU_HAS_FP_ARMV8
+ 	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
+ 	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
+ 	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
+@@ -380,10 +395,25 @@ config BR2_ARM_FPU_NEON_VFPV4
+ 	  example on Cortex-A5 and Cortex-A7, support for VFPv4 and
+ 	  NEON is optional.
+ 
++config BR2_ARM_FPU_FP_ARMV8
++	bool "FP-ARMv8"
++	depends on BR2_ARM_CPU_HAS_FP_ARMV8
++	help
++	  This option allows to use the ARMv8 floating point unit.
++
++config BR2_ARM_FPU_NEON_FP_ARMV8
++	bool "NEON/FP-ARMv8"
++	depends on BR2_ARM_CPU_HAS_FP_ARMV8
++	depends on BR2_ARM_CPU_HAS_NEON
++	help
++	  This option allows to use both the ARMv8 floating point unit
++	  and the NEON SIMD unit for floating point operations.
++
+ endchoice
+ 
+ choice
+ 	prompt "ARM instruction set"
++	depends on BR2_arm || BR2_armeb
+ 
+ config BR2_ARM_INSTRUCTIONS_ARM
+ 	bool "ARM"
+@@ -419,12 +449,14 @@ config BR2_ARM_INSTRUCTIONS_THUMB2
+ endchoice
+ 
+ config BR2_ARCH
+-	default "arm"	if BR2_arm
+-	default "armeb"	if BR2_armeb
++	default "arm"        if BR2_arm
++	default "armeb"      if BR2_armeb
++	default "aarch64"    if BR2_aarch64
++	default "aarch64_be" if BR2_aarch64_be
+ 
+ config BR2_ENDIAN
+-	default "LITTLE" if BR2_arm
+-	default "BIG"	 if BR2_armeb
++	default "LITTLE" if (BR2_arm || BR2_aarch64)
++	default "BIG"    if (BR2_armeb || BR2_aarch64_be)
+ 
+ config BR2_GCC_TARGET_CPU
+ 	default "arm920t"	if BR2_arm920t
+@@ -442,6 +474,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a9"	if BR2_cortex_a9
+ 	default "cortex-a12"	if BR2_cortex_a12
+ 	default "cortex-a15"	if BR2_cortex_a15
++	default "cortex-a53"	if BR2_cortex_a53
+ 	default "cortex-m3"	if BR2_cortex_m3
+ 	default "fa526"		if BR2_fa526
+ 	default "marvell-pj4"	if BR2_pj4
+@@ -450,7 +483,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "iwmmxt"	if BR2_iwmmxt
+ 
+ config BR2_GCC_TARGET_ABI
+-	default "aapcs-linux"
++	default "aapcs-linux" if BR2_arm || BR2_armeb
++	default "lp64"        if BR2_aarch64 || BR2_aarch64_be
+ 
+ config BR2_GCC_TARGET_FPU
+ 	default "vfp"		if BR2_ARM_FPU_VFPV2
+@@ -460,6 +494,8 @@ config BR2_GCC_TARGET_FPU
+ 	default "vfpv4-d16" 	if BR2_ARM_FPU_VFPV4D16
+ 	default "neon" 		if BR2_ARM_FPU_NEON
+ 	default "neon-vfpv4" 	if BR2_ARM_FPU_NEON_VFPV4
++	default "fp-armv8"	if BR2_ARM_FPU_FP_ARMV8
++	default "neon-fp-armv8"	if BR2_ARM_FPU_NEON_FP_ARMV8
+ 
+ config BR2_GCC_TARGET_FLOAT_ABI
+ 	default "soft"		if BR2_ARM_SOFT_FLOAT

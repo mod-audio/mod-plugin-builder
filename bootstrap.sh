@@ -54,8 +54,8 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
 
   tar xf ${DOWNLOAD_DIR}/${BUILDROOT_FILE} -C ${BUILD_DIR}
 
-  cd ${BUILD_DIR}
-  patch -p1 -i ${SOURCE_DIR}/buildroot-2016.02-a53.patch
+  cd ${BUILD_DIR}/${BUILDROOT_VERSION}
+  patch -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02-a53.patch
 fi
 
 #######################################################################################################################
