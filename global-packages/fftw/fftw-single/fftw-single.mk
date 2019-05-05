@@ -43,3 +43,4 @@ endif
 endif
 
 $(eval $(autotools-package))
+$(eval $(host-autotools-package))

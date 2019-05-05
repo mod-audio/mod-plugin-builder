@@ -20,3 +20,4 @@ FFTW_DOUBLE_CONF_OPTS = \
 	$(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
 
 $(eval $(autotools-package))
+$(eval $(host-autotools-package))
