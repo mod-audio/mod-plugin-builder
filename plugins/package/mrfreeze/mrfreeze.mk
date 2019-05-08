@@ -6,8 +6,8 @@
 
 MRFREEZE_VERSION = bce928d9f5b10dad76d425f8715833964fe8005f
 MRFREEZE_SITE = $(call github,romi1502,MrFreeze,$(MRFREEZE_VERSION))
-MRFREEZE_DEPENDENCIES = armadillo fftwf eigen
-# host-fftwf host-python host-python-mpmath
+MRFREEZE_DEPENDENCIES = armadillo fftw-single eigen
+# host-fftw-single host-python host-python-mpmath
 MRFREEZE_BUNDLES = mrfreeze.lv2
 
 MRFREEZE_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)

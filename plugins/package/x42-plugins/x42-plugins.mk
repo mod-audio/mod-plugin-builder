@@ -7,7 +7,7 @@
 X42_PLUGINS_VERSION = 20160619
 X42_PLUGINS_SITE = http://rg42.org/misc/x42-plugins
 X42_PLUGINS_SOURCE = x42-plugins-$(X42_PLUGINS_VERSION).tar.xz
-X42_PLUGINS_DEPENDENCIES = fftwf libglib2 libsamplerate libsndfile zita-convolver
+X42_PLUGINS_DEPENDENCIES = fftw-single libglib2 libsamplerate libsndfile zita-convolver
 X42_PLUGINS_BUNDLES = balance.lv2 convo.lv2 nodelay.lv2 stereoroute.lv2 testsignal.lv2
 
 X42_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) MOD=1 OPTIMIZATIONS= BUILDOPENGL=no BUILDGTK=no HAVE_UI=no LIBZITACONVOLVER="-lzita-convolver" PREFIX=/usr -C $(@D)
