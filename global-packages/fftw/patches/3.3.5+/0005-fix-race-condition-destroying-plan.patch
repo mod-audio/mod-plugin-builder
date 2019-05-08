@@ -1,0 +1,32 @@
+From 402d2508fe970770d9316d9c83f21d6fc268ba12 Mon Sep 17 00:00:00 2001
+From: Matteo Frigo <athena@fftw.org>
+Date: Fri, 12 Aug 2016 04:21:33 -0400
+Subject: [PATCH] Fix race condition when destroying a plan.
+
+More generally, this patch calls the planner hooks when destroying a
+plan.  The intended usage is that the hooks do in fact acquire a lock.
+---
+ api/apiplan.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/api/apiplan.c b/api/apiplan.c
+index 15e6556..f69b6b7 100644
+--- a/api/apiplan.c
++++ b/api/apiplan.c
+@@ -179,10 +179,16 @@ apiplan *X(mkapiplan)(int sign, unsigned flags, problem *prb)
+ void X(destroy_plan)(X(plan) p)
+ {
+      if (p) {
++          if (before_planner_hook)
++               before_planner_hook();
++     
+           X(plan_awake)(p->pln, SLEEPY);
+           X(plan_destroy_internal)(p->pln);
+           X(problem_destroy)(p->prb);
+           X(ifree)(p);
++
++          if (after_planner_hook)
++               after_planner_hook();
+      }
+ }
+ 

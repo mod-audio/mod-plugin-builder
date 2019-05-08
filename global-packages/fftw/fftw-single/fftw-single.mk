@@ -35,12 +35,14 @@ endif
 
 ifdef BR2_arm
 ifdef BR2_cortex_a7
-FFTW_SINGLE_CFLAGS += -mfpu=neon
+FFTW_SINGLE_CFLAGS += -mfpu=neon-vfpv4
 endif
 ifdef BR2_cortex_a53
 FFTW_SINGLE_CFLAGS += -mfpu=neon-fp-armv8
 endif
 endif
+
+FFTW_SINGLE_POST_PATCH_HOOKS += FFTW_APPLY_MOD_PATCHES
 
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))

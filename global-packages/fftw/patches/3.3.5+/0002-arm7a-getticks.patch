@@ -1,10 +1,10 @@
 diff --git a/kernel/cycle.h b/kernel/cycle.h
-index fe3dd50..95fbefd 100644
+index 873e92e..486cf97 100644
 --- a/kernel/cycle.h
 +++ b/kernel/cycle.h
-@@ -515,6 +515,18 @@ INLINE_ELAPSED(inline)
+@@ -527,6 +527,18 @@ INLINE_ELAPSED(inline)
+ #define HAVE_TICK_COUNTER
  #endif
- #endif /* HAVE_MIPS_ZBUS_TIMER */
  
 +#if defined(__ARM_ARCH_7A__)
 +typedef uint64_t ticks;
@@ -18,6 +18,6 @@ index fe3dd50..95fbefd 100644
 +#define HAVE_TICK_COUNTER
 +#endif
 +
- #if defined(HAVE_ARMV7A_CNTVCT)
+ #if defined(__aarch64__) && defined(ARMV8_HAS_CNTCVT_EL0) && !defined(HAVE_ARMV8CC)
  typedef uint64_t ticks;
  static inline ticks getticks(void)

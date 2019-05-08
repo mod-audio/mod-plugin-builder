@@ -19,5 +19,7 @@ FFTW_DOUBLE_CONF_OPTS = \
 	CFLAGS="$(FFTW_COMMON_CFLAGS)" \
 	$(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
 
+FFTW_DOUBLE_POST_PATCH_HOOKS += FFTW_APPLY_MOD_PATCHES
+
 $(eval $(autotools-package))
 $(eval $(host-autotools-package))
