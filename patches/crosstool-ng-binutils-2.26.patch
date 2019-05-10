@@ -1,0 +1,35 @@
+diff --git a/config/binutils/binutils.in b/config/binutils/binutils.in
+index fc57412..40add65 100644
+--- a/config/binutils/binutils.in
++++ b/config/binutils/binutils.in
+@@ -25,6 +25,11 @@ choice
+ # Don't remove next line
+ # CT_INSERT_VERSION_BELOW
+ 
++config BINUTILS_V_2_26
++    bool
++    prompt "2.26"
++    select BINUTILS_2_26_or_later
++
+ config BINUTILS_V_2_25_1
+     bool
+     prompt "2.25.1"
+@@ -115,6 +120,7 @@ config BINUTILS_VERSION
+     string
+ # Don't remove next line
+ # CT_INSERT_VERSION_STRING_BELOW
++    default "2.26" if BINUTILS_V_2_26
+     default "2.25.1" if BINUTILS_V_2_25_1
+     default "linaro-2.25.0-2015.01-2" if BINUTILS_LINARO_V_2_25
+     default "2.25" if BINUTILS_V_2_25
+@@ -129,6 +135,10 @@ config BINUTILS_VERSION
+     default "2.19.1a" if BINUTILS_V_2_19_1a
+     default "2.18a" if BINUTILS_V_2_18a
+ 
++config BINUTILS_2_26_or_later
++    bool
++    select BINUTILS_2_25_1_or_later
++
+ config BINUTILS_2_25_1_or_later
+     bool
+     select BINUTILS_2_25_or_later
