@@ -7,7 +7,7 @@ index 5290d5a..6db0525 100755
  fi
  
 +if [ ! -f premake ]; then
-+  mkdir tmp; cd tmp && wget --quiet http://ftp.debian.org/debian/pool/main/p/premake/premake_3.7-1_amd64.deb && dpkg -x premake_3.7-1_amd64.deb . && mv ./usr/bin/premake ../ && cd .. && rm -rf tmp
++  mkdir tmp; cd tmp && wget --quiet http://archive.ubuntu.com/ubuntu/pool/universe/p/premake/premake_3.7-1_amd64.deb && dpkg -x premake_3.7-1_amd64.deb . && mv ./usr/bin/premake ../ && cd .. && rm -rf tmp
 +fi
 +PREMAKE=$(pwd)/premake
 +
