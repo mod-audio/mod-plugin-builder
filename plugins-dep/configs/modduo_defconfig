@@ -13,6 +13,7 @@ BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -mvectorize-with-neon-quad -ffast-math -fno-finite-math-only -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__"
+BR2_TARGET_LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
 BR2_TARGET_GENERIC_HOSTNAME=""
 BR2_TARGET_GENERIC_ISSUE=""
 BR2_INIT_NONE=y
