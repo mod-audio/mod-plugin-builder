@@ -38,7 +38,8 @@ if [ ! -f .stamp_configured ]; then
 fi
 
 if [ ! -f .stamp_built1 ]; then
-  make
+  sed -i Makefile -e 's/ifneq ($(strip $(CT_MAKEFLAGS)),)/ifneq (,)/'
+  make build-bin build-lib
   touch .stamp_built1
 fi
 
