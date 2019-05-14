@@ -86,13 +86,9 @@ for dir in `ls ${SOURCE_DIR}/global-packages`; do
     cp -r ${SOURCE_DIR}/global-packages/${dir} package/${dir}
 done
 
-if [ ! -f package/libglib2/001-glib-gdate-suppress-string-format-literal-warning.patch ]; then
-    cp ${SOURCE_DIR}/patches/001-glib-gdate-suppress-string-format-literal-warning.patch package/libglib2/
-fi
-
-# apply superseded patch from https://patchwork.ozlabs.org/patch/714012/
-# fixes python modules build when local ssl is present
-cp ${SOURCE_DIR}/patches/111-optional-ssl.patch package/python/
+cp ${SOURCE_DIR}/patches/libglib2/*.patch  package/libglib2/
+cp ${SOURCE_DIR}/patches/localedef/*.patch package/localedef/
+cp ${SOURCE_DIR}/patches/python/*.patch    package/python/
 
 make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${platform}_defconfig
 
