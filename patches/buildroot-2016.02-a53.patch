@@ -32,7 +32,7 @@ index 34cd409..0000000
 -	default "LITTLE" if BR2_aarch64
 -	default "BIG"	 if BR2_aarch64_be
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 2b34f42..f7a53e6 100644
+index 2b34f42..4833906 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
 @@ -31,6 +31,10 @@ config BR2_ARM_CPU_HAS_VFPV4
@@ -67,16 +67,19 @@ index 2b34f42..f7a53e6 100644
 +config BR2_cortex_a53
 +	bool "cortex-A53"
 +	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_HAS_FP_ARMV8
 +	select BR2_ARM_CPU_ARMV8A
 +	select BR2_ARCH_HAS_MMU_OPTIONAL
  config BR2_cortex_m3
  	bool "cortex-M3"
  	select BR2_ARM_CPU_HAS_THUMB
-@@ -269,7 +284,7 @@ endchoice
+@@ -267,9 +282,10 @@ config BR2_ARM_EABIHF
  
+ endchoice
+ 
++if BR2_arm || BR2_armeb
  choice
  	prompt "Floating point strategy"
 -	depends on BR2_ARM_EABI || BR2_ARM_EABIHF
@@ -84,7 +87,7 @@ index 2b34f42..f7a53e6 100644
  	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
  	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
  	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
-@@ -380,10 +395,25 @@ config BR2_ARM_FPU_NEON_VFPV4
+@@ -380,10 +396,26 @@ config BR2_ARM_FPU_NEON_VFPV4
  	  example on Cortex-A5 and Cortex-A7, support for VFPv4 and
  	  NEON is optional.
  
@@ -103,6 +106,7 @@ index 2b34f42..f7a53e6 100644
 +	  and the NEON SIMD unit for floating point operations.
 +
  endchoice
++endif
  
  choice
  	prompt "ARM instruction set"
@@ -110,7 +114,7 @@ index 2b34f42..f7a53e6 100644
  
  config BR2_ARM_INSTRUCTIONS_ARM
  	bool "ARM"
-@@ -419,12 +449,14 @@ config BR2_ARM_INSTRUCTIONS_THUMB2
+@@ -419,12 +451,14 @@ config BR2_ARM_INSTRUCTIONS_THUMB2
  endchoice
  
  config BR2_ARCH
@@ -129,7 +133,7 @@ index 2b34f42..f7a53e6 100644
  
  config BR2_GCC_TARGET_CPU
  	default "arm920t"	if BR2_arm920t
-@@ -442,6 +474,7 @@ config BR2_GCC_TARGET_CPU
+@@ -442,6 +476,7 @@ config BR2_GCC_TARGET_CPU
  	default "cortex-a9"	if BR2_cortex_a9
  	default "cortex-a12"	if BR2_cortex_a12
  	default "cortex-a15"	if BR2_cortex_a15
@@ -137,7 +141,7 @@ index 2b34f42..f7a53e6 100644
  	default "cortex-m3"	if BR2_cortex_m3
  	default "fa526"		if BR2_fa526
  	default "marvell-pj4"	if BR2_pj4
-@@ -450,7 +483,8 @@ config BR2_GCC_TARGET_CPU
+@@ -450,7 +485,8 @@ config BR2_GCC_TARGET_CPU
  	default "iwmmxt"	if BR2_iwmmxt
  
  config BR2_GCC_TARGET_ABI
@@ -147,7 +151,7 @@ index 2b34f42..f7a53e6 100644
  
  config BR2_GCC_TARGET_FPU
  	default "vfp"		if BR2_ARM_FPU_VFPV2
-@@ -460,6 +494,8 @@ config BR2_GCC_TARGET_FPU
+@@ -460,6 +496,8 @@ config BR2_GCC_TARGET_FPU
  	default "vfpv4-d16" 	if BR2_ARM_FPU_VFPV4D16
  	default "neon" 		if BR2_ARM_FPU_NEON
  	default "neon-vfpv4" 	if BR2_ARM_FPU_NEON_VFPV4
