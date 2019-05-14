@@ -60,6 +60,7 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
 
   cd ${BUILD_DIR}/${BUILDROOT_VERSION}
   patch -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02-a53.patch
+  patch -p1 -i ${SOURCE_DIR}/patches/buildroot-automake-fix-unescaped-left-brace-warning-patch
 fi
 
 #######################################################################################################################
