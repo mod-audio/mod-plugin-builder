@@ -33,8 +33,11 @@ If you're running a debian based system you can install all dependencies by runn
 ```
 sudo apt-get install acl bc curl cvs git mercurial rsync subversion wget \
 bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
-automake binutils build-essential cpio libtool libncurses-dev pkg-config
+automake binutils build-essential cpio libtool libncurses-dev pkg-config libtool-bin
 ```
+
+Note that libtool-bin is not available on old distros.<br/>
+If that is the case for you, simply skip that package but install everything else.
 
 To begin simply run the bootstrap.sh script.<br/>
 The bootstrap.sh script will build the toolchain (ct-ng) and buildroot.<br/>
@@ -60,14 +63,6 @@ git submodule update
 
 To cleanup the build of a plugin, run:<br/>
 ```./build <plugin-package>-dirclean```
-
-
-If you get an issue under Debian or Ubuntu about missing libtool, like this:
-```
-checking for GNU libtool >= 1.5.26... no
-configure: error: could not find GNU libtool >= 1.5.26
-```
-Please install libtool-bin and re-run bootstrap.sh.
 
 
 There's a more detailed [HowTo](http://wiki.moddevices.com/wiki/How_To_Build_and_Deploy_LV2_Plugin_to_MOD_Duo) explaining how to compile an LV2 Plugin using mod-plugin-builder.
