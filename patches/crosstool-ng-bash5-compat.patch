@@ -1,14 +1,18 @@
-From a4286b8c9b61a48ee802cf633f0ff19c6cf10ae5 Mon Sep 17 00:00:00 2001
-From: Linus <wendefelix1998@gmail.com>
-Date: Wed, 6 Feb 2019 18:03:42 +0100
-Subject: [PATCH] fix: prevent configure fail with bash 5
-
----
- configure.ac | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
+diff --git a/configure b/configure
+index f1d34e7..a58a372 100755
+--- a/configure
++++ b/configure
+@@ -4993,7 +4993,7 @@ do
+       ac_path__BASH="$as_dir/$ac_prog$ac_exec_ext"
+       as_fn_executable_p "$ac_path__BASH" || continue
+ _BASH_ver=$($ac_path__BASH --version 2>&1 \
+-                     |$EGREP '^GNU bash, version (3\.[1-9]|4)')
++                     |$EGREP '^GNU bash, version (3\.[1-9]|4|5)')
+           test -n "$_BASH_ver" && ac_cv_path__BASH=$ac_path__BASH ac_path__BASH_found=:
+       $ac_path__BASH_found && break 3
+     done
 diff --git a/configure.ac b/configure.ac
-index 5d512fe87..872a73de2 100644
+index 4f0b428..6bc7de2 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -190,7 +190,7 @@ AC_CACHE_VAL([ac_cv_path__BASH],
