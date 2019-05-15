@@ -13,6 +13,7 @@ if [ ! -f ${BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
   mkdir -p ${BUILD_DIR}/${CT_NG_VERSION}
   tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
 
+  patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/crosstool-ng-bash5-compat.patch
   patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/crosstool-ng-binutils-2.26.patch
   cp -r ${SOURCE_DIR}/patches/bin-utils-2.26 ${BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/
 fi
