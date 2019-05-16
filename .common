@@ -54,7 +54,7 @@ BUILDROOT_VERSION=buildroot-2016.02
 BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.bz2
 
 SOURCE_DIR=$(readlink -f $(dirname $0))
-BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}"
+BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}/plugins-dep"
 BR2_TARGET=${WORKDIR}/${PLATFORM}/target
 
 #######################################################################################################################
