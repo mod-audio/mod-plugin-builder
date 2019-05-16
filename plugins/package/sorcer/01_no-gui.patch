@@ -1,0 +1,79 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7c0d989..17e92b1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -15,22 +15,14 @@ find_package(PkgConfig)
+ 
+ #SET(CMAKE_INSTALL_PREFIX "/usr" )
+ 
+-pkg_check_modules(NTK ntk REQUIRED)
+-include_directories( ${NTK_INCLUDE_DIRS}  )
+-link_directories   ( ${NTK_LIBRARY_DIRS}  )
+-
+ pkg_check_modules(LV2 lv2 REQUIRED)
+ include_directories( ${LV2_INCLUDE_DIRS}  )
+ 
+-pkg_check_modules(CAIRO cairo REQUIRED)
+-include_directories( ${CAIRO_INCLUDE_DIRS}  )
+-link_directories   ( ${CAIRO_LIBRARY_DIRS}  )
+-
+-SET(CMAKE_SHARED_LINKER_FLAGS "-fPIC -shared -Wl,-z,nodelete -Wl,--no-undefined")
++SET(CMAKE_SHARED_LINKER_FLAGS "-fPIC -shared -Wl,--no-undefined")
+ 
+ IF(RELEASE_BUILD)
+-  SET(CMAKE_CXX_FLAGS "-g -Wall -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
+-  SET(CMAKE_C_FLAGS "-g -Wall -W -Wno-unused-variable -msse2 -mfpmath=sse -ffast-math")
++  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-unused-variable -ffast-math")
++  SET(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -W -Wno-unused-variable -ffast-math")
+ ENDIF()
+ 
+ ## The following commands will re-generate the .cpp files from the FAUST .dsp,
+@@ -76,17 +68,10 @@ COLOR_MESSAGE( "
+ 
+ 
+ 
+-FILE(GLOB sources faust/main.cpp +
+-  gui/sorcer_widget.cxx +
+-  gui/sorcer_ui.cxx )
++FILE(GLOB sources faust/main.cpp)
+ 
+ ADD_LIBRARY(sorcer SHARED ${sources})
+ 
+-target_link_libraries( sorcer ${NTK_LIBRARIES}     )
+-#target_link_libraries( sorcer ${SNDFILE_LIBRARIES} )
+-
+-target_link_libraries( sorcer ${CAIRO_LIBRARIES}     )
+-
+ # Remove "lib" part before name (sorcer.so, not libsorcer.so)
+ set_target_properties(sorcer PROPERTIES PREFIX "")
+ 
+diff --git a/sorcer.lv2/manifest.ttl b/sorcer.lv2/manifest.ttl
+index e55c941..3c15288 100644
+--- a/sorcer.lv2/manifest.ttl
++++ b/sorcer.lv2/manifest.ttl
+@@ -9,10 +9,3 @@
+     a lv2:Plugin ;
+     lv2:binary <sorcer.so> ;
+     rdfs:seeAlso <sorcer.ttl> .
+-
+-<http://www.openavproductions.com/sorcer/gui>
+-  a ui:X11UI;
+-  ui:binary <sorcer.so> ;
+-  lv2:extensionData ui:idleInterface;
+-  lv2:optionalFeature ui:noUserResize ;
+-  .
+diff --git a/sorcer.lv2/sorcer.ttl b/sorcer.lv2/sorcer.ttl
+index abdb119..fe531ee 100644
+--- a/sorcer.lv2/sorcer.ttl
++++ b/sorcer.lv2/sorcer.ttl
+@@ -16,9 +16,7 @@
+        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:project [ doap:maintainer [ foaf:name "OpenAV Productions" ] ] ;
+        doap:description "Wavetable Synth" ;
+-       
+-       ui:ui <http://www.openavproductions.com/sorcer/gui> ;
+-       
++
+     lv2:port [
+   a lv2:InputPort ;
+   a lv2:ControlPort ;
