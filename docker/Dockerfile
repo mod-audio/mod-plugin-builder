@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER Alexandre Cunha <alex@moddevices.com>
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -10,13 +10,13 @@ RUN dpkg --add-architecture i386
 RUN dpkg --add-architecture armhf
 RUN dpkg --add-architecture arm64
 
-RUN echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ xenial main restricted universe multiverse"                > /etc/apt/sources.list && \
-    echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ xenial-updates main restricted universe multiverse"       >> /etc/apt/sources.list && \
-    echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ xenial-backports main restricted universe multiverse"     >> /etc/apt/sources.list && \
-    echo "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu xenial-security main restricted universe multiverse"      >> /etc/apt/sources.list && \
-    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports xenial main restricted universe multiverse"           >> /etc/apt/sources.list && \
-    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports xenial-updates main restricted universe multiverse"   >> /etc/apt/sources.list && \
-    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports xenial-backports main restricted universe multiverse" >> /etc/apt/sources.list
+RUN echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse"                > /etc/apt/sources.list && \
+    echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse"       >> /etc/apt/sources.list && \
+    echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse"     >> /etc/apt/sources.list && \
+    echo "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted universe multiverse"      >> /etc/apt/sources.list && \
+    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main restricted universe multiverse"           >> /etc/apt/sources.list && \
+    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main restricted universe multiverse"   >> /etc/apt/sources.list && \
+    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-backports main restricted universe multiverse" >> /etc/apt/sources.list
 
 # update and upgrade system
 RUN apt-get update && apt-get upgrade -qy && apt-get clean
