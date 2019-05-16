@@ -1,5 +1,19 @@
 #!/bin/bash
 
+#######################################################################################################################
+# check arguments
+
+PLATFORM=$1
+
+if [ "${PLATFORM}" == "" ]; then
+  echo "Usage: $0 <platform>"
+  echo "  Where platform can be modduo or modduox"
+  exit 1
+fi
+
+#######################################################################################################################
+# Import common code and variables
+
 source .common
 
 #######################################################################################################################
@@ -28,7 +42,7 @@ if [ ! -f patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch ]; then
 fi
 
 if [ ! -f .config ]; then
-  cp ${SOURCE_DIR}/toolchain/${platform}.config .config
+  cp ${SOURCE_DIR}/toolchain/${PLATFORM}.config .config
   sed -i "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
   sed -i "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
 fi
@@ -59,9 +73,8 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
 
   tar xf ${DOWNLOAD_DIR}/${BUILDROOT_FILE} -C ${BUILD_DIR}
 
-  cd ${BUILD_DIR}/${BUILDROOT_VERSION}
-  patch -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02-a53.patch
-  patch -p1 -i ${SOURCE_DIR}/patches/buildroot-automake-fix-unescaped-left-brace-warning-patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02-a53.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-automake-fix-unescaped-left-brace-warning-patch
 fi
 
 #######################################################################################################################
@@ -77,10 +90,10 @@ ln -sf usr/bin  /tmp/skeleton/
 ln -sf usr/lib  /tmp/skeleton/
 ln -sf usr/sbin /tmp/skeleton/
 
-#######################################################################################################################
-# initial first build
-
 cd ${BUILD_DIR}/${BUILDROOT_VERSION}
+
+#######################################################################################################################
+# patching buildroot
 
 for dir in `ls ${SOURCE_DIR}/global-packages`; do
     rm -rf package/${dir}
@@ -92,10 +105,10 @@ cp ${SOURCE_DIR}/patches/localedef/*.patch package/localedef/
 cp ${SOURCE_DIR}/patches/m4/*.patch        package/m4/
 cp ${SOURCE_DIR}/patches/python/*.patch    package/python/
 
-make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${platform}_defconfig
+#######################################################################################################################
+# initial first build
 
-if [[ "${build}" == "plugins-dep" ]]; then
-  make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build}
-fi
+${BR2_MAKE} ${PLATFORM}_defconfig
+${BR2_MAKE}
 
 #######################################################################################################################

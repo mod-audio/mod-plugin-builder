@@ -1,61 +1,69 @@
 #!/bin/bash
 
+#######################################################################################################################
+# check arguments
+
+PLATFORM=$1
+PACKAGE=$2
+
+if [[ "${PLATFORM}" == "" ]] || [[ "${PACKAGE}" == "" ]]; then
+  echo "Usage: $0 <platform> <plugin-package-name>"
+  echo "  Where platform can be modduo or modduox"
+  echo "  and plugin-package-name is a folder inside ./plugins"
+  exit 1
+fi
+
+#######################################################################################################################
+# Import common code and variables
+
 source .common
 
 #######################################################################################################################
-# initial plugin setup
+# cleanup "package"
 
-action=$1
+if [[ "${PACKAGE}" == "cleanup" ]]; then
+  # cleanup previous
+  rm -rf ${WORKDIR}/tmp-lv2-spec
 
-if [[ "${build}" == "plugins-dep" ]]; then
-    if [[ "${action}" == "" ]]; then
-      echo "Usage: $0 <package-name>"
-      exit 1
-    fi
+  # make sure plugins dir exists and it's clean
+  mkdir -p ${PLUGINS_DIR}
+  rm -rf ${PLUGINS_DIR}/plugins/*
 
-    if [[ "${action}" == "cleanup" ]]; then
-      # cleanup previous
-      rm -rf ${WORKDIR}/tmp-lv2-spec
+  # move lv2 spec to a temp dir so we can delete everything else
+  mkdir ${WORKDIR}/tmp-lv2-spec
+  mv ${BR2_TARGET}/usr/lib/lv2/{atom,buf-size,data-access,dynmanifest,event,instance-access,log,lv2core,midi,morph,options,parameters,patch,port-groups,port-props,presets,resize-port,schemas,state,time,ui,units,urid,uri-map,worker}.lv2 ${WORKDIR}/tmp-lv2-spec/
+  rm -rf ${BR2_TARGET}/usr/lib/lv2/*
+  mv ${WORKDIR}/tmp-lv2-spec/* ${BR2_TARGET}/usr/lib/lv2/
+  rmdir ${WORKDIR}/tmp-lv2-spec
 
-      # make sure plugins dir exists and it's clean
-      mkdir -p ${WORKDIR}/plugins
-      rm -rf ${WORKDIR}/plugins/*
+  # just in case
+  rm -rf ${BR2_TARGET}/usr/local/lib/lv2
 
-      # move lv2 spec to a temp dir so we can delete everything else
-      mkdir ${WORKDIR}/tmp-lv2-spec
-      mv ${WORKDIR}/${build}/target/usr/lib/lv2/{atom,buf-size,data-access,dynmanifest,event,instance-access,log,lv2core,midi,morph,options,parameters,patch,port-groups,port-props,presets,resize-port,schemas,state,time,ui,units,urid,uri-map,worker}.lv2 ${WORKDIR}/tmp-lv2-spec/
-      rm -rf ${WORKDIR}/${build}/target/usr/lib/lv2/*
-      mv ${WORKDIR}/tmp-lv2-spec/* ${WORKDIR}/${build}/target/usr/lib/lv2/
-      rmdir ${WORKDIR}/tmp-lv2-spec
+  # all done!
+  exit 0
+fi
 
-      # just in case
-      rm -rf ${WORKDIR}/${build}/target/usr/local/lib/lv2
+#######################################################################################################################
+# Check if requested plugin package exists
 
-      # all done!
-      exit 0
-    fi
+if [[ "${PACKAGE}" != *"-dirclean" ]] && [[ "${PACKAGE}" != *"-rebuild" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then
+  PACKAGE=$(basename ${PACKAGE} | sed "s|\.mk||")
+  PKGNAME=$(echo ${PACKAGE} | tr a-z- A-Z_)
 
-    if [[ "${action}" != *"-dirclean" ]] && [[ "${action}" != *"-rebuild" ]] && [[ "${action}" != "menuconfig" ]]; then
-      action=$(basename ${action} | sed "s|\.mk||")
-      pkgname=$(echo ${action} | tr a-z- A-Z_)
+  if [ ! -d ${SOURCE_DIR}/plugins/package/${PACKAGE} ]; then
+    error "Plugin package name '${PACKAGE}' does not exist"
+    exit 1
+  fi
+  if [ ! -f ${SOURCE_DIR}/plugins/package/${PACKAGE}/${PACKAGE}.mk ]; then
+    error "Requested plugin package has no 'mk' file"
+    exit 1
+  fi
 
-      if [ ! -d ${SOURCE_DIR}/plugins/package/${action} ]; then
-        error "Package name '${action}' does not exist"
-        exit 1
-      fi
-      if [ ! -f ${SOURCE_DIR}/plugins/package/${action}/${action}.mk ]; then
-        error "Requested package has no 'mk' file"
-        exit 1
-      fi
-
-      bundles=($(cat plugins/package/${action}/${action}.mk | awk 'sub("'${pkgname}'_BUNDLES = ","")'))
-      echo ${bundles}
-      echo ${action}
-      if [[ "${bundles}" == "" ]]; then
-        error "Requested package has no bundles"
-        exit 1
-      fi
-    fi
+  bundles=($(cat ${SOURCE_DIR}/plugins/package/${PACKAGE}/${PACKAGE}.mk | awk 'sub("'${PKGNAME}'_BUNDLES = ","")'))
+  if [[ "${bundles}" == "" ]]; then
+    error "Requested plugin package has no bundles"
+    exit 1
+  fi
 fi
 
 #######################################################################################################################
@@ -70,16 +78,30 @@ mkdir -p /tmp/skeleton
 # now building...
 
 cd ${BUILD_DIR}/${BUILDROOT_VERSION}
-make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${platform}_defconfig &>/dev/null
-make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} ${action}
+${BR2_MAKE} ${PLATFORM}_defconfig &>/dev/null
+${BR2_MAKE} ${PACKAGE}
 
 #######################################################################################################################
 # if cleaning, stop here
 
-if [[ "${action}" == *"-dirclean" ]]; then
+if [[ "${PACKAGE}" == *"-dirclean" ]]; then
   # run host-*-dirclean
-  make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} host-${action} &>/dev/null
+  ${BR2_MAKE} host-${PACKAGE} &>/dev/null
   exit 0
+fi
+
+#######################################################################################################################
+# internal: check for a menuconfig "package" to automatically save config
+
+if [[ "${PACKAGE}" == *"menuconfig"* ]]; then
+    PREFIX=$(echo ${PACKAGE} | sed 's/menuconfig//g')
+    if [[ "$PREFIX" == "" ]]; then
+        ${BR2_MAKE} savedefconfig
+    else
+        ${BR2_MAKE} "$PREFIX"update-config
+    fi
+
+    info "Changes of ${PACKAGE} saved to correspondent configuration file"
 fi
 
 #######################################################################################################################
@@ -105,16 +127,16 @@ function try_copy_plugin_bundles
     fi
   done
 
-  ls ${WORKDIR}/plugins
-  if [ -z "`ls ${WORKDIR}/plugins`" ]; then
+  ls ${WORKDIR}/${PLATFORM}/plugins
+  if [ -z "`ls ${WORKDIR}/${PLATFORM}/plugins`" ]; then
     was_empty="1"
   else
     was_empty="0"
   fi
 
   for bundle in ${bundles[@]}; do
-    rm -rf ${WORKDIR}/plugins/${bundle}
-    cp -rL ${path}/${bundle} ${WORKDIR}/plugins/${bundle}
+    rm -rf ${WORKDIR}/${PLATFORM}/plugins/${bundle}
+    cp -rL ${path}/${bundle} ${WORKDIR}/${PLATFORM}/plugins/${bundle}
     info "Finished copying ${bundle}"
   done
 
@@ -132,28 +154,16 @@ function try_copy_plugin_bundles
   exit 0
 }
 
-if [[ "${build}" == "plugins-dep" ]] && [[ "${action}" != "menuconfig" ]]; then
-  mkdir -p ${WORKDIR}/plugins
+#######################################################################################################################
+# copy the requested plugin bundles
 
-  try_copy_plugin_bundles ${WORKDIR}/${build}/target/usr/lib/lv2
-  try_copy_plugin_bundles ${WORKDIR}/${build}/target/usr/local/lib/lv2
+if [[ "${PACKAGE}" != "menuconfig" ]]; then
+  mkdir -p ${WORKDIR}/${PLATFORM}/plugins
+
+  try_copy_plugin_bundles ${BR2_TARGET}/usr/lib/lv2
+  try_copy_plugin_bundles ${BR2_TARGET}/usr/local/lib/lv2
 
   error "Failed to find plugin installed bundles"
-  exit 1
-fi
-
-#######################################################################################################################
-# check for a menuconfig action to automatically save config
-
-if [[ "${action}" == *"menuconfig"* ]]; then
-    PREFIX=$(echo ${action} | sed 's/menuconfig//g')
-    if [[ "$PREFIX" == "" ]]; then
-        make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} savedefconfig
-    else
-        make O=${WORKDIR}/${build} BR2_EXTERNAL=${SOURCE_DIR}/${build} "$PREFIX"update-config
-    fi
-
-    info "Changes of ${action} saved to correspondent configuration file"
 fi
 
 #######################################################################################################################

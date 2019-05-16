@@ -8,9 +8,36 @@ set -e
 #######################################################################################################################
 # environment variables
 
-build=${build:=plugins-dep}
-platform=${platform:=modduo}
 WORKDIR=${WORKDIR:=~/mod-workdir}
+
+#######################################################################################################################
+# Colored print functions
+
+function error {
+  echo -e "\e[0;31m"$@"\e[0m"
+  exit 1
+}
+
+function info {
+  echo -e "\e[0;32m"$@"\e[0m"
+}
+
+function warn {
+  echo -e "\e[0;33m"$@"\e[0m"
+}
+
+#######################################################################################################################
+# check for old installation
+
+if [ -d ${WORKDIR}/build ]; then
+  info "mod-plugin-builder has been updated to support multiple platforms"
+  info "Unfortunately this requires a complete rebuild of its packages"
+  error "Please delete ${WORKDIR} and re-run bootstrap.sh"
+fi
+
+if [ -z "${PLATFORM}" ]; then
+  error "Incorrect use of .common, PLATFORM not defined!"
+fi
 
 #######################################################################################################################
 # crosstool-ng variables
@@ -26,31 +53,21 @@ BUILDROOT_LINK=http://buildroot.uclibc.org/downloads/
 BUILDROOT_VERSION=buildroot-2016.02
 BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.bz2
 
+SOURCE_DIR=$(readlink -f $(dirname $0))
+BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}"
+BR2_TARGET=${WORKDIR}/${PLATFORM}/target
+
 #######################################################################################################################
 # setup directories
 
-SOURCE_DIR=$(readlink -f $(dirname $0))
-BUILD_DIR=${WORKDIR}/build
-DOWNLOAD_DIR=${WORKDIR}/download
-TOOLCHAIN_DIR=${WORKDIR}/toolchain
+BUILD_DIR=${WORKDIR}/${PLATFORM}/build
+DOWNLOAD_DIR=${WORKDIR}/${PLATFORM}/download
+PLUGINS_DIR=${WORKDIR}/${PLATFORM}/plugins
+TOOLCHAIN_DIR=${WORKDIR}/${PLATFORM}/toolchain
 
 mkdir -p ${BUILD_DIR}
 mkdir -p ${DOWNLOAD_DIR}
+mkdir -p ${PLUGINS_DIR}
 mkdir -p ${TOOLCHAIN_DIR}
-
-#######################################################################################################################
-# Colored print functions
-
-function error {
-    echo -e "\e[0;31m"$@"\e[0m"
-}
-
-function info {
-    echo -e "\e[0;32m"$@"\e[0m"
-}
-
-function warn {
-    echo -e "\e[0;33m"$@"\e[0m"
-}
 
 #######################################################################################################################
