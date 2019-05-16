@@ -37,7 +37,7 @@ fi
 
 cd ${BUILD_DIR}/${CT_NG_VERSION}
 
-if [ ! -f patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch ]; then
+if [ ! -f patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch ] && [ -d patches/gcc/4.9.3 ]; then
     cp ${SOURCE_DIR}/patches/0001-fixed-build-with-gcc-6.patch patches/gcc/4.9.3/0001-fixed-build-with-gcc-6.patch
 fi
 
