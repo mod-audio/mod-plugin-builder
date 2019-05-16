@@ -1,0 +1,99 @@
+diff --git a/Makefile.in b/Makefile.in
+index 4bf34f8..2b6cec9 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -74,16 +74,12 @@ resources = \
+ 
+ headers_lv2 = \
+ 	$(headers) \
+-	$(headers_ui) \
+ 	src/$(name)_lv2.h \
+-	src/$(name)_param.h \
+-	src/$(name)widget_lv2.h
++	src/$(name)_param.h
+ 
+ sources_lv2 = \
+ 	$(sources) \
+-	$(sources_ui) \
+-	src/$(name)_lv2.cpp \
+-	src/$(name)widget_lv2.cpp
++	src/$(name)_lv2.cpp
+ 
+ 
+ headers_jack = \
+@@ -111,7 +107,7 @@ export LUPDATE = @ac_lupdate@
+ export LRELEASE = @ac_lrelease@
+ 
+ 
+-all:	core ui @ac_all_targets@
++all:	core @ac_all_targets@
+ 
+ core:	$(name).mak $(sources) $(headers)
+ 	@$(MAKE) -f $(name).mak
+@@ -119,7 +115,7 @@ core:	$(name).mak $(sources) $(headers)
+ ui:	$(name_ui).mak $(sources_ui) $(headers_ui) $(resources) ${forms}
+ 	@$(MAKE) -f $(name_ui).mak
+ 
+-lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) ui core
++lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) core
+ 	@$(MAKE) -f $(name_lv2).mak
+ 
+ jack:	$(name_jack).mak $(sources_jack) $(headers_jack) ui core
+@@ -186,7 +182,7 @@ clean_jack:	$(name_jack).mak
+ 	@rm -f $(name_jack).mak
+ 
+ 
+-install:	install_core install_ui @ac_install_targets@
++install:	install_core @ac_install_targets@
+ 
+ uninstall:	uninstall_core uninstall_ui @ac_uninstall_targets@
+ 
+diff --git a/configure.ac b/configure.ac
+index 7afe17e..46cba58 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3,7 +3,7 @@ AC_INIT(synthv1, 0.9.7, rncbc@rncbc.org)
+ 
+ AC_CONFIG_SRCDIR(src/synthv1.cpp)
+ AC_CONFIG_HEADERS(src/config.h)
+-AC_CONFIG_FILES(Makefile synthv1.spec src/src_core.pri src/src_ui.pri src/src_jack.pri src/src_lv2.pri)
++AC_CONFIG_FILES(Makefile synthv1.spec src/src_core.pri src/src_jack.pri src/src_lv2.pri)
+ 
+ # Build version string.
+ AC_CACHE_VAL([ac_cv_build_version], [
+diff --git a/src/synthv1.lv2/manifest.ttl b/src/synthv1.lv2/manifest.ttl
+index 0d69672..6351e43 100644
+--- a/src/synthv1.lv2/manifest.ttl
++++ b/src/synthv1.lv2/manifest.ttl
+@@ -4,4 +4,4 @@
+ <http://synthv1.sourceforge.net/lv2>
+ 	a lv2:Plugin, lv2:InstrumentPlugin ;
+ 	lv2:binary <synthv1.so> ;
+-	rdfs:seeAlso <synthv1.ttl>, <synthv1_ui.ttl> .
++	rdfs:seeAlso <synthv1.ttl> .
+diff --git a/src/synthv1.lv2/synthv1.ttl b/src/synthv1.lv2/synthv1.ttl
+index 8f7fb66..3475a07 100644
+--- a/src/synthv1.lv2/synthv1.ttl
++++ b/src/synthv1.lv2/synthv1.ttl
+@@ -25,7 +25,6 @@
+ 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:extensionData lv2worker:interface ;
+-	lv2ui:ui synthv1_lv2:ui, synthv1_lv2:ui_x11, synthv1_lv2:ui_external ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2atom:AtomPort ;
+ 		lv2atom:bufferType lv2atom:Sequence ;
+diff --git a/synthv1_lv2.pro b/synthv1_lv2.pro
+index 2185029..91f1af1 100644
+--- a/synthv1_lv2.pro
++++ b/synthv1_lv2.pro
+@@ -1,8 +1,5 @@
+ # synthv1_lv2.pro
+ #
+ TEMPLATE = subdirs
+-SUBDIRS = src_lv2 src_lv2ui
++SUBDIRS = src_lv2
+ src_lv2.file = src/src_lv2.pro
+-src_lv2ui.file = src/src_lv2ui.pro
+-src_lv2ui.depends = src_lv2
+-
