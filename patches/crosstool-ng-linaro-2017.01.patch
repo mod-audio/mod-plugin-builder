@@ -20,3 +20,16 @@ index e67e435..f9504c7 100644
      default "4.9.3" if CC_GCC_V_4_9_3
      default "linaro-4.8-2015.06" if CC_GCC_V_linaro_4_8
      default "4.8.5" if CC_GCC_V_4_8_5
+diff --git a/scripts/build/cc/100-gcc.sh b/scripts/build/cc/100-gcc.sh
+index 5674c30..ba406e9 100644
+--- a/scripts/build/cc/100-gcc.sh
++++ b/scripts/build/cc/100-gcc.sh
+@@ -29,7 +29,7 @@ do_gcc_get() {
+             YYMM=`echo ${CT_CC_GCC_VERSION} |cut -d- -f3 |${sed} -e 's,^..,,'`
+             CT_GetFile "gcc-${CT_CC_GCC_VERSION}"                                                               \
+                        "http://launchpad.net/gcc-linaro/${linaro_series}/${linaro_version}/+download"       \
+-                       https://releases.linaro.org/${YYMM}/components/toolchain/gcc-linaro/${linaro_series} \
++                       https://releases.linaro.org/components/toolchain/gcc-linaro/${linaro_version} \
+                        http://cbuild.validation.linaro.org/snapshots
+         fi
+
