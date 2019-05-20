@@ -31,6 +31,10 @@ define REMAINCALM_PLUGINS_INSTALL_TARGET_CMDS
 	cp -rL $(@D)/floaty/source/build/floaty.lv2     $(TARGET_DIR)/usr/lib/lv2/
 	cp -rL $(@D)/mud/source/build/mud.lv2           $(TARGET_DIR)/usr/lib/lv2/
 	cp -rL $(@D)/paranoia/source/build/paranoia.lv2 $(TARGET_DIR)/usr/lib/lv2/
+	cp -rL $($(PKG)_PKGDIR)/avocado.lv2/*           $(TARGET_DIR)/usr/lib/lv2/avocado.lv2/
+	cp -rL $($(PKG)_PKGDIR)/floaty.lv2/*            $(TARGET_DIR)/usr/lib/lv2/floaty.lv2/
+	cp -rL $($(PKG)_PKGDIR)/mud.lv2/*               $(TARGET_DIR)/usr/lib/lv2/mud.lv2/
+	cp -rL $($(PKG)_PKGDIR)/paranoia.lv2/*          $(TARGET_DIR)/usr/lib/lv2/paranoia.lv2/
 endef
 
 $(eval $(generic-package))
