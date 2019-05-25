@@ -19,6 +19,10 @@ FFTW_DOUBLE_CONF_OPTS = \
 	CFLAGS="$(FFTW_COMMON_CFLAGS)" \
 	$(if $(BR2_X86_CPU_HAS_SSE2),--enable,--disable)-sse2
 
+ifdef BR2_aarch64
+FFTW_SINGLE_CONF_OPTS += --enable-neon
+endif
+
 FFTW_DOUBLE_POST_PATCH_HOOKS += FFTW_APPLY_MOD_PATCHES
 
 $(eval $(autotools-package))
