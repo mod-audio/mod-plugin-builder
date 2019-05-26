@@ -7,7 +7,7 @@
 ZYNADDSUBFX_VERSION = 67366a08a8362af15ea60f6fe39f4ad9918af08f
 ZYNADDSUBFX_SITE = git://git.code.sf.net/p/zynaddsubfx/code
 ZYNADDSUBFX_SITE_METHOD = git
-ZYNADDSUBFX_DEPENDENCIES = fftw mxml liblo zlib
+ZYNADDSUBFX_DEPENDENCIES = fftw-single fftw-double mxml liblo zlib
 ZYNADDSUBFX_BUNDLES = ZynAddSubFX.lv2 ZynAlienWah.lv2 ZynChorus.lv2 ZynDistortion.lv2 ZynDynamicFilter.lv2 ZynEcho.lv2 ZynPhaser.lv2 ZynReverb.lv2
 
 ZYNADDSUBFX_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) VERBOSE=1 -C $(@D)
