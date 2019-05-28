@@ -25,6 +25,9 @@ define ZAM_PLUGINS_BUILD_CMDS
 endef
 
 define ZAM_PLUGINS_INSTALL_TARGET_CMDS
+	# fixes broken install
+	touch $(@D)/bin/ZamPhono
+
 	$(ZAM_PLUGINS_TARGET_MAKE) install PREFIX=/usr DESTDIR=$(TARGET_DIR)
 	# TODO ZamDynamicEQ.lv2 ZamPhono.lv2
 	cp -rL $($(PKG)_PKGDIR)/ZamAutoSat.lv2/*    $(TARGET_DIR)/usr/lib/lv2/ZamAutoSat.lv2/
