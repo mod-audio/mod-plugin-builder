@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-JACK2MOD_VERSION = e94138b13797d0054985337d262abd5908d16b14
+JACK2MOD_VERSION = e7fa65faf728f5d108a6ca0e8192f1d93374e1f9
 JACK2MOD_SITE = $(call github,moddevices,jack2,$(JACK2MOD_VERSION))
 JACK2MOD_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
 JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
@@ -16,7 +16,7 @@ ifeq ($(BR2_cortex_a7),y)
 JACK2MOD_EXTRA_FLAGS = -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations
 endif
 ifeq ($(BR2_cortex_a53),y)
-JACK2MOD_EXTRA_OPTIONS = --clients=128 --ports-per-application=1024
+JACK2MOD_EXTRA_OPTIONS = --clients=128
 endif
 
 define JACK2MOD_CONFIGURE_CMDS

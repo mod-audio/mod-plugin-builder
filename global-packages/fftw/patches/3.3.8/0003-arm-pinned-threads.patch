@@ -1,12 +1,12 @@
 diff --git a/threads/threads.c b/threads/threads.c
-index 9f40363..6733b03 100644
+index 9f40363..9937f5f 100644
 --- a/threads/threads.c
 +++ b/threads/threads.c
 @@ -22,6 +22,10 @@
     function.  The first portion of this file is a set of macros to
     spawn and join threads on various systems. */
  
-+#ifdef __ARM_ARCH_7A__
++#if defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_8A)
 +#  define _GNU_SOURCE
 +#endif
 +
@@ -17,7 +17,7 @@ index 9f40363..6733b03 100644
  
  #include <pthread.h>
  
-+#ifdef __ARM_ARCH_7A__
++#if defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_8A)
 +#  include <stdio.h>
 +#  include <sched.h>
 +#endif
@@ -25,13 +25,18 @@ index 9f40363..6733b03 100644
  #ifdef HAVE_UNISTD_H
  #  include <unistd.h>
  #endif
-@@ -141,6 +150,16 @@ static void os_create_thread(FFTW_WORKER (*worker)(void *arg),
+@@ -141,6 +150,21 @@ static void os_create_thread(FFTW_WORKER (*worker)(void *arg),
       pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM); 
       pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
  
++#if defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_8A)
 +#ifdef __ARM_ARCH_7A__
++     static int cpu_count = 2;
++#else
++     static int cpu_count = 4;
++#endif
 +     static int cpu_id = 0;
-+     cpu_id = ++cpu_id % 2;
++     cpu_id = ++cpu_id % cpu_count;
 +     printf("Pinning thread to core #%i\n", cpu_id+1);
 +     cpu_set_t cpuset;
 +     CPU_ZERO(&cpuset);
@@ -43,13 +48,13 @@ index 9f40363..6733b03 100644
       pthread_attr_destroy(&attr);
  }
 diff --git a/tools/fftw-wisdom.c b/tools/fftw-wisdom.c
-index 46a1369..cf1b31e 100644
+index 46a1369..9313946 100644
 --- a/tools/fftw-wisdom.c
 +++ b/tools/fftw-wisdom.c
 @@ -1,5 +1,8 @@
  /* Re-use libbench2 and the test program, but override bench_main so that
     we can have different command-line syntax. */
-+#ifdef __ARM_ARCH_7A__
++#if defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_8A)
 +#  define _GNU_SOURCE
 +#endif
  #include "libbench2/my-getopt.h"
@@ -59,7 +64,7 @@ index 46a1369..cf1b31e 100644
  #include <string.h>
  #include <time.h>
  
-+#ifdef __ARM_ARCH_7A__
++#if defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_8A)
 +#  undef HAVE_THREADS
 +#  undef HAVE_OPENMP
 +#  include <sched.h>
@@ -72,7 +77,7 @@ index 46a1369..cf1b31e 100644
  	user requests -T */
       threads_ok = 0;
  #endif
-+#ifdef __ARM_ARCH_7A__
++#if defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_8A)
 +     printf("NOTE: Running pinned to core #1\n");
 +     cpu_set_t cpuset;
 +     CPU_ZERO(&cpuset);
