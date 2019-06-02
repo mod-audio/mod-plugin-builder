@@ -50,7 +50,7 @@ endif
 # Patch sources depending on platform
 define FFTW_APPLY_MOD_PATCHES
 	(cd $(@D) && \
-		for p in `find $(MBS_DIR)/global-packages/fftw/patches/$(FFTW_VERSION) -name "*.patch"`; \
+		for p in `find $(BR2_EXTERNAL)/global-packages/fftw/patches/$(FFTW_VERSION) -name "*.patch"`; \
 			do echo Applying `basename $$p`; \
 			patch -p1 -i $$p; \
 		done)
