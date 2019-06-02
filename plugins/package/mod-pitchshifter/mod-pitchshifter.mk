@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_PITCHSHIFTER_VERSION = d404edc4d79fb59ee77bb9e87ce51de050e70a88
+MOD_PITCHSHIFTER_VERSION = 4fabd8994c8dff40886198d9641c1b734655602d
 MOD_PITCHSHIFTER_SITE = $(call github,moddevices,mod-pitchshifter,$(MOD_PITCHSHIFTER_VERSION))
 MOD_PITCHSHIFTER_DEPENDENCIES = armadillo fftw-single host-python host-python-mpmath
 ifneq ($(BR2_arm)$(BR2_aarch64),y)
