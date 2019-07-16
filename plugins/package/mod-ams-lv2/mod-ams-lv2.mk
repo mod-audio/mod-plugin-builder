@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_AMS_LV2_VERSION = 58e7776af087612f5b937d764b4d0858e13164a2
+MOD_AMS_LV2_VERSION = 37ba786d29c470a402b94a3cae547a6de690f871
 MOD_AMS_LV2_SITE = $(call github,moddevices,ams-lv2,$(MOD_AMS_LV2_VERSION))
 MOD_AMS_LV2_DEPENDENCIES = fftw-double lvtk-1
 MOD_AMS_LV2_BUNDLES = mod-ams.lv2
