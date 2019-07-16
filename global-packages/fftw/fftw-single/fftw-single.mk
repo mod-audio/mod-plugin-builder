@@ -36,9 +36,11 @@ endif
 ifdef BR2_arm
 ifdef BR2_cortex_a7
 FFTW_SINGLE_CFLAGS += -mfpu=neon-vfpv4
+FFTW_SINGLE_CONF_OPTS += NEON_CFLAGS="-mfpu=neon-vfpv4"
 endif
 ifdef BR2_cortex_a53
 FFTW_SINGLE_CFLAGS += -mfpu=neon-fp-armv8
+FFTW_SINGLE_CONF_OPTS += NEON_CFLAGS="-mfpu=neon-fp-armv8"
 endif
 endif
 

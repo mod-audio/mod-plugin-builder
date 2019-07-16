@@ -43,10 +43,14 @@ FFTW_COMMON_CONF_OPTS += --disable-threads
 endif
 FFTW_COMMON_CONF_OPTS += $(if $(BR2_GCC_ENABLE_OPENMP),--enable,--disable)-openmp
 
+ifeq ($(BR2_cortex_a53),y)
+FFTW_COMMON_CONF_OPTS += --enable-armv8-pmccntr-el0
+endif
+
 # Patch sources depending on platform
 define FFTW_APPLY_MOD_PATCHES
 	(cd $(@D) && \
-		for p in `find $(BR2_EXTERNAL)/../global-packages/fftw/patches/$(FFTW_VERSION) -name "*.patch"`; \
+		for p in `find $(BR2_EXTERNAL)/global-packages/fftw/patches/$(FFTW_VERSION) -name "*.patch"`; \
 			do echo Applying `basename $$p`; \
 			patch -p1 -i $$p; \
 		done)

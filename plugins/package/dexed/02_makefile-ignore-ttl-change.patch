@@ -1,0 +1,11 @@
+diff --git a/src/Makefile b/src/Makefile
+index f55aa89..c1764e7 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -129,6 +129,3 @@ EngineOpl.o: Makefile EngineOpl.cpp
+ 
+ PluginFx.o: Makefile PluginFx.cpp
+ 	$(CXX) $(CXXFLAGS) -Wall -c PluginFx.cpp
+-
+-dexed_ttl.h: Dexed.ttl
+-	ttl2c Dexed.ttl dexed_ttl.h

@@ -1,0 +1,17 @@
+diff --git a/src/Dexed.ttl b/src/Dexed.ttl
+index fc3a15d..45a78a1 100644
+--- a/src/Dexed.ttl
++++ b/src/Dexed.ttl
+@@ -36,12 +36,6 @@
+     lv2:binary <dexed.so> ;
+     ll:pegName "p";
+ 
+-rdfs:comment """
+-Dexed.lv2 is a native LV2 port of the famous DX-7 emulator Dexed. It is based on the FM-synthesis and tries to emulate the original as good as possible. With external scripts you can convert original SYSEX files to use them within Dexed.
+-
+-The original engine comes from MSFA (music synthesizer for android) which is based on the Apache 2.0 license. Additional sources for Dexed were done by Pascal Gauthier (asb2m10). The port to LV2 and some smaller modification were done by Holger Wirtz and also reside under GPL license.
+-""";
+-
+     lv2:port [
+         a lv2:InputPort, atom:AtomPort ;
+         atom:bufferType atom:Sequence ;

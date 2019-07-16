@@ -28,11 +28,11 @@ index f696fdc..04f186e 100644
  } jack_timer_type_t;
  
 diff --git a/common/Jackdmp.cpp b/common/Jackdmp.cpp
-index a2ccd9c..3432340 100644
+index de3eb30..2b2b890 100644
 --- a/common/Jackdmp.cpp
 +++ b/common/Jackdmp.cpp
-@@ -203,7 +203,7 @@ static void usage(FILE* file, jackctl_server_t *server, bool full = true)
-             "               [ --internal-client OR -I internal-client-name ]\n"
+@@ -212,7 +212,7 @@ static void usage(FILE* file, jackctl_server_t *server, bool full = true)
+             "               [ --internal-session-file OR -C internal-session-file ]\n"
              "               [ --verbose OR -v ]\n"
  #ifdef __linux__
 -            "               [ --clocksource OR -c [ h(pet) | s(ystem) ]\n"
@@ -40,7 +40,7 @@ index a2ccd9c..3432340 100644
  #endif
              "               [ --autoconnect OR -a <modechar>]\n");
  
-@@ -333,11 +333,7 @@ int main(int argc, char** argv)
+@@ -357,11 +357,7 @@ int main(int argc, char** argv)
                          value.ui = JACK_TIMER_HPET;
                          jackctl_parameter_set_value(param, &value);
                      } else if (tolower (optarg[0]) == 'c') {
@@ -54,10 +54,10 @@ index a2ccd9c..3432340 100644
                      } else if (tolower (optarg[0]) == 's') {
                          value.ui = JACK_TIMER_SYSTEM_CLOCK;
 diff --git a/linux/JackLinuxTime.c b/linux/JackLinuxTime.c
-index a5ece76..5df079b 100644
+index 66449d6..3d01731 100644
 --- a/linux/JackLinuxTime.c
 +++ b/linux/JackLinuxTime.c
-@@ -122,6 +122,17 @@ static jack_time_t jack_get_microseconds_from_hpet (void)
+@@ -122,6 +122,22 @@ static jack_time_t jack_get_microseconds_from_hpet (void)
  
  #endif /* HPET_SUPPORT */
  
@@ -67,7 +67,12 @@ index a5ece76..5df079b 100644
 +        uint32_t r;
 +        asm volatile("mrc p15, 0, %0, c9, c13, 0\t\n" : "=r"(r));
 +        return (((uint64_t)r) << 6) / 912; // 912 is the hardcoded MOD Duo CPU frequency
++#elif defined(__ARM_ARCH_8A)
++        uint64_t r;
++        asm volatile("mrs %0, CNTVCT_EL0" : "=r"(r));
++        return r * 0.12;
 +#else
++        #warning Cycle counter implementation missing
 +        return 0;
 +#endif
 +}
@@ -75,7 +80,7 @@ index a5ece76..5df079b 100644
  #define HAVE_CLOCK_GETTIME 1
  
  #ifndef HAVE_CLOCK_GETTIME
-@@ -171,6 +182,10 @@ void SetClockSource(jack_timer_type_t source)
+@@ -175,6 +191,10 @@ void SetClockSource(jack_timer_type_t source)
  
  	switch (source)
  	{
@@ -86,7 +91,7 @@ index a5ece76..5df079b 100644
          case JACK_TIMER_HPET:
              if (jack_hpet_init () == 0) {
                  _jack_get_microseconds = jack_get_microseconds_from_hpet;
-@@ -189,6 +204,8 @@ void SetClockSource(jack_timer_type_t source)
+@@ -193,6 +213,8 @@ void SetClockSource(jack_timer_type_t source)
  const char* ClockSourceName(jack_timer_type_t source)
  {
  	switch (source) {
