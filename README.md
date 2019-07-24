@@ -52,6 +52,8 @@ See the 'plugins/package' folder in this repository for some examples.
 To build a plugin, run:<br/>
 ```./build <platform> <plugin-package>```
 
+Where `platform` is either modduo or modduox, and `plugin-package` is a folder inside the `plugins/package` directory.
+
 If everything goes well, you will have the final plugin bundle in `~/workdir/<platform>/plugins`.<br/>
 You can use [MOD-SDK](https://github.com/moddevices/mod-sdk)'s 'publish' tab to push those into a MOD Duo.<br/>
 Or if you feel like doing it manually, you can run something like:
