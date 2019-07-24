@@ -4,7 +4,7 @@
 # bolliedelay
 #
 ######################################
-BOLLIEDELAY_VERSION = e00d63e5011ac209de3a70bd9a83c7cbb896383a
+BOLLIEDELAY_VERSION = c42ae339855b1725d9e0c2c81900151b751af502
 BOLLIEDELAY_SITE = $(call github,MrBollie,bolliedelay.lv2,$(BOLLIEDELAY_VERSION))
 BOLLIEDELAY_BUNDLES = bolliedelay.lv2
 
