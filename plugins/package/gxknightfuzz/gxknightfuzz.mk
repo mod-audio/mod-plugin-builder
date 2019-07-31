@@ -20,6 +20,7 @@ endef
 
 define GXKNIGHTFUZZ_INSTALL_TARGET_CMDS
 	$(GXKNIGHTFUZZ_TARGET_MAKE) install DESTDIR=$(TARGET_DIR) INSTALL_DIR=/usr/lib/lv2
+	cp -rL $($(PKG)_PKGDIR)/gx_KnightFuzz.lv2/* $(TARGET_DIR)/usr/lib/lv2/gx_KnightFuzz.lv2/
 endef
 
 $(eval $(generic-package))
