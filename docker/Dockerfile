@@ -25,8 +25,8 @@ RUN apt-get update && apt-get upgrade -qy && apt-get clean
 
 # install packages for buildroot
 RUN apt-get install -qy multiarch-support:armhf qemu-user-static && \
-    apt-get install -qy libmxml1:armhf libfftw3-3:armhf liblo7:armhf zlib1g:armhf libstdc++6:armhf && \
-    apt-get install -qy libmxml1:arm64 libfftw3-3:arm64 liblo7:arm64 zlib1g:arm64 libstdc++6:arm64 && \
+    apt-get install -qy libmxml1:armhf libfftw3-3:armhf liblo7:armhf libsndfile1:armhf zlib1g:armhf libstdc++6:armhf && \
+    apt-get install -qy libmxml1:arm64 libfftw3-3:arm64 liblo7:arm64 libsndfile1:arm64 zlib1g:arm64 libstdc++6:arm64 && \
     apt-get install -qy locales acl bash bash-completion bc curl cvs git mercurial rsync subversion sudo wget dosfstools && \
     apt-get install -qy bison bundler bzip2 cpio flex gawk gperf gzip help2man nano perl patch python tar texinfo unzip python3-dev python3-setuptools && \
     apt-get install -qy automake binutils build-essential device-tree-compiler premake4 sunxi-tools libtool-bin ncurses-dev libc6:i386 libstdc++6:i386 zlib1g:i386 jq && \
