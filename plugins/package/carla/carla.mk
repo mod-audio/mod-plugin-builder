@@ -1,10 +1,10 @@
 ######################################
 #
-# abgate
+# carla
 #
 ######################################
 
-CARLA_VERSION = 5ecbedbcc1a25b15d9fc03fba5c5ed448028840e
+CARLA_VERSION = 8385b5ee418357e2dc907518ac39c20beb3b28ed
 CARLA_SITE = $(call github,falkTX,Carla,$(CARLA_VERSION))
 CARLA_DEPENDENCIES = libsndfile
 # FIXME ffmpeg fluidsynth as dependencies, plus liblo eventually
