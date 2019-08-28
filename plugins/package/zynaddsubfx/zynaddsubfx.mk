@@ -36,7 +36,6 @@ define ZYNADDSUBFX_POST_INSTALL_TARGET_MODGUIS
 	cp -rL $($(PKG)_PKGDIR)/ZynAddSubFX.lv2/modgui $(TARGET_DIR)/usr/lib/lv2/ZynAddSubFX.lv2/
 endef
 
-# do not install modguis for now, need to adjust
 ZYNADDSUBFX_POST_INSTALL_TARGET_HOOKS += ZYNADDSUBFX_POST_INSTALL_TARGET_MODGUIS
 
 $(eval $(cmake-package))
