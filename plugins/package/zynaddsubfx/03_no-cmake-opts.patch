@@ -1,8 +1,8 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 1dfcf69..63464e6 100644
+index 54afa474..80ab4374 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -254,23 +254,7 @@ else (BuildForDebug)
+@@ -321,23 +321,7 @@ else (BuildForDebug)
  	set (CMAKE_BUILD_TYPE "Release")
  	
  	set (CMAKE_CXX_FLAGS_RELEASE ${BuildOptionsBasic})

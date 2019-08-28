@@ -1,8 +1,8 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index e9517e5..6339a1c 100644
+index 08d9eea0..54afa474 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -50,10 +50,6 @@ check_cxx_compiler_flag("-mfpu=neon -Werror" SUPPORT_NEON)
+@@ -63,10 +63,6 @@ check_cxx_compiler_flag("-mfpu=neon -Werror" SUPPORT_NEON)
  set(CMAKE_REQUIRED_FLAGS "")
  
  
@@ -13,7 +13,7 @@ index e9517e5..6339a1c 100644
  ######### Settings ###########
  # NOTE: These cache variables should normally not be changed in this
  # file, but either in in CMakeCache.txt before compile, or by passing
-@@ -239,10 +235,6 @@ add_definitions(
+@@ -316,10 +312,6 @@ if(COMPILER_SUPPORTS_SYSTEM_HDR_PREFIX)
      add_definitions(--system-header-prefix="FL/")
  endif()
  

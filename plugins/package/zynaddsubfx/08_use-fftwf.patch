@@ -1,5 +1,5 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index 6561ad3..2e9a735 100644
+index 80ab4374..1fd9e2b8 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -30,7 +30,7 @@ if(PKG_CONFIG_FOUND AND NOT (${CMAKE_SYSTEM_NAME} STREQUAL "Windows"))
@@ -20,16 +20,16 @@ index 6561ad3..2e9a735 100644
      find_package(MXML REQUIRED)
      find_package(LIBLO REQUIRED)
      find_package(PORTAUDIO)
-@@ -402,7 +402,7 @@ endif()
- configure_file(${CMAKE_CURRENT_SOURCE_DIR}/zyn-version.h.in
-     ${CMAKE_CURRENT_BINARY_DIR}/zyn-version.h)
+@@ -426,7 +426,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/zyn-version.h.in
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/zyn-config.h.in
+     ${CMAKE_CURRENT_BINARY_DIR}/zyn-config.h)
  
 -link_directories(${AUDIO_LIBRARY_DIRS} ${ZLIB_LIBRARY_DIRS} ${FFTW_LIBRARY_DIRS} ${MXML_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS})
 +link_directories(${AUDIO_LIBRARY_DIRS} ${ZLIB_LIBRARY_DIRS} ${FFTWF_LIBRARY_DIRS} ${MXML_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS} ${NTK_LIBRARY_DIRS})
  
  include_directories(
  	${CMAKE_CURRENT_SOURCE_DIR}
-@@ -455,7 +455,7 @@ endif()
+@@ -481,7 +481,7 @@ endif()
  
  target_link_libraries(zynaddsubfx_core
  	${ZLIB_LIBRARIES}
@@ -38,7 +38,7 @@ index 6561ad3..2e9a735 100644
  	${MXML_LIBRARIES}
  	${OS_LIBRARIES}
      ${PTHREAD_LIBRARY}
-@@ -532,7 +532,7 @@ endmacro()
+@@ -571,7 +571,7 @@ endmacro()
  package_status(PKG_CONFIG_FOUND "PkgConfig" "found"   ${Red})
  package_status(ZLIB_FOUND       "zlib     " "found"   ${Red})
  package_status(MXML_FOUND       "mxml     " "found"   ${Red})
@@ -47,25 +47,23 @@ index 6561ad3..2e9a735 100644
  package_status(LIBLO_FOUND      "liblo    " "found"   ${Red})
  package_status(X11_FOUND        "x11      " "found"   ${Yellow})
  package_status(X11_Xpm_FOUND    "xpm      " "found"   ${Yellow})
-@@ -557,4 +557,4 @@ package_status(PaEnable         "PA       " "enabled" ${Yellow})
+@@ -596,4 +596,4 @@ package_status(PaEnable         "PA       " "enabled" ${Yellow})
  package_status(HAVE_ASYNC       "c++ async" "usable"  ${Yellow})
  
  
 -message(STATUS "Link libraries: ${ZLIB_LIBRARY} ${FFTW_LIBRARY} ${MXML_LIBRARIES} ${AUDIO_LIBRARIES} ${OS_LIBRARIES}")
 +message(STATUS "Link libraries: ${ZLIB_LIBRARY} ${FFTWF_LIBRARY} ${MXML_LIBRARIES} ${AUDIO_LIBRARIES} ${OS_LIBRARIES}")
 diff --git a/src/DSP/FFTwrapper.cpp b/src/DSP/FFTwrapper.cpp
-index 5e7edcc..ec369c3 100644
+index 227b879a..7e17ee1f 100644
 --- a/src/DSP/FFTwrapper.cpp
 +++ b/src/DSP/FFTwrapper.cpp
-@@ -20,23 +20,23 @@
+@@ -22,23 +22,23 @@ namespace zyn {
  FFTwrapper::FFTwrapper(int fftsize_)
  {
      fftsize  = fftsize_;
 -    time     = new fftw_real[fftsize];
 -    fft      = new fftw_complex[fftsize + 1];
-+    time     = new fftwf_real[fftsize];
-+    fft      = new fftwf_complex[fftsize + 1];
- 
+-
 -    planfftw = fftw_plan_dft_r2c_1d(fftsize,
 -                                    time,
 -                                    fft,
@@ -74,6 +72,9 @@ index 5e7edcc..ec369c3 100644
 -                                        fft,
 -                                        time,
 -                                        FFTW_ESTIMATE);
++    time     = new fftwf_real[fftsize];
++    fft      = new fftwf_complex[fftsize + 1];
++
 +    planfftw = fftwf_plan_dft_r2c_1d(fftsize,
 +                                     time,
 +                                     fft,
@@ -93,7 +94,7 @@ index 5e7edcc..ec369c3 100644
  
      delete [] time;
      delete [] fft;
-@@ -46,26 +46,26 @@ void FFTwrapper::smps2freqs(const float *smps, fft_t *freqs)
+@@ -48,26 +48,26 @@ void FFTwrapper::smps2freqs(const float *smps, fft_t *freqs)
  {
      //Load data
      for(int i = 0; i < fftsize; ++i)
@@ -125,18 +126,20 @@ index 5e7edcc..ec369c3 100644
  
      //Grab data
      for(int i = 0; i < fftsize; ++i)
-@@ -74,5 +74,5 @@ void FFTwrapper::freqs2smps(const fft_t *freqs, float *smps)
+@@ -76,7 +76,7 @@ void FFTwrapper::freqs2smps(const fft_t *freqs, float *smps)
  
  void FFT_cleanup()
  {
 -    fftw_cleanup();
 +    fftwf_cleanup();
  }
+ 
+ }
 diff --git a/src/DSP/FFTwrapper.h b/src/DSP/FFTwrapper.h
-index 418bfb8..53df987 100644
+index 6a31cb41..09255c8c 100644
 --- a/src/DSP/FFTwrapper.h
 +++ b/src/DSP/FFTwrapper.h
-@@ -33,9 +33,9 @@ class FFTwrapper
+@@ -35,9 +35,9 @@ class FFTwrapper
          void freqs2smps(const fft_t *freqs, float *smps);
      private:
          int fftsize;
@@ -150,10 +153,10 @@ index 418bfb8..53df987 100644
  
  /*
 diff --git a/src/Effects/EQ.cpp b/src/Effects/EQ.cpp
-index 96bf13a..a32e281 100644
+index b260e25d..a8071fa5 100644
 --- a/src/Effects/EQ.cpp
 +++ b/src/Effects/EQ.cpp
-@@ -285,8 +285,8 @@ void EQ::getFilter(float *a, float *b) const
+@@ -287,8 +287,8 @@ void EQ::getFilter(float *a, float *b) const
          auto &F = filter[i];
          if(F.Ptype == 0)
              continue;
@@ -165,10 +168,10 @@ index 96bf13a..a32e281 100644
          for(int j=0; j<F.Pstages+1; ++j) {
              for(int k=0; k<3; ++k) {
 diff --git a/src/Misc/Time.h b/src/Misc/Time.h
-index fc22842..9a05bcf 100644
+index 09bc3a5c..4d2b84a2 100644
 --- a/src/Misc/Time.h
 +++ b/src/Misc/Time.h
-@@ -38,7 +38,7 @@ class RelTime
+@@ -40,7 +40,7 @@ class RelTime
              :t(t_)
          {
              //Calculate time of event
@@ -178,10 +181,10 @@ index fc22842..9a05bcf 100644
              frame = t.time() + tmp;
              sample = t.samplesPerFrame()*(deltaFrames-tmp);
 diff --git a/src/Synth/OscilGen.cpp b/src/Synth/OscilGen.cpp
-index b718e71..7a4b3f5 100644
+index 5b8aacd8..57872377 100644
 --- a/src/Synth/OscilGen.cpp
 +++ b/src/Synth/OscilGen.cpp
-@@ -749,7 +749,7 @@ void OscilGen::spectrumadjust(fft_t *freqs)
+@@ -770,7 +770,7 @@ void OscilGen::spectrumadjust(fft_t *freqs)
                      mag = 1.0f;
                  break;
          }
@@ -190,7 +193,7 @@ index b718e71..7a4b3f5 100644
      }
  }
  
-@@ -850,7 +850,7 @@ void OscilGen::prepare(fft_t *freqs)
+@@ -871,7 +871,7 @@ void OscilGen::prepare(fft_t *freqs)
                  int k = i * (j + 1);
                  if(k >= synth.oscilsize / 2)
                      break;
@@ -199,7 +202,7 @@ index b718e71..7a4b3f5 100644
                      hmag[j],
                      hphase[j] * k);
              }
-@@ -943,7 +943,7 @@ void OscilGen::adaptiveharmonicpostprocess(fft_t *f, int size)
+@@ -964,7 +964,7 @@ void OscilGen::adaptiveharmonicpostprocess(fft_t *f, int size)
      par = 1.0f - powf((1.0f - par), 1.5f);
  
      for(int i = 0; i < size; ++i) {
@@ -208,7 +211,7 @@ index b718e71..7a4b3f5 100644
          f[i]  *= (1.0f - par);
      }
  
-@@ -1064,7 +1064,7 @@ short int OscilGen::get(float *smps, float freqHz, int resonance)
+@@ -1088,7 +1088,7 @@ short int OscilGen::get(float *smps, float freqHz, int resonance)
          const float rnd = PI * powf((Prand - 64.0f) / 64.0f, 2.0f);
          for(int i = 1; i < nyquist - 1; ++i) //to Nyquist only for AntiAliasing
              outoscilFFTfreqs[i] *=
@@ -218,25 +221,25 @@ index b718e71..7a4b3f5 100644
  
      //Harmonic Amplitude Randomness
 diff --git a/src/Tests/CMakeLists.txt b/src/Tests/CMakeLists.txt
-index ccba326..722a0b8 100644
+index 4ad807fd..f25d4291 100644
 --- a/src/Tests/CMakeLists.txt
 +++ b/src/Tests/CMakeLists.txt
-@@ -29,7 +29,7 @@ CXXTEST_ADD_TEST(MemoryStressTest MemoryStressTest.cpp
+@@ -34,7 +34,7 @@ CXXTEST_ADD_TEST(MemoryStressTest MemoryStressTest.cpp
  
  #Extra libraries added to make test and full compilation use the same library
  #links for quirky compilers
--set(test_lib zynaddsubfx_core ${GUI_LIBRARIES} ${ZLIB_LIBRARY} ${FFTW_LIBRARIES} ${MXML_LIBRARIES} pthread)
-+set(test_lib zynaddsubfx_core ${GUI_LIBRARIES} ${ZLIB_LIBRARY} ${FFTWF_LIBRARIES} ${MXML_LIBRARIES} pthread)
+-set(test_lib zynaddsubfx_core ${GUI_LIBRARIES} ${ZLIB_LIBRARY} ${FFTW_LIBRARIES}
++set(test_lib zynaddsubfx_core ${GUI_LIBRARIES} ${ZLIB_LIBRARY} ${FFTWF_LIBRARIES}
+     ${MXML_LIBRARIES} pthread "-Wl,--no-as-needed -lpthread")
  
  message(STATUS "Linking tests with: ${test_lib}")
- target_link_libraries(ADnoteTest     ${test_lib})
 diff --git a/src/globals.h b/src/globals.h
-index 71a8c14..852fa1b 100644
+index ef3ca304..01918fa1 100644
 --- a/src/globals.h
 +++ b/src/globals.h
-@@ -68,8 +68,8 @@ namespace std {
- };
- #endif
+@@ -71,8 +71,8 @@ class  SVFilter;
+ class  FormantFilter;
+ class  ModFilter;
  
 -typedef double fftw_real;
 -typedef std::complex<fftw_real> fft_t;

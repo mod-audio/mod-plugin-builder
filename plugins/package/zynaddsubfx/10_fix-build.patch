@@ -1,0 +1,14 @@
+diff --git a/src/Misc/BankDb.cpp b/src/Misc/BankDb.cpp
+index e8c776e5..3092bdcf 100644
+--- a/src/Misc/BankDb.cpp
++++ b/src/Misc/BankDb.cpp
+@@ -221,7 +221,9 @@ void BankDb::scanBanks(void)
+         closedir(dir);
+ 
+     }
++#ifndef __MOD_DEVICES__
+     saveCache(ncache);
++#endif
+ }
+ 
+ BankEntry BankDb::processXiz(std::string filename,

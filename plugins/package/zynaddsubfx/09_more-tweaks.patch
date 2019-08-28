@@ -1,27 +1,17 @@
 diff --git a/src/globals.h b/src/globals.h
-index 852fa1b..1d1d6c4 100644
+index 01918fa1..13fb407b 100644
 --- a/src/globals.h
 +++ b/src/globals.h
-@@ -162,14 +162,14 @@ typedef std::complex<fftwf_real> fft_t;
+@@ -165,7 +165,7 @@ typedef std::complex<fftwf_real> fft_t;
  /*
   * Maximum filter stages
   */
 -#define MAX_FILTER_STAGES 5
-+#define MAX_FILTER_STAGES 2
++#define MAX_FILTER_STAGES 5 // FIXME ensure remote UI can work when changing this
  
  /*
   * Formant filter (FF) limits
-  */
--#define FF_MAX_VOWELS 6
--#define FF_MAX_FORMANTS 12
--#define FF_MAX_SEQUENCE 8
-+#define FF_MAX_VOWELS 3
-+#define FF_MAX_FORMANTS 6
-+#define FF_MAX_SEQUENCE 4
- 
- #define MAX_PRESETTYPE_SIZE 30
- 
-@@ -291,7 +291,7 @@ public:
+@@ -294,7 +294,7 @@ public:
  struct SYNTH_T {
  
      SYNTH_T(void)
