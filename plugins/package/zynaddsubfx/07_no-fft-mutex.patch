@@ -1,10 +1,10 @@
 diff --git a/src/DSP/FFTwrapper.cpp b/src/DSP/FFTwrapper.cpp
-index 062c09f..5e7edcc 100644
+index d946fec0..227b879a 100644
 --- a/src/DSP/FFTwrapper.cpp
 +++ b/src/DSP/FFTwrapper.cpp
-@@ -17,21 +17,12 @@
- #include <pthread.h>
- #include "FFTwrapper.h"
+@@ -19,21 +19,12 @@
+ 
+ namespace zyn {
  
 -static pthread_mutex_t *mutex = NULL;
 -
@@ -25,7 +25,7 @@ index 062c09f..5e7edcc 100644
      planfftw = fftw_plan_dft_r2c_1d(fftsize,
                                      time,
                                      fft,
-@@ -40,15 +31,12 @@ FFTwrapper::FFTwrapper(int fftsize_)
+@@ -42,15 +33,12 @@ FFTwrapper::FFTwrapper(int fftsize_)
                                          fft,
                                          time,
                                          FFTW_ESTIMATE);
@@ -41,11 +41,13 @@ index 062c09f..5e7edcc 100644
  
      delete [] time;
      delete [] fft;
-@@ -87,7 +75,4 @@ void FFTwrapper::freqs2smps(const fft_t *freqs, float *smps)
+@@ -89,9 +77,6 @@ void FFTwrapper::freqs2smps(const fft_t *freqs, float *smps)
  void FFT_cleanup()
  {
      fftw_cleanup();
 -    pthread_mutex_destroy(mutex);
 -    delete mutex;
 -    mutex = NULL;
+ }
+ 
  }

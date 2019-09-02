@@ -1,38 +1,38 @@
 diff --git a/src/globals.h b/src/globals.h
-index cf8f639..f8a294b 100644
+index 34cea3ae..ef3ca304 100644
 --- a/src/globals.h
 +++ b/src/globals.h
-@@ -77,25 +77,25 @@ typedef std::complex<fftw_real> fft_t;
+@@ -78,25 +78,25 @@ typedef std::complex<fftw_real> fft_t;
   * The number of harmonics of additive synth
   * This must be smaller than OSCIL_SIZE/2
   */
 -#define MAX_AD_HARMONICS 128
-+#define MAX_AD_HARMONICS 8
++#define MAX_AD_HARMONICS 16
  
  
  /**
   * The number of harmonics of substractive
   */
 -#define MAX_SUB_HARMONICS 64
-+#define MAX_SUB_HARMONICS 4
++#define MAX_SUB_HARMONICS 8
  
  
  /*
   * The maximum number of samples that are used for 1 PADsynth instrument(or item)
   */
 -#define PAD_MAX_SAMPLES 64
-+#define PAD_MAX_SAMPLES 4
++#define PAD_MAX_SAMPLES 8
  
  
  /*
   * Number of parts
   */
 -#define NUM_MIDI_PARTS 16
-+#define NUM_MIDI_PARTS 1
++#define NUM_MIDI_PARTS 16 // FIXME ensure remote UI can work with 1 single part
  
  /*
   * Number of Midi channes
-@@ -110,7 +110,7 @@ typedef std::complex<fftw_real> fft_t;
+@@ -111,7 +111,7 @@ typedef std::complex<fftw_real> fft_t;
  /*
   * The polyphony (notes)
   */

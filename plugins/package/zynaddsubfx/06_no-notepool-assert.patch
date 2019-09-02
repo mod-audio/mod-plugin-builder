@@ -1,8 +1,8 @@
 diff --git a/src/Containers/NotePool.cpp b/src/Containers/NotePool.cpp
-index 2f6c351..9c17c37 100644
+index d67d9141..74408fb5 100644
 --- a/src/Containers/NotePool.cpp
 +++ b/src/Containers/NotePool.cpp
-@@ -153,7 +153,7 @@ void NotePool::insertNote(uint8_t note, uint8_t sendto, SynthDescriptor desc, bo
+@@ -155,7 +155,7 @@ void NotePool::insertNote(note_t note, uint8_t sendto, SynthDescriptor desc, boo
  {
      //Get first free note descriptor
      int desc_id = getMergeableDescriptor(note, sendto, legato, ndesc);
