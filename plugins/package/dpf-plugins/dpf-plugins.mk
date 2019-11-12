@@ -4,11 +4,11 @@
 #
 ######################################
 
-DPF_PLUGINS_VERSION = ad74a88c36664135546cdc5e770d5ac9bfd46110
+DPF_PLUGINS_VERSION = 5ae3d53964a448fe489490bf66dfe67515809376
 DPF_PLUGINS_SITE = $(call github,DISTRHO,DPF-Plugins,$(DPF_PLUGINS_VERSION))
 DPF_PLUGINS_BUNDLES = 3BandEQ.lv2 3BandSplitter.lv2 AmplitudeImposer.lv2 CycleShifter.lv2 Kars.lv2 MaBitcrush.lv2 MaFreeverb.lv2 MaGigaverb.lv2 MaPitchshift.lv2 MVerb.lv2 Nekobi.lv2 PingPongPan.lv2 SoulForce.lv2
 
-DPF_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
+DPF_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true HAVE_CAIRO=false HAVE_GL=false -C $(@D)
 
 define DPF_PLUGINS_BUILD_CMDS
 	$(DPF_PLUGINS_TARGET_MAKE)
