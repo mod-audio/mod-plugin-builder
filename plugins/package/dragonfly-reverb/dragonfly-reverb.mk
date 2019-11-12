@@ -4,7 +4,7 @@
 #
 ######################################
 
-DRAGONFLY_REVERB_VERSION = 67d942d8bf24c507fea7c83e5dda8b3f17b064c0
+DRAGONFLY_REVERB_VERSION = 7543bda6333fffa43a2ed059c313b17b35abebbd
 DRAGONFLY_REVERB_SITE = https://github.com/michaelwillis/dragonfly-reverb.git
 DRAGONFLY_REVERB_SITE_METHOD = git
 DRAGONFLY_REVERB_BUNDLES = DragonflyHallReverb.lv2 DragonflyRoomReverb.lv2
@@ -20,7 +20,7 @@ define DRAGONFLY_REVERB_EXTRACT_CMDS
 		git submodule update)
 	# FIXME: remove next 2 lines when upstream updates its dpf version
 	(cd $(@D)/dpf && \
-		git reset --hard 196977645eb0ffc1928369538b1c262e7c267316)
+		git reset --hard a40eafdf187d6cba5ec68a2d1a3b4ced44b22361)
 	touch $(@D)/.stamp_downloaded
 endef
 
