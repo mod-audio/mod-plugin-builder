@@ -1,0 +1,133 @@
+diff --git a/deteriorate.lv2/downsampler_mono.ttl b/deteriorate.lv2/downsampler_mono.ttl
+index 0ff59dc..a630e51 100644
+--- a/deteriorate.lv2/downsampler_mono.ttl
++++ b/deteriorate.lv2/downsampler_mono.ttl
+@@ -7,17 +7,12 @@
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ 
+-<http://github.com/blablack/deteriorate-lv2/downsampler_mono/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <downsampler_mono_gui.so> .
+-
+ <http://github.com/blablack/deteriorate-lv2/downsampler_mono>
+ 	a lv2:Plugin, lv2:FilterPlugin ;
+ 	lv2:project <http://github.com/blablack/deteriorate-lv2/> ;
+ 	doap:name "Downsampler - Mono" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/deteriorate-lv2/downsampler_mono/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/deteriorate.lv2/downsampler_stereo.ttl b/deteriorate.lv2/downsampler_stereo.ttl
+index 3789619..a88c892 100644
+--- a/deteriorate.lv2/downsampler_stereo.ttl
++++ b/deteriorate.lv2/downsampler_stereo.ttl
+@@ -7,17 +7,12 @@
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ 
+-<http://github.com/blablack/deteriorate-lv2/downsampler_stereo/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <downsampler_stereo_gui.so> .
+-
+ <http://github.com/blablack/deteriorate-lv2/downsampler_stereo>
+ 	a lv2:Plugin, lv2:FilterPlugin ;
+ 	lv2:project <http://github.com/blablack/deteriorate-lv2/> ;
+ 	doap:name "Downsampler - Stereo" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/deteriorate-lv2/downsampler_stereo/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+diff --git a/deteriorate.lv2/granulator_mono.ttl b/deteriorate.lv2/granulator_mono.ttl
+index 19740ef..c3c1a6c 100644
+--- a/deteriorate.lv2/granulator_mono.ttl
++++ b/deteriorate.lv2/granulator_mono.ttl
+@@ -7,17 +7,12 @@
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ 
+-<http://github.com/blablack/deteriorate-lv2/granulator_mono/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <granulator_mono_gui.so> .
+-
+ <http://github.com/blablack/deteriorate-lv2/granulator_mono>
+ 	a lv2:Plugin, lv2:FilterPlugin ;
+ 	lv2:project <http://github.com/blablack/deteriorate-lv2/> ;
+ 	doap:name "Granulator - Mono" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/deteriorate-lv2/granulator_mono/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/deteriorate.lv2/granulator_stereo.ttl b/deteriorate.lv2/granulator_stereo.ttl
+index 9d67292..c052142 100644
+--- a/deteriorate.lv2/granulator_stereo.ttl
++++ b/deteriorate.lv2/granulator_stereo.ttl
+@@ -7,17 +7,12 @@
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ 
+-<http://github.com/blablack/deteriorate-lv2/granulator_stereo/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <granulator_stereo_gui.so> .
+-
+ <http://github.com/blablack/deteriorate-lv2/granulator_stereo>
+ 	a lv2:Plugin, lv2:FilterPlugin ;
+ 	lv2:project <http://github.com/blablack/deteriorate-lv2/> ;
+ 	doap:name "Granulator - Stereo" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/deteriorate-lv2/granulator_stereo/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/wscript b/wscript
+index 26781ad..c5f0440 100644
+--- a/wscript
++++ b/wscript
+@@ -27,13 +27,8 @@ def configure(conf):
+     conf.load('compiler_cxx')
+     conf.load('lv2')
+ 
+-    autowaf.check_pkg(conf, 'gtkmm-2.4',  uselib_store='GTKMM',atleast_version='2.24.0')
+-    autowaf.check_pkg(conf, 'gtk+-2.0', uselib_store='GTK2', atleast_version='2.24.0')
+-    autowaf.check_pkg(conf, 'cairo', uselib_store='CAIRO', atleast_version='1.0.0')
+     autowaf.check_pkg(conf, 'lv2', uselib_store='LV2', atleast_version='1.2.0')
+     autowaf.check_pkg(conf, 'lvtk-plugin-1', uselib_store='LVTK_PLUGIN', atleast_version='1.2.0')
+-    autowaf.check_pkg(conf, 'lvtk-ui-1', uselib_store='LVTK_UI', atleast_version='1.2.0')
+-    autowaf.check_pkg(conf, 'lvtk-gtkui-1', uselib_store='LVTK_GTKGUI', atleast_version='1.2.0')
+ 
+     check = 'Extended Initializer Lists'
+     conf.check_cxx(msg         = check,
+@@ -142,26 +137,3 @@ def build(bld):
+                       '-DPLUGIN_HEADER="src/%s.hpp"' % i],
+                      ['LV2', 'LVTK_PLUGIN'],
+                      ['src/envgen.cpp'])
+-
+-
+-
+-
+-    plugins_gui = '''
+-    downsampler_mono_gui
+-    downsampler_stereo_gui
+-    granulator_mono_gui
+-    granulator_stereo_gui
+-    '''.split()
+-
+-    for i in plugins_gui:
+-       build_plugin_gui(bld, 'deteriorate.lv2', i, ['src/%s.cpp' % i],
+-                        ['-DPLUGIN_CLASS=%s' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/deteriorate-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="%s"' % i,
+-                         '-DPLUGIN_HEADER="src/%s.hpp"' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp'])
+-
+-
+-
