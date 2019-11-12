@@ -12,8 +12,4 @@ SYNTHV1_AUTORECONF = YES
 
 SYNTHV1_CONF_OPTS=--disable-jack --disable-lv2-ui-x11 --disable-lv2-ui-external
 
-# define SYNTHV1_CONFIGURE_TARGET_CMDS_EXTRA
-# 	rm -f $(@D)/src/synthv1.lv2/synthv1_ui.ttl
-# endef
-
 $(eval $(autotools-package))
