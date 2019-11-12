@@ -1,0 +1,26 @@
+diff --git a/plugins/rezonateur-stereo/Makefile b/plugins/rezonateur-stereo/Makefile
+index 3dc8f2d..e220d70 100644
+--- a/plugins/rezonateur-stereo/Makefile
++++ b/plugins/rezonateur-stereo/Makefile
+@@ -51,7 +51,7 @@ ifeq ($(HAVE_JACK),true)
+ TARGETS += jack
+ endif
+ 
+-TARGETS += lv2
++TARGETS += lv2_dsp
+ TARGETS += vst
+ 
+ all: $(TARGETS)
+diff --git a/plugins/rezonateur/Makefile b/plugins/rezonateur/Makefile
+index e19c76e..c7782e5 100644
+--- a/plugins/rezonateur/Makefile
++++ b/plugins/rezonateur/Makefile
+@@ -51,7 +51,7 @@ ifeq ($(HAVE_JACK),true)
+ TARGETS += jack
+ endif
+ 
+-TARGETS += lv2
++TARGETS += lv2_dsp
+ TARGETS += vst
+ 
+ all: $(TARGETS)

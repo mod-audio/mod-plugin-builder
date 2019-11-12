@@ -1,0 +1,102 @@
+diff --git a/Makefile.in b/Makefile.in
+index afe20ff..e29c14b 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -115,7 +115,7 @@ export LUPDATE = @ac_lupdate@
+ export LRELEASE = @ac_lrelease@
+ 
+ 
+-all:	core ui @ac_all_targets@
++all:	core @ac_all_targets@
+ 
+ core:	$(name).mak $(sources) $(headers)
+ 	@$(MAKE) -f $(name).mak
+@@ -123,7 +123,7 @@ core:	$(name).mak $(sources) $(headers)
+ ui:	$(name_ui).mak $(sources_ui) $(headers_ui) $(resources) ${forms}
+ 	@$(MAKE) -f $(name_ui).mak
+ 
+-lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) ui core
++lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) core
+ 	@$(MAKE) -f $(name_lv2).mak
+ 
+ jack:	$(name_jack).mak $(sources_jack) $(headers_jack) ui core
+@@ -190,7 +190,7 @@ clean_jack:	$(name_jack).mak
+ 	@rm -f $(name_jack).mak
+ 
+ 
+-install:	install_core install_ui @ac_install_targets@
++install:	install_core @ac_install_targets@
+ 
+ uninstall:	uninstall_core uninstall_ui @ac_uninstall_targets@
+ 
+diff --git a/configure.ac b/configure.ac
+index 7cc09dc..f40a2a7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3,7 +3,7 @@ AC_INIT(padthv1, 0.9.11, rncbc@rncbc.org)
+ 
+ AC_CONFIG_SRCDIR(src/padthv1.cpp)
+ AC_CONFIG_HEADERS(src/config.h)
+-AC_CONFIG_FILES(Makefile padthv1.spec src/src_core.pri src/src_ui.pri src/src_jack.pri src/src_lv2.pri)
++AC_CONFIG_FILES(Makefile padthv1.spec src/src_core.pri src/src_jack.pri src/src_lv2.pri)
+ 
+ # Build version string.
+ AC_CACHE_VAL([ac_cv_build_version], [
+diff --git a/src/src_lv2.pro b/src/src_lv2.pro
+index e09a7f4..5cd6d74 100644
+--- a/src/src_lv2.pro
++++ b/src/src_lv2.pro
+@@ -6,27 +6,22 @@ TARGET = $${NAME}_lv2
+ TEMPLATE = lib
+ CONFIG += shared plugin
+ 
+-unix { LIBS += -L. -l$${NAME} -l$${NAME}_ui }
++unix { LIBS += -L. -l$${NAME} }
+ 
+ include(src_lv2.pri)
+ 
+ HEADERS = \
+ 	config.h \
+-	padthv1_lv2.h \
+-	padthv1_lv2ui.h \
+-	padthv1widget_lv2.h
++	padthv1_lv2.h
+ 
+ SOURCES = \
+-	padthv1_lv2.cpp \
+-	padthv1_lv2ui.cpp \
+-	padthv1widget_lv2.cpp
++	padthv1_lv2.cpp
+ 
+ 
+ unix {
+ 
+ 	OBJECTS_DIR = .obj_lv2
+ 	MOC_DIR     = .moc_lv2
+-	UI_DIR      = .ui_lv2
+ 
+ 	isEmpty(PREFIX) {
+ 		PREFIX = /usr/local
+@@ -53,14 +48,11 @@ unix {
+ 		system(touch $${TARGET_LV2}.so)
+ 	}
+ 
+-	TARGET_LV2UI = $${NAME}.lv2/$${NAME}_ui
+-
+ 	INSTALLS += target
+ 
+ 	target.path  = $${LV2DIR}/$${NAME}.lv2
+ 	target.files = $${TARGET_LV2}.so \
+ 		$${TARGET_LV2}.ttl \
+-		$${TARGET_LV2UI}.ttl \
+ 		$${NAME}.lv2/manifest.ttl
+ 
+ 	Release:QMAKE_POST_LINK += strip $(TARGET);
+@@ -69,5 +61,6 @@ unix {
+ 	QMAKE_CLEAN += $${TARGET_LV2}.so
+ }
+ 
+-QT += widgets xml
++QT -= gui
++QT += xml
+ 
