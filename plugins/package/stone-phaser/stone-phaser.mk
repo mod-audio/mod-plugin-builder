@@ -4,7 +4,7 @@
 #
 ######################################
 
-STONE_PHASER_VERSION = da7157e6026f779ac4ae7cf3fb4df2a83ea2fc35
+STONE_PHASER_VERSION = 8ae2fc7544259525027ee4496e7fa0c7527f71e7
 STONE_PHASER_SITE = https://github.com/jpcima/stone-phaser.git
 STONE_PHASER_SITE_METHOD = git
 STONE_PHASER_BUNDLES = stone-phaser.lv2 stone-phaser-stereo.lv2
