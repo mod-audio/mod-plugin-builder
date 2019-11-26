@@ -1,0 +1,133 @@
+diff --git a/beatslash.lv2/beatrepeater_mono.ttl b/beatslash.lv2/beatrepeater_mono.ttl
+index c078f5f..26dc5db 100644
+--- a/beatslash.lv2/beatrepeater_mono.ttl
++++ b/beatslash.lv2/beatrepeater_mono.ttl
+@@ -11,17 +11,12 @@
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ 
+-<http://github.com/blablack/beatslash-lv2/beatrepeater_mono/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <beatrepeater_mono_gui.so> .
+-
+ <http://github.com/blablack/beatslash-lv2/beatrepeater_mono>
+ 	a lv2:Plugin ;
+ 	lv2:project <http://github.com/blablack/beatslash-lv2/> ;
+ 	doap:name "Beat Repeater - Mono" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/beatslash-lv2/beatrepeater_mono/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port  [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/beatslash.lv2/beatrepeater_stereo.ttl b/beatslash.lv2/beatrepeater_stereo.ttl
+index 89b7d49..8ae4228 100644
+--- a/beatslash.lv2/beatrepeater_stereo.ttl
++++ b/beatslash.lv2/beatrepeater_stereo.ttl
+@@ -11,17 +11,12 @@
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ 
+-<http://github.com/blablack/beatslash-lv2/beatrepeater_stereo/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <beatrepeater_stereo_gui.so> .
+-
+ <http://github.com/blablack/beatslash-lv2/beatrepeater_stereo>
+ 	a lv2:Plugin ;
+ 	lv2:project <http://github.com/blablack/beatslash-lv2/> ;
+ 	doap:name "Beat Repeater - Stereo" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/beatslash-lv2/beatrepeater_stereo/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port  [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/beatslash.lv2/beatslicer_mono.ttl b/beatslash.lv2/beatslicer_mono.ttl
+index bbb812f..30c1b38 100644
+--- a/beatslash.lv2/beatslicer_mono.ttl
++++ b/beatslash.lv2/beatslicer_mono.ttl
+@@ -11,17 +11,12 @@
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ 
+-<http://github.com/blablack/beatslash-lv2/beatslicer_mono/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <beatslicer_mono_gui.so> .
+-
+ <http://github.com/blablack/beatslash-lv2/beatslicer_mono>
+ 	a lv2:Plugin ;
+ 	lv2:project <http://github.com/blablack/beatslash-lv2/> ;
+ 	doap:name "Beat Slicer - Mono" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/beatslash-lv2/beatslicer_mono/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port  [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/beatslash.lv2/beatslicer_stereo.ttl b/beatslash.lv2/beatslicer_stereo.ttl
+index 888d641..909876e 100644
+--- a/beatslash.lv2/beatslicer_stereo.ttl
++++ b/beatslash.lv2/beatslicer_stereo.ttl
+@@ -11,17 +11,12 @@
+ @prefix pprops: <http://lv2plug.in/ns/ext/port-props#> .
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+ 
+-<http://github.com/blablack/beatslash-lv2/beatslicer_stereo/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <beatslicer_stereo_gui.so> .
+-
+ <http://github.com/blablack/beatslash-lv2/beatslicer_stereo>
+ 	a lv2:Plugin ;
+ 	lv2:project <http://github.com/blablack/beatslash-lv2/> ;
+ 	doap:name "Beat Slicer - Stereo" ;
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/beatslash-lv2/beatslicer_stereo/gui> ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:port  [
+ 		a lv2:InputPort, lv2:AudioPort ;
+diff --git a/wscript b/wscript
+index 0135eb6..dbb89df 100644
+--- a/wscript
++++ b/wscript
+@@ -27,13 +27,8 @@ def configure(conf):
+     conf.load('compiler_cxx')
+     conf.load('lv2')
+ 
+-    autowaf.check_pkg(conf, 'gtkmm-2.4',  uselib_store='GTKMM',atleast_version='2.24.0')
+-    autowaf.check_pkg(conf, 'gtk+-2.0', uselib_store='GTK2', atleast_version='2.24.0')
+-    autowaf.check_pkg(conf, 'cairo', uselib_store='CAIRO', atleast_version='1.0.0')
+     autowaf.check_pkg(conf, 'lv2', uselib_store='LV2', atleast_version='1.2.0')
+     autowaf.check_pkg(conf, 'lvtk-plugin-1', uselib_store='LVTK_PLUGIN', atleast_version='1.2.0')
+-    autowaf.check_pkg(conf, 'lvtk-ui-1', uselib_store='LVTK_UI', atleast_version='1.2.0')
+-    autowaf.check_pkg(conf, 'lvtk-gtkui-1', uselib_store='LVTK_GTKGUI', atleast_version='1.2.0')
+ 
+     check = 'Extended Initializer Lists'
+     conf.check_cxx(msg         = check,
+@@ -129,26 +124,3 @@ def build(bld):
+                       '-DPLUGIN_HEADER="src/%s.hpp"' % i],
+                      ['LV2', 'LVTK_PLUGIN'],
+                      ['src/envgen.cpp'])
+-
+-
+-
+-
+-    plugins_gui = '''
+-    beatrepeater_mono_gui
+-    beatrepeater_stereo_gui
+-    beatslicer_mono_gui
+-    beatslicer_stereo_gui
+-    '''.split()
+-
+-    for i in plugins_gui:
+-       build_plugin_gui(bld, 'beatslash.lv2', i, ['src/%s.cpp' % i],
+-                        ['-DPLUGIN_CLASS=%s' % i,
+-                         '-std=c++11',
+-                         '-DURI_PREFIX=\"http://github.com/blablack/beatslash-lv2/\"',
+-                         '-DPLUGIN_URI_SUFFIX="%s"' % i,
+-                         '-DPLUGIN_HEADER="src/%s.hpp"' % i],
+-                        ['LV2', 'LVTK_PLUGIN', 'LVTK_GTKGUI', 'GTKMM', 'GTK2', 'CAIRO'],
+-                        ['src/dial.cpp', 'src/labeleddial.cpp', 'src/my_box.cpp'])
+-
+-
+-

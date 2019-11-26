@@ -4,7 +4,7 @@
 #
 ######################################
 
-ZEROCONVO_VERSION = e0afc4139d1c410e5153b901c3539410ce548a8c
+ZEROCONVO_VERSION = 35248cdaa4b04fcbdcc0f9a7873cccd066fcf3b6
 ZEROCONVO_SITE = git://gareus.org/zeroconvo.lv2
 ZEROCONVO_SITE_METHOD = git
 ZEROCONVO_BUNDLES = zeroconvo.lv2
