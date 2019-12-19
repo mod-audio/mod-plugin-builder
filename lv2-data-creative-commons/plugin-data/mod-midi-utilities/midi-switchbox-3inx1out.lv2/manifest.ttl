@@ -1,7 +1,0 @@
-@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-
-<http://moddevices.com/plugins/mod-devel/midi-switchbox-3inx1out>
-    a lv2:Plugin ;
-    lv2:binary <midi-switchbox-3inx1out.so>  ;
-    rdfs:seeAlso <midi-switchbox-3inx1out.ttl> , <modgui.ttl> .

@@ -1,9 +1,0 @@
-@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-
-<http://moddevices.com/plugins/mod-devel/mod-cv-switch3>
-	a lv2:Plugin ;
-	lv2:binary <mod-cv-switch3.so> ;
-	rdfs:seeAlso <mod-cv-switch3.ttl> ;
-	lv2:optionalFeature lv2:hardRTCapable .
-<http://moddevices.com/plugins/mod-devel/mod-cv-switch3> rdfs:seeAlso <modgui.ttl> .
