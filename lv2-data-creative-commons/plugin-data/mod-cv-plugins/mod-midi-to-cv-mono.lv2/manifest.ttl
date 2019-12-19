@@ -1,0 +1,9 @@
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://moddevices.com/plugins/mod-devel/midi-to-cv-mono> 
+	a lv2:Plugin ;
+    lv2:binary <mod-midi-to-cv-mono.so> ;
+    rdfs:seeAlso <mod-midi-to-cv-mono.ttl> ;
+	lv2:optionalFeature lv2:hardRTCapable .
+<http://moddevices.com/plugins/mod-devel/midi-to-cv-mono> rdfs:seeAlso <modgui.ttl> .

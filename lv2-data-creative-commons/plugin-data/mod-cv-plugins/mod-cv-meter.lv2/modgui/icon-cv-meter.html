@@ -1,0 +1,36 @@
+<div class="mod-pedal mod-cv-meter{{{cns}}}">
+    <div mod-role="drag-handle" class="mod-drag-handle"></div>
+    <div class="mod-light on" mod-role="bypass-light"></div>
+    <div class="mod-switch" mod-role="bypass"></div>
+    <div class="mod-cv-meter-display mod-display-group clearfix" mod-role="dpm">
+        <div title="Output Digital Peak, rise-time: immediate, falloff: 15dB/sec">
+            <span class="min_level" mod-role="min_level">0.0</span>
+        </div>
+    </div>
+    <div class="mod-cv-meter-display mod-display-max clearfix" mod-role="dpm">
+        <div title="Output Digital Peak, rise-time: immediate, falloff: 15dB/sec">
+            <span class="max_level" mod-role="max_level">0.0</span>
+        </div>
+    </div>
+    <div class="mod-cv-meter-display mod-display-current clearfix" mod-role="dpm">
+        <div title="Output Digital Peak, rise-time: immediate, falloff: 15dB/sec">
+            <span class="current_level" mod-role="current_level">0.0</span>
+        </div>
+    </div>
+
+    <div class="mod-reset" mod-role="input-control-port" mod-port-symbol="Reset" title="Reset"></div>
+    <div class="mod-pedal-input">
+        {{#effect.ports.cv.input}}
+        <div class="mod-input mod-input-disconnected" title="{{name}}" mod-role="input-cv-port" mod-port-symbol="{{symbol}}">
+            <div class="mod-pedal-input-image"></div>
+        </div>
+        {{/effect.ports.cv.input}}
+    </div>
+    <div class="mod-pedal-output">
+        {{#effect.ports.cv.output}}
+        <div class="mod-output mod-output-disconnected" title="{{name}}" mod-role="output-cv-port" mod-port-symbol="{{symbol}}">
+            <div class="mod-pedal-output-image"></div>
+        </div>
+        {{/effect.ports.cv.output}}
+    </div>
+</div>

@@ -1,0 +1,66 @@
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
+@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
+
+<http://guitarix.sourceforge.net/plugins/gx_shimmizita_#_shimmizita_>
+    modgui:gui [
+        modgui:resourcesDirectory <modgui> ;
+        modgui:iconTemplate <modgui/icon-gxshimmizita.html> ;
+        modgui:stylesheet <modgui/stylesheet-gxshimmizita.css> ;
+        modgui:screenshot <modgui/gx_shimmizita_ss.png> ;
+        modgui:thumbnail <modgui/gx_shimmizita_tn.png> ;
+        modgui:brand "Guitarix" ;
+        modgui:label "Shimmizita" ;
+        modgui:model "boxy" ;
+        modgui:panel "12-sliders" ;
+        modgui:color "wood4" ;
+        modgui:knob "bronze" ;
+        modgui:port [
+            lv2:index 0 ;
+            lv2:symbol "ModSource" ;
+            lv2:name "ModSource" ;
+        ] , [
+            lv2:index 1 ;
+            lv2:symbol "ModDepth" ;
+            lv2:name "ModDepth" ;
+        ] , [
+            lv2:index 2 ;
+            lv2:symbol "Mix" ;
+            lv2:name "Mix" ;
+        ] , [
+            lv2:index 3 ;
+            lv2:symbol "EnvTime" ;
+            lv2:name "EnvTime" ;
+        ] , [
+            lv2:index 4 ;
+            lv2:symbol "FreqLow" ;
+            lv2:name "FreqLow" ;
+        ] , [
+            lv2:index 5 ;
+            lv2:symbol "FreqHigh" ;
+            lv2:name "FreqHigh" ;
+        ] , [
+            lv2:index 6 ;
+            lv2:symbol "Mode" ;
+            lv2:name "Mode" ;
+        ] , [
+            lv2:index 7 ;
+            lv2:symbol "PitchMix" ;
+            lv2:name "PitchMix" ;
+        ] , [
+            lv2:index 8 ;
+            lv2:symbol "PitchShift" ;
+            lv2:name "PitchShift" ;
+        ] , [
+            lv2:index 9 ;
+            lv2:symbol "LFOSpeed" ;
+            lv2:name "LFOSpeed" ;
+        ] , [
+            lv2:index 10 ;
+            lv2:symbol "DecayLow" ;
+            lv2:name "DecayLow" ;
+        ] , [
+            lv2:index 11 ;
+            lv2:symbol "DecayHigh" ;
+            lv2:name "DecayHigh" ;
+        ] ;
+    ] .

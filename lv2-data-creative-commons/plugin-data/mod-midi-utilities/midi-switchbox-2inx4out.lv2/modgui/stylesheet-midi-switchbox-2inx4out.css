@@ -1,0 +1,42 @@
+.mod-midi-switch-box-2inx4out{{{cns}}} {
+    background-image:url(/resources/1inx2out_stereo_MIDI_body.png{{{ns}}});
+    background-repeat:no-repeat;
+    height:274px;
+    position:relative;
+    width:200px;
+}
+
+.mod-midi-switch-box-2inx4out{{{cns}}} .mod-pedal-input {
+    top:88px;
+}
+
+.mod-midi-switch-box-2inx4out{{{cns}}} .mod-pedal-input .mod-input {
+    margin-bottom: 4px;
+}
+
+.mod-midi-switch-box-2inx4out{{{cns}}} .mod-pedal-output .mod-output:nth-child(2) {
+    margin-bottom: 14px;
+}
+
+.mod-midi-switch-box-2inx4out{{{cns}}} .mod-pedal-output {
+    top:22px;
+}
+
+.mod-midi-switch-box-2inx4out{{{cns}}} .mod-pedal-output .mod-output {
+    margin-bottom: 2px;
+}
+
+.mod-midi-switch-box-2inx4out{{{cns}}} .mod-control-group {
+    left:58px;
+    position:absolute;
+    top:50px;
+}
+
+.mod-midi-switch-box-2inx4out{{{cns}}} .mod-control-group .mod-knob .mod-knob-image {
+    background-image:url(/resources/1inx2out_stereo_MIDI_sprite.png{{{ns}}});
+    background-repeat:no-repeat;
+    margin:0 auto;
+    height:190px;
+    width:131px;
+    cursor: pointer;
+}

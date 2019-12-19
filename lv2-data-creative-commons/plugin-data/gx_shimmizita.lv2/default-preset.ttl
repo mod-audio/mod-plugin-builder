@@ -1,0 +1,39 @@
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix pset:  <http://lv2plug.in/ns/ext/presets#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+
+<default-preset>
+	a pset:Preset ;
+	lv2:appliesTo <http://guitarix.sourceforge.net/plugins/gx_shimmizita_#_shimmizita_> ;
+	lv2:port [
+		lv2:symbol "ModSource" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "ModDepth" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "Mix" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "EnvTime" ;
+		pset:value 1.0
+	] , [
+		lv2:symbol "Mode" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "PitchMix" ;
+		pset:value 0.5
+	] , [
+		lv2:symbol "PitchShift" ;
+		pset:value 0.0
+	] , [
+		lv2:symbol "LFOSpeed" ;
+		pset:value 0.1
+	] , [
+		lv2:symbol "DecayLow" ;
+		pset:value 3.0
+	] , [
+		lv2:symbol "DecayHigh" ;
+		pset:value 2.0
+	] .
+

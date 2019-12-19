@@ -1,0 +1,113 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+@prefix midi: <http://lv2plug.in/ns/ext/midi#> .
+@prefix mod:  <http://moddevices.com/ns/mod#> .
+@prefix modgui:  <http://moddevices.com/ns/modgui#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix epp:  <http://lv2plug.in/ns/ext/port-props#> .
+
+<http://moddevices.com/plugins/mod-devel/midi-to-cv-mono>
+a lv2:Plugin, mod:ControlVoltagePlugin;
+        doap:name "MIDI to CV mono" ;
+        rdfs:comment """
+MIDI to CV mono converts a midi message to monophonic control voltage, 1/12 volt per note. It also features a retrigger knob, which retriggers the gate when it switches back to a previous voice that is still active. This is particularly useful when combined with short envelopes. 
+""" ;
+        lv2:minorVersion 3 ;
+        lv2:microVersion 1 ;
+        lv2:optionalFeature lv2:hardRTCapable ;
+        lv2:port [
+          a lv2:InputPort ,
+          atom:AtomPort ;
+          atom:bufferType atom:Sequence ;
+          atom:supports midi:MidiEvent ;
+          lv2:index 0 ;
+          lv2:symbol "in" ;
+          lv2:name "In" ;
+        ] , 
+        [
+          a lv2:OutputPort, lv2:CVPort;
+          lv2:index 1;
+          lv2:symbol "Pitch";
+          lv2:name "Pitch";
+        ] , 
+        [
+           a lv2:OutputPort, lv2:CVPort;
+           lv2:index 2;
+           lv2:symbol "Velocity";
+           lv2:name "Velocity";
+        ] , 
+        [
+           a lv2:OutputPort, lv2:CVPort;
+           lv2:index 3;
+           lv2:symbol "Gate";
+           lv2:name "Gate";
+        ] , 
+        [
+           a lv2:InputPort, lv2:ControlPort;
+           lv2:index 4;
+           lv2:symbol "Octave";
+           lv2:name "Octave";
+           lv2:minimum -3;
+           lv2:default 0;
+           lv2:maximum 3;
+           lv2:portProperty lv2:integer;
+        ] , 
+        [
+           a lv2:InputPort, lv2:ControlPort;
+           lv2:index 5;
+           lv2:symbol "Semitone";
+           lv2:name "Semitone";
+           lv2:minimum -12;
+           lv2:default 0;
+           lv2:maximum 12;
+           lv2:portProperty lv2:integer;
+        ] ,
+        [
+           a lv2:InputPort, lv2:ControlPort;
+           lv2:index 6;
+           lv2:symbol "Cent";
+           lv2:name "Cent";
+           lv2:minimum -100;
+           lv2:default 0;
+           lv2:maximum 100;
+           lv2:portProperty lv2:integer;
+        ] ,
+        [
+           a lv2:InputPort ,
+           lv2:ControlPort ;
+           lv2:index 7 ;
+           lv2:symbol "Retrigger" ;
+           lv2:name "Retrigger" ;
+           lv2:default 0.0 ;
+           lv2:minimum 0.0 ;
+           lv2:maximum 1.0 ;
+           lv2:portProperty lv2:toggled;
+       ] ,
+       [   a lv2:InputPort,
+           lv2:ControlPort ;
+           lv2:index 8;
+           lv2:symbol "Panic";
+           lv2:name "Panic";
+           lv2:default 0;
+           lv2:minimum 0;
+           lv2:maximum 1;
+           lv2:portProperty lv2:integer, lv2:toggled, epp:trigger ;
+        ] ;
+
+        doap:developer [
+            foaf:name "Bram Giesen & Jarno Verheesen" ;
+            foaf:homepage <> ;
+            foaf:mbox <mailto:bram@moddevices.com> ;
+        ] ;
+
+        doap:maintainer [
+            foaf:name "MOD Team" ;
+            foaf:homepage <http://moddevices.com> ;
+            foaf:mbox <mailto:devel@moddevices.com> ;
+        ] ;
+
+        mod:brand "MOD" ;
+        mod:label "MIDI to CV mono" .

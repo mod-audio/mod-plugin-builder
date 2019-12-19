@@ -1,0 +1,42 @@
+/* = CONTAINER
+================================================ */
+.mod-cv-switchbox-1-3{{{cns}}} {
+    background-image: url(/resources/switchbox_cv_1to3_bg.png{{{ns}}});
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 274px;
+    position: absolute;
+    width: 200px;
+}
+
+/* PORTS
+================================================ */
+
+.mod-cv-switchbox-1-3{{{cns}}} .mod-pedal-input {
+    top: 108px;
+}
+
+.mod-cv-switchbox-1-3{{{cns}}} .mod-pedal-output {
+    top: 38px;
+}
+
+.mod-cv-switchbox-1-3{{{cns}}} .mod-pedal-output .mod-output:nth-child(3) {
+    top: 5px !important;
+}
+
+/* = KNOBS
+================================================ */
+.mod-cv-switchbox-1-3{{{cns}}} .mod-control-group {
+    margin: 63px 0 0 46px;
+    position: relative;
+    z-index: 30;
+}
+
+/* ONE KNOB */
+.mod-cv-switchbox-1-3{{{cns}}} .mod-control-group .mod-knob .mod-knob-image {
+    background-image: url(/resources/switchbox_cv_1to3_sprite.png{{{ns}}});
+    background-repeat: no-repeat;
+    height: 149px;
+    width: 137px;
+    margin: 0 auto;
+}

@@ -1,0 +1,23 @@
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
+@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
+
+<http://moddevices.com/plugins/mod-devel/mod-audio-to-cv>
+    modgui:gui [
+        modgui:resourcesDirectory <modgui> ;
+        modgui:iconTemplate <modgui/icon-audio-to-cv.html> ;
+        modgui:stylesheet <modgui/stylesheet-audio-to-cv.css> ;
+        modgui:screenshot <modgui/mod_audio_to_cv_ss.png> ;
+        modgui:thumbnail <modgui/mod_audio_to_cv_tn.png> ;
+        modgui:brand "MOD" ;
+        modgui:label "Audio to CV" ;
+        modgui:license "CC BY-NC-ND 4.0";
+        modgui:port [
+            lv2:index 0 ;
+            lv2:symbol "Level" ;
+            lv2:name "Level" ;
+        ] , [
+            lv2:index 1 ;
+            lv2:symbol "Offset" ;
+            lv2:name "Offset" ;
+        ] ;
+    ] .

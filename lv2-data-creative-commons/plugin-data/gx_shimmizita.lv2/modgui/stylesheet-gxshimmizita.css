@@ -1,0 +1,150 @@
+/* SKINS */
+.gx-shimmizita{{{cns}}} {
+  background-image: url(/resources/gx_shimmizita_bg.png{{{ns}}});
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 387px;
+  position: relative;
+  width: 532px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-pedal-input,
+.gx-shimmizita{{{cns}}} .mod-pedal-output {
+    top: 64px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-pedal-input .mod-input,
+.gx-shimmizita{{{cns}}} .mod-pedal-output .mod-output {
+    margin-bottom: 55px;
+}
+
+/* Switch / Light */
+
+.gx-shimmizita{{{cns}}} .mod-switch {
+  position: absolute !important;
+  background-image: url(/resources/gx_shimmizita_sprites/footswitch.png{{{ns}}});
+  background-repeat: no-repeat;
+  cursor: pointer;
+  height: 64px;
+  width: 64px;
+  bottom: 24px;
+  right: 70px;
+  z-index: 30;
+  background-position: bottom center;
+}
+
+.gx-shimmizita{{{cns}}} .mod-switch.on {
+  background-position-y: top !important
+}
+
+.gx-shimmizita{{{cns}}} .mod-light {
+  position: absolute;
+  background-image: url(/resources/gx_shimmizita_sprites/shimmizita_led.png{{{ns}}}) !important;
+  height: 32px;
+  width: 30px;
+  bottom: 96px;
+  right: 88px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-light.off {
+  background-position: left center;
+}
+
+.gx-shimmizita{{{cns}}} .mod-light.on {
+  background-position: right center;
+}
+
+/* CONTROLS */
+.gx-shimmizita{{{cns}}} .mod-control-group {
+  position: relative;
+  z-index: 30;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob {
+  position: absolute;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.small{
+  top: 290px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-FreqLow {
+  left: 34px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-DecayLow {
+  left: 122px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-FreqHigh {
+  left: 210px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-DecayHigh {
+  left: 298px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-Mode,
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-PitchShift,
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-PitchMix {
+  top: 56px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-Mode {
+  left: 73px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-PitchShift {
+  left: 161px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-PitchMix {
+  left: 249px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-EnvTime,
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-ModSource,
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-LFOSpeed,
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-ModDepth {
+  top: 165px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-EnvTime {
+  left: 29px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-ModSource {
+  left: 117px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-LFOSpeed {
+  left: 205px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-ModDepth {
+  left: 293px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.gx-shimmizita-Mix {
+  top: 152px;
+  right: 54px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob .mod-knob-image {
+  background-image: url(/resources/gx_shimmizita_sprites/gx_shimmizita_knobs_medium_70frames.png{{{ns}}});
+  background-repeat: no-repeat;
+  height: 75px;
+  width: 75px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.small .mod-knob-image {
+  background-image: url(/resources/gx_shimmizita_sprites/gx_shimmizita_knobs_small_70frames.png{{{ns}}});
+  height: 65px;
+  width: 65px;
+}
+
+.gx-shimmizita{{{cns}}} .mod-control-group .mod-knob.big .mod-knob-image {
+  background-image: url(/resources/gx_shimmizita_sprites/gx_shimmizita_knobs_big_70frames.png{{{ns}}});
+  height: 100px;
+  width: 100px;
+}

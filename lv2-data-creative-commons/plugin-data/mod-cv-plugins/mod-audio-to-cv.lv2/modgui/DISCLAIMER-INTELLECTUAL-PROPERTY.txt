@@ -1,0 +1,8 @@
+////////////////////////////////
+//Intellectual property rights//
+//of the MOD plugin interface///
+////////////////////////////////
+
+MOD Devices GmbH or its related companies (or their licensors) own the intellectual property rights (including copyright and trade marks) of all files included in the "modgui" folder. You must not copy, modify, transmit or adapt the contents of the modgui folder or otherwise infringe the intellectual property of MOD Devices GmbH, its related companies or their licensors.
+
+Except as expressly provided above, nothing contained in the Terms of Use of the plugin will grant, or is intended to be construed as conferring, any license or right in, or an assignment of all or part of, any intellectual property rights in the Content, without the express written agreement of the relevant owner of the intellectual property rights.

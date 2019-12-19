@@ -1,0 +1,85 @@
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#>.
+@prefix doap: <http://usefulinc.com/ns/doap#>.
+@prefix epp: <http://lv2plug.in/ns/ext/port-props#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix mod: <http://moddevices.com/ns/mod#>.
+@prefix modgui: <http://moddevices.com/ns/modgui#>.
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix midi: <http://lv2plug.in/ns/ext/midi#> .
+@prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+
+<http://moddevices.com/plugins/mod-devel/mod-audio-to-cv>
+a lv2:Plugin, mod:ControlVoltagePlugin;
+
+doap:name "Audio to CV";
+
+doap:developer [
+    foaf:name "Jarno Verheesen";
+    foaf:homepage <>;
+    foaf:mbox <mailto:j.verheesen@hotmail.nl>;
+    ];
+
+doap:maintainer [
+    foaf:name "MOD";
+    foaf:homepage <http://moddevices.com>;
+    foaf:mbox <mailto:jarno@moddevices.com>;
+    ];
+
+    lv2:minorVersion 3;
+    lv2:microVersion 0;
+
+rdfs:comment """
+Audio to CV converts an audio signal to a control voltage signal. 
+""";
+
+lv2:port
+[
+    a lv2:InputPort, lv2:AudioPort;
+    lv2:index 0;
+    lv2:symbol "AudioIn";
+    lv2:name "Audio Input";
+],
+[
+    a lv2:OutputPort, lv2:CVPort;
+    lv2:index 1;
+    lv2:symbol "CVout";
+    lv2:name "CV Output";
+]
+,
+[
+    a lv2:InputPort ,
+    lv2:ControlPort ;
+    lv2:index 2 ;
+    lv2:symbol "Level" ;
+    lv2:name "Level";
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 10.0 ;
+]
+,
+[
+    a lv2:InputPort ,
+    lv2:ControlPort ;
+    lv2:index 3 ;
+    lv2:symbol "Offset" ;
+    lv2:name "Offset";
+    lv2:default 0.0 ;
+    lv2:minimum -10.0 ;
+    lv2:maximum 10.0 ;
+]
+,
+[
+     a lv2:InputPort ,
+     lv2:ControlPort ;
+     lv2:index 4 ;
+     lv2:symbol "BYPASS" ;
+     lv2:name "BYPASS" ;
+     lv2:default 1.0 ;
+     lv2:minimum 0.0 ;
+     lv2:maximum 1.0 ;
+     lv2:designation lv2:enabled;
+     lv2:portProperty lv2:toggled;
+]
+.

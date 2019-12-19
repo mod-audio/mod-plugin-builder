@@ -1,0 +1,112 @@
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#>.
+@prefix doap: <http://usefulinc.com/ns/doap#>.
+@prefix epp: <http://lv2plug.in/ns/ext/port-props#>.
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+@prefix mod: <http://moddevices.com/ns/mod#>.
+@prefix modgui: <http://moddevices.com/ns/modgui#>.
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix midi: <http://lv2plug.in/ns/ext/midi#> .
+@prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@prefix time: <http://lv2plug.in/ns/ext/time#> .
+
+<http://moddevices.com/plugins/mod-devel/mod-cv-clock>
+a lv2:Plugin, mod:ControlVoltagePlugin;
+
+doap:name "CV Clock";
+
+doap:developer [
+    foaf:name "Bram Giesen & Jarno Verheesen";
+    foaf:homepage <>;
+    foaf:mbox <mailto:j.verheesen@hotmail.nl>;
+    ];
+
+doap:maintainer [
+    foaf:name "MOD";
+    foaf:homepage <http://moddevices.com>;
+    foaf:mbox <mailto:jarno@moddevices.com>;
+    ];
+
+    lv2:minorVersion 3;
+    lv2:microVersion 0;
+
+rdfs:comment """
+CV Clock generates CV clock pulses or square waves in multiple divisions. The clock can run in free mode or be signed with the host tempo. 
+""";
+
+lv2:port
+[
+    a lv2:OutputPort, lv2:CVPort;
+    lv2:index 0;
+    lv2:symbol "CVout1";
+    lv2:name "pulse";
+],
+[
+    a lv2:OutputPort, lv2:CVPort;
+    lv2:index 1;
+    lv2:symbol "CVout2";
+    lv2:name "square";
+],
+[
+    a lv2:InputPort ,lv2:ControlPort ;
+    lv2:index 2 ;
+    lv2:symbol "Bpm" ;
+    lv2:name "Bpm";
+    lv2:default 120.0 ;
+    lv2:minimum 20.0 ;
+    lv2:maximum 280.0 ;
+    lv2:portProperty lv2:integer ;
+],
+[
+    a lv2:InputPort ,lv2:ControlPort ;
+    lv2:index 3 ;
+    lv2:symbol "Divisions" ;
+    lv2:name "Divisions";
+    lv2:default 4 ;
+    lv2:minimum 0.05 ;
+    lv2:maximum 16 ;
+    lv2:scalePoint [ rdfs:label "10 Notes";     rdf:value 0.05; ] ;
+    lv2:scalePoint [ rdfs:label "8 Notes";      rdf:value 0.0625; ] ;
+    lv2:scalePoint [ rdfs:label "6 Notes";      rdf:value 0.0937; ] ;
+    lv2:scalePoint [ rdfs:label "4 Notes";      rdf:value 0.125; ] ;
+    lv2:scalePoint [ rdfs:label "3 Notes";      rdf:value 0.1875 ; ] ;
+    lv2:scalePoint [ rdfs:label "2 Notes";      rdf:value 0.25 ; ] ;
+    lv2:scalePoint [ rdfs:label "Whole Note";   rdf:value 0.5 ; ] ;
+    lv2:scalePoint [ rdfs:label "Half Note";    rdf:value 1 ; ] ;
+    lv2:scalePoint [ rdfs:label "third Note";   rdf:value 1.5; ] ;
+    lv2:scalePoint [ rdfs:label "Quarter";      rdf:value 2 ; ] ;
+    lv2:scalePoint [ rdfs:label "Dotted 4th";   rdf:value 2.66666 ; ] ;
+    lv2:scalePoint [ rdfs:label "Triplet 4th";  rdf:value 3; ] ;
+    lv2:scalePoint [ rdfs:label "8th";          rdf:value 4 ; ] ;
+    lv2:scalePoint [ rdfs:label "Dotted 8th";   rdf:value 5.33333; ] ;
+    lv2:scalePoint [ rdfs:label "Triplet 8th";  rdf:value 6; ] ;
+    lv2:scalePoint [ rdfs:label "16th";         rdf:value 8 ; ] ;
+    lv2:scalePoint [ rdfs:label "Dotted 16th";  rdf:value 10.66666; ] ;
+    lv2:scalePoint [ rdfs:label "Triplet 16th"; rdf:value 12; ] ;
+    lv2:scalePoint [ rdfs:label "32th";         rdf:value 16 ; ] ;
+    lv2:portProperty lv2:enumeration;
+]
+,
+[
+    a lv2:InputPort, lv2:ControlPort;
+    lv2:index 4;
+    lv2:symbol "sync";
+    lv2:name "Sync";
+    lv2:minimum 0;
+    lv2:default 0;
+    lv2:maximum 1;
+    lv2:portProperty lv2:integer, lv2:enumeration, lv2:toggled;
+    lv2:scalePoint [ rdfs:label "Free Running"; rdf:value 0 ; ] ;
+    lv2:scalePoint [ rdfs:label "Host Sync (if available)"; rdf:value 1 ; ] ;
+]
+,
+[
+    a lv2:InputPort, atom:AtomPort ;
+    atom:bufferType atom:Sequence ;
+    atom:supports time:Position ;
+    lv2:index 5 ;
+    lv2:symbol "control" ;
+    lv2:name "Control" ;
+]
+.

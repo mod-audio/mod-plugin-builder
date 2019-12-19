@@ -1,0 +1,88 @@
+/* = CONTAINER
+================================================ */
+.mod-attenuverter{{{cns}}} {
+    background-image: url(/resources/mod_attenuverter_booster_bg.png{{{ns}}});
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 227px 316px;
+    height: 316px;
+    position: absolute;
+    width: 227px;
+}
+
+/* PORTS
+================================================ */
+
+.mod-attenuverter{{{cns}}} .mod-pedal-input,
+.mod-attenuverter{{{cns}}} .mod-pedal-output {
+    top: 130px;
+}
+
+/* = LIGHT ON/OFF
+================================================ */
+.mod-attenuverter{{{cns}}} .mod-light {
+    background-image: url(/resources/mod_attenuverter_booster_sprite_sheets/lights.png{{{ns}}});
+    background-position: left center;
+    background-size: auto 25px;
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    right: 83px;
+    top: 69px;
+}
+
+.mod-attenuverter{{{cns}}} .mod-light.on {
+    background-position: left center;
+}
+
+.mod-attenuverter{{{cns}}} .mod-light.off {
+    background-position: right center;
+}
+
+/* = SWITCH
+================================================ */
+.mod-attenuverter{{{cns}}} .mod-switch {
+    background-image: url(/resources/mod_attenuverter_booster_sprite_sheets/switch_key.png{{{ns}}});
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    background-size: auto 28px 77px;
+    left: 85px;
+    top: 56px;
+    cursor: pointer;
+    height: 38.5px;
+    width: 28px;
+    position: absolute;
+    z-index: 30;
+}
+
+.mod-attenuverter{{{cns}}} .mod-switch.on {
+    background-position: center top;
+    top: 66px;
+}
+
+.mod-attenuverter{{{cns}}} .mod-switch.off {
+    background-position: center bottom;
+}
+
+/* = KNOBS
+================================================ */
+.mod-attenuverter{{{cns}}} .mod-control-group {
+    margin: 100px 50px 20px;
+    position: relative;
+    text-align: center;
+    z-index: 30;
+}
+
+/* ONE KNOB */
+.mod-attenuverter{{{cns}}} .mod-control-group .mod-knob .mod-knob-image {
+    background-image: url(/resources/mod_attenuverter_booster_sprite_sheets/Big_knob_3_70frames.png{{{ns}}});
+    background-repeat: no-repeat;
+    background-size: auto 83px;
+    height: 83px;
+    width: 83px;
+    margin: 0 22px;
+}
+
+.mod-attenuverter{{{cns}}} .mod-control-group .mod-knob {
+    padding-top: 57px;
+}

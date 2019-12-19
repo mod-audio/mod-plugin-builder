@@ -1,0 +1,22 @@
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
+@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
+
+<http://moddevices.com/plugins/mod-devel/midi-switchbox-3inx1out>
+    modgui:gui [
+        modgui:resourcesDirectory <modgui> ;
+        modgui:iconTemplate <modgui/icon-midi-switchbox3.html> ;
+        modgui:stylesheet <modgui/stylesheet-midi-switchbox3.css> ;
+        modgui:screenshot <modgui/3inx1out_mono_MIDI_ss.png> ;
+        modgui:thumbnail <modgui/3inx1out_mono_MIDI_tn.png> ;
+        modgui:brand "MOD" ;
+        modgui:label "MIDI SwitchBox3" ;
+        modgui:model "boxy" ;
+        modgui:panel "1-knob" ;
+        modgui:color "black" ;
+        modgui:knob "gold" ;
+        modgui:port [
+            lv2:index 0 ;
+            lv2:symbol "target" ;
+            lv2:name "Target" ;
+        ] ;
+    ] .

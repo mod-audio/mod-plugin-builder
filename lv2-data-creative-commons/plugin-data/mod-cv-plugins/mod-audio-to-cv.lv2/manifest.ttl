@@ -1,0 +1,9 @@
+@prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://moddevices.com/plugins/mod-devel/mod-audio-to-cv>
+	a lv2:Plugin ;
+	lv2:binary <mod-audio-to-cv.so> ;
+	rdfs:seeAlso <mod-audio-to-cv.ttl> ;
+	lv2:optionalFeature lv2:hardRTCapable .
+<http://moddevices.com/plugins/mod-devel/mod-audio-to-cv> rdfs:seeAlso <modgui.ttl> .

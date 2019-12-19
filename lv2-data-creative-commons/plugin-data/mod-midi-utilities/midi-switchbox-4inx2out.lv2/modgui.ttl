@@ -1,0 +1,16 @@
+@prefix modgui: <http://moddevices.com/ns/modgui#> .
+@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
+
+<http://moddevices.com/plugins/mod-devel/midi-switchbox-4inx2out>
+    modgui:gui [
+        modgui:resourcesDirectory <modgui> ;
+        modgui:iconTemplate <modgui/icon-midi-switchbox-4inx2out.html> ;
+        modgui:stylesheet <modgui/stylesheet-midi-switchbox-4inx2out.css> ;
+        modgui:screenshot <modgui/4inx2out_stereo_MIDI_screenshot.png> ;
+        modgui:thumbnail <modgui/4inx2out_stereo_MIDI_thumbnail.png> ;
+        modgui:port [
+            lv2:index 0 ;
+            lv2:symbol "target" ;
+            lv2:name "Target" ;
+        ] ;
+    ] .

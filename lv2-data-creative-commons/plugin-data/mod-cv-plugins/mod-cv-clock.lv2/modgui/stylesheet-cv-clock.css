@@ -1,0 +1,160 @@
+/* = CONTAINER
+================================================ */
+.mod-cv-clock{{{cns}}} {
+    background-image: url(/resources/mod_cv_clock_bg.png{{{ns}}});
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 227px 368px;
+    height: 368px;
+    position: absolute;
+    width: 227px;
+}
+
+/* PORTS
+================================================ */
+
+.mod-cv-clock{{{cns}}} .mod-pedal-output {
+    top: 77px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-pedal-output .mod-cv-output {
+    height: 38px;
+    margin-bottom: 0;
+    background-position-y: center;
+    background-size: 90%;
+}
+
+.mod-cv-clock{{{cns}}} .mod-pedal-output .mod-cv-output .mod-output-jack {
+    background-position: 0 center;
+    height: 38px;
+    cursor: pointer;
+    background-size: 90%;
+}
+
+/* = LIGHT ON/OFF
+================================================ */
+.mod-cv-clock{{{cns}}} .mod-light {
+    position: absolute;
+    background-image: url(/resources/mod_cv_clock_sprite_sheets/lights.png{{{ns}}});
+    background-size: auto 25px;
+    background-position: left center;
+    height: 25px;
+    width: 25px;
+    top: 11px;
+    right: 30px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-light.on {
+    background-position: left center;
+}
+
+.mod-cv-clock{{{cns}}} .mod-light.off {
+    background-position: right center;
+}
+
+/* = SWITCH
+================================================ */
+.mod-cv-clock{{{cns}}} .mod-switch {
+    background-image: url(/resources/mod_cv_clock_sprite_sheets/switch_key.png{{{ns}}});
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: auto 28px 77px;
+    top: 30px;
+    right: 28px;
+    cursor: pointer;
+    height: 38.5px;
+    width: 28px;
+    position: absolute;
+    z-index: 30;
+}
+
+.mod-cv-clock{{{cns}}} .mod-switch.on {
+    background-position: center top;
+    top: 40px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-switch.off {
+    background-position: center bottom;
+}
+
+/* = KNOBS
+================================================ */
+
+.mod-cv-clock{{{cns}}} .mod-control-group {
+    position: relative;
+    z-index: 30;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.knobs {
+    margin: 70px 70px 0px;
+    height: 228px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.knobs .mod-knob .mod-knob-image {
+    background-repeat: no-repeat;
+    background-size: auto 83px;
+    height: 83px;
+    width: 83px;
+    margin: 0 2px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.knobs .mod-knob.mod-control-bpm .mod-knob-image {
+    background-image: url(/resources/mod_cv_clock_sprite_sheets/Big_knob_3_70frames.png{{{ns}}});
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.knobs .mod-knob.mod-control-divider .mod-knob-image {
+    background-image: url(/resources/mod_cv_clock_sprite_sheets/Big_knob_3_19frames.png{{{ns}}});
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.knobs .mod-knob.mod-control-bpm {
+    padding-top: 2px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.knobs .mod-knob.mod-control-divider {
+    padding-top: 51px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches {
+    margin-top: 20px;
+    display: flex;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync {
+    width: 50%;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image {
+    background-image: url(/resources/mod_cv_clock_sprite_sheets/switch.png{{{ns}}});
+    background-repeat: no-repeat;
+    height: 14px;
+    cursor: pointer;
+    width: 48px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image.hot-sync {
+    margin-left: 21px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image.hot-sync {
+    margin-left: 21px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image.free-running {
+    margin-left: 44px;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image.hot-sync.off {
+    background-position: center left !important;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image.hot-sync.on {
+    background-position: center right !important;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image.free-running.off {
+    background-position: center right !important;
+}
+
+.mod-cv-clock{{{cns}}} .mod-control-group.switches .mod-sync .mod-knob-image.free-running.on {
+    background-position: center left !important;
+}
