@@ -1,5 +1,5 @@
 diff --git a/Makefile b/Makefile
-index 109f9ef..6ed361f 100644
+index fdf0cae..714f5d7 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -14,8 +14,8 @@ RW=$(abspath $(ROBTK))/
@@ -9,15 +9,24 @@ index 109f9ef..6ed361f 100644
 -ifneq ($(MOD),)
 -  SUBDIRS = b_whirl b_synth
 +ifneq ($(MOD_BUILD),)
-+  SUBDIRS = b_overdrive b_whirl b_reverb b_synth
++  SUBDIRS = b_whirl b_synth b_overdrive b_reverb
  else
-   SUBDIRS = b_overdrive b_whirl b_reverb b_conv src b_synth ui
+   SUBDIRS = b_overdrive b_whirl b_reverb b_conv b_chorato src b_synth ui
  endif
 diff --git a/common.mak b/common.mak
-index e17b007..18fc8fb 100644
+index fb8ad0d..215a3c0 100644
 --- a/common.mak
 +++ b/common.mak
-@@ -126,7 +126,7 @@ else
+@@ -106,7 +106,7 @@ ifeq ($(ENABLE_CONVOLUTION), yes)
+   CC=$(CXX)
+ endif
+ 
+-ifneq ($(MOD),)
++ifneq ($(MOD_BUILD),)
+ 	MODBRAND=mod:brand \"x42\";
+ 	MODLABEL=mod:label \"$(MODNAME)\";
+ 	MODGUITTL=, <modgui.ttl>
+@@ -128,7 +128,7 @@ else
    endif
  endif
  
