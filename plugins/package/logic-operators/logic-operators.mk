@@ -4,9 +4,8 @@
 #
 ######################################
 
-LOGIC_OPERATORS_SITE_METHOD = git
-LOGIC_OPERATORS_SITE = ssh://git@github.com/moddevices/mod-cv-plugins.git
 LOGIC_OPERATORS_VERSION = d3b86ab7aedb388c48ee9ae765ac77b8309646b2
+LOGIC_OPERATORS_SITE = $(call github,moddevices,mod-cv-plugins,$(LOGIC_OPERATORS_VERSION))
 LOGIC_OPERATORS_BUNDLES = cv-logic-equal.lv2 cv-logic-larger.lv2 cv-logic-or.lv2 cv-logic-smaller.lv2 cv-logic-change.lv2
 
 # dependencies (list of other buildroot packages, separated by space)
