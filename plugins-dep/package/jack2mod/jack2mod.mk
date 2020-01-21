@@ -4,10 +4,10 @@
 #
 ################################################################################
 
-JACK2MOD_VERSION = e7fa65faf728f5d108a6ca0e8192f1d93374e1f9
+JACK2MOD_VERSION = e579130ca918cab160c6e6618a527e4903e53771
 JACK2MOD_SITE = $(call github,moddevices,jack2,$(JACK2MOD_VERSION))
 JACK2MOD_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
-JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python
+JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib berkeleydb host-python
 JACK2MOD_INSTALL_STAGING = YES
 
 JACK2MOD_WAF = $(HOST_DIR)/usr/bin/python2 ./waf
@@ -28,6 +28,7 @@ define JACK2MOD_CONFIGURE_CMDS
 		$(JACK2MOD_WAF) configure \
 		--alsa    \
 		--classic \
+		--db      \
 		--prefix=/usr \
 		$(JACK2MOD_EXTRA_OPTIONS) \
 	)
