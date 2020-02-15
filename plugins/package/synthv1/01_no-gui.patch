@@ -99,3 +99,25 @@ index cbb1512..d5908d3 100644
 -QT += widgets xml
 +QT -= gui
 +QT += xml
+diff --git a/src/synthv1.lv2/manifest.ttl b/src/synthv1.lv2/manifest.ttl
+index 0d69672..6351e43 100644
+--- a/src/synthv1.lv2/manifest.ttl
++++ b/src/synthv1.lv2/manifest.ttl
+@@ -4,4 +4,4 @@
+ <http://synthv1.sourceforge.net/lv2>
+ 	a lv2:Plugin, lv2:InstrumentPlugin ;
+ 	lv2:binary <synthv1.so> ;
+-	rdfs:seeAlso <synthv1.ttl>, <synthv1_ui.ttl> .
++	rdfs:seeAlso <synthv1.ttl> .
+diff --git a/src/synthv1.lv2/synthv1.ttl b/src/synthv1.lv2/synthv1.ttl
+index b7a6df9..f683c27 100644
+--- a/src/synthv1.lv2/synthv1.ttl
++++ b/src/synthv1.lv2/synthv1.ttl
+@@ -27,7 +27,6 @@
+ 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:extensionData lv2worker:interface ;
+-	lv2ui:ui synthv1_lv2:ui, synthv1_lv2:ui_x11, synthv1_lv2:ui_external ;
+ 	lv2patch:writable synthv1_lv2:P201_TUNING_ENABLED,
+ 		synthv1_lv2:P202_TUNING_REF_PITCH,
+ 		synthv1_lv2:P203_TUNING_REF_NOTE,
