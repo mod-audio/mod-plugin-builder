@@ -42,6 +42,28 @@ index 7cc09dc..f40a2a7 100644
  
  # Build version string.
  AC_CACHE_VAL([ac_cv_build_version], [
+diff --git a/src/padthv1.lv2/manifest.ttl b/src/padthv1.lv2/manifest.ttl
+index d7f9cde..c7b07e4 100644
+--- a/src/padthv1.lv2/manifest.ttl
++++ b/src/padthv1.lv2/manifest.ttl
+@@ -4,4 +4,4 @@
+ <http://padthv1.sourceforge.net/lv2>
+ 	a lv2:Plugin, lv2:InstrumentPlugin ;
+ 	lv2:binary <padthv1.so> ;
+-	rdfs:seeAlso <padthv1.ttl>, <padthv1_ui.ttl> .
++	rdfs:seeAlso <padthv1.ttl> .
+diff --git a/src/padthv1.lv2/padthv1.ttl b/src/padthv1.lv2/padthv1.ttl
+index 3259c45..a36e85c 100644
+--- a/src/padthv1.lv2/padthv1.ttl
++++ b/src/padthv1.lv2/padthv1.ttl
+@@ -27,7 +27,6 @@
+ 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:extensionData lv2state:interface, lv2worker:interface ;
+-	lv2ui:ui padthv1_lv2:ui, padthv1_lv2:ui_x11, padthv1_lv2:ui_external ;
+ 	lv2patch:writable padthv1_lv2:P201_TUNING_ENABLED,
+ 		padthv1_lv2:P202_TUNING_REF_PITCH,
+ 		padthv1_lv2:P203_TUNING_REF_NOTE,
 diff --git a/src/src_lv2.pro b/src/src_lv2.pro
 index e09a7f4..5cd6d74 100644
 --- a/src/src_lv2.pro
