@@ -4,10 +4,10 @@
 #
 ######################################
 
-DRAGONFLY_REVERB_VERSION = 7543bda6333fffa43a2ed059c313b17b35abebbd
+DRAGONFLY_REVERB_VERSION = ba76b88ade015cf597fac19337938c03851f67aa
 DRAGONFLY_REVERB_SITE = https://github.com/michaelwillis/dragonfly-reverb.git
 DRAGONFLY_REVERB_SITE_METHOD = git
-DRAGONFLY_REVERB_BUNDLES = DragonflyHallReverb.lv2 DragonflyRoomReverb.lv2
+DRAGONFLY_REVERB_BUNDLES = DragonflyHallReverb.lv2 DragonflyRoomReverb.lv2 DragonflyEarlyReflections.lv2 DragonflyPlateReverb.lv2
 
 DRAGONFLY_REVERB_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 
