@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 19edd48..c2a4d59 100644
+--- a/Makefile
++++ b/Makefile
+@@ -25,7 +25,7 @@ PLUGINS := string-machine string-machine-chorus string-machine-chorus-stereo
+ dgl:
+ 	$(MAKE) -C dpf/dgl ../build/libdgl-cairo.a
+ 
+-plugins: dgl
++plugins:
+ 	$(foreach p,$(PLUGINS),$(MAKE) all -C plugins/$(p);)
+ 
+ ifneq ($(CROSS_COMPILING),true)

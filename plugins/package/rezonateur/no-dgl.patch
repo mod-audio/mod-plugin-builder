@@ -1,0 +1,22 @@
+diff --git a/Makefile b/Makefile
+index 36f58f0..582c7d1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -10,7 +10,7 @@ endif
+ 
+ include dpf/Makefile.base.mk
+ 
+-all: dgl plugins gen
++all: plugins gen
+ 
+ # --------------------------------------------------------------
+ 
+@@ -19,7 +19,7 @@ PLUGINS := rezonateur rezonateur-stereo
+ dgl:
+ 	$(MAKE) -C dpf/dgl ../build/libdgl-cairo.a
+ 
+-plugins: dgl
++plugins:
+ 	$(foreach p,$(PLUGINS),$(MAKE) all -C plugins/$(p);)
+ 
+ ifneq ($(CROSS_COMPILING),true)
