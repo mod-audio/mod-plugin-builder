@@ -4,7 +4,7 @@
 #
 ######################################
 
-CARLA_VERSION = 8e8fe2e111b669fcd38be1d146cdf9e612949fa9
+CARLA_VERSION = 08e416113bcb0facaac952370fdee19937907384
 CARLA_SITE = $(call github,falkTX,Carla,$(CARLA_VERSION))
 CARLA_DEPENDENCIES = libsndfile ffmpeg
 # for later: fluidsynth liblo (unused at the moment)
