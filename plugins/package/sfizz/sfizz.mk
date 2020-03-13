@@ -4,7 +4,7 @@
 #
 ######################################
 
-SFIZZ_VERSION = 82e4a7404404f1c78abf30beec5b8e95abc81c49
+SFIZZ_VERSION = 48c9dbf9471fffd201ef8da83c30bf2db466a018
 SFIZZ_SITE = $(call github,paulfd,sfizz,$(SFIZZ_VERSION))
 SFIZZ_DEPENDENCIES = libsndfile
 SFIZZ_CONF_OPTS=-DSFIZZ_JACK=OFF
