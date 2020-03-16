@@ -4,8 +4,8 @@
 #
 ######################################
 
-SFIZZ_VERSION = 48c9dbf9471fffd201ef8da83c30bf2db466a018
-SFIZZ_SITE = $(call github,paulfd,sfizz,$(SFIZZ_VERSION))
+SFIZZ_VERSION = 930bfdfefed49d44d0c1f547da4d8c637e63155d
+SFIZZ_SITE = $(call github,sfztools,sfizz,$(SFIZZ_VERSION))
 SFIZZ_DEPENDENCIES = libsndfile
 SFIZZ_CONF_OPTS=-DSFIZZ_JACK=OFF
 SFIZZ_BUNDLES = sfizz.lv2
@@ -13,7 +13,7 @@ SFIZZ_BUNDLES = sfizz.lv2
 # needed for git submodules
 define SFIZZ_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/paulfd/sfizz $(@D)
+	git clone --recursive git://github.com/sfztools/sfizz $(@D)
 	(cd $(@D) && \
 		git reset --hard $(SFIZZ_VERSION) && \
 		git submodule update)
