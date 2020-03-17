@@ -1,0 +1,20 @@
+diff --git a/lv2/sfizz.ttl.in b/lv2/sfizz.ttl.in
+index 400ead8..e8f62fd 100644
+--- a/lv2/sfizz.ttl.in
++++ b/lv2/sfizz.ttl.in
+@@ -4,6 +4,7 @@
+ @prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2:     <http://lv2plug.in/ns/lv2core#> .
+ @prefix midi:    <http://lv2plug.in/ns/ext/midi#> .
++@prefix mod:     <http://moddevices.com/ns/mod#> .
+ @prefix opts:    <http://lv2plug.in/ns/ext/options#> .
+ @prefix param:   <http://lv2plug.in/ns/ext/parameters#> .
+ @prefix patch:   <http://lv2plug.in/ns/ext/patch#> .
+@@ -29,6 +30,7 @@ midnam:update a lv2:Feature .
+ 
+ <@LV2PLUGIN_URI@:sfzfile>
+   a lv2:Parameter ;
++  mod:fileTypes "sfz" ;
+   rdfs:label "SFZ file",
+     "Fichier SFZ"@fr ,
+     "File SFZ"@it ;
