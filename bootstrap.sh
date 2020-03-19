@@ -57,8 +57,13 @@ if [ ! -f .stamp_configured ]; then
 fi
 
 if [ ! -f .stamp_built1 ]; then
-  sed -i Makefile -e 's/ifneq ($(strip $(CT_MAKEFLAGS)),)/ifneq (,)/'
-  make build-bin build-lib
+  # ct-ng 1.22 does not build correctly against latest distros
+  if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ]; then
+    sed -i Makefile -e 's/ifneq ($(strip $(CT_MAKEFLAGS)),)/ifneq (,)/'
+    make build-bin build-lib
+  else
+    make
+  fi
   touch .stamp_built1
 fi
 
