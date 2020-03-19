@@ -1,0 +1,44 @@
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 1b7b416..43a090b 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -295,10 +295,20 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
++config BR2_TOOLCHAIN_GCC_AT_LEAST_6
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	default "5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 	default "4.9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	default "4.8"	if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 2ee4c0f..e276fce 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -725,6 +725,14 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_7
++	bool "7.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_6
++	bool "6.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+ 	bool "5.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
