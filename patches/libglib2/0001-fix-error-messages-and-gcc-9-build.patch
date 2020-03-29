@@ -1,0 +1,84 @@
+From 76b1df084e20d9901408baf06a9301646915d7bf Mon Sep 17 00:00:00 2001
+From: Vladimir Molokov <vladimir.molokov@gmail.com>
+Date: Sun, 29 Mar 2020 18:38:12 +0200
+Subject: [PATCH] fix error messages and gcc 9 build
+
+---
+ gio/gdbusauth.c    |  2 +-
+ gio/gdbusmessage.c | 32 ++++++++++++++++++--------------
+ 2 files changed, 19 insertions(+), 15 deletions(-)
+
+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
+index a29f97e..ab62e2d 100644
+--- a/gio/gdbusauth.c
++++ b/gio/gdbusauth.c
+@@ -1292,9 +1292,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
+                                                     &line_length,
+                                                     cancellable,
+                                                     error);
+-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
+           if (line == NULL)
+             goto out;
++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
+           if (g_strcmp0 (line, "BEGIN") == 0)
+             {
+               /* YAY, done! */
+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
+index d9d8f37..346a302 100644
+--- a/gio/gdbusmessage.c
++++ b/gio/gdbusmessage.c
+@@ -2690,33 +2690,37 @@ g_dbus_message_to_blob (GDBusMessage          *message,
+ 
+   signature = g_dbus_message_get_header (message, G_DBUS_MESSAGE_HEADER_FIELD_SIGNATURE);
+   signature_str = NULL;
+-  if (signature != NULL)
+-      signature_str = g_variant_get_string (signature, NULL);
+   if (message->body != NULL)
+     {
+-      gchar *tupled_signature_str;
+-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++      gchar *message_body_str;
++      message_body_str = g_variant_get_type_string (message->body);
+       if (signature == NULL)
+         {
+           g_set_error (error,
+                        G_IO_ERROR,
+                        G_IO_ERROR_INVALID_ARGUMENT,
+                        _("Message body has signature '%s' but there is no signature header"),
+-                       signature_str);
+-          g_free (tupled_signature_str);
++                       message_body_str);
+           goto out;
+         }
+-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
++      else
+         {
+-          g_set_error (error,
+-                       G_IO_ERROR,
+-                       G_IO_ERROR_INVALID_ARGUMENT,
+-                       _("Message body has type signature '%s' but signature in the header field is '%s'"),
+-                       tupled_signature_str, g_variant_get_type_string (message->body));
++          gchar *tupled_signature_str;
++          signature_str = g_variant_get_string (signature, NULL);
++          tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++
++          if (g_strcmp0 (tupled_signature_str, message_body_str) != 0)
++            {
++              g_set_error (error,
++                           G_IO_ERROR,
++                           G_IO_ERROR_INVALID_ARGUMENT,
++                           _("Message body has type signature '%s' but signature in the header field is '%s'"),
++                           g_variant_get_type_string (message->body), tupled_signature_str);
++              g_free (tupled_signature_str);
++              goto out;
++            }
+           g_free (tupled_signature_str);
+-          goto out;
+         }
+-      g_free (tupled_signature_str);
+       if (!append_body_to_blob (message->body, &mbuf, error))
+         goto out;
+     }
+-- 
+2.25.1
+
