@@ -1,6 +1,6 @@
 [submodule "mod-lv2-data"]
 	path = lv2-data
-	url = git://github.com/moddevices/mod-lv2-data
+	url = https://github.com/moddevices/mod-lv2-data.git
 [submodule "lv2-data-creative-commons"]
 	path = lv2-data-creative-commons
-	url = git@github.com:moddevices/lv2-data-creative-commons.git
+	url = https://github.com/moddevices/lv2-data-creative-commons.git
