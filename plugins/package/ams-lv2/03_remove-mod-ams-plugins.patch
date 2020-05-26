@@ -200,8 +200,8 @@ diff -ruN ams-lv2/ams.lv2/lfo2_freq.ttl ams-lv2/ams.lv2/lfo2_freq.ttl
 -        lv2:maximum 1.0 ;
 -	] .
 diff -ruN ams-lv2/ams.lv2/manifest.ttl ams-lv2/ams.lv2/manifest.ttl
---- ams-lv2/ams.lv2/manifest.ttl	2020-05-25 09:52:16.000000000 +0200
-+++ ams-lv2/ams.lv2/manifest.ttl	2020-05-25 11:45:07.001562288 +0200
+--- ams-lv2/ams.lv2/manifest.ttl	2020-05-26 12:00:18.000000000 +0200
++++ ams-lv2/ams.lv2/manifest.ttl	2020-05-26 12:12:40.242435359 +0200
 @@ -112,11 +112,6 @@
  	lv2:binary <dynamicwaves2_8.so>  ;
  	rdfs:seeAlso <dynamicwaves2_8.ttl> .
@@ -267,7 +267,17 @@ diff -ruN ams-lv2/ams.lv2/manifest.ttl ams-lv2/ams.lv2/manifest.ttl
  <http://github.com/blablack/ams-lv2/vcdelay>
  	a lv2:Plugin ;
  	lv2:binary <vcdelay.so>  ;
-@@ -297,11 +267,6 @@
+@@ -287,21 +257,11 @@
+ 	lv2:binary <vcenvii.so>  ;
+ 	rdfs:seeAlso <vcenvii.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/vcf>
+-	a lv2:Plugin ;
+-	lv2:binary <vcf.so>  ;
+-	rdfs:seeAlso <vcf.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/vco2>
+ 	a lv2:Plugin ;
  	lv2:binary <vco2.so>  ;
  	rdfs:seeAlso <vco2.ttl> .
  
@@ -280,7 +290,7 @@ diff -ruN ams-lv2/ams.lv2/manifest.ttl ams-lv2/ams.lv2/manifest.ttl
  	a lv2:Plugin ;
  	lv2:binary <vcorgan_4.so>  ;
 diff -ruN ams-lv2/ams.lv2/percussiveenv.ttl ams-lv2/ams.lv2/percussiveenv.ttl
---- ams-lv2/ams.lv2/percussiveenv.ttl	2020-05-25 09:52:16.000000000 +0200
+--- ams-lv2/ams.lv2/percussiveenv.ttl	2020-05-26 12:00:18.000000000 +0200
 +++ ams-lv2/ams.lv2/percussiveenv.ttl	1970-01-01 01:00:00.000000000 +0100
 @@ -1,80 +0,0 @@
 -@prefix doap: 	<http://usefulinc.com/ns/doap#> .
@@ -364,7 +374,7 @@ diff -ruN ams-lv2/ams.lv2/percussiveenv.ttl ams-lv2/ams.lv2/percussiveenv.ttl
 -        lv2:maximum 0.0 ;
 -	].
 diff -ruN ams-lv2/ams.lv2/seq_8.ttl ams-lv2/ams.lv2/seq_8.ttl
---- ams-lv2/ams.lv2/seq_8.ttl	2020-05-25 09:52:16.000000000 +0200
+--- ams-lv2/ams.lv2/seq_8.ttl	2020-05-26 12:00:18.000000000 +0200
 +++ ams-lv2/ams.lv2/seq_8.ttl	1970-01-01 01:00:00.000000000 +0100
 @@ -1,344 +0,0 @@
 -@prefix doap: 	<http://usefulinc.com/ns/doap#> .
@@ -1266,8 +1276,8 @@ diff -ruN ams-lv2/ams.lv2/vco3.ttl ams-lv2/ams.lv2/vco3.ttl
 -		lv2:name "Out"
 -	] .
 diff -ruN ams-lv2/wscript ams-lv2/wscript
---- ams-lv2/wscript	2020-05-25 09:52:16.000000000 +0200
-+++ ams-lv2/wscript	2020-05-25 12:01:42.928209995 +0200
+--- ams-lv2/wscript	2020-05-26 12:00:18.000000000 +0200
++++ ams-lv2/wscript	2020-05-26 12:12:19.952434497 +0200
 @@ -107,13 +107,11 @@
      cvs
      cvtocontrol
