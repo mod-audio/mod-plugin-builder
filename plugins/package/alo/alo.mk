@@ -4,7 +4,7 @@
 #
 ######################################
 
-ALO_VERSION = master
+ALO_VERSION = 44f50586eb67455fccd53b736d47365419aec806
 ALO_BUNDLES = alo.lv2
 
 ALO_SITE = $(call github,devcurmudgeon,alo,$(ALO_VERSION))
