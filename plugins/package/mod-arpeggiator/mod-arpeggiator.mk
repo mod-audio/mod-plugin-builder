@@ -1,12 +1,12 @@
 ######################################
 #
-# arpeggiator
+# mod-arpeggiator
 #
 ######################################
 
-MOD_ARPEGGIATOR_VERSION = 0fc5bb3b8360435e71544de7fed42e3d586afdc2
+MOD_ARPEGGIATOR_VERSION = 47becf60302b4b48d3e5456c38a00a9e1ad0fd5f
 MOD_ARPEGGIATOR_SITE = $(call github,moddevices,mod-arpeggiator-lv2,$(MOD_ARPEGGIATOR_VERSION))
-MOD_ARPEGGIATOR_BUNDLES = mod-arpeggiator.lv2 mod-midi-pattern.lv2
+MOD_ARPEGGIATOR_BUNDLES = mod-arpeggiator.lv2
 
 # dependencies (list of other buildroot packages, separated by space)
 MOD_ARPEGGIATOR_DEPENDENCIES =
@@ -21,7 +21,7 @@ endef
 define MOD_ARPEGGIATOR_INSTALL_TARGET_CMDS
 	install -d $(TARGET_DIR)/usr/lib/lv2/
 	cp -r $(@D)/arpeggiator/source/mod-arpeggiator.lv2    $(TARGET_DIR)/usr/lib/lv2/
-	cp -r $(@D)/midi-pattern/source/mod-midi-pattern.lv2    $(TARGET_DIR)/usr/lib/lv2/
+	cp -rL $($(PKG)_PKGDIR)/mod-arpeggiator.lv2/*         $(TARGET_DIR)/usr/lib/lv2/mod-arpeggiator.lv2/
 endef
 
 $(eval $(generic-package))
