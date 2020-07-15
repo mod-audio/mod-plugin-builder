@@ -4,7 +4,7 @@
 #
 ######################################
 
-RKRLV2_VERSION = 058fecf367b2d20e140828869822391217783a82
+RKRLV2_VERSION = 7edcb4e29a358623bfd57fa2c27e5da60adfcec3
 RKRLV2_SITE = $(call github,ssj71,rkrlv2,$(RKRLV2_VERSION))
 RKRLV2_DEPENDENCIES = fftw-double libsamplerate
 RKRLV2_BUNDLES = rkr.lv2
