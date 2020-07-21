@@ -4,10 +4,11 @@
 #
 ######################################
 
-SFIZZ_VERSION = 930bfdfefed49d44d0c1f547da4d8c637e63155d
+SFIZZ_VERSION = 0160af3bb7f17c88f3f1a357eabe5281ecccefd4
 SFIZZ_SITE = $(call github,sfztools,sfizz,$(SFIZZ_VERSION))
-SFIZZ_DEPENDENCIES = libsndfile
-SFIZZ_CONF_OPTS=-DSFIZZ_JACK=OFF
+SFIZZ_DEPENDENCIES = libsndfile host-cmake
+SFIZZ_CONF_OPTS=-DSFIZZ_JACK=OFF -DSFIZZ_SHARED=OFF -DABSL_BUILD_DLL=FALSE -DBUILD_SHARED_LIBS=FALSE
+# -DSFIZZ_RENDER=OFF
 SFIZZ_BUNDLES = sfizz.lv2
 
 # needed for git submodules
