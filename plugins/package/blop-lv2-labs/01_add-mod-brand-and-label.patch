@@ -1,0 +1,546 @@
+diff --git a/blop.lv2/adsr.ttl b/blop.lv2/adsr.ttl
+index 290a745..dd3c151 100644
+--- a/blop.lv2/adsr.ttl
++++ b/blop.lv2/adsr.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+ blop:adsr
+@@ -69,6 +70,8 @@ blop:adsr
+ 	] ;
+ 	dct:replaces <urn:ladspa:1653> ;
+ 	doap:name "ADSR Envelope" ;
++	mod:brand "BLOP" ;
++	mod:label "ADSR Env" ;
+ 	lv2:documentation """
+ <p>Generates an ADSR (Attack, Decay, Sustain and Release) envelope.</p>
+ 
+diff --git a/blop.lv2/adsr_gt.ttl b/blop.lv2/adsr_gt.ttl
+index 719330e..73ef52b 100644
+--- a/blop.lv2/adsr_gt.ttl
++++ b/blop.lv2/adsr_gt.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+ blop:adsr_gt
+@@ -72,6 +73,8 @@ blop:adsr_gt
+ 	] ;
+ 	dct:replaces <urn:ladspa:1680> ;
+ 	doap:name "Retriggerable ADSR Envelope" ;
++	mod:brand "BLOP" ;
++	mod:label "ADSR Env Retrig" ;
+ 	lv2:documentation """
+ <p>Generates an ADSR (Attack, Decay, Sustain and Release)
+ envelope.</p>
+diff --git a/blop.lv2/amp.ttl b/blop.lv2/amp.ttl
+index 8ba454d..38a1f74 100644
+--- a/blop.lv2/amp.ttl
++++ b/blop.lv2/amp.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -44,6 +45,8 @@ blop:amp
+ 	dct:replaces <urn:ladspa:1654> ,
+ 		<urn:ladspa:1655> ;
+ 	doap:name "Amplifier" ;
++	mod:brand "BLOP" ;
++	mod:label "Amplifier" ;
+ 	lv2:documentation """
+ <p>A simple monophonic amplifier.</p>
+ """ .
+diff --git a/blop.lv2/branch.ttl b/blop.lv2/branch.ttl
+index f58b81d..7a13958 100644
+--- a/blop.lv2/branch.ttl
++++ b/blop.lv2/branch.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@@ -47,6 +48,8 @@ blop:branch
+ 	dct:replaces <urn:ladspa:1673> ,
+ 		<urn:ladspa:1674> ;
+ 	doap:name "Branch" ;
++	mod:brand "BLOP" ;
++	mod:label "Branch" ;
+ 	lv2:documentation """
+ <p>Splits an input signal into two identical signals. Somewhat redundant, as
+ most modular synth hosts allow you to connect an output to more than one input.
+diff --git a/blop.lv2/dahdsr.ttl b/blop.lv2/dahdsr.ttl
+index 68652aa..8c26637 100644
+--- a/blop.lv2/dahdsr.ttl
++++ b/blop.lv2/dahdsr.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@@ -109,6 +110,8 @@ blop:dahdsr
+ 		<urn:ladspa:2022> ,
+ 		<urn:ladspa:2038> ;
+ 	doap:name "Retriggerable DAHDSR Envelope" ;
++	mod:brand "BLOP" ;
++	mod:label "DAHDSR Env Retr" ;
+ 	lv2:documentation """
+ <p>Generates a DAHDSR (Delay, Attack, Hold, Decay, Sustain, Release)
+ envelope.</p>
+diff --git a/blop.lv2/difference.ttl b/blop.lv2/difference.ttl
+index e55c6fe..fb9b649 100644
+--- a/blop.lv2/difference.ttl
++++ b/blop.lv2/difference.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@@ -46,6 +47,8 @@ blop:difference
+ 		<urn:ladspa:2032> ,
+ 		<urn:ladspa:2033> ;
+ 	doap:name "Difference" ;
++	mod:brand "BLOP" ;
++	mod:label "Difference" ;
+ 	lv2:documentation """
+ <p>Subtract two signals.</p>
+ """ .
+diff --git a/blop.lv2/fmod.ttl b/blop.lv2/fmod.ttl
+index 38a552d..ad50699 100644
+--- a/blop.lv2/fmod.ttl
++++ b/blop.lv2/fmod.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -54,6 +55,8 @@ blop:fmod
+ 		<urn:ladspa:1658> ,
+ 		<urn:ladspa:1659> ;
+ 	doap:name "Frequency Modulator" ;
++	mod:brand "BLOP" ;
++	mod:label "Freq. Modulator" ;
+ 	lv2:documentation """
+ <p>Modulates an input frequency by a driving signal, transposing the frequency
+ by &#177;1 Octave per unit amplitude of signal.</p>
+diff --git a/blop.lv2/interpolator.ttl b/blop.lv2/interpolator.ttl
+index 38c93db..44b4997 100644
+--- a/blop.lv2/interpolator.ttl
++++ b/blop.lv2/interpolator.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ 
+ blop:interpolator
+ 	a lv2:Plugin ,
+@@ -26,6 +27,8 @@ blop:interpolator
+ 	] ;
+ 	dct:replaces <urn:ladspa:1660> ;
+ 	doap:name "Control to CV Interpolator" ;
++	mod:brand "BLOP" ;
++	mod:label "Ctrl2CV Intrpltr" ;
+ 	lv2:documentation """
+ <p>Interpolates a control-rate (per-block) signal into a smooth audio-rate
+ (per-sample) signal.</p>
+diff --git a/blop.lv2/lp4pole.ttl b/blop.lv2/lp4pole.ttl
+index 8fcf75c..6cd9217 100644
+--- a/blop.lv2/lp4pole.ttl
++++ b/blop.lv2/lp4pole.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@@ -56,6 +57,8 @@ blop:lp4pole
+ 	dct:replaces <urn:ladspa:1671> ,
+ 		<urn:ladspa:1672> ;
+ 	doap:name "4 Pole Resonant Low-Pass" ;
++	mod:brand "BLOP" ;
++	mod:label "4-Pole Low-Pass" ;
+ 	lv2:documentation """
+ <p>Emulates a low pass filter in popular analogue synthesisers. This particular
+ filter is derived from one of <a
+diff --git a/blop.lv2/product.ttl b/blop.lv2/product.ttl
+index d273f22..a9f0621 100644
+--- a/blop.lv2/product.ttl
++++ b/blop.lv2/product.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@@ -45,6 +46,8 @@ blop:product
+ 		<urn:ladspa:1669> ,
+ 		<urn:ladspa:1670> ;
+ 	doap:name "Product" ;
++	mod:brand "BLOP" ;
++	mod:label "Product" ;
+ 	lv2:documentation """
+ <p>Multiply two signals.</p>
+ """ .
+diff --git a/blop.lv2/pulse.ttl b/blop.lv2/pulse.ttl
+index 5a940a9..d3a9d7f 100644
+--- a/blop.lv2/pulse.ttl
++++ b/blop.lv2/pulse.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -54,6 +55,8 @@ blop:pulse
+ 		<urn:ladspa:1647> ,
+ 		<urn:ladspa:1648> ;
+ 	doap:name "Pulse" ;
++	mod:brand "BLOP" ;
++	mod:label "Pulse" ;
+ 	lv2:documentation """
+ <p>Generates an alias-free pulse wave at given input frequency and pulse width
+ (duty).</p>
+diff --git a/blop.lv2/quantiser_100.ttl b/blop.lv2/quantiser_100.ttl
+index c2873aa..cd04b57 100644
+--- a/blop.lv2/quantiser_100.ttl
++++ b/blop.lv2/quantiser_100.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ 
+@@ -684,6 +685,8 @@ blop:quantiser_100
+ 	] ;
+ 	dct:replaces <urn:ladspa:2029> ;
+ 	doap:name "Quantiser (100 Steps)" ;
++	mod:brand "BLOP" ;
++	mod:label "Quant. 100-Step" ;
+ 	lv2:documentation """
+ <p>Quantises a signal to a set of arbitrary values within a range.</p>
+ 
+diff --git a/blop.lv2/quantiser_20.ttl b/blop.lv2/quantiser_20.ttl
+index 095716f..5c8b9b8 100644
+--- a/blop.lv2/quantiser_20.ttl
++++ b/blop.lv2/quantiser_20.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ 
+@@ -204,6 +205,8 @@ blop:quantiser_20
+ 	] ;
+ 	dct:replaces <urn:ladspa:2027> ;
+ 	doap:name "Quantiser (20 Steps)" ;
++	mod:brand "BLOP" ;
++	mod:label "Quant. 20-Step" ;
+ 	lv2:documentation """
+ <p>Quantises a signal to a set of arbitrary values within a range.</p>
+ 
+diff --git a/blop.lv2/quantiser_50.ttl b/blop.lv2/quantiser_50.ttl
+index 901865c..f964365 100644
+--- a/blop.lv2/quantiser_50.ttl
++++ b/blop.lv2/quantiser_50.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ 
+@@ -384,6 +385,8 @@ blop:quantiser_50
+ 	] ;
+ 	dct:replaces <urn:ladspa:2028> ;
+ 	doap:name "Quantiser (50 Steps)" ;
++	mod:brand "BLOP" ;
++	mod:label "Quant. 50-Step" ;
+ 	lv2:documentation """
+ <p>Quantises a signal to a set of arbitrary values within a range.</p>
+ 
+diff --git a/blop.lv2/random.ttl b/blop.lv2/random.ttl
+index 8b810c9..5034be9 100644
+--- a/blop.lv2/random.ttl
++++ b/blop.lv2/random.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -55,6 +56,8 @@ blop:random
+ 		<urn:ladspa:1663> ,
+ 		<urn:ladspa:1664> ;
+ 	doap:name "Random Wave" ;
++	mod:brand "BLOP" ;
++	mod:label "Random Wave" ;
+ 	lv2:documentation """
+ <p>Generates a random waveform of varying frequency and smoothness.  The
+ frequency determines how often the output changes. The smoothness, how quickly
+diff --git a/blop.lv2/ratio.ttl b/blop.lv2/ratio.ttl
+index 04e4d90..84cd999 100644
+--- a/blop.lv2/ratio.ttl
++++ b/blop.lv2/ratio.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@@ -46,6 +47,8 @@ blop:ratio
+ 		<urn:ladspa:2036> ,
+ 		<urn:ladspa:2037> ;
+ 	doap:name "Ratio" ;
++	mod:brand "BLOP" ;
++	mod:label "Ratio" ;
+ 	lv2:documentation """
+ <p>Get the ratio between two signals.</p>
+ <p>To avoid divisions by zero, 0 is treated as a really small number.</p>
+diff --git a/blop.lv2/sawtooth.ttl b/blop.lv2/sawtooth.ttl
+index 04dec12..824d865 100644
+--- a/blop.lv2/sawtooth.ttl
++++ b/blop.lv2/sawtooth.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -41,6 +42,8 @@ blop:sawtooth
+ 	dct:replaces <urn:ladspa:1642> ,
+ 		<urn:ladspa:1643> ;
+ 	doap:name "Sawtooth" ;
++	mod:brand "BLOP" ;
++	mod:label "Sawtooth" ;
+ 	lv2:documentation """
+ <p>Generates an alias-free sawtooth wave at given input frequency.</p>
+ """ .
+diff --git a/blop.lv2/sequencer_16.ttl b/blop.lv2/sequencer_16.ttl
+index 97473a6..ac9233a 100644
+--- a/blop.lv2/sequencer_16.ttl
++++ b/blop.lv2/sequencer_16.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ 
+ blop:sequencer_16
+ 	a lv2:Plugin ;
+@@ -156,6 +157,8 @@ blop:sequencer_16
+ 	] ;
+ 	dct:replaces <urn:ladspa:1677> ;
+ 	doap:name "16 Step Sequencer" ;
++	mod:brand "BLOP" ;
++	mod:label "16 Step Seq." ;
+ 	lv2:documentation """
+ <p>Simulates an analogue step sequencer. The sequencer stores a number of
+ values which are stepped through using a trigger when the gate is open, looping
+diff --git a/blop.lv2/sequencer_32.ttl b/blop.lv2/sequencer_32.ttl
+index ae289f2..0d2f171 100644
+--- a/blop.lv2/sequencer_32.ttl
++++ b/blop.lv2/sequencer_32.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ 
+ blop:sequencer_32
+ 	a lv2:Plugin ;
+@@ -252,6 +253,8 @@ blop:sequencer_32
+ 	] ;
+ 	dct:replaces <urn:ladspa:1676> ;
+ 	doap:name "32 Step Sequencer" ;
++	mod:brand "BLOP" ;
++	mod:label "32 Step Seq." ;
+ 	lv2:documentation """
+ <p>Simulates an analogue step sequencer. The sequencer stores a number of
+ values which are stepped through using a trigger when the gate is open, looping
+diff --git a/blop.lv2/sequencer_64.ttl b/blop.lv2/sequencer_64.ttl
+index 3a3ea0f..a8e72d1 100644
+--- a/blop.lv2/sequencer_64.ttl
++++ b/blop.lv2/sequencer_64.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ 
+ blop:sequencer_64
+ 	a lv2:Plugin ;
+@@ -444,6 +445,8 @@ blop:sequencer_64
+ 	] ;
+ 	dct:replaces <urn:ladspa:1675> ;
+ 	doap:name "64 Step Sequencer" ;
++	mod:brand "BLOP" ;
++	mod:label "64 Step Seq." ;
+ 	lv2:documentation """
+ <p>Simulates an analogue step sequencer. The sequencer stores a number of
+ values which are stepped through using a trigger when the gate is open, looping
+diff --git a/blop.lv2/square.ttl b/blop.lv2/square.ttl
+index 77f30bc..68ed578 100644
+--- a/blop.lv2/square.ttl
++++ b/blop.lv2/square.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -41,6 +42,8 @@ blop:square
+ 	dct:replaces <urn:ladspa:1643> ,
+ 		<urn:ladspa:1644> ;
+ 	doap:name "Square" ;
++	mod:brand "BLOP" ;
++	mod:label "Square" ;
+ 	lv2:documentation """
+ <p>Generates an alias-free square wave at given input frequency.</p>
+ """ .
+diff --git a/blop.lv2/sum.ttl b/blop.lv2/sum.ttl
+index 66ea88d..2d1c75f 100644
+--- a/blop.lv2/sum.ttl
++++ b/blop.lv2/sum.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix urid: <http://lv2plug.in/ns/ext/urid#> .
+@@ -45,6 +46,8 @@ blop:sum
+ 		<urn:ladspa:1666> ,
+ 		<urn:ladspa:1667> ;
+ 	doap:name "Sum" ;
++	mod:brand "BLOP" ;
++	mod:label "Sum" ;
+ 	lv2:documentation """
+ <p>Add two signals.</p>
+ """ .
+diff --git a/blop.lv2/sync_pulse.ttl b/blop.lv2/sync_pulse.ttl
+index 47051e2..ae83fd8 100644
+--- a/blop.lv2/sync_pulse.ttl
++++ b/blop.lv2/sync_pulse.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -57,6 +58,8 @@ blop:sync_pulse
+ 	dct:replaces <urn:ladspa:2023> ,
+ 		<urn:ladspa:2024> ;
+ 	doap:name "Clock Pulse" ;
++	mod:brand "BLOP" ;
++	mod:label "Clock Pulse" ;
+ 	lv2:documentation """
+ <p>Same as the <a href="http://drobilla.net/plugins/blop/sync_square">Clock
+ Oscillator</a>, but with pulse-width modulation.</p>
+diff --git a/blop.lv2/sync_square.ttl b/blop.lv2/sync_square.ttl
+index 873619f..e3e1c6b 100644
+--- a/blop.lv2/sync_square.ttl
++++ b/blop.lv2/sync_square.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -46,6 +47,8 @@ blop:sync_square
+ 	dct:replaces <urn:ladspa:1678> ,
+ 		<urn:ladspa:1679> ;
+ 	doap:name "Clock Square" ;
++	mod:brand "BLOP" ;
++	mod:label "Clock Square" ;
+ 	lv2:documentation """
+ <p>Generates a non-bandlimited simple square waveform for use as a clock.
+ Useful for triggering the sequencers, or anything else that uses a clock
+diff --git a/blop.lv2/tracker.ttl b/blop.lv2/tracker.ttl
+index b62d811..774055d 100644
+--- a/blop.lv2/tracker.ttl
++++ b/blop.lv2/tracker.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -95,6 +96,8 @@ blop:tracker
+ 	dct:replaces <urn:ladspa:2025> ,
+ 		<urn:ladspa:2026> ;
+ 	doap:name "Tracker" ;
++	mod:brand "BLOP" ;
++	mod:label "Tracker" ;
+ 	lv2:documentation """
+ <p>This tracks an incoming signal and outputs the result.</p>
+ <p>The rate controls tell the plugin how quickly to respond to a change in
+diff --git a/blop.lv2/triangle.ttl b/blop.lv2/triangle.ttl
+index 60b5a2b..09e9ea5 100644
+--- a/blop.lv2/triangle.ttl
++++ b/blop.lv2/triangle.ttl
+@@ -2,6 +2,7 @@
+ @prefix dct: <http://purl.org/dc/terms/> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+ @prefix lv2: <http://lv2plug.in/ns/lv2core#> .
++@prefix mod: <http://moddevices.com/ns/mod#> .
+ @prefix morph: <http://lv2plug.in/ns/ext/morph#> .
+ @prefix opts: <http://lv2plug.in/ns/ext/options#> .
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@@ -54,6 +55,8 @@ blop:triangle
+ 		<urn:ladspa:1651> ,
+ 		<urn:ladspa:1652> ;
+ 	doap:name "Triangle" ;
++	mod:brand "BLOP" ;
++	mod:label "Triangle" ;
+ 	lv2:documentation """
+ <p>Generates an alias-free variable slope triangle wave at given input
+ frequency and slope. The slope changes the wave shape from sawtooth to
