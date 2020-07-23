@@ -7,7 +7,7 @@
 MOD_UTILITIES_VERSION = 4a92aa81351c5c95fefa0505fafad5fbea494dd0
 MOD_UTILITIES_SITE = $(call github,moddevices,mod-utilities,$(MOD_UTILITIES_VERSION))
 MOD_UTILITIES_DEPENDENCIES = alsa-lib
-MOD_UTILITIES_BUNDLES = mod-bpf.lv2 mod-bypass.lv2 mod-crossover2.lv2 mod-crossover3.lv2 mod-gain.lv2 mod-gain2x2.lv2 mod-hpf.lv2 mod-lpf.lv2 mod-switchbox2.lv2 mod-switchtrigger4.lv2 mod-toggleswitch4.lv2 inverted-switchbox.lv2 stereoswitchbox.lv2 stereoswitchbox2.lv2
+MOD_UTILITIES_BUNDLES = mod-bpf.lv2 mod-bypass.lv2 mod-crossover2.lv2 mod-crossover3.lv2 mod-gain.lv2 mod-gain2x2.lv2 mod-hpf.lv2 mod-lpf.lv2 mod-switchbox2.lv2 mod-toggleswitch4.lv2
 
 MOD_UTILITIES_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true MOD=1 -C $(@D)
 
@@ -26,7 +26,6 @@ define MOD_UTILITIES_INSTALL_TARGET_CMDS
 	cp -rL $($(PKG)_PKGDIR)/mod-hpf.lv2/*            $(TARGET_DIR)/usr/lib/lv2/mod-hpf.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-lpf.lv2/*            $(TARGET_DIR)/usr/lib/lv2/mod-lpf.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-switchbox2.lv2/*     $(TARGET_DIR)/usr/lib/lv2/mod-switchbox2.lv2/
-	cp -rL $($(PKG)_PKGDIR)/mod-switchtrigger4.lv2/* $(TARGET_DIR)/usr/lib/lv2/mod-switchtrigger4.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-toggleswitch4.lv2/*  $(TARGET_DIR)/usr/lib/lv2/mod-toggleswitch4.lv2/
 endef
 
