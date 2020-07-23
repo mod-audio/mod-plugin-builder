@@ -1,0 +1,33 @@
+From 4ba1177f57ae009dfaddce1bf1e61d8fbbe76c88 Mon Sep 17 00:00:00 2001
+From: falkTX <falktx@gmail.com>
+Date: Tue, 31 Jan 2017 15:33:26 +0100
+Subject: [PATCH] Make OpenGL optional
+
+---
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 863eecc..7665af7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -15,7 +15,9 @@ include Makefile.mk
+ all: libs $(PLUGINS) gen
+ 
+ libs:
++ifeq ($(HAVE_DGL),true)
+ 	$(MAKE) -C dpf/dgl
++endif
+ 
+ gen: $(PLUGINS) dpf/utils/lv2_ttl_generator
+ 	@$(CURDIR)/dpf/utils/generate-ttl.sh
+@@ -63,7 +65,9 @@ clean:
+ 	for plugin in $(PLUGINS); do \
+ 		$(MAKE) -C plugins/"$$plugin" clean; \
+ 	done
++ifeq ($(HAVE_DGL),true)
+ 	$(MAKE) clean -C dpf/dgl
++endif
+ 	$(MAKE) clean -C dpf/utils/lv2-ttl-generator
+ 
+ # --------------------------------------------------------------
