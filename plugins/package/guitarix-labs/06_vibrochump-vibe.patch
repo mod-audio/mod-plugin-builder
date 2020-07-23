@@ -1,0 +1,417 @@
+diff --git a/trunk/src/LV2/faust-generated/gx_vibrochump.cc b/trunk/src/LV2/faust-generated/gx_vibrochump.cc
+index 084d275..28fec44 100644
+--- a/trunk/src/LV2/faust-generated/gx_vibrochump.cc
++++ b/trunk/src/LV2/faust-generated/gx_vibrochump.cc
+@@ -25,6 +25,8 @@ private:
+ 	FAUSTFLOAT 	fslider1;
+ 	FAUSTFLOAT	*fslider1_;
+ 	double 	fRec6[2];
++	FAUSTFLOAT 	fcheckbox1;
++	FAUSTFLOAT	*fcheckbox1_;
+ 	FAUSTFLOAT 	fslider2;
+ 	FAUSTFLOAT	*fslider2_;
+ 	double 	fRec13[2];
+@@ -35,8 +37,8 @@ private:
+ 	double 	fConst8;
+ 	double 	fConst9;
+ 	double 	fConst10;
+-	FAUSTFLOAT 	fcheckbox1;
+-	FAUSTFLOAT	*fcheckbox1_;
++	FAUSTFLOAT 	fcheckbox2;
++	FAUSTFLOAT	*fcheckbox2_;
+ 	double 	fVec1[2];
+ 	double 	fConst11;
+ 	double 	fConst12;
+@@ -265,8 +267,9 @@ void always_inline Dsp::compute(int count, FAUSTFLOAT *input0, FAUSTFLOAT *outpu
+ #define fslider0 (*fslider0_)
+ #define fcheckbox0 (*fcheckbox0_)
+ #define fslider1 (*fslider1_)
+-#define fslider2 (*fslider2_)
+ #define fcheckbox1 (*fcheckbox1_)
++#define fslider2 (*fslider2_)
++#define fcheckbox2 (*fcheckbox2_)
+ #define fslider3 (*fslider3_)
+ #define fslider4 (*fslider4_)
+ 	double 	fSlow0 = double(fslider0);
+@@ -275,11 +278,12 @@ void always_inline Dsp::compute(int count, FAUSTFLOAT *input0, FAUSTFLOAT *outpu
+ 	double 	fSlow3 = (fConst3 * fSlow0);
+ 	int 	iSlow4 = int(double(fcheckbox0));
+ 	double 	fSlow5 = double(fslider1);
+-	double 	fSlow6 = (0.007000000000000006 * pow(10,(0.05 * double(fslider2))));
+-	double 	fSlow7 = double(fcheckbox1);
+-	double 	fSlow8 = (fConst7 * fSlow7);
+-	double 	fSlow9 = (0.007000000000000006 * double(fslider3));
+-	double 	fSlow10 = (0.007000000000000006 * pow(10,(0.05 * double(fslider4))));
++	int 	iSlow6 = int(double(fcheckbox1));
++	double 	fSlow7 = (0.007000000000000006 * pow(10,(0.05 * double(fslider2))));
++	double 	fSlow8 = double(fcheckbox2);
++	double 	fSlow9 = (fConst7 * fSlow8);
++	double 	fSlow10 = (0.007000000000000006 * double(fslider3));
++	double 	fSlow11 = (0.007000000000000006 * pow(10,(0.05 * double(fslider4))));
+ 	for (int i=0; i<count; i++) {
+ 		iVec0[0] = 1;
+ 		double fTemp0 = (fRec6[1] * (1 - (fConst1 / (fConst1 + (0.06 * exp((0 - (2.4849066497880004 * fRec6[1]))))))));
+@@ -289,14 +293,14 @@ void always_inline Dsp::compute(int count, FAUSTFLOAT *input0, FAUSTFLOAT *outpu
+ 		fRec10[0] = ((1 + (fRec10[1] + (fSlow3 * fRec11[0]))) - iVec0[1]);
+ 		fRec9[0] = fRec10[0];
+ 		fRec6[0] = (fTemp0 + (fConst1 * (pow((1 + (fSlow5 * ((0.09803921568627452 * ((iSlow4)?max((double)0, (0.5 * (1 + fRec9[0]))):(fSlow2 * iRec7[0]))) - 0.09803921568627452))),1.9) / (fConst1 + (0.06 * exp((0 - (2.4849066497880004 * fTemp0))))))));
+-		fRec13[0] = ((0.993 * fRec13[1]) + fSlow6);
+-		double fTemp1 = (fSlow7 * fRec14[1]);
++		fRec13[0] = ((0.993 * fRec13[1]) + fSlow7);
++		double fTemp1 = (fSlow8 * fRec14[1]);
+ 		fVec1[0] = fTemp1;
+-		fRec21[0] = ((fConst14 * fRec21[1]) + (fConst13 * ((fSlow8 * fRec14[1]) + (fConst11 * fVec1[1]))));
++		fRec21[0] = ((fConst14 * fRec21[1]) + (fConst13 * ((fSlow9 * fRec14[1]) + (fConst11 * fVec1[1]))));
+ 		fRec20[0] = (fRec21[0] - (fConst10 * ((fConst8 * fRec20[2]) + (fConst6 * fRec20[1]))));
+ 		fRec23[0] = ((fConst14 * fRec23[1]) + (fConst13 * (fVec1[0] + fVec1[1])));
+ 		fRec22[0] = (fRec23[0] - (fConst10 * ((fConst8 * fRec22[2]) + (fConst6 * fRec22[1]))));
+-		fRec24[0] = ((0.993 * fRec24[1]) + fSlow9);
++		fRec24[0] = ((0.993 * fRec24[1]) + fSlow10);
+ 		double fTemp2 = (fConst21 * fRec24[0]);
+ 		double fTemp3 = ((double)input0[i] + 1e-15);
+ 		fVec2[0] = fTemp3;
+@@ -308,7 +312,7 @@ void always_inline Dsp::compute(int count, FAUSTFLOAT *input0, FAUSTFLOAT *outpu
+ 		fRec27[0] = (Ftube(TUBE_TABLE_12AX7_68k, ((fRec30[0] + (0.9254498422517706 * (fRec28[2] + (fRec28[0] + (2.0 * fRec28[1]))))) - 1.581656)) - 191.42014814814814);
+ 		fRec26[0] = ((fConst35 * fRec26[1]) + (fConst34 * ((fConst31 * fRec27[0]) + (fConst32 * fRec27[1]))));
+ 		fRec25[0] = (fRec26[0] - (fConst26 * ((fConst25 * fRec25[1]) + (fConst23 * fRec25[2]))));
+-		fRec31[0] = ((0.993 * fRec31[1]) + fSlow10);
++		fRec31[0] = ((0.993 * fRec31[1]) + fSlow11);
+ 		double fTemp5 = ((fConst26 * (fRec31[0] * (((fRec25[0] * (fTemp2 + fConst37)) + (fRec25[1] * (0.00802871828276969 + (fConst36 * fRec24[0])))) + (fRec25[2] * (fTemp2 + fConst19))))) - (fConst16 * ((fRec22[2] + (fRec22[0] + (2 * fRec22[1]))) + (1.4125375446227544 * (((fConst5 * fRec20[0]) + (fConst15 * fRec20[1])) + (fConst5 * fRec20[2]))))));
+ 		fVec4[0] = fTemp5;
+ 		fRec19[0] = ((fConst14 * fRec19[1]) + (fConst13 * (fVec4[0] + fVec4[1])));
+@@ -325,7 +329,7 @@ void always_inline Dsp::compute(int count, FAUSTFLOAT *input0, FAUSTFLOAT *outpu
+ 		double fTemp8 = (fRec14[0] * fRec13[0]);
+ 		fVec7[0] = fTemp8;
+ 		fRec12[0] = ((fConst14 * fRec12[1]) + (fConst13 * (fVec7[0] + fVec7[1])));
+-		double fTemp9 = (1e-15 + (2700 * (fRec12[0] / (2700 + exp((13.815510557964274 / log((2.718281828459045 + (8.551967507929417 * fRec6[0])))))))));
++		double fTemp9 = (1e-15 + (fRec12[0] * ((iSlow6)?1.0:(double(2700) / (2700 + exp((13.815510557964274 / log((2.718281828459045 + (8.551967507929417 * fRec6[0]))))))))));
+ 		fVec8[0] = fTemp9;
+ 		fRec5[0] = ((0.9302847925323914 * (fVec8[0] + fVec8[1])) - (0.8605695850647829 * fRec5[1]));
+ 		fRec4[0] = (fRec5[0] - ((1.8405051250752198 * fRec4[1]) + (0.8612942439318627 * fRec4[2])));
+@@ -386,8 +390,9 @@ void always_inline Dsp::compute(int count, FAUSTFLOAT *input0, FAUSTFLOAT *outpu
+ #undef fslider0
+ #undef fcheckbox0
+ #undef fslider1
+-#undef fslider2
+ #undef fcheckbox1
++#undef fslider2
++#undef fcheckbox2
+ #undef fslider3
+ #undef fslider4
+ }
+@@ -416,7 +421,7 @@ void Dsp::connect(uint32_t port,void* data)
+ 		fslider2_ = (float*)data; // , 0.0, -2e+01, 1e+01, 0.1 
+ 		break;
+ 	case FEEDBACK: 
+-		fcheckbox1_ = (float*)data; // , 0.0, 0.0, 1.0, 1.0 
++		fcheckbox2_ = (float*)data; // , 0.0, 0.0, 1.0, 1.0 
+ 		break;
+ 	case INTENSITY: 
+ 		fslider1_ = (float*)data; // , 5.0, 0.0, 1e+01, 0.1 
+@@ -424,6 +429,10 @@ void Dsp::connect(uint32_t port,void* data)
+ 	case SPEED: 
+ 		fslider0_ = (float*)data; // , 5.0, 0.1, 1e+01, 0.1 
+ 		break;
++	// static const value_pair fcheckbox1_values[] = {{"On"},{"Off"},{0}};
++	case VIBE: 
++		fcheckbox1_ = (float*)data; // , 0.0, 0.0, 1.0, 1.0 
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -454,6 +463,7 @@ typedef enum
+    FEEDBACK, 
+    INTENSITY, 
+    SPEED, 
++   VIBE, 
+ } PortIndex;
+ */
+ 
+diff --git a/trunk/src/LV2/faust/gx_vibrochump.dsp b/trunk/src/LV2/faust/gx_vibrochump.dsp
+index 7f3aa70..21a3b74 100644
+--- a/trunk/src/LV2/faust/gx_vibrochump.dsp
++++ b/trunk/src/LV2/faust/gx_vibrochump.dsp
+@@ -94,6 +94,8 @@ tremolo(freq, depth) = lfo * depth + 1 - depth : vactrol with {
+ 
+ effect =  (tremolo(vslider("speed[style:knob]",5,0.1,10,0.1),vslider("intensity[style:knob]",5,0,10,0.1)/10.2));
+ 
++vof =checkbox("vibe[enum:On|Off]");
++vibe = select2(vof, effect, 1.0);
+ 
+ // After some playing it seems that tubestage() phase inverts
+ // so if presence is wrapped around odd number of tubestages no need to reverse
+@@ -110,7 +112,7 @@ process =  stage1:bmptone:*(preamp): stage2:transformer with {
+ 	// master 0 - > 20 Either 0.75 or 0.5
+ 	// How to do in Faust!
+ 	atten = 0.5; // Seems to need at least this much!
+-	stage2 =  ( + : lowpass(1,6531.0):tubestage(TB_12AX7_250k,100.0,1500.0,1.204285) )~feedback:*(volume):lowpass(1,6531.0):*(effect):tubestage(TB_6V6_250k,120.0,820.0,1.130462):*(atten); 
++	stage2 =  ( + : lowpass(1,6531.0):tubestage(TB_12AX7_250k,100.0,1500.0,1.204285) )~feedback:*(volume):lowpass(1,6531.0):*(vibe):tubestage(TB_6V6_250k,120.0,820.0,1.130462):*(atten); 
+        transformer = lowpass( 1, 6531 ):highpass( 1, 120) ;
+ 	feedback = *(checkbox("feedback") ):high_shelf( 3, 6531 ): *(-0.5);
+       cabinet = lowpass(2,5500):peak_eq(-15.0,400.0,400):highpass(2,120);
+diff --git a/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl b/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl
+index e57a324..44eb837 100644
+--- a/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl
++++ b/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl
+@@ -108,6 +108,16 @@ rdfs:comment """
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+         lv2:index 4 ;
++        lv2:symbol "Vibe" ;
++        lv2:name "Vibe";
++        lv2:portProperty lv2:notOnGUI;
++        lv2:default 0 ;
++        lv2:minimum 0 ;
++        lv2:maximum 1.0 ;
++    ] , [
++        a lv2:InputPort ,
++            lv2:ControlPort ;
++        lv2:index 5 ;
+         lv2:symbol "Speed" ;
+         lv2:name "Speed";
+         lv2:portProperty lv2:notOnGUI;
+@@ -117,7 +127,7 @@ rdfs:comment """
+     ] , [
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+-        lv2:index 5 ;
++        lv2:index 6 ;
+         lv2:symbol "Intensity" ;
+         lv2:name "Intensity";
+         lv2:portProperty lv2:notOnGUI;
+@@ -127,7 +137,7 @@ rdfs:comment """
+     ] , [
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+-        lv2:index 6 ;
++        lv2:index 7 ;
+         lv2:symbol "Sinewave" ;
+         lv2:name "Sinewave";
+         lv2:portProperty lv2:notOnGUI;
+@@ -137,13 +147,13 @@ rdfs:comment """
+     ] , [
+         a lv2:AudioPort ,
+             lv2:OutputPort ;
+-        lv2:index 7 ;
++        lv2:index 8 ;
+         lv2:symbol "out" ;
+         lv2:name "Out"
+     ] , [
+         a lv2:AudioPort ,
+             lv2:InputPort ;
+-        lv2:index 8 ;
++        lv2:index 9 ;
+         lv2:symbol "in" ;
+         lv2:name "in"
+     ] .
+@@ -205,6 +215,16 @@ rdfs:comment """
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+         lv2:index 4 ;
++        lv2:symbol "Vibe" ;
++        lv2:name "Vibe";
++        lv2:portProperty lv2:notOnGUI;
++        lv2:default 0 ;
++        lv2:minimum 0 ;
++        lv2:maximum 1.0 ;
++    ] , [
++        a lv2:InputPort ,
++            lv2:ControlPort ;
++        lv2:index 5 ;
+         lv2:symbol "Speed" ;
+         lv2:name "Speed";
+         lv2:portProperty lv2:notOnGUI;
+@@ -214,7 +234,7 @@ rdfs:comment """
+     ] , [
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+-        lv2:index 5 ;
++        lv2:index 6 ;
+         lv2:symbol "Intensity" ;
+         lv2:name "Intensity";
+         lv2:portProperty lv2:notOnGUI;
+@@ -224,7 +244,7 @@ rdfs:comment """
+     ] , [
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+-        lv2:index 6 ;
++        lv2:index 7 ;
+         lv2:symbol "Sinewave" ;
+         lv2:name "Sinewave";
+         lv2:portProperty lv2:notOnGUI;
+@@ -234,13 +254,13 @@ rdfs:comment """
+     ] , [
+         a lv2:AudioPort ,
+             lv2:OutputPort ;
+-        lv2:index 7 ;
++        lv2:index 8 ;
+         lv2:symbol "out" ;
+         lv2:name "Out"
+     ] , [
+         a lv2:AudioPort ,
+             lv2:InputPort ;
+-        lv2:index 8 ;
++        lv2:index 9 ;
+         lv2:symbol "in" ;
+         lv2:name "in"
+     ] .
+@@ -302,6 +322,17 @@ rdfs:comment """
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+         lv2:index 4 ;
++        lv2:symbol "Vibe" ;
++        lv2:name "Vibe";
++        lv2:portProperty lv2:toggled;
++        lv2:portProperty lv2:integer;
++        lv2:default 0 ;
++        lv2:minimum 0 ;
++        lv2:maximum 1.0 ;
++    ] , [
++        a lv2:InputPort ,
++            lv2:ControlPort ;
++        lv2:index 5 ;
+         lv2:symbol "Speed" ;
+         lv2:name "Speed";
+         lv2:default 5 ;
+@@ -310,7 +341,7 @@ rdfs:comment """
+     ] , [
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+-        lv2:index 5 ;
++        lv2:index 6 ;
+         lv2:symbol "Intensity" ;
+         lv2:name "Intensity";
+         lv2:default 0 ;
+@@ -319,7 +350,7 @@ rdfs:comment """
+     ] , [
+         a lv2:InputPort ,
+             lv2:ControlPort ;
+-        lv2:index 6 ;
++        lv2:index 7 ;
+         lv2:symbol "Sinewave" ;
+         lv2:name "Sinewave";
+         lv2:portProperty lv2:toggled;
+@@ -330,13 +361,13 @@ rdfs:comment """
+     ] , [
+         a lv2:AudioPort ,
+             lv2:OutputPort ;
+-        lv2:index 7 ;
++        lv2:index 8 ;
+         lv2:symbol "out" ;
+         lv2:name "Out"
+     ] , [
+         a lv2:AudioPort ,
+             lv2:InputPort ;
+-        lv2:index 8 ;
++        lv2:index 9 ;
+         lv2:symbol "in" ;
+         lv2:name "in"
+     ] .
+diff --git a/trunk/src/LV2/gx_redeye.lv2/gxredeye.h b/trunk/src/LV2/gx_redeye.lv2/gxredeye.h
+index 1f79c97..af64bf0 100644
+--- a/trunk/src/LV2/gx_redeye.lv2/gxredeye.h
++++ b/trunk/src/LV2/gx_redeye.lv2/gxredeye.h
+@@ -42,6 +42,7 @@ typedef enum
+   TONE,
+   VOLUME,
+   FEEDBACK,
++  VIBE,
+   SPEED,
+   INTENSITY,
+   SINEWAVE,
+diff --git a/trunk/src/LV2/gx_redeye.lv2/widget.cpp b/trunk/src/LV2/gx_redeye.lv2/widget.cpp
+index 6b3db6b..da80db5 100644
+--- a/trunk/src/LV2/gx_redeye.lv2/widget.cpp
++++ b/trunk/src/LV2/gx_redeye.lv2/widget.cpp
+@@ -109,7 +109,7 @@ Widget::Widget(Glib::ustring plug_name)
+   	m_vbox_.pack_start( m_hbox1_ ) ;
+   }
+  // Wrapper for lower layer with knobs in centre
+-  m_hbox3_.set_spacing(20); // Calculate more accurately
++  m_hbox3_.set_spacing(6); // Calculate more accurately
+   m_hbox3_.set_border_width(0);
+   m_hbox3_.set_homogeneous(false);
+   m_hbox3_.set_size_request(678,72);
+@@ -119,7 +119,7 @@ Widget::Widget(Glib::ustring plug_name)
+   m_vbox5_.set_border_width(0);
+   m_vbox5_.set_homogeneous(false);
+   if( vibrochump ){
+-	m_vbox5_.set_size_request(36);
++	m_vbox5_.set_size_request(16);
+   }else{
+   	m_vbox5_.set_size_request(146);
+   }
+@@ -172,6 +172,11 @@ Widget::Widget(Glib::ustring plug_name)
+   // This is for the Vibro amps
+ 
+   if( vibrochump ){
++	  m_vbox21_.set_spacing(0);
++	  m_vbox21_.set_border_width(0);
++	  m_vbox21_.set_homogeneous(false);
++	  make_switch_box( &m_vbox21_, &m_switch2, "vibe", 0.0, 1.0, 1.0, vibe, VIBE, plug_name);
++          m_hbox3_.pack_start( m_vbox21_ ) ;
+ 	  m_vbox10_.set_spacing(0);
+ 	  m_vbox10_.set_border_width(0);
+ 	  m_vbox10_.set_homogeneous(false);
+@@ -205,7 +210,7 @@ Widget::Widget(Glib::ustring plug_name)
+   m_vbox14_.set_border_width(0);
+   m_vbox14_.set_homogeneous(false);
+   if( vibrochump ){
+-	m_vbox14_.set_size_request(36);
++	m_vbox14_.set_size_request(16);
+   }else{
+   	m_vbox14_.set_size_request(146);
+   }
+@@ -393,6 +398,10 @@ void Widget::set_value(uint32_t port_index,
+           sinewave = value;
+           m_switch1.cp_set_value(sinewave);
+           break;
++        case VIBE:
++          vibe = value;
++          m_switch2.cp_set_value(vibe);
++          break;
+         default:
+           break;
+         }
+@@ -429,6 +438,13 @@ void Widget::on_value_changed(uint32_t port_index)
+       write_function(controller, (PortIndex)SPEED,
+                  sizeof(float), 0, (const void*)&speed);
+       break;
++
++   case VIBE:
++      vibe = m_switch2.cp_get_value();
++      //std::cout << "sinewave = " << sinewave << std::endl;
++      write_function(controller, (PortIndex)VIBE,
++                 sizeof(float), 0, (const void*)&vibe);
++      break;
+     case INTENSITY:
+       intensity = m_bigknob4.get_value();
+      // std::cout << "intensity = " << intensity << std::endl;
+diff --git a/trunk/src/LV2/gx_redeye.lv2/widget.h b/trunk/src/LV2/gx_redeye.lv2/widget.h
+index 06d107a..d090682 100644
+--- a/trunk/src/LV2/gx_redeye.lv2/widget.h
++++ b/trunk/src/LV2/gx_redeye.lv2/widget.h
+@@ -88,6 +88,7 @@ protected:
+   Gtk::VBox      m_vbox12_;
+   Gtk::VBox      m_vbox13_;
+   Gtk::VBox      m_vbox14_;
++  Gtk::VBox      m_vbox21_;
+ 
+ 
+ Gtk::VBox      m_vbox15_;
+@@ -121,6 +122,7 @@ Gtk::VBox      m_vbox20_;
+ 
+   Gxw::Switch	     m_switch;
+   Gxw::Switch	     m_switch1;
++  Gxw::Switch	     m_switch2;
+ 
+   // stores port values we're currently at.
+   float              gain;
+@@ -130,6 +132,7 @@ Gtk::VBox      m_vbox20_;
+   float              speed;
+   float              intensity;
+   float		sinewave ;
++  float		vibe ;
+   bool		vibrochump ;
+ };
+ 

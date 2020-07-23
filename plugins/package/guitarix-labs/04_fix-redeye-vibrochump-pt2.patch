@@ -1,0 +1,87 @@
+diff --git a/trunk/src/LV2/faust-generated/gx_vibrochump.cc b/trunk/src/LV2/faust-generated/gx_vibrochump.cc
+index 67430b3..084d275 100644
+--- a/trunk/src/LV2/faust-generated/gx_vibrochump.cc
++++ b/trunk/src/LV2/faust-generated/gx_vibrochump.cc
+@@ -288,7 +288,7 @@ void always_inline Dsp::compute(int count, FAUSTFLOAT *input0, FAUSTFLOAT *outpu
+ 		fRec11[0] = (fRec11[1] + (fSlow3 * (0 - fRec9[1])));
+ 		fRec10[0] = ((1 + (fRec10[1] + (fSlow3 * fRec11[0]))) - iVec0[1]);
+ 		fRec9[0] = fRec10[0];
+-		fRec6[0] = (fTemp0 + (fConst1 * (pow((1 + (fSlow5 * ((0.1 * ((iSlow4)?max((double)0, (0.5 * (1 + fRec9[0]))):(fSlow2 * iRec7[0]))) - 0.1))),1.9) / (fConst1 + (0.06 * exp((0 - (2.4849066497880004 * fTemp0))))))));
++		fRec6[0] = (fTemp0 + (fConst1 * (pow((1 + (fSlow5 * ((0.09803921568627452 * ((iSlow4)?max((double)0, (0.5 * (1 + fRec9[0]))):(fSlow2 * iRec7[0]))) - 0.09803921568627452))),1.9) / (fConst1 + (0.06 * exp((0 - (2.4849066497880004 * fTemp0))))))));
+ 		fRec13[0] = ((0.993 * fRec13[1]) + fSlow6);
+ 		double fTemp1 = (fSlow7 * fRec14[1]);
+ 		fVec1[0] = fTemp1;
+diff --git a/trunk/src/LV2/faust/gx_vibrochump.dsp b/trunk/src/LV2/faust/gx_vibrochump.dsp
+index b65b988..7f3aa70 100644
+--- a/trunk/src/LV2/faust/gx_vibrochump.dsp
++++ b/trunk/src/LV2/faust/gx_vibrochump.dsp
+@@ -92,7 +92,7 @@ tremolo(freq, depth) = lfo * depth + 1 - depth : vactrol with {
+     lfo = select2(SINE, trianglewave(freq), sine(freq));
+ };
+ 
+-effect =  (tremolo(vslider("speed[style:knob]",5,0.1,10,0.1),vslider("intensity[style:knob]",5,0,10,0.1)/10));
++effect =  (tremolo(vslider("speed[style:knob]",5,0.1,10,0.1),vslider("intensity[style:knob]",5,0,10,0.1)/10.2));
+ 
+ 
+ // After some playing it seems that tubestage() phase inverts
+diff --git a/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl b/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl
+index 1da9fe4..e57a324 100644
+--- a/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl
++++ b/trunk/src/LV2/gx_redeye.lv2/gx_redeye.ttl
+@@ -110,6 +110,7 @@ rdfs:comment """
+         lv2:index 4 ;
+         lv2:symbol "Speed" ;
+         lv2:name "Speed";
++        lv2:portProperty lv2:notOnGUI;
+         lv2:default 5 ;
+         lv2:minimum 0.1 ;
+         lv2:maximum 10.0 ;
+@@ -119,6 +120,7 @@ rdfs:comment """
+         lv2:index 5 ;
+         lv2:symbol "Intensity" ;
+         lv2:name "Intensity";
++        lv2:portProperty lv2:notOnGUI;
+         lv2:default 0 ;
+         lv2:minimum 0 ;
+         lv2:maximum 10.0 ;
+@@ -128,6 +130,7 @@ rdfs:comment """
+         lv2:index 6 ;
+         lv2:symbol "Sinewave" ;
+         lv2:name "Sinewave";
++        lv2:portProperty lv2:notOnGUI;
+         lv2:default 0 ;
+         lv2:minimum 0 ;
+         lv2:maximum 1.0 ;
+@@ -204,6 +207,7 @@ rdfs:comment """
+         lv2:index 4 ;
+         lv2:symbol "Speed" ;
+         lv2:name "Speed";
++        lv2:portProperty lv2:notOnGUI;
+         lv2:default 5 ;
+         lv2:minimum 0.1 ;
+         lv2:maximum 10.0 ;
+@@ -213,6 +217,7 @@ rdfs:comment """
+         lv2:index 5 ;
+         lv2:symbol "Intensity" ;
+         lv2:name "Intensity";
++        lv2:portProperty lv2:notOnGUI;
+         lv2:default 0 ;
+         lv2:minimum 0 ;
+         lv2:maximum 10.0 ;
+@@ -222,6 +227,7 @@ rdfs:comment """
+         lv2:index 6 ;
+         lv2:symbol "Sinewave" ;
+         lv2:name "Sinewave";
++        lv2:portProperty lv2:notOnGUI;
+         lv2:default 0 ;
+         lv2:minimum 0 ;
+         lv2:maximum 1.0 ;
+@@ -316,6 +322,8 @@ rdfs:comment """
+         lv2:index 6 ;
+         lv2:symbol "Sinewave" ;
+         lv2:name "Sinewave";
++        lv2:portProperty lv2:toggled;
++        lv2:portProperty lv2:integer;
+         lv2:default 0 ;
+         lv2:minimum 0 ;
+         lv2:maximum 1.0 ;
