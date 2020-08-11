@@ -104,7 +104,6 @@ done
 cp ${SOURCE_DIR}/patches/libglib2/*.patch  package/libglib2/
 cp ${SOURCE_DIR}/patches/localedef/*.patch package/localedef/
 cp ${SOURCE_DIR}/patches/m4/*.patch        package/m4/
-cp ${SOURCE_DIR}/patches/python/*.patch    package/python/
 
 #######################################################################################################################
 # initial first build

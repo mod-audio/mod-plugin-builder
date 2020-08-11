@@ -4,10 +4,11 @@
 #
 ######################################
 
-LV2_EXAMPLES_VERSION = a34ea338a347c4ebd3a190b60cde664d977412e8
-LV2_EXAMPLES_SITE = $(call github,drobilla,lv2,$(LV2_EXAMPLES_VERSION))
+LV2_EXAMPLES_VERSION = 1.18.0
+LV2_EXAMPLES_SITE = http://lv2plug.in/spec
+LV2_EXAMPLES_SOURCE = lv2-$(LV2_EXAMPLES_VERSION).tar.bz2
 LV2_EXAMPLES_DEPENDENCIES = host-python
-LV2_EXAMPLES_BUNDLES = eg-amp.lv2 eg-fifths.lv2 eg-metro.lv2 eg-midigate.lv2 eg-sampler.lv2
+LV2_EXAMPLES_BUNDLES = eg-metro.lv2
 
 LV2_EXAMPLES_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python ./waf
 
