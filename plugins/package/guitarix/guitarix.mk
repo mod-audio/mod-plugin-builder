@@ -67,6 +67,8 @@ define GUITARIX_INSTALL_TARGET_CMDS
 	cp -rL $($(PKG)_PKGDIR)/gxts9.lv2/*                  $(TARGET_DIR)/usr/lib/lv2/gxts9.lv2/
 
 	# gxautowah.lv2 has been manually splitted into separate bundles
+	mv $(TARGET_DIR)/usr/lib/lv2/gxautowah.lv2/gxautowah.so $(TARGET_DIR)/usr/lib/lv2/gxautowah.so
+	rm -rf $(TARGET_DIR)/usr/lib/lv2/gxautowah.lv2/
 	cp -rL $($(PKG)_PKGDIR)/gxwah.lv2     $(TARGET_DIR)/usr/lib/lv2/
 	cp $(TARGET_DIR)/usr/lib/lv2/gxautowah.so $(TARGET_DIR)/usr/lib/lv2/gxwah.lv2/
 	rm $(TARGET_DIR)/usr/lib/lv2/gxautowah.so
