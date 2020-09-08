@@ -28,15 +28,15 @@ if [ ! -f ${BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
   tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
 
   if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ]; then
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/crosstool-ng-1.22/001_bash5-compat.patch
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/crosstool-ng-1.22/002_binutils-2.26.patch
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/crosstool-ng-1.22/003_linaro-2017.01.patch
+    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_bash5-compat.patch
+    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_binutils-2.26.patch
+    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/003_linaro-2017.01.patch
 
-    cp -r ${SOURCE_DIR}/patches/crosstool-ng-1.22/bin-utils-2.26    ${BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/2.26
-    cp    ${SOURCE_DIR}/patches/crosstool-ng-1.22/gcc-4.9.3/*.patch ${BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/4.9.3/
+    cp -r ${SOURCE_DIR}/patches/${CT_NG_VERSION}/bin-utils-2.26    ${BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/2.26
+    cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-4.9.3/*.patch ${BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/4.9.3/
 
   elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.24.0" ]; then
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/crosstool-ng-1.24/001_linaro-2019.12.patch
+    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_linaro-2019.12.patch
   fi
 fi
 
