@@ -1,0 +1,2 @@
+This custom package exists because the original is outdated (we need at least 3.5 for sfizz).
+Can be dropped once we update buildroot.

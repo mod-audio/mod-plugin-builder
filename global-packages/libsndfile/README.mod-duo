@@ -1,2 +1,0 @@
-This custom package exists because the original does not make libsndfile depend on libogg and flac.
-libsndfile without support for ogg vorbis and flac breaks things for us, we want support for those.

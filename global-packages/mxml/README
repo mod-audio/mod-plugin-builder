@@ -1,0 +1,2 @@
+This custom package exists because the original does not support host builds.
+Can be dropped if buildroot one ends up supporting that later on.

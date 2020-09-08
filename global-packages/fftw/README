@@ -1,0 +1,3 @@
+This custom package exists because we keep a custom fftw version for the Duo (for backwards compatibility).
+Plugins built against fftw that pre-generate wisdom files need a matching fftw version.
+So for this reason, we must hardcode a version and never update once a device is released.

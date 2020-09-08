@@ -1,0 +1,2 @@
+This custom package exists because the original is old and does not support arm64.
+Can be dropped if buildroot one ends up supporting that later on.
