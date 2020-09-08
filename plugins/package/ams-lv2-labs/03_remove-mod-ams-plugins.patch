@@ -1,0 +1,1331 @@
+diff -ruN ams-lv2/ams.lv2/env.ttl ams-lv2/ams.lv2/env.ttl
+--- ams-lv2/ams.lv2/env.ttl	2017-01-14 14:44:17.000000000 +0100
++++ ams-lv2/ams.lv2/env.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,111 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/env/gui>
+-  	a guiext:GtkUI ;
+-  	guiext:binary <env_gui.so> .
+-
+-<http://github.com/blablack/ams-lv2/env>
+-	a lv2:Plugin, lv2:EnvelopePlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS Envelope" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/env/gui> ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 0 ; 
+-		lv2:symbol "gate" ;
+-		lv2:name "Gate" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum 0.0 ;
+-        lv2:maximum 1.0 ;
+-        lv2:portProperty lv2:toggled ;
+-	] ,	[
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "retrigger" ;
+-		lv2:name "Retrigger" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum 0.0 ;
+-        lv2:maximum 1.0 ;
+-        lv2:portProperty lv2:toggled ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "attack" ;
+-		lv2:name "Attack" ;
+-		lv2:default 0.05 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 3 ; 
+-		lv2:symbol "decay" ;
+-		lv2:name "Decay" ;
+-		lv2:default 0.1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] , [
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "sustain" ;
+-		lv2:name "Sustain" ;
+-		lv2:default 0.7 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 5 ; 
+-		lv2:symbol "release" ;
+-		lv2:name "Release" ;
+-		lv2:default 0.05 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 6 ; 
+-		lv2:symbol "delay" ;
+-		lv2:name "Delay" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 7 ; 
+-		lv2:symbol "hold" ;
+-		lv2:name "Hold" ;
+-		lv2:default 0.02 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 8 ; 
+-		lv2:symbol "timeScale" ;
+-		lv2:name "Time Scale" ;
+-		lv2:default 0.1 ;
+-		lv2:minimum 1 ;
+-		lv2:maximum 10 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 9 ; 
+-		lv2:symbol "out" ;
+-		lv2:name "Out" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum 0.0 ;
+-        lv2:maximum 1.0 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 10 ; 
+-		lv2:symbol "invOut" ;
+-		lv2:name "Inverse Out" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 0.0 ;
+-	].
+diff -ruN ams-lv2/ams.lv2/lfo2_freq.ttl ams-lv2/ams.lv2/lfo2_freq.ttl
+--- ams-lv2/ams.lv2/lfo2_freq.ttl	2017-01-14 14:44:17.000000000 +0100
++++ ams-lv2/ams.lv2/lfo2_freq.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,82 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/lfo2_freq/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <lfo2_freq_gui.so> .
+-
+-<http://github.com/blablack/ams-lv2/lfo2_freq>
+-	a lv2:Plugin, lv2:OscillatorPlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS LFO2 - Freq" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/lfo2_freq/gui> ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 0 ; 
+-		lv2:symbol "reset" ;
+-		lv2:name "Reset" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 1.0 ;
+-	] , [
+-		a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "waveForm" ;
+-		lv2:name "Wave Form" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 5 ;
+-		lv2:portProperty lv2:enumeration ;
+-		lv2:scalePoint
+-				[
+-			    rdfs:label "Sine" ;
+-			    rdf:value 0
+-		] ,		[
+-				rdfs:label "Triangle" ;
+-				rdf:value 1
+-		] ,		[
+-		  		rdfs:label "Sawtooth Up" ;
+-				rdf:value 2
+-		] , 	[
+-		  		rdfs:label "Sawtooth Down" ;
+-				rdf:value 3
+-		] ,		[
+-		  		rdfs:label "Rectangle" ;
+-				rdf:value 4
+-		] ,		[
+-		  		rdfs:label "S & H" ;
+-				rdf:value 5
+-		] ;
+-	] ,	[
+-		a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "freq" ;
+-		lv2:name "Freq" ;
+-		lv2:default 5.0 ;
+-		lv2:minimum 0.0001 ;
+-		lv2:maximum 100.0 ;
+-	] ,	[
+-		a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 3 ; 
+-		lv2:symbol "phi0" ;
+-		lv2:name "Phi0" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0.0 ;
+-		lv2:maximum 6.28 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "output" ;
+-		lv2:name "Output" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 1.0 ;
+-	] .
+diff -ruN ams-lv2/ams.lv2/manifest.ttl ams-lv2/ams.lv2/manifest.ttl
+--- ams-lv2/ams.lv2/manifest.ttl	2020-05-26 12:00:18.000000000 +0200
++++ ams-lv2/ams.lv2/manifest.ttl	2020-05-26 12:12:40.242435359 +0200
+@@ -112,11 +112,6 @@
+ 	lv2:binary <dynamicwaves2_8.so>  ;
+ 	rdfs:seeAlso <dynamicwaves2_8.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/env>
+-	a lv2:Plugin ;
+-	lv2:binary <env.so>  ;
+-	rdfs:seeAlso <env.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/fftvocoder>
+ 	a lv2:Plugin ;
+ 	lv2:binary <fftvocoder.so>  ;
+@@ -147,11 +142,6 @@
+ 	lv2:binary <lfo2_tempo.so>  ;
+ 	rdfs:seeAlso <lfo2_tempo.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/lfo2_freq>
+-	a lv2:Plugin ;
+-	lv2:binary <lfo2_freq.so>  ;
+-	rdfs:seeAlso <lfo2_freq.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/lfo>
+ 	a lv2:Plugin ;
+ 	lv2:binary <lfo.so>  ;
+@@ -187,11 +177,6 @@
+ 	lv2:binary <noise2.so>  ;
+ 	rdfs:seeAlso <noise2.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/percussiveenv>
+-	a lv2:Plugin ;
+-	lv2:binary <percussiveenv.so>  ;
+-	rdfs:seeAlso <percussiveenv.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/ringmodulator>
+ 	a lv2:Plugin ;
+ 	lv2:binary <ringmodulator.so>  ;
+@@ -207,11 +192,6 @@
+ 	lv2:binary <samplehold.so>  ;
+ 	rdfs:seeAlso <samplehold.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/seq_8>
+-	a lv2:Plugin ;
+-	lv2:binary <seq_8.so>  ;
+-	rdfs:seeAlso <seq_8.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/seq_12>
+ 	a lv2:Plugin ;
+ 	lv2:binary <seq_12.so>  ;
+@@ -257,16 +237,6 @@
+ 	lv2:binary <transport.so>  ;
+ 	rdfs:seeAlso <transport.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/vcaexp>
+-	a lv2:Plugin ;
+-	lv2:binary <vcaexp.so>  ;
+-	rdfs:seeAlso <vcaexp.ttl> .
+-
+-<http://github.com/blablack/ams-lv2/vcalin>
+-	a lv2:Plugin ;
+-	lv2:binary <vcalin.so>  ;
+-	rdfs:seeAlso <vcalin.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/vcdelay>
+ 	a lv2:Plugin ;
+ 	lv2:binary <vcdelay.so>  ;
+@@ -287,21 +257,11 @@
+ 	lv2:binary <vcenvii.so>  ;
+ 	rdfs:seeAlso <vcenvii.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/vcf>
+-	a lv2:Plugin ;
+-	lv2:binary <vcf.so>  ;
+-	rdfs:seeAlso <vcf.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/vco2>
+ 	a lv2:Plugin ;
+ 	lv2:binary <vco2.so>  ;
+ 	rdfs:seeAlso <vco2.ttl> .
+ 
+-<http://github.com/blablack/ams-lv2/vco3>
+-	a lv2:Plugin ;
+-	lv2:binary <vco3.so>  ;
+-	rdfs:seeAlso <vco3.ttl> .
+-
+ <http://github.com/blablack/ams-lv2/vcorgan_4>
+ 	a lv2:Plugin ;
+ 	lv2:binary <vcorgan_4.so>  ;
+diff -ruN ams-lv2/ams.lv2/percussiveenv.ttl ams-lv2/ams.lv2/percussiveenv.ttl
+--- ams-lv2/ams.lv2/percussiveenv.ttl	2020-05-26 12:00:18.000000000 +0200
++++ ams-lv2/ams.lv2/percussiveenv.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,80 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix mod:    <http://moddevices.com/ns/mod#>.
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-
+-<http://github.com/blablack/ams-lv2/percussiveenv>
+-	a lv2:Plugin, mod:ControlVoltagePlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS Percussive Envelope" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 0 ; 
+-		lv2:symbol "trigger" ;
+-		lv2:name "Trigger" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum 0.0 ;
+-        lv2:maximum 1.0 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "attack" ;
+-		lv2:name "Attack" ;
+-		lv2:default 0.05 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "decay" ;
+-		lv2:name "Decay" ;
+-		lv2:default 0.1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 3 ; 
+-		lv2:symbol "delay" ;
+-		lv2:name "Delay" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "hold" ;
+-		lv2:name "Hold" ;
+-		lv2:default 0.02 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 5 ; 
+-		lv2:symbol "timeScale" ;
+-		lv2:name "Time Scale" ;
+-		lv2:default 0.1 ;
+-		lv2:minimum 1 ;
+-		lv2:maximum 10 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 6 ; 
+-		lv2:symbol "out" ;
+-		lv2:name "Out" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum 0.0 ;
+-        lv2:maximum 1.0 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 7 ; 
+-		lv2:symbol "invOut" ;
+-		lv2:name "Inverse Out" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 0.0 ;
+-	].
+diff -ruN ams-lv2/ams.lv2/seq_8.ttl ams-lv2/ams.lv2/seq_8.ttl
+--- ams-lv2/ams.lv2/seq_8.ttl	2020-05-26 12:00:18.000000000 +0200
++++ ams-lv2/ams.lv2/seq_8.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,344 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix mod:    <http://moddevices.com/ns/mod#>.
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-
+-<http://github.com/blablack/ams-lv2/seq_8#main_controls>
+-    lv2:name "Main Controls" ;
+-    lv2:symbol "grpMainControls" .
+-
+-<http://github.com/blablack/ams-lv2/seq_8#pitch_controls>
+-    lv2:name "Pitch Controls" ;
+-    lv2:symbol "grpPitchControls" .
+-
+-<http://github.com/blablack/ams-lv2/seq_8#gate_controls>
+-    lv2:name "Gate Controls" ;
+-    lv2:symbol "grpGateControls" .
+-
+-<http://github.com/blablack/ams-lv2/seq_8#velocity_controls>
+-    lv2:name "Velocity Controls" ;
+-    lv2:symbol "grpVelocityControls" .
+-
+-
+-<http://github.com/blablack/ams-lv2/seq_8>
+-	a lv2:Plugin, mod:ControlVoltagePlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS Sequencer - 8 Steps" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port 
+-		[
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 0 ; 
+-		lv2:symbol "in_trigger" ;
+-		lv2:name "Trigger" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum 0.0 ;
+-	        lv2:maximum 1.0 ;
+-        	lv2:portProperty lv2:toggled ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "gate" ;
+-		lv2:name "Gate" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum 0.0 ;
+-	        lv2:maximum 1.0 ;
+-        	lv2:portProperty lv2:toggled ;
+-	] ,	[
+-	  	a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "freq" ;
+-		lv2:name "Freq" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 3 ; 
+-		lv2:symbol "velocity" ;
+-		lv2:name "Velocity" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] , 	[
+-	  	a lv2:OutputPort, lv2:CVPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "out_trigger" ;
+-		lv2:name "Trigger" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 5 ; 
+-		lv2:symbol "pitchOffset" ;
+-		lv2:name "Pitch Offset" ;
+-		lv2:default 32 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 63 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#main_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 6 ; 
+-		lv2:symbol "bpm" ;
+-		lv2:name "BPM" ;
+-		lv2:default 120 ;
+-		lv2:minimum 3 ;
+-		lv2:maximum 300 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#main_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 7 ; 
+-		lv2:symbol "gateTime" ;
+-		lv2:name "Gate Time" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 3 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#main_controls> ;
+-		lv2:portProperty lv2:enumeration ;
+-		lv2:scalePoint
+-				[
+-	   			rdfs:label "1" ;
+-			    	rdf:value 0
+-			] ,	[
+-				rdfs:label "3/4" ;
+-				rdf:value 1
+-			] ,	[
+-		  		rdfs:label "1/2" ;
+-				rdf:value 2
+-			] , 	[
+-		  		rdfs:label "1/4" ;
+-				rdf:value 3
+-			]
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 8 ; 
+-		lv2:symbol "pitch1" ;
+-		lv2:name "Pitch 1" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 9 ; 
+-		lv2:symbol "pitch2" ;
+-		lv2:name "Pitch 2" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 10 ; 
+-		lv2:symbol "pitch3" ;
+-		lv2:name "Pitch 3" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 11 ; 
+-		lv2:symbol "pitch4" ;
+-		lv2:name "Pitch 4" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 12 ; 
+-		lv2:symbol "pitch5" ;
+-		lv2:name "Pitch 5" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 13 ; 
+-		lv2:symbol "pitch6" ;
+-		lv2:name "Pitch 6" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 14 ; 
+-		lv2:symbol "pitch7" ;
+-		lv2:name "Pitch 7" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 15 ; 
+-		lv2:symbol "pitch8" ;
+-		lv2:name "Pitch 8" ;
+-		lv2:default 31 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 64 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#pitch_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 16 ; 
+-		lv2:symbol "gate1" ;
+-		lv2:name "Gate 1" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 17 ; 
+-		lv2:symbol "gate2" ;
+-		lv2:name "Gate 2" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 18 ; 
+-		lv2:symbol "gate3" ;
+-		lv2:name "Gate 3" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 19 ; 
+-		lv2:symbol "gate4" ;
+-		lv2:name "Gate 4" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 20 ; 
+-		lv2:symbol "gate5" ;
+-		lv2:name "Gate 5" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 21 ; 
+-		lv2:symbol "gate6" ;
+-		lv2:name "Gate 6" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 22 ; 
+-		lv2:symbol "gate7" ;
+-		lv2:name "Gate 7" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 23 ; 
+-		lv2:symbol "gate8" ;
+-		lv2:name "Gate 8" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-        	lv2:portProperty lv2:toggled ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#gate_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 24 ; 
+-		lv2:symbol "velocity1" ;
+-		lv2:name "Velocity 1" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 25 ; 
+-		lv2:symbol "velocity2" ;
+-		lv2:name "Velocity 2" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 26 ; 
+-		lv2:symbol "velocity3" ;
+-		lv2:name "Velocity 3" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 27 ; 
+-		lv2:symbol "velocity4" ;
+-		lv2:name "Velocity 4" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 28 ; 
+-		lv2:symbol "velocity5" ;
+-		lv2:name "Velocity 5" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 29 ; 
+-		lv2:symbol "velocity6" ;
+-		lv2:name "Velocity 6" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 30 ; 
+-		lv2:symbol "velocity7" ;
+-		lv2:name "Velocity 7" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 31 ; 
+-		lv2:symbol "velocity8" ;
+-		lv2:name "Velocity 8" ;
+-		lv2:default 63 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 127 ;
+-		pg:group <http://github.com/blablack/ams-lv2/seq_8#velocity_controls> ;
+-	] .
+diff -ruN ams-lv2/ams.lv2/vcaexp.ttl ams-lv2/ams.lv2/vcaexp.ttl
+--- ams-lv2/ams.lv2/vcaexp.ttl	2017-01-14 14:44:17.000000000 +0100
++++ ams-lv2/ams.lv2/vcaexp.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,92 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcaexp/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcaexp_gui.so> .
+-
+-<http://github.com/blablack/ams-lv2/vcaexp>
+-	a lv2:Plugin, lv2:AmplifierPlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS VCA Exp" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcaexp/gui> ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 0 ; 
+-		lv2:symbol "gain1Data" ;
+-		lv2:name "Main Gain" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 1.0 ;
+-	] ,	[
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "gain2Data" ;
+-		lv2:name "2nd Gain" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 1.0 ;
+-	] ,	[
+-		a lv2:InputPort, lv2:AudioPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "in1Data" ;
+-		lv2:name "In 1" ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:AudioPort;
+-		lv2:index 3 ; 
+-		lv2:symbol "in2Data" ;
+-		lv2:name "In 2" ;
+-	] , [
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "gain1" ;
+-		lv2:name "Gain Offset" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 5 ; 
+-		lv2:symbol "gain2" ;
+-		lv2:name "2nd Gain Boost" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] , [
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 6 ; 
+-		lv2:symbol "in1" ;
+-		lv2:name "In 1 Level" ;
+-		lv2:default 1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 2 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 7 ; 
+-		lv2:symbol "in2" ;
+-		lv2:name "In 2 Level" ;
+-		lv2:default 1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 2 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 8 ; 
+-		lv2:symbol "outputLevel" ;
+-		lv2:name "Output Level" ;
+-		lv2:default 1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 2 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:AudioPort ;
+-		lv2:index 9 ; 
+-		lv2:symbol "out" ;
+-		lv2:name "Out" ;
+-	] .
+diff -ruN ams-lv2/ams.lv2/vcalin.ttl ams-lv2/ams.lv2/vcalin.ttl
+--- ams-lv2/ams.lv2/vcalin.ttl	2017-01-14 14:44:17.000000000 +0100
++++ ams-lv2/ams.lv2/vcalin.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,92 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcalin/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcalin_gui.so> .
+-
+-<http://github.com/blablack/ams-lv2/vcalin>
+-	a lv2:Plugin, lv2:AmplifierPlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS VCA Lin" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcalin/gui> ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 0 ; 
+-		lv2:symbol "gain1Data" ;
+-		lv2:name "Main Gain" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 1.0 ;
+-	] ,	[
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "gain2Data" ;
+-		lv2:name "2nd Gain" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-        lv2:maximum 1.0 ;
+-	] ,	[
+-		a lv2:InputPort, lv2:AudioPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "in1Data" ;
+-		lv2:name "In 1 Mod" ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:AudioPort ;
+-		lv2:index 3 ; 
+-		lv2:symbol "in2Data" ;
+-		lv2:name "In 2 Mod" ;
+-	] , [
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "gain1" ;
+-		lv2:name "Gain Offset" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 5 ; 
+-		lv2:symbol "gain2" ;
+-		lv2:name "2nd Gain Boost" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] , [
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 6 ; 
+-		lv2:symbol "in1" ;
+-		lv2:name "In 1" ;
+-		lv2:default 1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 2 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 7 ; 
+-		lv2:symbol "in2" ;
+-		lv2:name "In 2" ;
+-		lv2:default 1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 2 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 8 ; 
+-		lv2:symbol "outputLevel" ;
+-		lv2:name "Output Level" ;
+-		lv2:default 1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 2 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:AudioPort ;
+-		lv2:index 9 ; 
+-		lv2:symbol "out" ;
+-		lv2:name "Out" ;
+-	] .
+diff -ruN ams-lv2/ams.lv2/vcf.ttl ams-lv2/ams.lv2/vcf.ttl
+--- ams-lv2/ams.lv2/vcf.ttl	2017-01-14 14:44:17.000000000 +0100
++++ ams-lv2/ams.lv2/vcf.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,147 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-
+-<http://github.com/blablack/ams-lv2/vcf/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vcf_gui.so> .
+-
+-<http://github.com/blablack/ams-lv2/vcf>
+-	a lv2:Plugin, lv2:SpectralPlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS VCF" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vcf/gui> ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port 
+-		[
+-		a lv2:InputPort, lv2:AudioPort;
+-		lv2:index 0 ; 
+-		lv2:symbol "in" ;
+-		lv2:name "In" ;
+-	] ,	[
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "freqPort" ;
+-		lv2:name "Frequency Mod" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-	        lv2:maximum 1.0 ;
+-	] ,	[
+-		a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "expFM" ;
+-		lv2:name "Exp FM" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-	        lv2:maximum 1.0 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 3 ; 
+-		lv2:symbol "linFM" ;
+-		lv2:name "Lin FM" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-	        lv2:maximum 1.0 ;
+-	] , 	[
+-	  	a lv2:InputPort, lv2:CVPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "resonancePort" ;
+-		lv2:name "Resonance Mod" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-	        lv2:maximum 1.0 ;
+-	] , 	[
+-		a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 5 ; 
+-		lv2:symbol "vcfType" ;
+-		lv2:name "VCF Type" ;
+-		lv2:default 0;
+-		lv2:minimum 0;
+-		lv2:maximum 7;
+-		lv2:portProperty lv2:enumeration ;
+-		lv2:scalePoint
+-				[
+-			    	rdfs:label "Resonant Lowpass" ;
+-			   	rdf:value 0 ;
+-			] ,	[
+-				rdfs:label "Lowpass" ;
+-				rdf:value 1 ;
+-			] ,	[
+-		  		rdfs:label "Highpass" ;
+-				rdf:value 2 ;
+-			] , 	[
+-		  		rdfs:label "Bandpass I" ;
+-				rdf:value 3 ;
+-			] ,	[
+-		  		rdfs:label "Bandpass II" ;
+-				rdf:value 4 ;
+-			] ,	[
+-		  		rdfs:label "Notch" ;
+-				rdf:value 5 ;
+-			] , 	[
+-		  		rdfs:label "24 dB Lowpass I" ;
+-				rdf:value 6 ;
+-			] , 	[
+-		  		rdfs:label "24 dB Lowpass II" ;
+-				rdf:value 7 ;
+-			]
+-	] , 	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 6 ; 
+-		lv2:symbol "inputGain" ;
+-		lv2:name "Input Gain" ;
+-		lv2:default 1 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 10 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 7 ; 
+-		lv2:symbol "freq" ;
+-		lv2:name "Frequency" ;
+-		lv2:default 5 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 10 ;
+-	] , 	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 8 ; 
+-		lv2:symbol "expFMGain" ;
+-		lv2:name "Exp. FM Gain" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 10 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 9 ; 
+-		lv2:symbol "linFMGain" ;
+-		lv2:name "Lin. FM Gain" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 10 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 10 ; 
+-		lv2:symbol "resonance" ;
+-		lv2:name "Resonance" ;
+-		lv2:default 0.8 ;
+-		lv2:minimum 0.01 ;
+-		lv2:maximum 1.0 ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 11 ; 
+-		lv2:symbol "resonanceGain" ;
+-		lv2:name "Resonance Gain" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-	] ,	[
+-		a lv2:OutputPort, lv2:AudioPort ;
+-		lv2:index 12 ; 
+-		lv2:symbol "out" ;
+-		lv2:name "Out" ;
+-	] .
+diff -ruN ams-lv2/ams.lv2/vco3.ttl ams-lv2/ams.lv2/vco3.ttl
+--- ams-lv2/ams.lv2/vco3.ttl	2017-01-14 14:44:17.000000000 +0100
++++ ams-lv2/ams.lv2/vco3.ttl	1970-01-01 01:00:00.000000000 +0100
+@@ -1,207 +0,0 @@
+-@prefix doap: 	<http://usefulinc.com/ns/doap#> .
+-@prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+-@prefix rdf: 	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+-@prefix rdfs: 	<http://www.w3.org/2000/01/rdf-schema#> .
+-@prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+-@prefix guiext: <http://lv2plug.in/ns/extensions/ui#> .
+-@prefix pg:     <http://lv2plug.in/ns/ext/port-groups#> .
+-@prefix ll: 	<http://ll-plugins.nongnu.org/lv2/namespace#> .
+-@prefix param:  <http://lv2plug.in/ns/ext/parameters#> .
+-
+-<http://github.com/blablack/ams-lv2/vco3/gui>
+-  a guiext:GtkUI ;
+-  guiext:binary <vco3_gui.so> .
+-
+-<http://github.com/blablack/ams-lv2/vco3#group_frequency>
+-    a param:OscillatorControls ;
+-    lv2:name "Frequency" ;
+-    lv2:symbol "grpFrequency" .
+-
+-<http://github.com/blablack/ams-lv2/vco3#group_pw_phase>
+-    a param:OscillatorControls ;
+-    lv2:name "Pulse Width - Phase" ;
+-    lv2:symbol "grpPWPhase" .
+-
+-<http://github.com/blablack/ams-lv2/vco3#group_modulation>
+-    a param:OscillatorControls ;
+-    lv2:name "Modulation" ;
+-    lv2:symbol "grpModulation" .
+-
+-<http://github.com/blablack/ams-lv2/vco3#group_input>
+-    a param:OscillatorControls, pg:InputGroup ;
+-    lv2:name "Input" ;
+-    lv2:symbol "grpInput" .
+-
+-<http://github.com/blablack/ams-lv2/vco3>
+-	a lv2:Plugin ,
+-		lv2:OscillatorPlugin ;
+-	lv2:project <http://github.com/blablack/ams-lv2/> ;
+-	doap:name "AMS VCO3" ;
+-	doap:license <http://opensource.org/licenses/isc> ;
+-	ll:pegName "p" ;
+-	guiext:ui <http://github.com/blablack/ams-lv2/vco3/gui> ;
+-	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
+-		a lv2:CVPort, lv2:InputPort ;
+-		lv2:index 0 ; 
+-		lv2:symbol "freq" ;
+-		lv2:name "Frequency";
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-		lv2:maximum 1.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
+-	] ,	[
+-		a lv2:CVPort, lv2:InputPort ;
+-		lv2:index 1 ; 
+-		lv2:symbol "expFM" ;
+-		lv2:name "Exp FM" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-		lv2:maximum 1.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
+-	] ,	[
+-		a lv2:CVPort, lv2:InputPort ;
+-		lv2:index 2 ; 
+-		lv2:symbol "linFM" ;
+-		lv2:name "Lin FM" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-		lv2:maximum 1.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
+-	] ,	[
+-	  	a lv2:CVPort, lv2:InputPort ;
+-		lv2:index 3 ; 
+-		lv2:symbol "pwPort" ;
+-		lv2:name "PW" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-		lv2:maximum 1.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
+-	] ,	[
+-	  	a lv2:CVPort, lv2:InputPort ;
+-		lv2:index 4 ; 
+-		lv2:symbol "sync" ;
+-		lv2:name "Sync" ;
+-		lv2:default 0.0 ;
+-		lv2:minimum -1.0 ;
+-		lv2:maximum 1.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
+-	] ,	[
+-		a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 5 ; 
+-		lv2:symbol "waveForm" ;
+-		lv2:name "Wave Form" ;
+-		lv2:default 0;
+-		lv2:minimum 0;
+-		lv2:maximum 6;
+-		lv2:portProperty lv2:enumeration ;
+-		lv2:scalePoint
+-				[
+-			    rdfs:label "Sine" ;
+-			    rdf:value 0
+-		] ,		[
+-				rdfs:label "Triangle" ;
+-				rdf:value 1
+-		] ,		[
+-		  		rdfs:label "Sawtooth" ;
+-				rdf:value 2
+-		] , 	[
+-		  		rdfs:label "Rectangle" ;
+-				rdf:value 3
+-		] ,		[
+-		  		rdfs:label "Aux Saw 1" ;
+-				rdf:value 4
+-		] ,		[
+-		  		rdfs:label "Aux Saw 2" ;
+-				rdf:value 5
+-		] , 	[
+-		  		rdfs:label "Aux Saw 3" ;
+-				rdf:value 6
+-		]
+-	] , [
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 6 ; 
+-		lv2:symbol "octave" ;
+-		lv2:name "Octave" ;
+-		lv2:default 3 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 6 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupFrequency> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 7 ; 
+-		lv2:symbol "tune" ;
+-		lv2:name "Tune" ;
+-		lv2:default 0 ;
+-		lv2:minimum -1 ;
+-		lv2:maximum 1 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupFrequency> ;
+-	] , [
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 8 ; 
+-		lv2:symbol "semitone" ;
+-		lv2:name "Semitone" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 12 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupFrequency> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 9 ; 
+-		lv2:symbol "pw0" ;
+-		lv2:name "PW0" ;
+-		lv2:default 0.5 ;
+-		lv2:minimum 0.1 ;
+-		lv2:maximum 0.9 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 10 ; 
+-		lv2:symbol "pwGain" ;
+-		lv2:name "PW Gain" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 1 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 11 ; 
+-		lv2:symbol "edge" ;
+-		lv2:name "Edge" ;
+-		lv2:default 1 ;
+-		lv2:minimum 1 ;
+-		lv2:maximum 10 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 12 ; 
+-		lv2:symbol "phi0" ;
+-		lv2:name "Phi0" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 6.283 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 13 ; 
+-		lv2:symbol "expFMGain" ;
+-		lv2:name "Exp FM Gain" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 10 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupModulation> ;
+-	] ,	[
+-	  	a lv2:InputPort, lv2:ControlPort ;
+-		lv2:index 14 ; 
+-		lv2:symbol "linFMGain" ;
+-		lv2:name "Lin FM Gain" ;
+-		lv2:default 0 ;
+-		lv2:minimum 0 ;
+-		lv2:maximum 10 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupModulation> ;
+-	] ,	[
+-		a lv2:AudioPort , lv2:OutputPort ;
+-		lv2:index 15 ; 
+-		lv2:symbol "out" ;
+-		lv2:name "Out"
+-	] .
+diff -ruN ams-lv2/wscript ams-lv2/wscript
+--- ams-lv2/wscript	2020-05-26 12:00:18.000000000 +0200
++++ ams-lv2/wscript	2020-05-26 12:12:19.952434497 +0200
+@@ -107,13 +107,11 @@
+     cvs
+     cvtocontrol
+     delay
+-    env
+     haas
+     hysteresis
+     hztovc
+     inv
+     lfo2_tempo
+-    lfo2_freq
+     lfo
+     mixer_8ch
+     mixer_4ch
+@@ -121,7 +119,6 @@
+     mooglpf
+     multiphase_lfo
+     noise2
+-    percussiveenv
+     ringmodulator
+     samplehold
+     slew
+@@ -129,7 +126,6 @@
+     stereomixer_4ch
+     stereomixer_8ch
+     transport
+-    vcalin
+     vcdelay
+     vcenv
+     vcpanning
+@@ -163,12 +159,9 @@
+ ########################################################################
+ 
+     plugins = '''
+-    vcaexp
+     vcdoubledecay
+     vcenvii
+-    vcf
+     vco2
+-    vco3
+     '''.split()
+ 
+     for i in plugins:
+@@ -253,7 +246,6 @@
+ ########################################################################
+ 
+     plugins = '''
+-    8
+     12
+     16
+     24

@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index c20e980..8886ff6 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,7 +17,7 @@ plugins:
+ 	$(MAKE) all -C plugins/harmless
+ 
+ gen: plugins dpf/utils/lv2_ttl_generator
+-	@$(CURDIR)/dpf/utils/generate-ttl.sh
++	@echo "no ttl generator"
+ ifeq ($(MACOS),true)
+ 	@$(CURDIR)/dpf/utils/generate-vst-bundles.sh
+ endif

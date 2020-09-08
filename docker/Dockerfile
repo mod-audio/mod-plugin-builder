@@ -1,9 +1,9 @@
 FROM ubuntu:18.04
-MAINTAINER Alexandre Cunha <alex@moddevices.com>
+LABEL maintainer="Alexandre Cunha <ale@moddevices.com>"
 ENV DEBIAN_FRONTEND noninteractive
 
 # platform argument must be provided, e.g. --build-arg platform=modduo
-ARG platform
+ARG platform=modduo
 
 # enable i386, armhf and arm64
 RUN dpkg --add-architecture i386

@@ -1,0 +1,24 @@
+diff --git a/src/vco3.cpp b/src/vco3.cpp
+index ea222bf..2503964 100644
+--- a/src/vco3.cpp
++++ b/src/vco3.cpp
+@@ -56,6 +56,9 @@ void Vco3::run(uint32_t nframes)
+ 			oldSyncValue = p(p_sync)[l2];
+ 
+ 			dphi = freq_const * (synthdata->exp2_table(freq_tune + p(p_freq)[l2] +  *p(p_expFMGain) * (p(p_expFM)[l2] * 0.2)) + gain_linfm * (p(p_linFM)[l2] * 0.2));
++
++			if (dphi > 32330.0)
++				dphi = 32330.0;
+ 			if (dphi > wave_period_2)
+ 				dphi = wave_period_2;
+ 			phi1 = phi + phi_const;
+@@ -183,6 +186,9 @@ void Vco3::run(uint32_t nframes)
+ 			oldSyncValue = p(p_sync)[l2];
+ 
+ 			dphi = freq_const * (synthdata->exp2_table(freq_tune + p(p_freq)[l2] +  *p(p_expFMGain) * (p(p_expFM)[l2] * 0.2)) + gain_linfm * (p(p_linFM)[l2] * 0.2));
++
++			if (dphi > 32330.0)
++				dphi = 32330.0;
+ 			if (dphi > wave_period_2)
+ 				dphi = wave_period_2;
+ 			phint = (int) phi;

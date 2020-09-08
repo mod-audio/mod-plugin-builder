@@ -1,0 +1,51 @@
+From 3aad5eb1b08ed5c27e60aa36021c4a85ce90c08f Mon Sep 17 00:00:00 2001
+From: Ruoxi Wang <thuwrx10@gmail.com>
+Date: Tue, 25 Feb 2020 16:19:54 +0800
+Subject: [PATCH] Use LV2_ATOM_BODY macros in examples instead of pointer
+ arithmetic
+
+---
+ plugins/eg-fifths.lv2/fifths.c     | 2 +-
+ plugins/eg-midigate.lv2/midigate.c | 2 +-
+ plugins/eg-sampler.lv2/sampler.c   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/plugins/eg-fifths.lv2/fifths.c b/plugins/eg-fifths.lv2/fifths.c
+index 0abcfbdc..5782417b 100644
+--- a/plugins/eg-fifths.lv2/fifths.c
++++ b/plugins/eg-fifths.lv2/fifths.c
+@@ -128,7 +128,7 @@ run(LV2_Handle instance,
+ 	// Read incoming events
+ 	LV2_ATOM_SEQUENCE_FOREACH(self->in_port, ev) {
+ 		if (ev->body.type == uris->midi_Event) {
+-			const uint8_t* const msg = (const uint8_t*)LV2_ATOM_BODY_CONST(ev);
++			const uint8_t* const msg = (const uint8_t*)(ev + 1);
+ 			switch (lv2_midi_message_type(msg)) {
+ 			case LV2_MIDI_MSG_NOTE_ON:
+ 			case LV2_MIDI_MSG_NOTE_OFF:
+diff --git a/plugins/eg-midigate.lv2/midigate.c b/plugins/eg-midigate.lv2/midigate.c
+index 70901f66..6c77828a 100644
+--- a/plugins/eg-midigate.lv2/midigate.c
++++ b/plugins/eg-midigate.lv2/midigate.c
+@@ -161,7 +161,7 @@ run(LV2_Handle instance, uint32_t sample_count)
+ 
+ 	LV2_ATOM_SEQUENCE_FOREACH(self->control, ev) {
+ 		if (ev->body.type == self->uris.midi_MidiEvent) {
+-			const uint8_t* const msg = (const uint8_t*)LV2_ATOM_BODY_CONST(ev);
++			const uint8_t* const msg = (const uint8_t*)(ev + 1);
+ 			switch (lv2_midi_message_type(msg)) {
+ 			case LV2_MIDI_MSG_NOTE_ON:
+ 				++self->n_active_notes;
+diff --git a/plugins/eg-sampler.lv2/sampler.c b/plugins/eg-sampler.lv2/sampler.c
+index 4e6afdf8..ed499035 100644
+--- a/plugins/eg-sampler.lv2/sampler.c
++++ b/plugins/eg-sampler.lv2/sampler.c
+@@ -322,7 +322,7 @@ handle_event(Sampler* self, LV2_Atom_Event* ev)
+ 	PeaksURIs*   peaks_uris = &self->psend.uris;
+ 
+ 	if (ev->body.type == uris->midi_Event) {
+-		const uint8_t* const msg = (const uint8_t*)LV2_ATOM_BODY_CONST(ev);
++		const uint8_t* const msg = (const uint8_t*)(ev + 1);
+ 		switch (lv2_midi_message_type(msg)) {
+ 		case LV2_MIDI_MSG_NOTE_ON:
+ 			self->frame = 0;

@@ -7,7 +7,7 @@
 FLUIDPLUG_VERSION = 889b2568f5c4483b1c72b5d82e4090e27ef824de
 FLUIDPLUG_SITE = $(call github,falkTX,FluidPlug,$(FLUIDPLUG_VERSION))
 FLUIDPLUG_DEPENDENCIES = fluidsynth host-p7zip-light
-FLUIDPLUG_BUNDLES = AirFont320.lv2 AVL_Drumkits_Perc.lv2 Black_Pearl_4A.lv2 Black_Pearl_4B.lv2 Black_Pearl_5.lv2 FluidBass.lv2 FluidBrass.lv2 FluidChromPerc.lv2 FluidDrums.lv2 FluidEnsemble.lv2 FluidEthnic.lv2 FluidGuitars.lv2 FluidOrgans.lv2 FluidPercussion.lv2 FluidPianos.lv2 FluidPipes.lv2 FluidReeds.lv2 FluidSoundFX.lv2 FluidStrings.lv2 FluidSynthFX.lv2 FluidSynthLeads.lv2 FluidSynthPads.lv2 Red_Zeppelin_4.lv2 Red_Zeppelin_5.lv2
+FLUIDPLUG_BUNDLES = Black_Pearl_4A.lv2 Black_Pearl_4B.lv2 Black_Pearl_5.lv2 FluidBass.lv2 FluidBrass.lv2 FluidChromPerc.lv2 FluidDrums.lv2 FluidEnsemble.lv2 FluidEthnic.lv2 FluidGuitars.lv2 FluidOrgans.lv2 FluidPercussion.lv2 FluidPianos.lv2 FluidPipes.lv2 FluidReeds.lv2 FluidSoundFX.lv2 FluidStrings.lv2 FluidSynthFX.lv2 FluidSynthLeads.lv2 FluidSynthPads.lv2 Red_Zeppelin_4.lv2 Red_Zeppelin_5.lv2
 # Missing 'FluidGM.lv2', too big and already split into separate files anyway
 
 FLUIDPLUG_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
@@ -18,8 +18,6 @@ endef
 
 define FLUIDPLUG_INSTALL_TARGET_CMDS
 	$(FLUIDPLUG_TARGET_MAKE) install PREFIX=/usr DESTDIR=$(TARGET_DIR)
-	cp -rL $($(PKG)_PKGDIR)/AirFont320.lv2/*         $(TARGET_DIR)/usr/lib/lv2/AirFont320.lv2/
-	cp -rL $($(PKG)_PKGDIR)/AVL_Drumkits_Perc.lv2/*  $(TARGET_DIR)/usr/lib/lv2/AVL_Drumkits_Perc.lv2/
 	cp -rL $($(PKG)_PKGDIR)/Black_Pearl_4A.lv2/*     $(TARGET_DIR)/usr/lib/lv2/Black_Pearl_4A.lv2/
 	cp -rL $($(PKG)_PKGDIR)/Black_Pearl_4B.lv2/*     $(TARGET_DIR)/usr/lib/lv2/Black_Pearl_4B.lv2/
 	cp -rL $($(PKG)_PKGDIR)/Black_Pearl_5.lv2/*      $(TARGET_DIR)/usr/lib/lv2/Black_Pearl_5.lv2/
