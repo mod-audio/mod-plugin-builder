@@ -1,0 +1,18 @@
+diff --git a/src/modules_delay.cpp b/src/modules_delay.cpp
+index f6df3ce..b95c1d8 100644
+--- a/src/modules_delay.cpp
++++ b/src/modules_delay.cpp
+@@ -403,11 +403,11 @@ uint32_t comp_delay_audio_module::process(uint32_t offset, uint32_t numsamples,
+             L = ins[0][i];
+             buffer[w_ptr] = L;
+             outs[0][i] = dry * L + wet * buffer[r_ptr];
+-            if (stereo)
++            if (stereo) {
+                 R = ins[1][i];
+                 buffer[w_ptr + 1] = R;
+                 outs[1][i] = dry * R + wet * buffer[r_ptr + 1];
+-            
++            }
+             w_ptr = (w_ptr + 2) & b_mask;
+             r_ptr = (r_ptr + 2) & b_mask;
+         }
