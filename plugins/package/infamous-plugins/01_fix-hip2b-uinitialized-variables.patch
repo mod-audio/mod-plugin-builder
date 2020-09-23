@@ -1,0 +1,20 @@
+diff --git a/src/hip2b/square.c b/src/hip2b/square.c
+index b3f065b..a17c42f 100644
+--- a/src/hip2b/square.c
++++ b/src/hip2b/square.c
+@@ -217,6 +217,7 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
+     plug->state = 0;
+     plug->outstate = 0;
+     plug->nextstate = 0;
++    plug->pos = 0;
+     plug->headway = HALF + 1;
+     plug->skip = 1;
+ 
+@@ -231,6 +232,7 @@ LV2_Handle init_square(const LV2_Descriptor *descriptor,double sample_rate, cons
+ 
+     plug->dcprevin = 0;
+     plug->dcprevout = 0;
++    plug->gain = 1;
+ 
+     return plug;
+ }
