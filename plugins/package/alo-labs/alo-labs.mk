@@ -4,7 +4,7 @@
 #
 ######################################
 
-ALO_LABS_VERSION = 44f50586eb67455fccd53b736d47365419aec806
+ALO_LABS_VERSION = a3bc9895e2836e236a024bee0cf45f165e0f1507
 ALO_LABS_BUNDLES = alo.lv2
 
 ALO_LABS_SITE = $(call github,devcurmudgeon,alo,$(ALO_LABS_VERSION))
