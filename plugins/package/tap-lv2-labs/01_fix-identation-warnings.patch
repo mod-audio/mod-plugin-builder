@@ -1,0 +1,35 @@
+diff --git a/rotspeak/tap_rotspeak.c b/rotspeak/tap_rotspeak.c
+index b637e71..34108c4 100644
+--- a/rotspeak/tap_rotspeak.c
++++ b/rotspeak/tap_rotspeak.c
+@@ -395,7 +395,7 @@ run_RotSpkr(LV2_Handle Instance,
+         ptr->phase_h += 1024.0f * freq_h * sample_index / ptr->sample_rate;
+     while (ptr->phase_h >= 1024.0f)
+         ptr->phase_h -= 1024.0f;
+-        ptr->phase_b += 1024.0f * freq_b * sample_index / ptr->sample_rate;
++    ptr->phase_b += 1024.0f * freq_b * sample_index / ptr->sample_rate;
+     while (ptr->phase_b >= 1024.0f)
+         ptr->phase_b -= 1024.0f;
+ 
+@@ -551,7 +551,7 @@ run_adding_RotSpkr(LV2_Handle Instance,
+         ptr->phase_h += 1024.0f * freq_h * sample_index / ptr->sample_rate;
+     while (ptr->phase_h >= 1024.0f)
+         ptr->phase_h -= 1024.0f;
+-        ptr->phase_b += 1024.0f * freq_b * sample_index / ptr->sample_rate;
++    ptr->phase_b += 1024.0f * freq_b * sample_index / ptr->sample_rate;
+     while (ptr->phase_b >= 1024.0f)
+         ptr->phase_b -= 1024.0f;
+ 
+diff --git a/tremolo/tap_tremolo.c b/tremolo/tap_tremolo.c
+index 4258326..54fd9f2 100644
+--- a/tremolo/tap_tremolo.c
++++ b/tremolo/tap_tremolo.c
+@@ -80,7 +80,7 @@ instantiate_Tremolo(const LV2_Descriptor * Descriptor, double SampleRate, const
+ 	        {
+                 for (i = 0; i < 1024; i++)
+                     cos_table[i] = cosf(i * M_PI / 512.0f);
+-                    flag++;
++                flag++;
+ 	        }
+ 		return ptr;
+ 	}
