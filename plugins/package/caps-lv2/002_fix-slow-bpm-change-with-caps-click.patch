@@ -1,0 +1,37 @@
+diff --git a/Click.cc b/Click.cc
+index 2a159a2..0d8c683 100644
+--- a/Click.cc
++++ b/Click.cc
+@@ -62,6 +62,12 @@ ClickStub<Waves>::cycle (uint frames)
+ 			played = 0;
+ 		}
+ 
++        if ((int)bpm != prev_bpm)
++        {
++            period = (int)(fs * 60 / bpm);
++            prev_bpm = (int)bpm;
++        }
++
+ 		uint n = min (frames, period);
+ 				
+ 		if (played < wave[w].N)
+diff --git a/Click.h b/Click.h
+index 7d6ced9..5a71b3c 100644
+--- a/Click.h
++++ b/Click.h
+@@ -38,6 +38,7 @@ class ClickStub
+ {
+ 	public:
+ 		sample_t bpm;
++		sample_t prev_bpm;
+ 
+ 		struct {
+ 			int16 * data;
+@@ -70,6 +71,7 @@ class ClickStub
+ 				played = 0;
+ 				period = 0;
+ 				bpm = -1;
++				prev_bpm = 0;
+ 			}
+ };
+ 
