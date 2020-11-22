@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#######################################################################################################################
+# check arguments
+
+PLATFORM=$1
+PACKAGE=$2
+
+if [[ "${PLATFORM}" == "" ]] || [[ "${PACKAGE}" == "" ]]; then
+    echo "Usage: $0 <platform> <plugin-package-name>"
+    echo "  Where platform can be modduo, modduox or moddwarf"
+    echo "  and plugin-package-name is a folder inside ./plugins/package"
+    exit 1
+fi
+
+if [ "${PLATFORM}" != "modduo" ] && [ "${PLATFORM}" != "modduox" ] && [ "${PLATFORM}" != "moddwarf" ]; then
+    echo -e "\e[0;31mPlease provide either modduo, modduox or moddwarf as platform argument\e[0m"
+    exit 1
+fi
+
+#######################################################################################################################
+# Import common code and variables
+
+source .common
+
+#######################################################################################################################
+# Check if requested plugin package exists
+
+PACKAGE=$(basename ${PACKAGE} | sed "s|\.mk||")
+PKGNAME=$(echo ${PACKAGE} | tr a-z- A-Z_)
+
+if [ ! -d ${SOURCE_DIR}/plugins/package/${PACKAGE} ]; then
+    error "Plugin package name '${PACKAGE}' does not exist"
+    exit 1
+fi
+if [ ! -f ${SOURCE_DIR}/plugins/package/${PACKAGE}/${PACKAGE}.mk ]; then
+    error "Requested plugin package has no 'mk' file"
+    exit 1
+fi
+
+bundles=($(cat ${SOURCE_DIR}/plugins/package/${PACKAGE}/${PACKAGE}.mk | awk 'sub("'${PKGNAME}'_BUNDLES = ","")'))
+if [[ "${bundles}" == "" ]]; then
+    error "Requested plugin package has no bundles"
+    exit 1
+fi
+
+#######################################################################################################################
+# Check if plugin path exists
+
+PLUGIN_PATH="${WORKDIR}/${PLATFORM}/plugins"
+
+if [ ! -e "${PLUGIN_PATH}" ]; then
+    error "Failed to find plugin installed bundles"
+    exit 1
+fi
+
+#######################################################################################################################
+# check if all bundles are present
+
+function bundle_has_binaries
+{
+    for f in "$1"/*.so; do
+        if [ -e "$f" ]; then
+            return 0;
+        fi
+    done
+    return 1
+}
+
+for bundle in ${bundles[@]}; do
+    if [ ! -d ${PLUGIN_PATH}/${bundle} ]; then
+        return
+    fi
+    if ! bundle_has_binaries ${PLUGIN_PATH}/${bundle}; then
+        return
+    fi
+done
+
+#######################################################################################################################
+# alright, good to go
+
+pushd "${PLUGIN_PATH}" >/dev/null
+for bundle in ${bundles[@]}; do
+    tar cz "${bundle}" | base64 | curl -F 'package=@-' http://192.168.51.1/sdk/install; echo
+done
+popd >/dev/null
+
+info "All plugin bundles installed"
+exit 0
+
+#######################################################################################################################
