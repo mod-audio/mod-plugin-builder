@@ -59,20 +59,21 @@ fi
 
 function bundle_has_binaries
 {
-    for f in "$1"/*.so; do
-        if [ -e "$f" ]; then
-            return 0;
-        fi
-    done
-    return 1
+    if find "$1" -name "*.so" >/dev/null; then
+        return 0
+    else
+        return 1
+    fi
 }
 
 for bundle in ${bundles[@]}; do
     if [ ! -d ${PLUGIN_PATH}/${bundle} ]; then
-        return
+        error "Failed to find plugin installed bundles"
+        exit 1
     fi
     if ! bundle_has_binaries ${PLUGIN_PATH}/${bundle}; then
-        return
+        error "Failed to find plugin installed bundles"
+        exit 1
     fi
 done
 
