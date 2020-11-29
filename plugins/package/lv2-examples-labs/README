@@ -1,13 +1,12 @@
 Special NOTE: LV2 bundles should not be stored in this repository!
 
-We make an exception here for eg-sampler in order to help develop development.
-The eg-sampler is very useful to quickly change and check implementation of MOD stuff.
+We make an exception here for eg-params and eg-sampler in order to help develop development.
+These plugins are very useful to quickly change and check implementation of MOD stuff.
 
-We can make use eg-sampler to test:
+We can make use of them to test:
 
 1. state save/restore support
 2. file handling
 3. parameter API (through patch messages, as eg-sampler has a gain parameter)
 4. modgui with file handling support
 5. sending raw message from modgui to plugin (a MIDI note for eg-sampler's case)
-
