@@ -8,8 +8,8 @@ PACKAGE=$2
 
 if [[ "${PLATFORM}" == "" ]] || [[ "${PACKAGE}" == "" ]]; then
   echo "Usage: $0 <platform> <plugin-package-name>"
-  echo "  Where platform can be modduo or modduox"
-  echo "  and plugin-package-name is a folder inside ./plugins"
+  echo "  Where platform can be modduo, modduox or moddwarf"
+  echo "  and plugin-package-name is a folder inside ./plugins/package"
   exit 1
 fi
 
@@ -155,7 +155,7 @@ function try_copy_plugin_bundles
 }
 
 #######################################################################################################################
-# copy the requested plugin bundles
+# copy the requested plugin projects
 
 if [[ "${PACKAGE}" != "menuconfig" ]]; then
   mkdir -p ${WORKDIR}/${PLATFORM}/plugins

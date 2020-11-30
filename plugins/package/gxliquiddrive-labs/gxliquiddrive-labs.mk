@@ -1,0 +1,25 @@
+######################################
+#
+# gxliquiddrive
+#
+######################################
+
+GXLIQUIDDRIVE_LABS_VERSION = 99061a03ccfe0fb5c9cb0e5d426b6bdcd05b8ab8
+GXLIQUIDDRIVE_LABS_SITE = $(call github,brummer10,GxLiquidDrive.lv2,$(GXLIQUIDDRIVE_LABS_VERSION))
+GXLIQUIDDRIVE_LABS_BUNDLES = gx_liquiddrive.lv2
+
+ifdef BR2_cortex_a7
+GXLIQUIDDRIVE_LABS_SSE_CFLAGS = -mfpu=vfpv3
+endif
+
+GXLIQUIDDRIVE_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) SSE_CFLAGS="$(GXLIQUIDDRIVE_LABS_SSE_CFLAGS)" -C $(@D)
+
+define GXLIQUIDDRIVE_LABS_BUILD_CMDS
+	$(GXLIQUIDDRIVE_LABS_TARGET_MAKE) mod
+endef
+
+define GXLIQUIDDRIVE_LABS_INSTALL_TARGET_CMDS
+	$(GXLIQUIDDRIVE_LABS_TARGET_MAKE) install DESTDIR=$(TARGET_DIR) INSTALL_DIR=/usr/lib/lv2
+endef
+
+$(eval $(generic-package))
