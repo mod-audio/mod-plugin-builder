@@ -1,0 +1,63 @@
+diff --git a/src/samplv1_lv2.cpp b/src/samplv1_lv2.cpp
+index 0593e21..57c9cd2 100644
+--- a/src/samplv1_lv2.cpp
++++ b/src/samplv1_lv2.cpp
+@@ -64,7 +64,7 @@
+ #include <stdlib.h>
+ #include <math.h>
+ 
+-#include <QApplication>
++//#include <QApplication>
+ #include <QDomDocument>
+ #include <QFileInfo>
+ 
+@@ -541,35 +541,35 @@ uint32_t samplv1_lv2::urid_map ( const char *uri ) const
+ // samplv1_lv2 - Instantiation and cleanup.
+ //
+ 
+-QApplication *samplv1_lv2::g_qapp_instance = nullptr;
++//QApplication *samplv1_lv2::g_qapp_instance = nullptr;
+ unsigned int  samplv1_lv2::g_qapp_refcount = 0;
+ 
+ 
+ void samplv1_lv2::qapp_instantiate (void)
+ {
+-	if (qApp == nullptr && g_qapp_instance == nullptr) {
+-		static int s_argc = 1;
+-		static const char *s_argv[] = { SAMPLV1_TITLE, nullptr };
+-		::setenv("QT_NO_GLIB", "1", 1); // Avoid glib event-loop...
+-		g_qapp_instance = new QApplication(s_argc, (char **) s_argv);
+-	}
+-
+-	if (g_qapp_instance) ++g_qapp_refcount;
++//	if (qApp == nullptr && g_qapp_instance == nullptr) {
++//		static int s_argc = 1;
++//		static const char *s_argv[] = { SAMPLV1_TITLE, nullptr };
++//		::setenv("QT_NO_GLIB", "1", 1); // Avoid glib event-loop...
++//		g_qapp_instance = new QApplication(s_argc, (char **) s_argv);
++//	}
++//
++//	if (g_qapp_instance) ++g_qapp_refcount;
+ }
+ 
+ 
+ void samplv1_lv2::qapp_cleanup (void)
+ {
+-	if (g_qapp_instance && --g_qapp_refcount == 0) {
+-		delete g_qapp_instance;
+-		g_qapp_instance = nullptr;
+-	}
++//	if (g_qapp_instance && --g_qapp_refcount == 0) {
++//		delete g_qapp_instance;
++//		g_qapp_instance = nullptr;
++//	}
+ }
+ 
+ 
+ QApplication *samplv1_lv2::qapp_instance (void)
+ {
+-	return g_qapp_instance;
++	return NULL;
+ }
+ 
+ 

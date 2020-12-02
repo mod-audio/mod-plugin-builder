@@ -1,0 +1,126 @@
+diff --git a/Makefile.in b/Makefile.in
+index dd531bb..e6e3f7b 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -124,7 +124,7 @@ export LUPDATE = @ac_lupdate@
+ export LRELEASE = @ac_lrelease@
+ 
+ 
+-all:	core ui @ac_all_targets@
++all:	core @ac_all_targets@
+ 
+ core:	$(name).mak $(sources) $(headers)
+ 	@$(MAKE) -f $(name).mak
+@@ -132,7 +132,7 @@ core:	$(name).mak $(sources) $(headers)
+ ui:	$(name_ui).mak $(sources_ui) $(headers_ui) $(resources_ui) ${forms_ui} core
+ 	@$(MAKE) -f $(name_ui).mak
+ 
+-lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) ui core
++lv2:	$(name_lv2).mak $(sources_lv2) $(headers_lv2) core
+ 	@$(MAKE) -f $(name_lv2).mak
+ 
+ jack:	$(name_jack).mak $(sources_jack) $(headers_jack) ui core
+@@ -203,7 +203,7 @@ clean_jack:	$(name_jack).mak
+ 	@rm -f $(name_jack).mak
+ 
+ 
+-install:	install_core install_ui @ac_install_targets@
++install:	install_core @ac_install_targets@
+ 
+ uninstall:	uninstall_core uninstall_ui @ac_uninstall_targets@
+ 
+diff --git a/configure.ac b/configure.ac
+index 1cf4a51..853f9b0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3,7 +3,7 @@ AC_INIT(samplv1, 0.9.18, rncbc@rncbc.org)
+ 
+ AC_CONFIG_SRCDIR(src/samplv1.cpp)
+ AC_CONFIG_HEADERS(src/config.h)
+-AC_CONFIG_FILES(Makefile samplv1.spec src/src_core.pri src/src_ui.pri src/src_jack.pri src/src_lv2.pri)
++AC_CONFIG_FILES(Makefile samplv1.spec src/src_core.pri src/src_jack.pri src/src_lv2.pri)
+ 
+ # Build version string.
+ AC_CACHE_VAL([ac_cv_build_version], [
+
+diff --git a/src/src_lv2.pro b/src/src_lv2.pro
+index ad6d235..df66cb9 100644
+--- a/src/src_lv2.pro
++++ b/src/src_lv2.pro
+@@ -7,8 +7,8 @@ TEMPLATE = lib
+ CONFIG += shared plugin
+ 
+ unix {
+-	LIBS += -L. -l$${NAME} -l$${NAME}_ui
+-	PRE_TARGETDEPS += lib$${NAME}.a lib$${NAME}_ui.a
++	LIBS += -L. -l$${NAME}
++	PRE_TARGETDEPS += lib$${NAME}.a
+ }
+ 
+ include(src_lv2.pri)
+@@ -16,20 +16,14 @@ include(src_lv2.pri)
+ HEADERS = \
+ 	config.h \
+ 	samplv1_lv2.h \
+-	samplv1_lv2ui.h \
+-	samplv1widget_lv2.h
+ 
+ SOURCES = \
+ 	samplv1_lv2.cpp \
+-	samplv1_lv2ui.cpp \
+-	samplv1widget_lv2.cpp
+-
+ 
+ unix {
+ 
+ 	OBJECTS_DIR = .obj_lv2
+ 	MOC_DIR     = .moc_lv2
+-	UI_DIR      = .ui_lv2
+ 
+ 	isEmpty(PREFIX) {
+ 		PREFIX = /usr/local
+@@ -56,14 +50,11 @@ unix {
+ 		system(touch $${TARGET_LV2}.so)
+ 	}
+ 
+-	TARGET_LV2UI = $${NAME}.lv2/$${NAME}_ui
+-
+ 	INSTALLS += target
+ 
+ 	target.path  = $${LV2DIR}/$${NAME}.lv2
+ 	target.files = $${TARGET_LV2}.so \
+ 		$${TARGET_LV2}.ttl \
+-		$${TARGET_LV2UI}.ttl \
+ 		$${NAME}.lv2/manifest.ttl
+ 
+ 	CONFIG(release, debug|release):QMAKE_POST_LINK += strip $(TARGET);
+@@ -72,5 +63,6 @@ unix {
+ 	QMAKE_CLEAN += $${TARGET_LV2}.so
+ }
+ 
+-QT += widgets xml
++QT -= gui
++QT += xml
+ 
+diff --git a/src/samplv1.lv2/manifest.ttl b/src/samplv1.lv2/manifest.ttl
+index 9cbf769..29fee78 100644
+--- a/src/samplv1.lv2/manifest.ttl
++++ b/src/samplv1.lv2/manifest.ttl
+@@ -4,4 +4,4 @@
+ <http://samplv1.sourceforge.net/lv2>
+ 	a lv2:Plugin, lv2:InstrumentPlugin ;
+ 	lv2:binary <samplv1.so> ;
+-	rdfs:seeAlso <samplv1.ttl>, <samplv1_ui.ttl> .
++	rdfs:seeAlso <samplv1.ttl> .
+diff --git a/src/samplv1.lv2/samplv1.ttl b/src/samplv1.lv2/samplv1.ttl
+index 2b076e1..a87454d 100644
+--- a/src/samplv1.lv2/samplv1.ttl
++++ b/src/samplv1.lv2/samplv1.ttl
+@@ -31,7 +31,6 @@
+ 	lv2:requiredFeature lv2urid:map, lv2worker:schedule ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+ 	lv2:extensionData lv2state:interface, lv2worker:interface ;
+-	lv2ui:ui samplv1_lv2:ui_x11, samplv1_lv2:ui_external ;
+ 	lv2patch:writable samplv1_lv2:P101_SAMPLE_FILE,
+ 		samplv1_lv2:P102_OFFSET_START,
+ 		samplv1_lv2:P103_OFFSET_END,
