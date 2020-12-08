@@ -1,34 +1,86 @@
-From 8a6da88b0725e7cf4f3b1921addd71c86d241ac2 Mon Sep 17 00:00:00 2001
-From: falkTX <falktx@falktx.com>
-Date: Sat, 28 Nov 2020 00:07:57 +0000
-Subject: [PATCH 1/3] eg-sampler: save and restore param:gain value
-
----
- plugins/eg-sampler.lv2/sampler.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
 diff --git a/plugins/eg-sampler.lv2/sampler.c b/plugins/eg-sampler.lv2/sampler.c
-index 17f62a87..a92ad7b0 100644
+index 17f62a8..425f732 100644
 --- a/plugins/eg-sampler.lv2/sampler.c
 +++ b/plugins/eg-sampler.lv2/sampler.c
-@@ -495,6 +495,16 @@ save(LV2_Handle                instance,
+@@ -78,9 +78,11 @@ typedef struct {
+ 	Sample*    sample;
+ 	uint32_t   frame_offset;
+ 	float      gain;
++	float      gain_dB;
+ 	sf_count_t frame;
+ 	bool       play;
+ 	bool       activated;
++	bool       gain_changed;
+ 	bool       sample_changed;
+ } Sampler;
+ 
+@@ -281,7 +283,8 @@ instantiate(const LV2_Descriptor*     descriptor,
+ 	lv2_atom_forge_init(&self->forge, self->map);
+ 	peaks_sender_init(&self->psend, self->map);
+ 
+-	self->gain = 1.0;
++	self->gain = 1.0f;
++	self->gain_dB = 0.0f;
+ 
+ 	return (LV2_Handle)self;
+ }
+@@ -359,7 +362,9 @@ handle_event(Sampler* self, LV2_Atom_Event* ev)
+ 			} else if (key == uris->param_gain) {
+ 				// Gain change
+ 				if (value->type == uris->atom_Float) {
+-					self->gain = DB_CO(((LV2_Atom_Float*)value)->body);
++					const float gain_dB = ((LV2_Atom_Float*)value)->body;
++					self->gain = DB_CO(gain_dB);
++					self->gain_dB = gain_dB;
+ 				}
+ 			}
+ 		} else if (obj->body.otype == uris->patch_Get && self->sample) {
+@@ -432,13 +437,21 @@ run(LV2_Handle instance, uint32_t sample_count)
+ 	// Start a sequence in the notify output port.
+ 	lv2_atom_forge_sequence_head(&self->forge, &self->notify_frame, 0);
+ 
+-	// Send update to UI if sample has changed due to state restore
+-	if (self->sample_changed) {
++	// Send update to UI if gain parameter or sample have changed due to state restore
++	if (self->gain_changed || self->sample_changed) {
+ 		lv2_atom_forge_frame_time(&self->forge, 0);
+-		write_set_file(&self->forge, &self->uris,
+-		               self->sample->path,
+-		               self->sample->path_len);
+-		self->sample_changed = false;
++
++		if (self->gain_changed) {
++			write_set_gain(&self->forge, &self->uris, self->gain_dB);
++			self->gain_changed = false;
++		}
++
++		if (self->sample_changed) {
++			write_set_file(&self->forge, &self->uris,
++			               self->sample->path,
++			               self->sample->path_len);
++			self->sample_changed = false;
++		}
+ 	}
+ 
+ 	// Iterate over incoming events, emitting audio along the way
+@@ -495,6 +508,16 @@ save(LV2_Handle                instance,
  	      LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
  
  	free(apath);
 +
 +	// Store the gain value
-+	const float gain = self->gain;
++	const float gain_dB = self->gain_dB;
 +	store(handle,
 +	      self->uris.param_gain,
-+	      &gain,
-+	      sizeof(gain),
++	      &gain_dB,
++	      sizeof(gain_dB),
 +	      self->uris.atom_Float,
 +	      LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
 +
  	return LV2_STATE_SUCCESS;
  }
  
-@@ -564,6 +574,19 @@ restore(LV2_Handle                  instance,
+@@ -564,6 +587,21 @@ restore(LV2_Handle                  instance,
  
  	free(path);
  
@@ -43,95 +95,15 @@ index 17f62a87..a92ad7b0 100644
 +		return LV2_STATE_ERR_BAD_TYPE;
 +	}
 +
-+	self->gain = *(const float*)value;
++	self->gain_dB = *(const float*)value;
++	self->gain = DB_CO(self->gain_dB);
++	self->gain_changed = true;
 +
  	return LV2_STATE_SUCCESS;
  }
  
-
-From 93b5a1d3256ec90a8f465bb657b3639186f30cf8 Mon Sep 17 00:00:00 2001
-From: falkTX <falktx@falktx.com>
-Date: Sat, 28 Nov 2020 01:27:22 +0000
-Subject: [PATCH 2/3] eg-sampler: store "raw" gain value in dB instead of
- internal coef
-
----
- plugins/eg-sampler.lv2/sampler.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/plugins/eg-sampler.lv2/sampler.c b/plugins/eg-sampler.lv2/sampler.c
-index a92ad7b0..81ef6b51 100644
---- a/plugins/eg-sampler.lv2/sampler.c
-+++ b/plugins/eg-sampler.lv2/sampler.c
-@@ -78,6 +78,7 @@ typedef struct {
- 	Sample*    sample;
- 	uint32_t   frame_offset;
- 	float      gain;
-+	float      gain_dB;
- 	sf_count_t frame;
- 	bool       play;
- 	bool       activated;
-@@ -281,7 +282,8 @@ instantiate(const LV2_Descriptor*     descriptor,
- 	lv2_atom_forge_init(&self->forge, self->map);
- 	peaks_sender_init(&self->psend, self->map);
- 
--	self->gain = 1.0;
-+	self->gain = 1.0f;
-+	self->gain_dB = 0.0f;
- 
- 	return (LV2_Handle)self;
- }
-@@ -359,7 +361,9 @@ handle_event(Sampler* self, LV2_Atom_Event* ev)
- 			} else if (key == uris->param_gain) {
- 				// Gain change
- 				if (value->type == uris->atom_Float) {
--					self->gain = DB_CO(((LV2_Atom_Float*)value)->body);
-+					const float gain_dB = ((LV2_Atom_Float*)value)->body;
-+					self->gain = DB_CO(gain_dB);
-+					self->gain_dB = gain_dB;
- 				}
- 			}
- 		} else if (obj->body.otype == uris->patch_Get && self->sample) {
-@@ -497,11 +501,11 @@ save(LV2_Handle                instance,
- 	free(apath);
- 
- 	// Store the gain value
--	const float gain = self->gain;
-+	const float gain_dB = self->gain_dB;
- 	store(handle,
- 	      self->uris.param_gain,
--	      &gain,
--	      sizeof(gain),
-+	      &gain_dB,
-+	      sizeof(gain_dB),
- 	      self->uris.atom_Float,
- 	      LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
- 
-@@ -585,7 +589,8 @@ restore(LV2_Handle                  instance,
- 		return LV2_STATE_ERR_BAD_TYPE;
- 	}
- 
--	self->gain = *(const float*)value;
-+	self->gain_dB = *(const float*)value;
-+	self->gain = DB_CO(self->gain_dB);
- 
- 	return LV2_STATE_SUCCESS;
- }
-
-From 433063d534009cacdc7058327e61b8b21b465485 Mon Sep 17 00:00:00 2001
-From: Filipe Coelho <falktx@falktx.com>
-Date: Sat, 28 Nov 2020 14:17:28 +0000
-Subject: [PATCH 3/3] eg-sampler: fix default gain value
-
-eg-sampler has `1.0` as its initial gain value in the code. (that is, the gain coefficient)
-This coefficient value is calculated with `DB_CO` whenever the real value in dB changes via patch:Set.
-To actually have `1.0` as coefficient, the real value in dB must be zero, so adjust that.
----
- plugins/eg-sampler.lv2/sampler.ttl | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
 diff --git a/plugins/eg-sampler.lv2/sampler.ttl b/plugins/eg-sampler.lv2/sampler.ttl
-index f5088f37..4a3c24c1 100644
+index f5088f3..4a3c24c 100644
 --- a/plugins/eg-sampler.lv2/sampler.ttl
 +++ b/plugins/eg-sampler.lv2/sampler.ttl
 @@ -58,7 +58,7 @@
@@ -143,3 +115,42 @@ index f5088f37..4a3c24c1 100644
  	] .
  
  <http://lv2plug.in/plugins/eg-sampler#ui>
+diff --git a/plugins/eg-sampler.lv2/uris.h b/plugins/eg-sampler.lv2/uris.h
+index 57e5754..f0c16ce 100644
+--- a/plugins/eg-sampler.lv2/uris.h
++++ b/plugins/eg-sampler.lv2/uris.h
+@@ -73,6 +73,34 @@ map_sampler_uris(LV2_URID_Map* map, SamplerURIs* uris)
+ 	uris->patch_value        = map->map(map->handle, LV2_PATCH__value);
+ }
+ 
++/**
++   Write a message like the following to `forge`:
++   [source,turtle]
++   ----
++   []
++   a patch:Set ;
++   patch:property param:gain ;
++   patch:value 0.0f .
++   ----
++*/
++static inline LV2_Atom_Forge_Ref
++write_set_gain(LV2_Atom_Forge*    forge,
++               const SamplerURIs* uris,
++               const float        gain)
++{
++	LV2_Atom_Forge_Frame frame;
++	LV2_Atom_Forge_Ref   set = lv2_atom_forge_object(
++		forge, &frame, 0, uris->patch_Set);
++
++	lv2_atom_forge_key(forge, uris->patch_property);
++	lv2_atom_forge_urid(forge, uris->param_gain);
++	lv2_atom_forge_key(forge, uris->patch_value);
++	lv2_atom_forge_float(forge, gain);
++
++	lv2_atom_forge_pop(forge, &frame);
++	return set;
++}
++
+ /**
+    Write a message like the following to `forge`:
+    [source,turtle]
