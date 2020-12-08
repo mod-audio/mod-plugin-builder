@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_CABSIM_IR_LOADER_VERSION = 83a6c88d158f79519d1e58aacdd0be78bf8e05f7
+MOD_CABSIM_IR_LOADER_VERSION = b6ac714b5fda017694a454dec091e54ea972ada3
 MOD_CABSIM_IR_LOADER_SITE = $(call github,moddevices,mod-cabsim-IR-loader,$(MOD_CABSIM_IR_LOADER_VERSION))
 
 MOD_CABSIM_IR_LOADER_BUNDLES = cabsim-IR-loader.lv2
