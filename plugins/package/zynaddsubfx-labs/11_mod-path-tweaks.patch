@@ -1,0 +1,46 @@
+diff --git a/src/Misc/Config.cpp b/src/Misc/Config.cpp
+index 5bd1976c..0b44765e 100644
+--- a/src/Misc/Config.cpp
++++ b/src/Misc/Config.cpp
+@@ -230,6 +230,11 @@ void Config::init()
+     getConfigFileName(filename, MAX_STRING_SIZE);
+     readConfig(filename);
+ 
++#ifdef __MOD_DEVICES__
++    cfg.currentBankDir = cfg.bankRootDirList[0] = ZYN_DATADIR "/banks";
++    cfg.presetsDirList[0] = ZYN_DATADIR "/presets";
++    cfg.IgnoreProgramChange = true;
++#else
+     if(cfg.bankRootDirList[0].empty()) {
+         //banks
+         cfg.bankRootDirList[0] = "~/banks";
+@@ -264,6 +269,7 @@ void Config::init()
+         cfg.presetsDirList[4] = "/usr/local/share/zynaddsubfx/presets";
+ #endif
+     }
++#endif
+     cfg.LinuxALSAaudioDev = "default";
+     cfg.nameTag = "";
+ }
+diff --git a/src/Misc/MiddleWare.cpp b/src/Misc/MiddleWare.cpp
+index 49bce2ca..37dcfa42 100644
+--- a/src/Misc/MiddleWare.cpp
++++ b/src/Misc/MiddleWare.cpp
+@@ -1338,6 +1338,9 @@ static rtosc::Ports middwareSnoopPorts = {
+         rEnd},
+     {"file_home_dir:", 0, 0,
+         rBegin;
++#ifdef __MOD_DEVICES__
++        const char *home = ZYN_DATADIR;
++#else
+         const char *home = getenv("PWD");
+         if(!home)
+             home = getenv("HOME");
+@@ -1347,6 +1350,7 @@ static rtosc::Ports middwareSnoopPorts = {
+             home = getenv("HOMEPATH");
+         if(!home)
+             home = "/";
++#endif
+ 
+         string home_ = home;
+ #ifndef WIN32
