@@ -44,9 +44,17 @@ if [[ "${PACKAGE}" == "cleanup" ]]; then
 fi
 
 #######################################################################################################################
+# if rebuilding, strip "-rebuild" suffix from PACKAGE
+
+if [[ "${PACKAGE}" == *"-rebuild" ]]; then
+    PACKAGE=$(echo ${PACKAGE} | awk 'sub("-rebuild","")')
+    PKGSUFFIX="-rebuild"
+fi
+
+#######################################################################################################################
 # Check if requested plugin package exists
 
-if [[ "${PACKAGE}" != *"-dirclean" ]] && [[ "${PACKAGE}" != *"-rebuild" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then
+if [[ "${PACKAGE}" != *"-dirclean" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then
   PACKAGE=$(basename ${PACKAGE} | sed "s|\.mk||")
   PKGNAME=$(echo ${PACKAGE} | tr a-z- A-Z_)
 
@@ -79,7 +87,7 @@ mkdir -p /tmp/skeleton
 
 cd ${BUILD_DIR}/${BUILDROOT_VERSION}
 ${BR2_MAKE} ${PLATFORM}_defconfig &>/dev/null
-${BR2_MAKE} ${PACKAGE}
+${BR2_MAKE} ${PACKAGE}${PKGSUFFIX}
 
 #######################################################################################################################
 # if cleaning, stop here
