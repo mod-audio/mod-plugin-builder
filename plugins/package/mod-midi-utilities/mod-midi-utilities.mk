@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_MIDI_UTILITIES_VERSION = 830061415c7756d3be9d770148f73569d1d7d09b
+MOD_MIDI_UTILITIES_VERSION = a35f2f4e69f0bae8df4c715668b3858df4c36c98
 MOD_MIDI_UTILITIES_SITE = $(call github,moddevices,mod-midi-utilities,$(MOD_MIDI_UTILITIES_VERSION))
 MOD_MIDI_UTILITIES_BUNDLES = midi-switchbox_1-2_2C.lv2 midi-switchbox_1-2.lv2 midi-switchbox_1-3.lv2 midi-switchbox_2-1_2C.lv2 midi-switchbox_2-1.lv2 midi-switchbox_3-1.lv2
 
