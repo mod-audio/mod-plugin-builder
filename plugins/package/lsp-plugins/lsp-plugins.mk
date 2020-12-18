@@ -4,15 +4,13 @@
 #
 ######################################
 
-LSP_PLUGINS_VERSION = 0c1fac8937456571caec0d0964e6202d2f3a753f
+LSP_PLUGINS_VERSION = ad2720345ce5dffb45f871146de1ae6d16f4c73d
 LSP_PLUGINS_SITE = $(call github,sadko4u,lsp-plugins,$(LSP_PLUGINS_VERSION))
 LSP_PLUGINS_BUNDLES = lsp-plugins.lv2
 
 ifdef BR2_cortex_a7
 LSP_PLUGINS_BUILD_PROFILE = "armv7ve"
-endif
-
-ifdef BR2_cortex_a53
+else
 LSP_PLUGINS_BUILD_PROFILE = "aarch64"
 endif
 
