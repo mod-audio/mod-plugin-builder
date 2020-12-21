@@ -4,9 +4,9 @@
 #
 ######################################
 
-MOD_CV_PLUGINS_VERSION = e6f24d5b33ab51682d0f8979e28758813d485997
+MOD_CV_PLUGINS_VERSION = 96fac685a8f425ccdd28c55ddef5f6a64c835e53
 MOD_CV_PLUGINS_SITE = $(call github,moddevices,mod-cv-plugins,$(MOD_CV_PLUGINS_VERSION))
-MOD_CV_PLUGINS_BUNDLES = mod-audio-to-cv.lv2 mod-cv-attenuverter.lv2 mod-cv-clock.lv2 mod-cv-control.lv2 mod-cv-switch1.lv2 mod-cv-switch2.lv2 mod-cv-switch3.lv2 mod-cv-switch4.lv2 mod-midi-to-cv-mono.lv2 mod-midi-to-cv-poly.lv2 mod-cv-meter.lv2 mod-cv-random.lv2 mod-cv-slew.lv2 mod-cv-gate.lv2 mod-cv-range.lv2 mod-cv-round.lv2 mod-cv-abs.lv2 mod-cv-parameter-modulation.lv2 mod-cv-to-audio.lv2 mod-logic-operators.lv2
+MOD_CV_PLUGINS_BUNDLES = mod-audio-to-cv.lv2 mod-cv-attenuverter.lv2 mod-cv-clock.lv2 mod-cv-control.lv2 mod-cv-switch1.lv2 mod-cv-switch2.lv2 mod-cv-switch3.lv2 mod-cv-switch4.lv2 mod-midi-to-cv-mono.lv2 mod-midi-to-cv-poly.lv2 mod-cv-meter.lv2 mod-cv-random.lv2 mod-cv-slew.lv2 mod-cv-gate.lv2 mod-cv-range.lv2 mod-cv-round.lv2 mod-cv-abs.lv2 mod-cv-parameter-modulation.lv2 mod-cv-to-audio.lv2 logic-operators.lv2
 
 # needed for git submodules
 define MOD_CV_PLUGINS_EXTRACT_CMDS
@@ -54,7 +54,7 @@ define MOD_CV_PLUGINS_INSTALL_TARGET_CMDS
 	cp -rL $($(PKG)_PKGDIR)/mod-midi-to-cv-mono.lv2/*    $(TARGET_DIR)/usr/lib/lv2/mod-midi-to-cv-mono.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-midi-to-cv-poly.lv2/*    $(TARGET_DIR)/usr/lib/lv2/mod-midi-to-cv-poly.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-cv-parameter-modulation.lv2/* $(TARGET_DIR)/usr/lib/lv2/mod-cv-parameter-modulation.lv2/
-	cp -rL $($(PKG)_PKGDIR)/mod-logic-operators.lv2/*    $(TARGET_DIR)/usr/lib/lv2/mod-logic-operators.lv2/
+	cp -rL $($(PKG)_PKGDIR)/logic-operators.lv2/*    $(TARGET_DIR)/usr/lib/lv2/logic-operators.lv2/
 endef
 
 $(eval $(generic-package))
