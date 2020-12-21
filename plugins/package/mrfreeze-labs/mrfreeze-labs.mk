@@ -11,11 +11,12 @@ MRFREEZE_LABS_BUNDLES = mrfreeze.lv2
 
 MRFREEZE_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 
-ifdef BR2_arm
-MRFREEZE_LABS_WISDOM_FILE = mrfreeze.wisdom.duo
-endif
-ifdef BR2_aarch64
+ifdef BR2_cortex_a35
+MRFREEZE_LABS_WISDOM_FILE = mrfreeze.wisdom.dwarf
+else ifdef BR2_cortex_a53
 MRFREEZE_LABS_WISDOM_FILE = mrfreeze.wisdom.duox
+else ifdef BR2_arm
+MRFREEZE_LABS_WISDOM_FILE = mrfreeze.wisdom.duo
 endif
 
 ifeq ($(BR2_arm)$(BR2_aarch64),y)

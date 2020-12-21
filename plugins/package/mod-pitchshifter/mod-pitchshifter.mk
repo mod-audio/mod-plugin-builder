@@ -14,11 +14,12 @@ MOD_PITCHSHIFTER_BUNDLES = mod-2voices.lv2 mod-capo.lv2 mod-drop.lv2 mod-harmoni
 
 MOD_PITCHSHIFTER_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 
-ifdef BR2_arm
-MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.duo
-endif
-ifdef BR2_aarch64
+ifdef BR2_cortex_a35
+MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.dwarf
+else ifdef BR2_cortex_a53
 MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.duox
+else ifdef BR2_arm
+MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.duo
 endif
 
 ifeq ($(BR2_arm)$(BR2_aarch64),y)
