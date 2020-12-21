@@ -1,0 +1,30 @@
+diff --git a/config/versions/gcc.in b/config/versions/gcc.in
+index 4f9618b..af480b6 100644
+--- a/config/versions/gcc.in
++++ b/config/versions/gcc.in
+@@ -642,25 +642,15 @@ config GCC_LINARO_VERY_NEW
+ config GCC_LINARO_V_7
+     bool "7.5-2019.12 (EXPERIMENTAL)"
+     depends on EXPERIMENTAL
+-    depends on !GCC_REQUIRE_7_or_older
+     select GCC_later_than_7
+-    depends on !GCC_REQUIRE_older_than_7
+     select GCC_7_or_later
+-    depends on !GCC_REQUIRE_6_or_older
+     select GCC_later_than_6
+-    depends on !GCC_REQUIRE_older_than_6
+     select GCC_6_or_later
+-    depends on !GCC_REQUIRE_5_or_older
+     select GCC_later_than_5
+-    depends on !GCC_REQUIRE_older_than_5
+     select GCC_5_or_later
+-    depends on !GCC_REQUIRE_4_9_or_older
+     select GCC_later_than_4_9
+-    depends on !GCC_REQUIRE_older_than_4_9
+     select GCC_4_9_or_later
+-    depends on !GCC_REQUIRE_4_8_or_older
+     select GCC_later_than_4_8
+-    depends on !GCC_REQUIRE_older_than_4_8
+     select GCC_4_8_or_later
+ 
+ config GCC_LINARO_V_6
