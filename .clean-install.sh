@@ -7,7 +7,7 @@ PLATFORM=$1
 
 if [ "${PLATFORM}" == "" ]; then
   echo "Usage: $0 <platform>"
-  echo "  Where platform can be modduo or modduox"
+  echo "  Where platform can be modduo, modduox or moddwarf"
   exit 1
 fi
 
