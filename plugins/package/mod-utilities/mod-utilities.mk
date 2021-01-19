@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_UTILITIES_VERSION = 0bdff8811c20faee93a798c3d7d8bc2b9945f761
+MOD_UTILITIES_VERSION = 4f0313ef75f5fc30fd6b71ef26d3c6959346a040
 MOD_UTILITIES_SITE = $(call github,moddevices,mod-utilities,$(MOD_UTILITIES_VERSION))
 MOD_UTILITIES_DEPENDENCIES = alsa-lib
 MOD_UTILITIES_BUNDLES = mod-bpf.lv2 mod-bypass.lv2 mod-crossover2.lv2 mod-crossover3.lv2 mod-gain.lv2 mod-gain2x2.lv2 mod-hpf.lv2 mod-lpf.lv2 mod-switchbox2.lv2 mod-toggleswitch4.lv2 switchbox_1-2_st.lv2 switchbox_2-1.lv2 switchbox_2-1_st.lv2
