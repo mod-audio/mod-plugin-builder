@@ -39,4 +39,9 @@ touch ${BUILD_DIR}/${CT_NG_VERSION}/.stamp_built1
 touch ${BUILD_DIR}/${CT_NG_VERSION}/.stamp_built2
 touch ${BUILD_DIR}/${CT_NG_VERSION}/configure
 
+# fix libglib2 dependency_libs
+sed -i -e "s|${BUILD_DIR}/libglib2-2.46.2/gobject/|${WORKDIR}/${PLATFORM}/staging/usr/lib/|" ${WORKDIR}/${PLATFORM}/staging/usr/lib/*.la
+sed -i -e "s|${BUILD_DIR}/libglib2-2.46.2/gmodule/|${WORKDIR}/${PLATFORM}/staging/usr/lib/|" ${WORKDIR}/${PLATFORM}/staging/usr/lib/*.la
+sed -i -e "s|${BUILD_DIR}/libglib2-2.46.2/glib/|${WORKDIR}/${PLATFORM}/staging/usr/lib/|" ${WORKDIR}/${PLATFORM}/staging/usr/lib/*.la
+
 #######################################################################################################################
