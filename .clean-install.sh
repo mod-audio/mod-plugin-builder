@@ -28,7 +28,6 @@ rm -rf ${BUILD_DIR}/*/.git*
 rm -rf ${BUILD_DIR}/*/.libs
 rm -rf ${BUILD_DIR}/*/.waf-*
 rm -rf ${DOWNLOAD_DIR}/*
-rm -rf ${PLUGINS_DIR}/*
 rm -rf ${WORKDIR}/${PLATFORM}/images/*
 
 mv ${WORKDIR}/${PLATFORM}/${BUILDROOT_VERSION} ${BUILD_DIR}/${BUILDROOT_VERSION}
