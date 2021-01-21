@@ -1,0 +1,20 @@
+diff --git a/units/systemd-fsck-root.service.in b/units/systemd-fsck-root.service.in
+index 6d76578..3617abf 100644
+--- a/units/systemd-fsck-root.service.in
++++ b/units/systemd-fsck-root.service.in
+@@ -16,5 +16,4 @@ ConditionPathIsReadWrite=!/
+ Type=oneshot
+ RemainAfterExit=yes
+ ExecStart=@rootlibexecdir@/systemd-fsck
+-StandardOutput=journal+console
+ TimeoutSec=0
+diff --git a/units/systemd-fsck@.service.in b/units/systemd-fsck@.service.in
+index 857e625..0468392 100644
+--- a/units/systemd-fsck@.service.in
++++ b/units/systemd-fsck@.service.in
+@@ -17,5 +17,4 @@ Before=shutdown.target
+ Type=oneshot
+ RemainAfterExit=yes
+ ExecStart=@rootlibexecdir@/systemd-fsck %f
+-StandardOutput=journal+console
+ TimeoutSec=0

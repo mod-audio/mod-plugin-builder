@@ -1,0 +1,4 @@
+This custom package exists because the original is outdated.
+We also tweak alsa restore behaviour in a patch (needed for not switching off bypass too early).
+
+Can be dropped once we update buildroot, leaving only the patch.
