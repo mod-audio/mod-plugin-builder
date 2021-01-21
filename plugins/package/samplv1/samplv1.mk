@@ -11,10 +11,6 @@ SAMPLV1_AUTORECONF = YES
 
 SAMPLV1_CONF_OPTS=--disable-jack --disable-lv2-ui-x11 --disable-lv2-ui-external --enable-lv2-port-event=no
 
-define MOD_TAL_NOISEMAKER_CONFIGURE_CMDS
-       (cd $(@D); ./autogen.sh)
-endef
-
 define SAMPLV1_COPY_LV2_DATA
 	cp -rL $($(PKG)_PKGDIR)$(SAMPLV1_BUNDLES)/* $(TARGET_DIR)/usr/lib/lv2/$(SAMPLV1_BUNDLES)
 endef

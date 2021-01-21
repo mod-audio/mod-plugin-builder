@@ -30,8 +30,8 @@ endef
 
 define MOD_TAL_NOISEMAKER_INSTALL_TARGET_CMDS
 	install -d $(TARGET_DIR)/usr/lib/lv2/
-	cp -r $(@D)/bin/lv2/*.lv2/    $(TARGET_DIR)/usr/lib/lv2/
-	cp -r $(@D)/data/*    $(TARGET_DIR)/usr/lib/lv2/TAL-NoiseMaker-ME.lv2/
-	$(INSTALL_DUOX)
+	cp -r $(@D)/bin/lv2/*.lv2/ $(TARGET_DIR)/usr/lib/lv2/
+	cp -r $(@D)/data/*         $(TARGET_DIR)/usr/lib/lv2/TAL-NoiseMaker-ME.lv2/
 endef
+
 $(eval $(generic-package))
