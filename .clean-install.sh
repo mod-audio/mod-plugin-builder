@@ -43,5 +43,7 @@ touch ${BUILD_DIR}/${CT_NG_VERSION}/configure
 sed -i -e "s|${BUILD_DIR}/libglib2-2.46.2/gobject/|${WORKDIR}/${PLATFORM}/staging/usr/lib/|" ${WORKDIR}/${PLATFORM}/staging/usr/lib/*.la
 sed -i -e "s|${BUILD_DIR}/libglib2-2.46.2/gmodule/|${WORKDIR}/${PLATFORM}/staging/usr/lib/|" ${WORKDIR}/${PLATFORM}/staging/usr/lib/*.la
 sed -i -e "s|${BUILD_DIR}/libglib2-2.46.2/glib/|${WORKDIR}/${PLATFORM}/staging/usr/lib/|" ${WORKDIR}/${PLATFORM}/staging/usr/lib/*.la
+# and libvorbis too, err..
+sed -i -e "s|${BUILD_DIR}/libvorbis-1.3.5/lib/|${WORKDIR}/${PLATFORM}/staging/usr/lib/|" ${WORKDIR}/${PLATFORM}/staging/usr/lib/*.la
 
 #######################################################################################################################
