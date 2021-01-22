@@ -1,0 +1,17 @@
+diff --git a/src/inotifywait.c b/src/inotifywait.c
+index c5ce5e3..b2bc4f9 100644
+--- a/src/inotifywait.c
++++ b/src/inotifywait.c
+@@ -126,10 +126,12 @@ void output_event_csv( struct inotify_event * event ) {
+     if (filename != NULL)
+         printf("%s,", filename);
+ 
++    {
+ 	printf("%s,", csv_escape( inotifytools_event_to_str( event->mask ) ) );
+ 	if ( event->len > 0 )
+ 		printf("%s", csv_escape( event->name ) );
+ 	printf("\n");
++    }
+ }
+ 
+ 
