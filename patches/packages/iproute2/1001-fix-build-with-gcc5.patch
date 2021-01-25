@@ -1,0 +1,12 @@
+diff --git a/tc/tc_core.c b/tc/tc_core.c
+index 46eaefb..27b24e2 100644
+--- a/tc/tc_core.c
++++ b/tc/tc_core.c
+@@ -11,6 +11,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+ #include <syslog.h>

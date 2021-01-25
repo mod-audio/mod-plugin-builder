@@ -1,0 +1,2 @@
+This custom package exists because we patch quite a lot of stuff regarding systemd.
+If we ever update this package, needs to be done with extreme care!

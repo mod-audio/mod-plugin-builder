@@ -1,0 +1,125 @@
+diff --git a/src/state.c b/src/state.c
+index 86b4bfc..6966b92 100644
+--- a/src/state.c
++++ b/src/state.c
+@@ -563,6 +563,9 @@ new_state_from_model(LilvWorld*       world,
+ 	}
+ 	sord_iter_free(ports);
+ 
++	// MOD HACK: Skip reporting some properties which we know can get quite long...
++	if (getenv("LILV_STATE_SKIP_PROPERTIES") == NULL) {
++
+ 	// Get properties
+ 	SordNode* statep     = sord_new_uri(world->world, USTR(LV2_STATE__state));
+ 	SordNode* state_node = sord_get(model, node, statep, NULL, NULL);
+@@ -602,6 +605,8 @@ new_state_from_model(LilvWorld*       world,
+ 	sord_node_free(world->world, state_node);
+ 	sord_node_free(world->world, statep);
+ 
++	} // LILV_STATE_SKIP_PROPERTIES
++
+ 	free((void*)chunk.buf);
+ 	sratom_free(sratom);
+ 
+@@ -890,9 +895,22 @@ write_property_array(const LilvState*     state,
+                      Sratom*              sratom,
+                      uint32_t             flags,
+                      const SerdNode*      subject,
++                     LV2_URID_Map*        map,
+                      LV2_URID_Unmap*      unmap,
+-                     const char*          dir)
++                     const char*          dir,
++                     bool                 skip_props)
+ {
++	LV2_URID atom_Bool, atom_Int, atom_Long, atom_Float, atom_Double, atom_String, atom_URI, atom_Vector;
++	if (skip_props && array->n != 0) {
++		atom_Bool = map->map(map->handle, LV2_ATOM__Bool);
++		atom_Int = map->map(map->handle, LV2_ATOM__Int);
++		atom_Long = map->map(map->handle, LV2_ATOM__Long);
++		atom_Float = map->map(map->handle, LV2_ATOM__Float);
++		atom_Double = map->map(map->handle, LV2_ATOM__Double);
++		atom_String = map->map(map->handle, LV2_ATOM__String);
++		atom_URI = map->map(map->handle, LV2_ATOM__URI);
++		atom_Vector = map->map(map->handle, LV2_ATOM__Vector);
++	}
+ 	for (uint32_t i = 0; i < array->n; ++i) {
+ 		Property*   prop = &array->props[i];
+ 		const char* key  = unmap->unmap(unmap->handle, prop->key);
+@@ -907,6 +925,39 @@ write_property_array(const LilvState*     state,
+ 			             strlen(abs_path) + 1, abs_path);
+ 		} else if (prop->flags & LV2_STATE_IS_POD ||
+ 		           prop->type == state->atom_Path) {
++			// MOD HACK: Skip reporting some properties which we know can get quite long...
++			if (skip_props) {
++				if (! (prop->type == atom_Bool ||
++				       prop->type == atom_Int ||
++				       prop->type == atom_Long ||
++				       prop->type == atom_Float ||
++				       prop->type == atom_Double ||
++				       prop->type == atom_String ||
++				       prop->type == atom_URI ||
++				       /*prop->type == state->atom_Tuple ||*/
++				       prop->type == atom_Vector ||
++				       prop->type == state->atom_Path)) {
++					continue;
++				}
++				if (prop->type == atom_String && prop->size > 5) {
++					const char* value = (const char*)prop->value;
++					uint32_t j = 0;
++					while (j < prop->size) {
++						switch (*value) {
++						case '\r':
++						case '\n':
++						case '\t':
++						case ' ':
++							++value;
++							continue;
++						}
++						break;
++					}
++					if (prop->size - j > 5 && !strncmp(value, "<?xml", 5)) {
++						continue;
++					}
++				}
++			}
+ 			sratom_write(sratom, unmap, flags,
+ 			             subject, &p, prop->type, prop->size, prop->value);
+ 		} else {
+@@ -964,7 +1015,7 @@ lilv_state_write(LilvWorld*       world,
+ 	// Write metadata
+ 	sratom_set_pretty_numbers(sratom, false);  // Use precise types
+ 	write_property_array(state, &state->metadata, sratom, 0,
+-	                     &subject, unmap, dir);
++	                     &subject, map, unmap, dir, false);
+ 
+ 	// Write port values
+ 	sratom_set_pretty_numbers(sratom, true);  // Use pretty numbers
+@@ -993,6 +1044,12 @@ lilv_state_write(LilvWorld*       world,
+ 		serd_writer_end_anon(writer, &port);
+ 	}
+ 
++	// MOD HACK: Skip reporting some properties which we know can get quite long...
++	const char* const skip_props_env = getenv("LILV_STATE_SKIP_PROPERTIES");
++	const int skip_props = skip_props_env ? atoi(skip_props_env) : -1;
++
++	if (skip_props != 2) {
++
+ 	// Write properties
+ 	const SerdNode body = serd_node_from_string(SERD_BLANK, USTR("body"));
+ 	if (state->props.n > 0) {
+@@ -1002,12 +1059,14 @@ lilv_state_write(LilvWorld*       world,
+ 	}
+ 	sratom_set_pretty_numbers(sratom, false);  // Use precise types
+ 	write_property_array(state, &state->props, sratom, SERD_ANON_CONT,
+-	                     &body, unmap, dir);
++	                     &body, map, unmap, dir, skip_props >= 0);
+ 
+ 	if (state->props.n > 0) {
+ 		serd_writer_end_anon(writer, &body);
+ 	}
+ 
++	} // if (skip_props != 2)
++
+ 	sratom_free(sratom);
+ 	return 0;
+ }

@@ -1,0 +1,22 @@
+diff --git a/alsactl/state.c b/alsactl/state.c
+index 38e85c0..ff5403d 100644
+--- a/alsactl/state.c
++++ b/alsactl/state.c
+@@ -1369,6 +1369,17 @@ static int set_control(snd_ctl_t *handle, snd_config_t *control,
+ 	if (snd_ctl_elem_info_is_inactive(info) ||
+ 				!snd_ctl_elem_info_is_writable(info))
+ 		return 0;
++
++	if (!strcmp(name1, "Left True-Bypass") ||
++	    !strcmp(name1, "Right True-Bypass") ||
++	    !strcmp(name1, "Loopback Switch") ||
++	    !strcmp(name1, "LOOPBACK") ||
++	    !strcmp(name1, "SPDIF Enable"))
++	{
++		printf("Skipping restore of element with name '%s', as needed for MOD\n", name1);
++		return 0;
++	}
++
+ 	snd_ctl_elem_value_set_numid(ctl, numid1);
+ 
+ 	if (count == 1) {

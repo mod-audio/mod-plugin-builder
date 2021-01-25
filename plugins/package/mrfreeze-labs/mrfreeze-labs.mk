@@ -17,9 +17,11 @@ else ifdef BR2_cortex_a53
 MRFREEZE_LABS_WISDOM_FILE = mrfreeze.wisdom.duox
 else ifdef BR2_arm
 MRFREEZE_LABS_WISDOM_FILE = mrfreeze.wisdom.duo
+else ifdef BR2_x86_64
+MRFREEZE_LABS_WISDOM_FILE = mrfreeze.wisdom.x86_64
 endif
 
-ifeq ($(BR2_arm)$(BR2_aarch64),y)
+ifeq ($(BR2_arm)$(BR2_aarch64)$(BR2_x86_64),y)
 define MRFREEZE_LABS_PREBUILD_STEP
 	cp $($(PKG)_PKGDIR)/$(MRFREEZE_LABS_WISDOM_FILE) $(@D)/mrfreeze.wisdom
 endef

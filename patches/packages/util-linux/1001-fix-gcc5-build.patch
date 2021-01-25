@@ -1,0 +1,36 @@
+diff --git a/include/c.h b/include/c.h
+index 2a317eb..550da8b 100644
+--- a/include/c.h
++++ b/include/c.h
+@@ -14,6 +14,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <errno.h>
++#include <sys/sysmacros.h>
+ 
+ #include <assert.h>
+ 
+diff --git a/include/sysfs.h b/include/sysfs.h
+index 5521378..c29d1be 100644
+--- a/include/sysfs.h
++++ b/include/sysfs.h
+@@ -11,6 +11,7 @@
+ #include <stdint.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ #include <fcntl.h>
+ #include <string.h>
+ #include <inttypes.h>
+diff --git a/libmount/python/fs.c b/libmount/python/fs.c
+index 0789d37..651a7c5 100644
+--- a/libmount/python/fs.c
++++ b/libmount/python/fs.c
+@@ -27,6 +27,7 @@
+ 
+ #include "pylibmount.h"
+ #include <errno.h>
++#include <sys/sysmacros.h>
+ 
+ #define Fs_HELP "Fs(source=None, root=None, target=None, fstype=None, options=None, attributes=None, freq=0, passno=0)"
+ 

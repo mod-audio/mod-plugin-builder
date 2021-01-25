@@ -1,0 +1,96 @@
+Subject: [PATCH] resolved: Do not add .busname dependencies, when compiling without kdbus.
+
+ Makefile.am                          |  2 +-
+ units/systemd-resolved.service.in    | 29 -----------------------------
+ units/systemd-resolved.service.m4.in | 31 +++++++++++++++++++++++++++++++
+ 3 files changed, 32 insertions(+), 30 deletions(-)
+ delete mode 100644 units/systemd-resolved.service.in
+ create mode 100644 units/systemd-resolved.service.m4.in
+
+diff --git a/Makefile.am b/Makefile.am
+index 856accb..dd8b825 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -5611,7 +5611,7 @@ dist_dbussystemservice_DATA += \
+ 	src/resolve/org.freedesktop.resolve1.service
+ 
+ EXTRA_DIST += \
+-	units/systemd-resolved.service.in
++	units/systemd-resolved.service.m4.in
+ 
+ SYSTEM_UNIT_ALIASES += \
+ 	systemd-resolved.service dbus-org.freedesktop.resolve1.service
+diff --git a/units/systemd-resolved.service.in b/units/systemd-resolved.service.in
+deleted file mode 100644
+index b643da9..0000000
+--- a/units/systemd-resolved.service.in
++++ /dev/null
+@@ -1,29 +0,0 @@
+-#  This file is part of systemd.
+-#
+-#  systemd is free software; you can redistribute it and/or modify it
+-#  under the terms of the GNU Lesser General Public License as published by
+-#  the Free Software Foundation; either version 2.1 of the License, or
+-#  (at your option) any later version.
+-
+-[Unit]
+-Description=Network Name Resolution
+-Documentation=man:systemd-resolved.service(8)
+-After=systemd-networkd.service network.service
+-
+-# On kdbus systems we pull in the busname explicitly, because it
+-# carries policy that allows the daemon to acquire its name.
+-Wants=org.freedesktop.resolve1.busname
+-After=org.freedesktop.resolve1.busname
+-
+-[Service]
+-Type=notify
+-Restart=always
+-RestartSec=0
+-ExecStart=@rootlibexecdir@/systemd-resolved
+-CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_SETPCAP CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER
+-ProtectSystem=full
+-ProtectHome=yes
+-WatchdogSec=1min
+-
+-[Install]
+-WantedBy=multi-user.target
+diff --git a/units/systemd-resolved.service.m4.in b/units/systemd-resolved.service.m4.in
+new file mode 100644
+index 0000000..d133847
+--- /dev/null
++++ b/units/systemd-resolved.service.m4.in
+@@ -0,0 +1,31 @@
++#  This file is part of systemd.
++#
++#  systemd is free software; you can redistribute it and/or modify it
++#  under the terms of the GNU Lesser General Public License as published by
++#  the Free Software Foundation; either version 2.1 of the License, or
++#  (at your option) any later version.
++
++[Unit]
++Description=Network Name Resolution
++Documentation=man:systemd-resolved.service(8)
++After=systemd-networkd.service network.service
++
++m4_ifdef(`ENABLE_KDBUS',
++# On kdbus systems we pull in the busname explicitly, because it
++# carries policy that allows the daemon to acquire its name.
++Wants=org.freedesktop.resolve1.busname
++After=org.freedesktop.resolve1.busname
++
++)m4_dnl
++[Service]
++Type=notify
++Restart=always
++RestartSec=0
++ExecStart=@rootlibexecdir@/systemd-resolved
++CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_SETPCAP CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER
++ProtectSystem=full
++ProtectHome=yes
++WatchdogSec=1min
++
++[Install]
++WantedBy=multi-user.target
+-- 
+2.1.0

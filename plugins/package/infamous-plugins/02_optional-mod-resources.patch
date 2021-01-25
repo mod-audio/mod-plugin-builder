@@ -1,0 +1,196 @@
+From c5c7ab03101ad8d5e03a003bcdd2671039b184a3 Mon Sep 17 00:00:00 2001
+From: auto3000 <auto3000@users.noreply.github.com>
+Date: Mon, 28 Dec 2020 17:46:20 +0100
+Subject: [PATCH] modgui: add option MOD=ON to install resources
+
+---
+ CMakeLists.txt              |  2 ++
+ README                      |  2 ++
+ src/ewham/CMakeLists.txt    | 10 +++++-----
+ src/hip2b/CMakeLists.txt    | 12 ++++++------
+ src/mindi/CMakeLists.txt    | 12 +++++++-----
+ src/powercut/CMakeLists.txt | 12 ++++++------
+ src/stuck/CMakeLists.txt    | 33 +++++++++++++++++----------------
+ 7 files changed, 45 insertions(+), 38 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b8d2a29..d50f0f3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
+ 
+ project(infamous-plugins)
+ 
++option(MOD "Install MOD gui resources" OFF)
++
+ set(LIBDIR lib CACHE STRING "Specifies the name of the library path")
+ 
+ foreach(plug casynth envfollower hip2b powerup powercut cheapdist stuck ewham lushlife bentdelay mindi octolo)
+diff --git a/README b/README
+index 5a031e4..8a7b6d3 100644
+--- a/README
++++ b/README
+@@ -16,6 +16,8 @@ To install the package under a specific library path (i.e. if you are using fedo
+     make
+     sudo make install
+ 
++To install the MOD gui resources, use the optional variable '-DMOD=ON' to cmake.
++
+ Once this is complete you can already start using the plugins in your favorite LV2 host
+ 
+ There is also an uninstall available:
+diff --git a/src/ewham/CMakeLists.txt b/src/ewham/CMakeLists.txt
+index 06d06d2..ccf2f4d 100644
+--- a/src/ewham/CMakeLists.txt
++++ b/src/ewham/CMakeLists.txt
+@@ -52,14 +52,14 @@ install(TARGETS ${PLUGIN}
+ install (FILES manifest.ttl ${PLUGIN}.ttl
+   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
+ )
++if(MOD)
++    install (DIRECTORY modgui/
++      DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
++    )
++endif()
+ 
+ if(NOT CAIRO_FOUND OR NOT NTK_FOUND)
+     message(WARNING "UI Libraries Missing, no GUI will be installed")
+-    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
+-        install (DIRECTORY modgui/
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+-        )
+-    endif()
+ endif() 
+ #    find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
+ #    fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
+diff --git a/src/hip2b/CMakeLists.txt b/src/hip2b/CMakeLists.txt
+index 59cb14e..a4c4363 100644
+--- a/src/hip2b/CMakeLists.txt
++++ b/src/hip2b/CMakeLists.txt
+@@ -48,6 +48,12 @@ install (FILES manifest.ttl ${PLUGIN}.ttl ${PLUGIN}_presets.ttl
+   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
+ )
+ 
++if(MOD)
++    install (DIRECTORY modgui/
++      DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
++    )
++endif()
++
+ if(CAIRO_FOUND AND NTK_FOUND)
+     find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
+     fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
+@@ -68,10 +74,4 @@ if(CAIRO_FOUND AND NTK_FOUND)
+ 
+ else()
+     message(WARNING "UI Libraries Missing, no GUI will be installed")
+-    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
+-        install (DIRECTORY
+-          modgui/
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+-        )
+-    endif()
+ endif()
+diff --git a/src/mindi/CMakeLists.txt b/src/mindi/CMakeLists.txt
+index f64dab8..3954aa6 100644
+--- a/src/mindi/CMakeLists.txt
++++ b/src/mindi/CMakeLists.txt
+@@ -47,13 +47,15 @@ install (FILES manifest.ttl ${PLUGIN}.ttl
+   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
+ )
+ 
++if(MOD)
++    message(STATUS "MOD resources are installed")
++    install (DIRECTORY modgui/
++      DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
++    )
++endif()
++
+ if(NOT CAIRO_FOUND OR NOT NTK_FOUND)
+     message(WARNING "UI Libraries Missing, no GUI will be installed")
+-    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
+-        install (DIRECTORY modgui/
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+-        )
+-    endif()
+ endif()
+ #else()
+ #    find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
+diff --git a/src/powercut/CMakeLists.txt b/src/powercut/CMakeLists.txt
+index b6d21a7..c4f1774 100644
+--- a/src/powercut/CMakeLists.txt
++++ b/src/powercut/CMakeLists.txt
+@@ -48,6 +48,12 @@ install (FILES manifest.ttl ${PLUGIN}.ttl
+   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
+ )
+ 
++if(MOD)
++    install (DIRECTORY modgui/
++      DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
++    )
++endif()
++
+ if(CAIRO_FOUND AND NTK_FOUND)
+     find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
+     fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
+@@ -68,10 +74,4 @@ if(CAIRO_FOUND AND NTK_FOUND)
+ 
+ else()
+     message(WARNING "UI Libraries Missing, no GUI will be installed")
+-    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
+-        install (DIRECTORY
+-          modgui/
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+-        )
+-    endif()
+ endif() 
+diff --git a/src/stuck/CMakeLists.txt b/src/stuck/CMakeLists.txt
+index 0e40c0a..26a3cad 100644
+--- a/src/stuck/CMakeLists.txt
++++ b/src/stuck/CMakeLists.txt
+@@ -50,6 +50,23 @@ install (FILES manifest.ttl ${PLUGIN}.ttl
+   DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2
+ )
+ 
++if( MOD )
++    install (FILES 
++        modgui/${PLUGIN}.html 
++        modgui/stuckstacker.html 
++        modgui/${PLUGIN}.css
++        modgui/stuckbg.svg
++        modgui/stacker.svg
++        modgui/led-bypassed.png
++        modgui/led-enabled.png
++        modgui/switch-key.png
++        modgui/tabDial64.svg
++        modgui/screenshot-stuck.png
++        modgui/thumbnail-stuck.png
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
++    )
++endif()
++
+ if(CAIRO_FOUND AND NTK_FOUND)
+     find_program(FLTK_FLUID_EXECUTABLE ntk-fluid)
+     fltk_wrap_ui(${PLUGIN}_ui ${PLUGIN}_ui.fl)
+@@ -70,21 +87,5 @@ if(CAIRO_FOUND AND NTK_FOUND)
+ 
+ else()
+     message(WARNING "UI Libraries Missing, no GUI will be installed")
+-    if(NOT SUPPORTS_SSE) #hopefully its a mod, so install the modguistuff
+-        install (FILES 
+-          modgui/${PLUGIN}.html 
+-          modgui/stuckstacker.html 
+-          modgui/${PLUGIN}.css
+-          modgui/stuckbg.svg
+-          modgui/stacker.svg
+-          modgui/led-bypassed.png
+-          modgui/led-enabled.png
+-          modgui/switch-key.png
+-          modgui/tabDial64.svg
+-          modgui/screenshot-stuck.png
+-          modgui/thumbnail-stuck.png
+-          DESTINATION ${CMAKE_INSTALL_PREFIX}/${LIBDIR}/lv2/${PLUGIN}.lv2/modgui
+-        )
+-    endif()
+ endif()
+ 

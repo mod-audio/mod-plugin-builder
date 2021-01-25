@@ -8,7 +8,7 @@ PACKAGE=$2
 
 if [[ "${PLATFORM}" == "" ]] || [[ "${PACKAGE}" == "" ]]; then
   echo "Usage: $0 <platform> <plugin-package-name>"
-  echo "  Where platform can be modduo, modduox or moddwarf"
+  echo "  Where platform can be modduo, modduox, moddwarf or x86_64"
   echo "  and plugin-package-name is a folder inside ./plugins/package"
   exit 1
 fi

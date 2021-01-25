@@ -1,0 +1,2 @@
+This custom package exists because the original is too old (we need the "alpha" version that supports new stuff).
+Can be dropped if buildroot updates to that.
