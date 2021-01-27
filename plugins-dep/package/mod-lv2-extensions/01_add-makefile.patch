@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+new file mode 100644
+index 0000000..d0dc367
+--- /dev/null
++++ b/Makefile
+@@ -0,0 +1,8 @@
++PREFIX ?= /usr/local
++
++all:
++clean:
++
++install:
++	install -d $(DESTDIR)$(PREFIX)/lib/lv2
++	cp -rv *.lv2 $(DESTDIR)$(PREFIX)/lib/lv2/
