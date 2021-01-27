@@ -1,0 +1,2 @@
+config BR2_PACKAGE_CARLA_BACKEND
+	bool "carla-backend"
