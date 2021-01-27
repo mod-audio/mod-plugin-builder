@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-LV2_VERSION = 39c7c726cd52b2863fcea356cafe1bcab2ba7f37
-LV2_SITE = $(call github,drobilla,lv2,$(LV2_VERSION))
+LV2_VERSION = cd152104c84bcee9fec22ef780cec2af7ba85d0c
+LV2_SITE = https://github.com/lv2/lv2.git
 LV2_LICENSE = ISC License
 LV2_LICENSE_FILES = COPYING
 LV2_INSTALL_STAGING = YES
@@ -15,6 +15,16 @@ LV2_WAF = $(HOST_DIR)/usr/bin/python ./waf
 
 LV2_HOST_WAF   = $(HOST_MAKE_ENV)   $(HOST_CONFIGURE_OPTS)   $(LV2_WAF)
 LV2_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(LV2_WAF)
+
+# needed for git submodules
+define LV2_EXTRACT_CMDS
+	rm -rf $(@D)
+	git clone --recursive $(LV2_SITE) $(@D)
+	(cd $(@D) && \
+		git reset --hard $(LV2_VERSION) && \
+		git submodule update)
+	touch $(@D)/.stamp_downloaded
+endef
 
 define HOST_LV2_CONFIGURE_CMDS
 	(cd $(@D); $(LV2_HOST_WAF) configure --prefix=/usr --no-plugins)

@@ -1,0 +1,22 @@
+diff --git a/util/lv2_validate.in b/util/lv2_validate.in
+index 2ba4f17..d4e339e 100755
+--- a/util/lv2_validate.in
++++ b/util/lv2_validate.in
+@@ -1,6 +1,7 @@
+ #!/bin/sh
+ 
+-LV2DIR="@LV2DIR@"
++PREFIX=$(realpath $(dirname $0)/..)
++LV2DIR="$PREFIX/lib/lv2"
+ 
+ if [ "$#" -eq "0" ]; then
+     echo "lv2_validate: missing operand" 1>&2;
+@@ -10,7 +11,7 @@ if [ "$#" -eq "0" ]; then
+     exit 1
+ fi
+ 
+-sord_validate \
++exec sord_validate \
+     "$LV2DIR/patch.lv2/manifest.ttl" \
+     "$LV2DIR/patch.lv2/patch.meta.ttl" \
+     "$LV2DIR/patch.lv2/patch.ttl" \
