@@ -6,6 +6,7 @@
 
 LV2_VERSION = cd152104c84bcee9fec22ef780cec2af7ba85d0c
 LV2_SITE = https://github.com/lv2/lv2.git
+LV2_SITE_METHOD = git
 LV2_LICENSE = ISC License
 LV2_LICENSE_FILES = COPYING
 LV2_INSTALL_STAGING = YES
