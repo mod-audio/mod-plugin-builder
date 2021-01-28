@@ -1,0 +1,2 @@
+config BR2_PACKAGE_MOD_LV2_EXTENSIONS
+	bool mod-lv2-extensions

@@ -1,0 +1,17 @@
+diff --git a/source/backend/plugin/CarlaPluginLV2.cpp b/source/backend/plugin/CarlaPluginLV2.cpp
+index 1ba649cb5..668e4b290 100644
+--- a/source/backend/plugin/CarlaPluginLV2.cpp
++++ b/source/backend/plugin/CarlaPluginLV2.cpp
+@@ -6958,6 +6958,12 @@ public:
+             return;
+         }
+ 
++        if (iFinal != eMod)
++            carla_stderr("%s: MODGUI is missing or plugin wants desktop UI", fRdfDescriptor->URI);
++
++        fUI.rdfDescriptor = nullptr;
++        return;
++
+         // ---------------------------------------------------------------
+         // initialize ui according to type
+ 

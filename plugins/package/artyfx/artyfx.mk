@@ -12,6 +12,8 @@ ARTYFX_BUNDLES = artyfx.lv2
 
 define ARTYFX_POST_INSTALL_TARGET_TTLFILES
 	cp -rL $($(PKG)_PKGDIR)/artyfx.lv2/* $(TARGET_DIR)/usr/lib/lv2/artyfx.lv2/
+	# unused plugin
+	rm $(TARGET_DIR)/usr/lib/lv2/artyfx.lv2/driva.ttl
 endef
 
 ARTYFX_POST_INSTALL_TARGET_HOOKS += ARTYFX_POST_INSTALL_TARGET_TTLFILES

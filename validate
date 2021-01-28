@@ -1,0 +1,125 @@
+#!/bin/bash
+
+#######################################################################################################################
+# check arguments
+
+PLATFORM=$1
+PACKAGE=$2
+
+if [[ "${PLATFORM}" == "" ]] || [[ "${PACKAGE}" == "" ]]; then
+    echo "Usage: $0 <platform> <plugin-package-name>"
+    echo "  Where platform can be modduo, modduox, moddwarf or x86_64"
+    echo "  and plugin-package-name is a folder inside ./plugins/package"
+    exit 1
+fi
+
+if [ "${PLATFORM}" != "modduo" ] && [ "${PLATFORM}" != "modduox" ] && [ "${PLATFORM}" != "moddwarf" ] && [ "${PLATFORM}" != "x86_64" ]; then
+    echo -e "\e[0;31mPlease provide either modduo, modduox, moddwarf or x86_64 as platform argument\e[0m"
+    exit 1
+fi
+
+#######################################################################################################################
+# Import common code and variables
+
+source .common
+
+#######################################################################################################################
+# Check if requested plugin package exists
+
+PACKAGE=$(basename ${PACKAGE} | sed "s|\.mk||")
+PKGNAME=$(echo ${PACKAGE} | tr a-z- A-Z_)
+
+if [ ! -d ${SOURCE_DIR}/plugins/package/${PACKAGE} ]; then
+    error "Plugin package name '${PACKAGE}' does not exist"
+    exit 1
+fi
+if [ ! -f ${SOURCE_DIR}/plugins/package/${PACKAGE}/${PACKAGE}.mk ]; then
+    error "Requested plugin package has no 'mk' file"
+    exit 1
+fi
+
+bundles=($(cat ${SOURCE_DIR}/plugins/package/${PACKAGE}/${PACKAGE}.mk | awk 'sub("'${PKGNAME}'_BUNDLES = ","")'))
+if [[ "${bundles}" == "" ]]; then
+    error "Requested plugin package has no bundles"
+    exit 1
+fi
+
+#######################################################################################################################
+# Check if plugin path exists
+
+PLUGIN_PATH="${WORKDIR}/${PLATFORM}/plugins"
+
+if [ ! -e "${PLUGIN_PATH}" ]; then
+    error "Failed to find plugin installed bundles"
+    exit 1
+fi
+
+#######################################################################################################################
+# check if all bundles are present
+
+function bundle_has_binaries
+{
+    if find "$1" -name "*.so" >/dev/null; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+for bundle in ${bundles[@]}; do
+    if [ ! -d ${PLUGIN_PATH}/${bundle} ]; then
+        error "Failed to find plugin installed bundles"
+        exit 1
+    fi
+    if ! bundle_has_binaries ${PLUGIN_PATH}/${bundle}; then
+        error "Failed to find plugin installed bundles"
+        exit 1
+    fi
+done
+
+#######################################################################################################################
+# copy requested bundle to sandbox
+
+rm -rf /tmp/mpb-plugin-check
+mkdir /tmp/mpb-plugin-check
+
+for bundle in ${bundles[@]}; do
+    cp -r "${PLUGIN_PATH}/${bundle}" /tmp/mpb-plugin-check/
+done
+
+export LV2_PATH=/tmp/mpb-plugin-check
+
+for bundle in ${bundles[@]}; do
+    echo "Checking ${bundle}..."
+    "${WORKDIR}/${PLATFORM}/target/bin/lv2_validate" \
+        "${WORKDIR}/${PLATFORM}/target/lib/lv2/kx-*/*.ttl" \
+        "${WORKDIR}/${PLATFORM}/target/lib/lv2/mod.lv2/*.ttl" \
+        "${WORKDIR}/${PLATFORM}/target/lib/lv2/modgui.lv2/*.ttl" \
+        "/tmp/mpb-plugin-check/${bundle}/*.ttl"
+done
+
+# plugin list
+plugins=($(lv2ls | tr -d '\r'))
+echo "Found ${#plugins[@]} plugin(s)"
+
+# real host test, if possible
+if [ -e "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" ]; then
+    for plugin in ${plugins[@]}; do
+        if [ -n "${VALGRIND}" ]; then
+            echo "Valgrind check ${plugin}..."
+            env CARLA_BRIDGE_DUMMY=1 CARLA_BRIDGE_TESTING=native \
+                VALGRIND_LIB="${WORKDIR}/${PLATFORM}/target/lib/valgrind" \
+                "${WORKDIR}/${PLATFORM}/target/bin/valgrind" --leak-check=full \
+                    "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" lv2 "" "${plugin}" 1>/dev/null
+        else
+            echo -n "Verifying ${plugin}... "
+            env CARLA_BRIDGE_DUMMY=1 CARLA_BRIDGE_TESTING=native \
+                "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" lv2 "" "${plugin}" 1>/dev/null
+            echo "ok"
+        fi
+    done
+fi
+
+rm -rf /tmp/mpb-plugin-check
+
+#######################################################################################################################

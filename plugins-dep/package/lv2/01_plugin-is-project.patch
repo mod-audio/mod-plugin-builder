@@ -1,5 +1,5 @@
---- lv2-1.12.1+git20151117.orig/lv2/lv2plug.in/ns/lv2core/lv2core.ttl
-+++ lv2-1.12.1+git20151117/lv2/lv2plug.in/ns/lv2core/lv2core.ttl
+--- lv2-1.12.1+git20151117.orig/lv2/core/lv2core.ttl
++++ lv2-1.12.1+git20151117/lv2/core/lv2core.ttl
 @@ -139,7 +139,7 @@ hosts and other tools already <q>underst
  lv2:Plugin
  	a rdfs:Class ,
