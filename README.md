@@ -31,7 +31,7 @@ There are several dependencies:
 
 If you're running a debian based system you can install all dependencies by running:
 ```
-sudo apt-get install acl bc curl cvs git mercurial rsync subversion wget \
+sudo apt install acl bc curl cvs git mercurial rsync subversion wget \
 bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
 automake binutils build-essential cpio libtool libncurses-dev pkg-config libtool-bin
 ```
@@ -86,7 +86,7 @@ Firstly, the test can be used for ttl syntax validation. This is done through lv
 These tools need to be installed on the system. 
 On a Debian based system these can be installed by running:<br/>
 ```
-sudo apt install lilv-utils
+sudo apt install lilv-utils sordi
 ```
 Secondly, this test can also be used for runtime tests for all x86_64 builds.
 
