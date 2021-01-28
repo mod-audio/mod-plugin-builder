@@ -49,6 +49,8 @@ Set the 'WORKDIR' environment variable before bootstraping if you wish to change
 After the bootstrap process is complete, you can start building plugins.<br/>
 See the 'plugins/package' folder in this repository for some examples.
 
+### Building plugins
+
 To build a plugin, run:<br/>
 ```./build <platform> <plugin-package>```
 
@@ -84,7 +86,7 @@ Firstly, the test can be used for ttl syntax validation. This is done through lv
 These tools need to be installed on the system. 
 On a Debian based system these can be installed by running:<br/>
 ```
-Sudo apt install lilv-utils
+sudo apt install lilv-utils
 ```
 Secondly, this test can also be used for runtime tests for all x86_64 builds.
 
