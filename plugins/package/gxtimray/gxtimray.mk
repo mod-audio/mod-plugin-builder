@@ -20,6 +20,7 @@ endef
 
 define GXTIMRAY_INSTALL_TARGET_CMDS
 	$(GXTIMRAY_TARGET_MAKE) install DESTDIR=$(TARGET_DIR) INSTALL_DIR=/usr/lib/lv2
+	cp -rL $($(PKG)_PKGDIR)/gx_timray.lv2/* $(TARGET_DIR)/usr/lib/lv2/gx_timray.lv2/
 endef
 
 $(eval $(generic-package))
