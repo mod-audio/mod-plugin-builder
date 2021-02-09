@@ -4,7 +4,7 @@
 #
 ######################################
 
-CARLA_PLUGINS_LABS_VERSION = 8109fad68d782780c11bd37aaaa448a28875c17c
+CARLA_PLUGINS_LABS_VERSION = e5ff619c8be872fcc79f341f85975215fc53ed68
 CARLA_PLUGINS_LABS_SITE = $(call github,falkTX,Carla,$(CARLA_PLUGINS_LABS_VERSION))
 CARLA_PLUGINS_LABS_DEPENDENCIES = libsndfile ffmpeg
 # for later: fluidsynth liblo (unused at the moment)
