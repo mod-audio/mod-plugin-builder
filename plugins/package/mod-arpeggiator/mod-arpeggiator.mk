@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_ARPEGGIATOR_VERSION = 885c741ffc8678c9656bf745c3aed0d11de78eb4
+MOD_ARPEGGIATOR_VERSION = 6cdbdc6d4e4efdafd90ae2cfc90bc4f4e11079e8
 MOD_ARPEGGIATOR_SITE = $(call github,moddevices,mod-arpeggiator-lv2,$(MOD_ARPEGGIATOR_VERSION))
 MOD_ARPEGGIATOR_BUNDLES = mod-arpeggiator.lv2
 
