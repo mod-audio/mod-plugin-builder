@@ -4,7 +4,7 @@
 #
 ######################################
 
-SAMPLV1_VERSION = 85c688e833b43adcfde1045ed4933c72ab85c987
+SAMPLV1_VERSION = 81436fe8c18fc80aef0cd163c3194934229e9f13
 SAMPLV1_SITE = $(call github,moddevices,samplv1,$(SAMPLV1_VERSION))
 SAMPLV1_BUNDLES = samplv1.lv2
 SAMPLV1_AUTORECONF = YES
