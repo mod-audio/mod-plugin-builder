@@ -1,0 +1,49 @@
+diff --git a/notes.c b/notes.c
+index 4621ce7..6af3c4d 100644
+--- a/notes.c
++++ b/notes.c
+@@ -60,22 +60,6 @@ static const props_def_t defs [MAX_NPROPS] = {
+ 		.property = NOTES__fontHeight,
+ 		.offset = offsetof(plugstate_t, font_height),
+ 		.type = LV2_ATOM__Int
+-	},
+-	{
+-		.property = NOTES__image,
+-		.offset = offsetof(plugstate_t, image),
+-		.type = LV2_ATOM__Path,
+-		.max_size = PATH_MAX
+-	},
+-	{
+-		.property = NOTES__imageMinimized,
+-		.offset = offsetof(plugstate_t, image_minimized),
+-		.type = LV2_ATOM__Bool
+-	},
+-	{
+-		.property = NOTES__textMinimized,
+-		.offset = offsetof(plugstate_t, text_minimized),
+-		.type = LV2_ATOM__Bool
+ 	}
+ };
+ 
+diff --git a/notes.h b/notes.h
+index af223a2..061ef7a 100644
+--- a/notes.h
++++ b/notes.h
+@@ -56,16 +56,13 @@
+ #define NOTES__imageMinimized NOTES_PREFIX "imageMinimized"
+ #define NOTES__textMinimized  NOTES_PREFIX "textMinimized"
+ 
+-#define MAX_NPROPS 5
++#define MAX_NPROPS 2
+ #define CODE_SIZE 0x10000 // 64 K
+ 
+ typedef struct _plugstate_t plugstate_t;
+ 
+ struct _plugstate_t {
+ 	int32_t font_height;
+-	int32_t image_minimized;
+-	int32_t text_minimized;
+-	char image [PATH_MAX];
+ 	char text [CODE_SIZE];
+ };
+ 
