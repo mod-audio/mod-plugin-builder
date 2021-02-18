@@ -7,10 +7,10 @@
 JACK2MOD_VERSION = 6dcc91bd7e405f8e3c4c9a72aecd78f57cb36f61
 JACK2MOD_SITE = $(call github,moddevices,jack2,$(JACK2MOD_VERSION))
 JACK2MOD_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
-JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib opus-custom systemd host-python3
+JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib opus-custom host-python
 JACK2MOD_INSTALL_STAGING = YES
 
-JACK2MOD_WAF = $(HOST_DIR)/usr/bin/python3 ./waf
+JACK2MOD_WAF = $(HOST_DIR)/usr/bin/python ./waf
 
 define JACK2MOD_CONFIGURE_CMDS
 	(cd $(@D); \
