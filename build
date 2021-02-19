@@ -52,6 +52,15 @@ if [[ "${PACKAGE}" == *"-rebuild" ]]; then
 fi
 
 #######################################################################################################################
+# if -publish suffix is used, call publish script and exit this script
+
+if [[ "${PACKAGE}" == *"-publish" ]]; then
+    PACKAGE=$(echo ${PACKAGE} | awk 'sub("-publish","")')
+    ./publish "${PLATFORM}" "${PACKAGE}"
+    exit 0
+fi
+
+#######################################################################################################################
 # Check if requested plugin package exists
 
 if [[ "${PACKAGE}" != *"-dirclean" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then

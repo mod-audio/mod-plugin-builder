@@ -52,18 +52,27 @@ See the 'plugins/package' folder in this repository for some examples.
 ### Building plugins
 
 To build a plugin, run:<br/>
-```./build <platform> <plugin-package>```
+```
+./build <platform> <plugin-package>
+```
 
 Where `platform` is either modduo, modduox, moddwarf or x86_64 and `plugin-package` is a folder inside the `plugins/package` directory.
 
 If everything goes well, you will have the final plugin bundle in `~/mod-workdir/<platform>/plugins`.<br/>
 
 To push the build plugin onto a MOD Device, run:<br/>
-```./publish <platform> <plugin-package>```
+```
+./build <platform> <plugin-package>-publish
+```
 Or if you feel like doing it manually, you can run something like:
 ```
 cd /path/to/mod-workdir/plugins # adjust as needed
 tar czf bundle1.lv2 bundle2.lv2 | base64 | curl -F 'package=@-' http://192.168.51.1/sdk/install; echo
+```
+
+For cleaning a build directory, run:<br/>
+```
+./build <platform> <plugin-package>-dirclean
 ```
 
 NOTE: If you want to build the provided plugins in this repository you'll need to enable git submodules, like this:
@@ -93,7 +102,7 @@ Secondly, this test can also be used for runtime tests for all x86_64 builds.
 To do the test, run:<br/>
 ```
 ./validate <platform> <plugin-package>
-```  
+```
 
 The runtime test (for `x86_64` plugins) can also be combined with valgrind for detecting memory issues.
 
