@@ -7,11 +7,11 @@ index 1a13a92..744d946 100644
  } SampleMessage;
  
 +static sf_count_t
-+convert_to_mono(float *input, sf_count_t num_input_frames, uint32_t channels)
++convert_to_mono(float *data, sf_count_t num_input_frames, uint32_t channels)
 +{
 +	sf_count_t mono_index = 0;
 +	for (sf_count_t i = 0; i < num_input_frames * channels; i+=channels) {
-+		input[mono_index++] = input[i];
++		data[mono_index++] = data[i];
 +	}
 +
 +	sf_count_t num_output_frames = mono_index;
