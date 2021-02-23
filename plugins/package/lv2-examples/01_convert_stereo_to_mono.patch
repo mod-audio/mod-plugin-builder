@@ -1,46 +1,51 @@
 diff --git a/plugins/eg-sampler.lv2/sampler.c b/plugins/eg-sampler.lv2/sampler.c
-index 1a13a92..de772c5 100644
+index 1a13a92..744d946 100644
 --- a/plugins/eg-sampler.lv2/sampler.c
 +++ b/plugins/eg-sampler.lv2/sampler.c
 @@ -99,6 +99,19 @@ typedef struct {
  	Sample*  sample;
  } SampleMessage;
  
-+static uint64_t
-+convert_to_mono(float *input, uint64_t inputSize, uint32_t channels)
++static sf_count_t
++convert_to_mono(float *input, sf_count_t num_input_frames, uint32_t channels)
 +{
-+	uint64_t mono_index = 0;
-+	for (uint64_t i = 0; i < inputSize; i+=channels) {
++	sf_count_t mono_index = 0;
++	for (sf_count_t i = 0; i < num_input_frames * channels; i+=channels) {
 +		input[mono_index++] = input[i];
 +	}
 +
-+	uint64_t outputSize = mono_index;
++	sf_count_t num_output_frames = mono_index;
 +
-+	return outputSize;
++	return num_output_frames;
 +}
 +
  /**
     Load a new sample and return it.
  
-@@ -119,8 +132,6 @@ load_sample(LV2_Log_Logger* logger, const char* path)
+@@ -119,9 +132,7 @@ load_sample(LV2_Log_Logger* logger, const char* path)
  	bool           error    = true;
  	if (!sndfile || !info->frames) {
  		lv2_log_error(logger, "Failed to open %s\n", path);
 -	} else if (info->channels != 1) {
 -		lv2_log_error(logger, "%s has %d channels\n", path, info->channels);
- 	} else if (!(data = (float*)malloc(sizeof(float) * info->frames))) {
+-	} else if (!(data = (float*)malloc(sizeof(float) * info->frames))) {
++	} else if (!(data = (float*)malloc(sizeof(float) * info->frames * info->channels))) {
  		lv2_log_error(logger, "Failed to allocate memory for sample\n");
  	} else {
-@@ -138,7 +149,11 @@ load_sample(LV2_Log_Logger* logger, const char* path)
- 	sf_read_float(sndfile, data, info->frames);
+ 		error = false;
+@@ -135,9 +146,14 @@ load_sample(LV2_Log_Logger* logger, const char* path)
+ 	}
+ 
+ 	sf_seek(sndfile, 0ul, SEEK_SET);
+-	sf_read_float(sndfile, data, info->frames);
++	sf_read_float(sndfile, data, info->frames * info->channels);
  	sf_close(sndfile);
  
--	// Fill sample struct and return it
 +	if (info->channels != 1) {
 +		info->frames = convert_to_mono(data, info->frames, info->channels);
++		info->channels = 1;
 +	}
 +
-+    // Fill sample struct and return it
+ 	// Fill sample struct and return it
  	sample->data     = data;
  	sample->path     = (char*)malloc(path_len + 1);
- 	sample->path_len = (uint32_t)path_len;
