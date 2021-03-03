@@ -1,0 +1,82 @@
+diff --git a/trunk/src/LV2/gx_amp.lv2/gxamp.cpp b/trunk/src/LV2/gx_amp.lv2/gxamp.cpp
+index 0fadbf6..4a053b1 100644
+--- a/trunk/src/LV2/gx_amp.lv2/gxamp.cpp
++++ b/trunk/src/LV2/gx_amp.lv2/gxamp.cpp
+@@ -235,19 +235,19 @@ private:
+   volatile int32_t             schedule_wait;
+ 
+   inline bool cab_changed() 
+-    {return abs(cab - clevel_ ) > 0.1;}
++    {return fabs(cab - clevel_ ) > 0.1;}
+   inline bool buffsize_changed() 
+-    {return abs(bufsize - cur_bufsize) != 0;}
++    {return fabs(bufsize - cur_bufsize) != 0;}
+   inline void update_cab() 
+     {cab = clevel_ ; c_old_model_ = c_model_;}
+   inline bool change_cab() 
+-    {return abs(c_old_model_ - c_model_) > 0.1;}
++    {return fabs(c_old_model_ - c_model_) > 0.1;}
+   inline bool pre_changed() 
+-    {return abs(pre - alevel_) > 0.1;}
++    {return fabs(pre - alevel_) > 0.1;}
+   inline void update_pre() 
+     {pre = (alevel_);}
+   inline bool val_changed() 
+-    {return  abs(alevel_ - (*alevel)) > 0.1 || abs(clevel_ - (*clevel)) > 0.1 || abs(c_model_ - (*c_model)) > 0.1;}
++    {return  fabs(alevel_ - (*alevel)) > 0.1 || fabs(clevel_ - (*clevel)) > 0.1 || fabs(c_model_ - (*c_model)) > 0.1;}
+ 
+   // LV2 stuff
+   LV2_URID_Map*                map;
+diff --git a/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp b/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp
+index 5fe8c5b..cb04bc0 100644
+--- a/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp
++++ b/trunk/src/LV2/gx_amp_stereo.lv2/gxamp_stereo.cpp
+@@ -235,19 +235,19 @@ private:
+   volatile int32_t             schedule_wait;
+   
+   bool cab_changed()
+-    {return abs(cab - clevel_ ) > 0.1;}
++    {return fabs(cab - clevel_ ) > 0.1;}
+   bool buffsize_changed() 
+-    {return abs(bufsize - cur_bufsize) != 0;}
++    {return fabs(bufsize - cur_bufsize) != 0;}
+   void update_cab()
+     {cab = (clevel_ ); c_old_model_ = c_model_;}
+   bool change_cab()
+-    {return abs(c_old_model_ - c_model_) > 0.1;}
++    {return fabs(c_old_model_ - c_model_) > 0.1;}
+   bool pre_changed()
+-    {return abs(pre - alevel_) > 0.1;}
++    {return fabs(pre - alevel_) > 0.1;}
+   void update_pre()
+     {pre = (alevel_);}
+   inline bool val_changed() 
+-    {return  abs(alevel_ - (*alevel)) > 0.1 || abs(clevel_ - (*clevel)) > 0.1 || abs(c_model_ - (*c_model)) > 0.1;}
++    {return  fabs(alevel_ - (*alevel)) > 0.1 || fabs(clevel_ - (*clevel)) > 0.1 || fabs(c_model_ - (*c_model)) > 0.1;}
+ 
+   // LV2 stuff
+   LV2_URID_Map*                map;
+diff --git a/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp b/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp
+index bf018a2..f68e666 100644
+--- a/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp
++++ b/trunk/src/LV2/gx_cabinet.lv2/gxcabinet.cpp
+@@ -106,15 +106,15 @@ private:
+   volatile int32_t             schedule_wait;
+ 
+   inline bool cab_changed() 
+-    {return abs(cab_bass - cbass_) > 0.1 || abs(cab_treble - ctreble_) > 0.1 || abs(cab_level - clevel_) > 0.1;}
++    {return fabs(cab_bass - cbass_) > 0.1 || fabs(cab_treble - ctreble_) > 0.1 || fabs(cab_level - clevel_) > 0.1;}
+   inline bool buffsize_changed() 
+-    {return abs(bufsize - cur_bufsize) != 0;}
++    {return fabs(bufsize - cur_bufsize) != 0;}
+   inline void update_cab() 
+     {cab_bass = cbass_; cab_treble = ctreble_; cab_level = clevel_; c_old_model_ = c_model_;}
+   inline bool change_cab() 
+-    {return abs(c_old_model_ - c_model_) > 0.1;}
++    {return fabs(c_old_model_ - c_model_) > 0.1;}
+   inline bool val_changed() 
+-    {return abs(cbass_ - (*cbass)) > 0.1 || abs(ctreble_ != (*ctreble)) > 0.1 || abs(clevel_ != (*clevel)) > 0.1 ||  abs(c_model_ != (*c_model)) > 0.1;}
++    {return fabs(cbass_ - (*cbass)) > 0.1 || fabs(ctreble_ != (*ctreble)) > 0.1 || fabs(clevel_ != (*clevel)) > 0.1 ||  fabs(c_model_ != (*c_model)) > 0.1;}
+ 
+   // LV2 stuff
+   LV2_URID_Map*                map;
