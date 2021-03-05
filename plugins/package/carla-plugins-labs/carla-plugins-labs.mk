@@ -4,7 +4,7 @@
 #
 ######################################
 
-CARLA_PLUGINS_LABS_VERSION = b5e253e18c0afa11f87c17262a5cc678959851a5
+CARLA_PLUGINS_LABS_VERSION = a39fc148d4a922c6e9703a9b76248318b84a9996
 CARLA_PLUGINS_LABS_SITE = $(call github,falkTX,Carla,$(CARLA_PLUGINS_LABS_VERSION))
 CARLA_PLUGINS_LABS_DEPENDENCIES = libsndfile
 CARLA_PLUGINS_LABS_BUNDLES = carla-audiogain.lv2 carla-files.lv2 carla-miditools.lv2
