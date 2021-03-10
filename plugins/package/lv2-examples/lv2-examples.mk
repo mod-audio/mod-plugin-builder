@@ -4,7 +4,7 @@
 #
 ######################################
 
-LV2_EXAMPLES_VERSION = 64d4a4a46901b1b1ab4eaac4f3f57f8d353e42c5
+LV2_EXAMPLES_VERSION = ba34a58b32839491335b5bcbda46e11c4b209cbc
 LV2_EXAMPLES_SITE = https://github.com/lv2/lv2.git
 LV2_EXAMPLES_SITE_METHOD = git
 LV2_EXAMPLES_DEPENDENCIES = host-python

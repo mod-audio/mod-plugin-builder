@@ -1,0 +1,26 @@
+From de4d22c9712451597b821f4c951926628949b1b9 Mon Sep 17 00:00:00 2001
+From: falkTX <falktx@falktx.com>
+Date: Wed, 10 Mar 2021 14:00:47 +0000
+Subject: [PATCH] eg-sampler: Fix out of bounds sample read after loading new
+ file
+
+Signed-off-by: falkTX <falktx@falktx.com>
+---
+ plugins/eg-sampler.lv2/sampler.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/plugins/eg-sampler.lv2/sampler.c b/plugins/eg-sampler.lv2/sampler.c
+index 6c64df51..1efad3cb 100644
+--- a/plugins/eg-sampler.lv2/sampler.c
++++ b/plugins/eg-sampler.lv2/sampler.c
+@@ -211,6 +211,10 @@ work_response(LV2_Handle instance, uint32_t size, const void* data)
+   // Install the new sample
+   self->sample = *(Sample* const*)data;
+ 
++  // Stop playing previous sample, which can be larger than new one
++  self->frame = 0;
++  self->play  = false;
++
+   // Schedule work to free the old sample
+   SampleMessage msg = {{sizeof(Sample*), self->uris.eg_freeSample}, old_sample};
+   self->schedule->schedule_work(self->schedule->handle, sizeof(msg), &msg);
