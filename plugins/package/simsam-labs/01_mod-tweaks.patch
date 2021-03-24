@@ -1,0 +1,171 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b00eb49..de35535 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,6 +5,8 @@ project(simsam VERSION 0.1.0)
+ #SET( MY_GCC_FLAGS "-fpermissive")
+ #SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MY_GCC_FLAGS}")
+ 
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
++
+ set(src_folder "${CMAKE_SOURCE_DIR}/src")
+ 
+ set(src_files
+diff --git a/bundles/simsam.lv2/manifest.ttl b/bundles/simsam.lv2/manifest.ttl
+index 14da64a..be59a92 100644
+--- a/bundles/simsam.lv2/manifest.ttl
++++ b/bundles/simsam.lv2/manifest.ttl
+@@ -38,9 +38,8 @@ sfzp:mainOut
+ 
+ sfzp:
+     a lv2:Plugin ;
+-    rdfs:seeAlso <simsam.ttl> ;
+-    #lv2:binary <simsam.so> .
+-    lv2:binary <../../build/simsam.so> .
++    rdfs:seeAlso <simsam.ttl> , <modgui.ttl> ;
++    lv2:binary <simsam.so> .
+ 
+ sfzp:SalamanderGrandPianoV3
+     a pset:Preset ;
+@@ -56,5 +55,3 @@ sfzp:SteinwaySons
+     a pset:Preset ;
+     lv2:appliesTo sfzp: ;
+     rdfs:seeAlso <presets.ttl> .
+-
+-<https://gitlab.com/edwillys/simsam/> rdfs:seeAlso <modgui.ttl> .
+diff --git a/bundles/simsam.lv2/modgui/script-sfz-player.js b/bundles/simsam.lv2/modgui/script-sfz-player.js
+index 71d5438..8382cd5 100755
+--- a/bundles/simsam.lv2/modgui/script-sfz-player.js
++++ b/bundles/simsam.lv2/modgui/script-sfz-player.js
+@@ -1,40 +1,35 @@
+ function (event) {
+-    
+-    function handle_event (event, value) {
+-        ptr_events_val = "auto";
+-        if (value == 0){
++
++    function handle_event (icon, value) {
++        var ptr_events_val = "auto";
++        if (value == 0) {
+             // print READY
+-            event.icon.find ('[mod-role=status]').text ("READY");
++            icon.find ('[mod-role=status]').text ("READY");
+         }
+-        else if (value == 1){
++        else if (value == 1) {
+             // print LOADING SAMPLES...
+-            event.icon.find ('[mod-role=status]').text ("LOADING SAMPLES...");
++            icon.find ('[mod-role=status]').text ("LOADING SAMPLES...");
+             // momentarily disable click on all input control ports
+             ptr_events_val = "none";
+         }
+-        else if (value == 2){
+-            event.icon.find ('[mod-role=status]').text ("LOADING FAILED!");
++        else if (value == 2) {
++            icon.find ('[mod-role=status]').text ("LOADING FAILED!");
+         }
+ 
+         // re-set click CSS property on all input control ports
+-        ctl_ports = event.icon.find('[mod-role=input-control-port]');
+-        for (let [key, val] of Object.entries(ctl_ports)) {
+-            if (typeof val === 'object' && val !== null && val.tagName == 'DIV'){
+-                val.style.pointerEvents = ptr_events_val;
+-            }
+-        }
++        icon.find ('[mod-role=input-control-port]').css ({'pointerEvents': ptr_events_val});
+     }
+ 
+-    if (event.type == 'start' )
++    if (event.type == 'start')
+     {
+-        for (var i = 0; i < event.ports.length; i++){
+-            if(event.ports[i].symbol == 'sfz_status'){
+-                handle_event(event, event.ports[i].value);
++        for (var i = 0; i < event.ports.length; i++) {
++            if (event.ports[i].symbol == 'sfz_status') {
++                handle_event (event.icon, event.ports[i].value);
+                 break;
+             }
+         };
+     } 
+     else if (event.type == 'change' && event.symbol == 'sfz_status') {
+-        handle_event(event, event.value);
++        handle_event (event.icon, event.value);
+     }
+ }
+diff --git a/src/Lv2Wrapper.cpp b/src/Lv2Wrapper.cpp
+index d56e9a1..5d2b476 100644
+--- a/src/Lv2Wrapper.cpp
++++ b/src/Lv2Wrapper.cpp
+@@ -96,7 +96,6 @@ typedef struct
+     LV2_Log_Logger logger;
+     
+     std::vector <int32_t> midi_payload;
+-    std::string bundle_path;
+ 
+     // Main object
+     CSimSam *sfzp;
+@@ -207,9 +206,9 @@ static const LV2_Descriptor SfzpDescriptor = {
+ };
+ 
+ static const std::string SfzPaths[] = {
+-    "/sfz/salamandergrandpiano/salamander.sfz",
+-    "/sfz/francisbaconpiano/francis_bacon.sfz",
+-    "/sfz/SteinwaySonsModelB/steinway_sons.sfz"
++    "salamandergrandpiano/salamander.sfz",
++    "francisbaconpiano/francis_bacon.sfz",
++    "SteinwaySonsModelB/steinway_sons.sfz"
+ };
+ 
+ static const int32_t PolyphonyVals[] = {
+@@ -256,9 +255,6 @@ instantiate(const LV2_Descriptor *descriptor,
+             self->uris.midi_event = self->map->map(self->map->handle, LV2_MIDI__MidiEvent);
+             self->uris.new_sfz_event = self->map->map(self->map->handle, "NewSFZ");
+             lv2_log_logger_init(&self->logger, self->map, self->log);
+-            
+-            // add bundle path
+-            self->bundle_path = std::string(bundle_path);
+ 
+             CSimSamProps props;
+             props.m_BlockSize = 512;
+@@ -445,7 +441,7 @@ run(LV2_Handle hnd, uint32_t n_samples)
+             *self->sfz_status = STATUS_LOADING_SAMPLES;
+ 
+             // TODO: extract the SFZ path from the ID
+-            self->sfzp->setFilePath(self->bundle_path + SfzPaths[sfz_ind]);
++            self->sfzp->setFilePath("/data/user-files/SFZ Instruments/" + SfzPaths[sfz_ind]);
+ 
+             tMessage msg = { { sizeof(CSimSam*), self->uris.new_sfz_event },
+                                 self->sfzp };
+diff --git a/src/Sample.cpp b/src/Sample.cpp
+index 5059ede..abfe1f8 100644
+--- a/src/Sample.cpp
++++ b/src/Sample.cpp
+@@ -65,6 +65,8 @@ CSample::CSample(CSfzParams const& params, cint32_t us, cint32_t ds)
+             m_Resampler.init(us, ds, 0);
+             //setBlocksize(m_ResamplerBlocksize, true);
+             delete data;
++
++            std::cout << "open sample " << params.path << " ok" << std::endl;
+         }
+     }
+ }
+diff --git a/src/SimSam.cpp b/src/SimSam.cpp
+index dbec349..d54ea55 100644
+--- a/src/SimSam.cpp
++++ b/src/SimSam.cpp
+@@ -91,13 +91,13 @@ int32_t CSimSam::loadSamples(void)
+                 }
+             }
+         }
+-        m_LoadPending = false;
+     }
+     else
+     {
+         std::cout << "Error in loading samples" << std::endl;
+     }
+ 
++    m_LoadPending = false;
+     return retval;
+ }
+ 
