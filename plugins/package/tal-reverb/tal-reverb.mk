@@ -4,7 +4,7 @@
 #
 ######################################
 
-TAL_REVERB_VERSION = 58485ff6b7559f3a470e9924ab0074bae163ea63
+TAL_REVERB_VERSION = e94c02e3030ea4314a398fae0f94ba7e6d1be69a
 TAL_REVERB_SITE = $(call github,DISTRHO,DISTRHO-Ports,$(TAL_REVERB_VERSION))
 TAL_REVERB_BUNDLES = mod-tal-Reverb-2.lv2
 

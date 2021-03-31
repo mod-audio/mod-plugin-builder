@@ -4,8 +4,8 @@
 #
 ######################################
 
-DISTRHO_PORTS_LABS_VERSION = 58485ff6b7559f3a470e9924ab0074bae163ea63
-DISTRHO_PORTS_LABS_SITE = $(call github,moddevices,DISTRHO-Ports,$(DISTRHO_PORTS_LABS_VERSION))
+DISTRHO_PORTS_LABS_VERSION = d19e3eb1b79df52250e233329e3d31cdbc922cb4
+DISTRHO_PORTS_LABS_SITE = $(call github,DISTRHO,DISTRHO-Ports,$(DISTRHO_PORTS_LABS_VERSION))
 DISTRHO_PORTS_LABS_BUNDLES = drowaudio-distortion.lv2 drowaudio-distortionshaper.lv2 drowaudio-flanger.lv2 drowaudio-reverb.lv2 drowaudio-tremolo.lv2 Luftikus.lv2 Obxd.lv2 TAL-Dub-3.lv2 TAL-Filter-2.lv2 TAL-Filter.lv2 TAL-NoiseMaker.lv2 TAL-Reverb-2.lv2 TAL-Reverb-3.lv2 TAL-Reverb.lv2 TAL-Vocoder-2.lv2 TheFunction.lv2 ThePilgrim.lv2 Temper.lv2 Wolpertinger.lv2
 
 DISTRHO_PORTS_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) LINUX_EMBED=true -C $(@D)
