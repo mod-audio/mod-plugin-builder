@@ -1,0 +1,28 @@
+From d94f58d27ced430cf2e09ac7c92e320785512ce2 Mon Sep 17 00:00:00 2001
+From: falkTX <falktx@falktx.com>
+Date: Thu, 28 Nov 2019 20:30:27 +0000
+Subject: [PATCH] Add tick_double field to jack_position_t
+
+---
+ common/jack/types.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/common/jack/types.h b/common/jack/types.h
+index 2dccf34f1..d4ed3d7ab 100644
+--- a/common/jack/types.h
++++ b/common/jack/types.h
+@@ -609,10 +609,13 @@ struct _jack_position {
+                          set, but the value is zero, there is
+                          no video frame within this cycle. */
+ 
++    /* MOD hack: tick in double resolution */
++    double tick_double;
++
+     /* For binary compatibility, new fields should be allocated from
+      * this padding area with new valid bits controlling access, so
+      * the existing structure size and offsets are preserved. */
+-    int32_t             padding[7];
++    int32_t             padding[5];
+ 
+     /* When (unique_1 == unique_2) the contents are consistent. */
+     jack_unique_t       unique_2;       /**< unique ID */

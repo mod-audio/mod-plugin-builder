@@ -1,0 +1,20 @@
+diff --git a/linux/JackLinuxFutex.cpp b/linux/JackLinuxFutex.cpp
+index 55283792..deff006b 100644
+--- a/linux/JackLinuxFutex.cpp
++++ b/linux/JackLinuxFutex.cpp
+@@ -43,15 +43,11 @@ void JackLinuxFutex::BuildName(const char* client_name, const char* server_name,
+ {
+     char ext_client_name[SYNC_MAX_NAME_SIZE + 1];
+     JackTools::RewriteName(client_name, ext_client_name);
+-#ifdef __MOD_DEVICES__
+-    snprintf(res, size, "jack_sem.%s", ext_client_name);
+-#else
+     if (fPromiscuous) {
+         snprintf(res, size, "jack_sem.%s_%s", server_name, ext_client_name);
+     } else {
+         snprintf(res, size, "jack_sem.%d_%s_%s", JackTools::GetUID(), server_name, ext_client_name);
+     }
+-#endif
+ }
+ 
+ bool JackLinuxFutex::Signal()
