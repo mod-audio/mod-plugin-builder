@@ -10,3 +10,15 @@ index 6c6ecff..4bafb0b 100644
  
  #include "ext2_fs.h"
  #include "ext2fs.h"
+diff --git a/lib/blkid/devname.c b/lib/blkid/devname.c
+index 3e2efa9..f60d28a 100644
+--- a/lib/blkid/devname.c
++++ b/lib/blkid/devname.c
+@@ -37,6 +37,7 @@
+ #include <sys/mkdev.h>
+ #endif
+ #include <time.h>
++#include <sys/sysmacros.h>
+ 
+ #include "blkidP.h"
+ 
