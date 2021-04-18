@@ -1,0 +1,12 @@
+diff --git a/lib/ext2fs/ismounted.c b/lib/ext2fs/ismounted.c
+index 6c6ecff..4bafb0b 100644
+--- a/lib/ext2fs/ismounted.c
++++ b/lib/ext2fs/ismounted.c
+@@ -38,6 +38,7 @@
+ #endif /* HAVE_GETMNTINFO */
+ #include <string.h>
+ #include <sys/stat.h>
++#include <sys/sysmacros.h>
+ 
+ #include "ext2_fs.h"
+ #include "ext2fs.h"

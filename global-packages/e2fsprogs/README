@@ -1,0 +1,6 @@
+This custom package exists because the original is broken regarding joined /bin and /usr/bin directories.
+It contains a post-install action that overrides /sbin/fsck with a symlink to /usr/bin/fsck.
+Since in rootfs /sbin and /usr/sbin are the same, the symlink is invalid and the real file deleted. :(
+
+This issue is fixed in the next buildroot update.
+The custom package can be safely removed after we update buildroot.
