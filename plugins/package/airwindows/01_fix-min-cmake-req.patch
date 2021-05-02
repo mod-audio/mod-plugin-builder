@@ -1,0 +1,10 @@
+diff --git a/plugins/LV2/CMakeLists.txt b/plugins/LV2/CMakeLists.txt
+index 72d14c6..281de56 100755
+--- a/plugins/LV2/CMakeLists.txt
++++ b/plugins/LV2/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.9)
++cmake_minimum_required(VERSION 3.5)
+ project(airwindows_ports)
+ 
+ set(CMAKE_CXX_STANDARD 14)
