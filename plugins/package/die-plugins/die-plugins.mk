@@ -4,7 +4,7 @@
 #
 ######################################
 
-DIE_PLUGINS_VERSION = 02a46ecc88afc0f255b9a56363cd44d5f6dc27c5
+DIE_PLUGINS_VERSION = ed17dc97153f93c3b38ee2f8a5c66b02678c1fdb
 DIE_PLUGINS_SITE = $(call github,DISTRHO,DIE-Plugins,$(DIE_PLUGINS_VERSION))
 DIE_PLUGINS_DEPENDENCIES = fluidsynth libsndfile
 DIE_PLUGINS_BUNDLES = distrho-a-fluidsynth.lv2
@@ -17,6 +17,7 @@ endef
 
 define DIE_PLUGINS_INSTALL_TARGET_CMDS
 	$(DIE_PLUGINS_TARGET_MAKE) install PREFIX=/usr DESTDIR=$(TARGET_DIR)
+	cp -rL $($(PKG)_PKGDIR)/distrho-a-fluidsynth.lv2/* $(TARGET_DIR)/usr/lib/lv2/distrho-a-fluidsynth.lv2/
 endef
 
 $(eval $(generic-package))
