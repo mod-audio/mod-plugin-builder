@@ -4,7 +4,7 @@
 #
 ######################################
 
-DIE_PLUGINS_LABS_VERSION = 02a46ecc88afc0f255b9a56363cd44d5f6dc27c5
+DIE_PLUGINS_LABS_VERSION = cb0544d167f1ad750140372c174d928591565fd8
 DIE_PLUGINS_LABS_SITE = $(call github,DISTRHO,DIE-Plugins,$(DIE_PLUGINS_LABS_VERSION))
 DIE_PLUGINS_LABS_DEPENDENCIES = fluidsynth libsndfile
 DIE_PLUGINS_LABS_BUNDLES = distrho-a-comp.lv2 distrho-a-delay.lv2 distrho-a-eq.lv2 distrho-a-exp.lv2 distrho-a-reverb.lv2
