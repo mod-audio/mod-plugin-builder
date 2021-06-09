@@ -1,0 +1,22 @@
+diff --git a/dsp/windows.h b/dsp/windows.h
+index b0b61b8..44eaa2f 100644
+--- a/dsp/windows.h
++++ b/dsp/windows.h
+@@ -155,14 +155,10 @@ kaiser (sample_t * s, int n, double beta, double step = 1)
+ 	double bb = besseli (beta);
+ 	int si = 0;
+ 
+-	for (double i = -n / 2 + .1; si < n; ++si, i += step)
++	for (double i = -n / 2 + .5; si < n; ++si, i += step)
+ 	{
+-		double k = besseli ((beta * sqrt (1 - pow ((2 * i / (n - 1)), 2)))) / bb;
+-
+-		/* can you spell hack */
+-		if (!finite (k) || isnan(k))
+-			k = 0;
+-
++		double a = 1 - pow((2*i / (n - 1)), 2);
++		double k = besseli((beta*(a < 0 ? 0 : sqrt(a))) / bb);
+ 		F (s[si], k);
+ 	}
+ }
