@@ -1,0 +1,329 @@
+@prefix atom:  <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
+@prefix pprops:<http://lv2plug.in/ns/ext/port-props#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix time:  <http://lv2plug.in/ns/ext/time#> .
+
+<http://polyeffects.com/lv2/polymarbles>
+	a lv2:Plugin ;
+	doap:name "Poly Random CV Sampler" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 0 ;
+		lv2:symbol "t_bias_input" ; 
+		lv2:name "T Bias Input" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 1 ;
+		lv2:symbol "x_bias_input" ; 
+		lv2:name "X Bias Input" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 2 ;
+		lv2:symbol "t_clock_input" ; 
+		lv2:name "T Clock Input" ;
+		lv2:default -42.0 ;
+		lv2:minimum -42.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 3 ;
+		lv2:symbol "t_rate_input" ; 
+		lv2:name "T Rate Input" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 4 ;
+		lv2:symbol "t_jitter_input" ; 
+		lv2:name "T Jitter Input" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "deja_vu_input" ; 
+		lv2:name "Deja Vu Input" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "x_steps_input" ; 
+		lv2:name "X Steps Input" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "x_spread_input" ; 
+		lv2:name "X Spread Input" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "x_clock_input" ; 
+		lv2:name "X Clock Input" ;
+		lv2:default -42.0 ;
+		lv2:minimum -42.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 9 ;
+		lv2:symbol "t_deja_vu_param" ; 
+		lv2:name "T Deja Vu" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 10 ;
+		lv2:symbol "x_deja_vu_param" ; 
+		lv2:name "X Deja Vu" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 11 ;
+		lv2:symbol "deja_vu_param" ; 
+		lv2:name "Deja Vu Probablity" ;
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 12 ;
+		lv2:symbol "t_rate_param" ; 
+		lv2:name "T Clock Tempo" ;
+		lv2:default 120 ;
+		lv2:minimum 5;
+		lv2:maximum 840.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 13 ;
+		lv2:symbol "x_spread_param" ; 
+		lv2:name "X Spread" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 14 ;
+		lv2:symbol "t_mode_param" ; 
+		lv2:name "T Mode" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 2.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 15 ;
+		lv2:symbol "x_mode_param" ; 
+		lv2:name "X Mode" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 2.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 16 ;
+		lv2:symbol "deja_vu_length_param" ; 
+		lv2:name "Deja Vu Length" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 17 ;
+		lv2:symbol "t_bias_param" ; 
+		lv2:name "T Gate Bias" ;
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 18 ;
+		lv2:symbol "x_bias_param" ; 
+		lv2:name "X Distribution Bias" ;
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 19 ;
+		lv2:symbol "t_range_param" ; 
+		lv2:name "T Range" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 2.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 20 ;
+		lv2:symbol "x_range_param" ; 
+		lv2:name "X Range" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 2.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 21 ;
+		lv2:symbol "external_param" ; 
+		lv2:name "External" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 22 ;
+		lv2:symbol "t_jitter_param" ; 
+		lv2:name "T Jitter" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 23 ;
+		lv2:symbol "x_steps_param" ; 
+		lv2:name "X Smoothness Steps" ;
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:CVPort ;
+		lv2:index 24 ;
+		lv2:symbol "t1_output" ; 
+		lv2:name "T1 Output" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:CVPort ;
+		lv2:index 25 ;
+		lv2:symbol "t2_output" ; 
+		lv2:name "T2 Output" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:CVPort ;
+		lv2:index 26 ;
+		lv2:symbol "t3_output" ; 
+		lv2:name "T3 Output" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:CVPort ;
+		lv2:index 27 ;
+		lv2:symbol "y_output" ; 
+		lv2:name "Y Output" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:CVPort ;
+		lv2:index 28 ;
+		lv2:symbol "x1_output" ; 
+		lv2:name "X1 Output" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:CVPort ;
+		lv2:index 29 ;
+		lv2:symbol "x2_output" ; 
+		lv2:name "X2 Output" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:CVPort ;
+		lv2:index 30 ;
+		lv2:symbol "x3_output" ; 
+		lv2:name "X3 Output" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 31 ;
+		lv2:symbol "x_scale" ; 
+		lv2:name "X Scale" ;
+		lv2:default 0 ; # Major
+		lv2:minimum 0.0 ;
+		lv2:maximum 5.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 32 ;
+		lv2:symbol "y_divider" ; 
+		lv2:name "Y Divider" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 12.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 33 ;
+		lv2:symbol "x_clock_source_internal" ; 
+		lv2:name "X Clock Source Internal" ;
+		lv2:default 0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 34 ;
+		lv2:symbol "y_spread_param" ; 
+		lv2:name "Y Spread" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 35 ;
+		lv2:symbol "y_bias_param" ; 
+		lv2:name "Y Distribution Bias" ;
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 36 ;
+		lv2:symbol "y_steps_param" ; 
+		lv2:name "Y Smoothness" ;
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] .

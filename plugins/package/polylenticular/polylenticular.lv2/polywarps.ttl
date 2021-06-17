@@ -1,0 +1,1027 @@
+@prefix atom:  <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
+@prefix pprops:<http://lv2plug.in/ns/ext/port-props#> .
+@prefix units: <http://lv2plug.in/ns/extensions/units#> .
+@prefix time:  <http://lv2plug.in/ns/ext/time#> .
+@prefix warps: <http://polyeffects.com/lv2/polywarps#> .
+
+warps:doppler
+	a lv2:Plugin ;
+	doap:name "Poly Twist Binaural Doppler Panner" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "x_coord" ; # ALGORITHM_PARAM
+		lv2:name "x_coord" ;
+		lv2:default 4.45 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "y_coord" ; # TIMBRE_PARAM
+		lv2:name "y_coord";
+		lv2:default 0.04 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "space_size" ; # SHAPE_PARAM
+		lv2:name "space_size";
+		lv2:default 2.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "lfo_frequency" ; # LEVEL1_PARAM
+		lv2:name "lfo_frequency" ;
+		lv2:default 0.11 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "lfo_amplitude" ; # LEVEL2_PARAMa
+		lv2:name "lfo_amplitude" ;
+		lv2:default 0.22 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "lfo_frequency_cv" ; # LEVEL1_INPUT
+		lv2:name "lfo frequency cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "lfo_amplitude_cv" ; # LEVEL2_INPUT
+		lv2:name "lfo_amplitude_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "x_coord_cv" ; # ALGORITHM_INPUT
+		lv2:name "x_coord_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "y_coord_cv" ; # TIMBRE_INPUT
+		lv2:name "y_coord_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:fold
+	a lv2:Plugin ;
+	doap:name "Poly Twist Wavefolder" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "n_folds" ; # ALGORITHM_PARAM
+		lv2:name "number of folds" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "input_bias" ; # TIMBRE_PARAM
+		lv2:name "input_bias";
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "int_osc" ; # SHAPE_PARAM
+		lv2:name "int_osc";
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "input_amp" ; # LEVEL1_PARAM
+		lv2:name "amp or freq" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "input_amp_2" ; # LEVEL2_PARAM
+		lv2:name "input amplitude 2" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "input_amp_cv" ; # LEVEL1_INPUT
+		lv2:name "input_amp_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "input_amp_2_cv" ; # LEVEL2_INPUT
+		lv2:name "input_amp_2_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "num_fold_cv" ; # ALGORITHM_INPUT
+		lv2:name "num_fold_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "input_bias_cv" ; # TIMBRE_INPUT
+		lv2:name "input_bias_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:chebyschev
+	a lv2:Plugin ;
+	doap:name "Poly Twist Chebyschev" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "order" ; # ALGORITHM_PARAM
+		lv2:name "order" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "gain" ; # TIMBRE_PARAM
+		lv2:name "gain";
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "int_osc" ; # SHAPE_PARAM
+		lv2:name "int_osc";
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "input_amp" ; # LEVEL1_PARAM
+		lv2:name "amp or freq" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "input_amp_2" ; # LEVEL2_PARAM
+		lv2:name "input amplitude 2" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "input_amp_cv" ; # LEVEL1_INPUT
+		lv2:name "input_amp_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "input_amp_2_cv" ; # LEVEL2_INPUT
+		lv2:name "input_amp_2_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "order_cv" ; # ALGORITHM_INPUT
+		lv2:name "order cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "gain_cv" ; # TIMBRE_INPUT
+		lv2:name "gain cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:frequency_shifter
+	a lv2:Plugin ;
+	doap:name "Poly Twist frequency shifter" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "frequency_shift" ; # ALGORITHM_PARAM
+		lv2:name "frequency shift" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "crossfade" ; # TIMBRE_PARAM
+		lv2:name "crossfade";
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "mode" ; # SHAPE_PARAM
+		lv2:name "mode";
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "feedback" ; # LEVEL1_PARAM
+		lv2:name "feedback" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "dry_wet" ; # LEVEL2_PARAM
+		lv2:name "dry wet" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "feedback_cv" ; # LEVEL1_INPUT
+		lv2:name "feedback cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "dry_wet_cv" ; # LEVEL2_INPUT
+		lv2:name "dry wet cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "frequency_shift_cv" ; # ALGORITHM_INPUT
+		lv2:name "frequency shift cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "crossfade_cv" ; # TIMBRE_INPUT
+		lv2:name "crossfade cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:bitcrusher
+	a lv2:Plugin ;
+	doap:name "Poly Twist Bitmangler" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "bits" ; # ALGORITHM_PARAM
+		lv2:name "bits" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "xor_vs_and" ; # TIMBRE_PARAM
+		lv2:name "xor vs and";
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "int_osc" ; # SHAPE_PARAM
+		lv2:name "int_osc";
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "input_amp" ; # LEVEL1_PARAM
+		lv2:name "amp or freq" ;
+		lv2:default 0.04 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "input_amp_2" ; # LEVEL2_PARAM
+		lv2:name "input amplitude 2" ;
+		lv2:default 0.14 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "input_amp_cv" ; # LEVEL1_INPUT
+		lv2:name "input_amp_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "input_amp_2_cv" ; # LEVEL2_INPUT
+		lv2:name "input_amp_2_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "bit_cv" ; # ALGORITHM_INPUT
+		lv2:name "bit cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "xor_vs_and_cv" ; # TIMBRE_INPUT
+		lv2:name "xor vs and cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:comparator
+	a lv2:Plugin ;
+	doap:name "Poly Twist Comparator" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "comparator" ; # ALGORITHM_PARAM
+		lv2:name "comparator" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "order" ; # TIMBRE_PARAM
+		lv2:name "order";
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "int_osc" ; # SHAPE_PARAM
+		lv2:name "int_osc";
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "input_amp" ; # LEVEL1_PARAM
+		lv2:name "amp or freq" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "input_amp_2" ; # LEVEL2_PARAM
+		lv2:name "input amplitude 2" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "input_amp_cv" ; # LEVEL1_INPUT
+		lv2:name "input_amp_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "input_amp_2_cv" ; # LEVEL2_INPUT
+		lv2:name "input_amp_2_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "comparator_cv" ; # ALGORITHM_INPUT
+		lv2:name "comparator cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "order_cv" ; # TIMBRE_INPUT
+		lv2:name "order_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:vocoder
+	a lv2:Plugin ;
+	doap:name "Poly Twist Vocoder" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "warping" ; # ALGORITHM_PARAM
+		lv2:name "warping" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "release" ; # TIMBRE_PARAM
+		lv2:name "release time";
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "int_osc" ; # SHAPE_PARAM
+		lv2:name "int_osc";
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "input_amp" ; # LEVEL1_PARAM
+		lv2:name "amp or freq" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "input_amp_2" ; # LEVEL2_PARAM
+		lv2:name "input amplitude 2" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "input_amp_cv" ; # LEVEL1_INPUT
+		lv2:name "input_amp_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "input_amp_2_cv" ; # LEVEL2_INPUT
+		lv2:name "input_amp_2_cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "warping_cv" ; # ALGORITHM_INPUT
+		lv2:name "warping cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "release_cv" ; # TIMBRE_INPUT
+		lv2:name "release time cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:delay
+	a lv2:Plugin ;
+	doap:name "Poly Twist Delay" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "speed_direction" ; # ALGORITHM_PARAM
+		lv2:name "speed direction" ;
+		lv2:default 2.39 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "length" ; # TIMBRE_PARAM
+		lv2:name "length";
+		lv2:default 0.92 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "mode" ; # SHAPE_PARAM
+		lv2:name "mode";
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "feedback" ; # LEVEL1_PARAM
+		lv2:name "feedback" ;
+		lv2:default 0.75 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "dry_wet" ; # LEVEL2_PARAM
+		lv2:name "dry wet" ;
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "feedback_cv" ; # LEVEL1_INPUT
+		lv2:name "feedback cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "dry_wet_cv" ; # LEVEL2_INPUT
+		lv2:name "dry wet cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "speed_direct_cv" ; # ALGORITHM_INPUT
+		lv2:name "speed direction cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "length_cv" ; # TIMBRE_INPUT
+		lv2:name "length cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .
+
+warps:meta
+	a lv2:Plugin ;
+	doap:name "Poly Twist Meta" ;
+	doap:license <http://opensource.org/licenses/gpl> ;
+	lv2:requiredFeature urid:map ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:port [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 0 ;
+		lv2:symbol "algorithm" ; # ALGORITHM_PARAM
+		lv2:name "algorithm" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 8.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 1 ;
+		lv2:symbol "timbre" ; # TIMBRE_PARAM
+		lv2:name "timbre";
+		lv2:default 0.5 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 2 ;
+		lv2:symbol "shape" ; # SHAPE_PARAM
+		lv2:name "shape";
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 3.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ; 
+		lv2:index 3 ;
+		lv2:symbol "level1" ; # LEVEL1_PARAM
+		lv2:name "level 1" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:ControlPort ;
+		lv2:index 4 ;
+		lv2:symbol "level2" ; # LEVEL2_PARAM
+		lv2:name "level 2" ;
+		lv2:default 1.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 5 ;
+		lv2:symbol "level1_cv" ; # LEVEL1_INPUT
+		lv2:name "level 1 cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 6 ;
+		lv2:symbol "level2_cv" ; # LEVEL2_INPUT
+		lv2:name "level 2 cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 7 ;
+		lv2:symbol "algorthm_cv" ; # ALGORITHM_INPUT
+		lv2:name "algorthm cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:CVPort ;
+		lv2:index 8 ;
+		lv2:symbol "timbre_cv" ; # TIMBRE_INPUT
+		lv2:name "timbre cv" ;
+		lv2:default 0.0 ;
+		lv2:minimum 0.0 ;
+		lv2:maximum 1.0 ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 9 ;
+		lv2:symbol "carrier" ; # CARRIER_INPUT
+		lv2:name "carrier" ;
+	] , [
+		a lv2:InputPort ,
+			lv2:AudioPort ;
+		lv2:index 10 ;
+		lv2:symbol "modulator" ; # MODULATOR_INPUT
+		lv2:name "modulator" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 11 ;
+		lv2:symbol "out" ; # MODULATOR_OUTPUT
+		lv2:name "out" ;
+	] , [
+		a lv2:OutputPort ,
+			lv2:AudioPort ;
+		lv2:index 12 ;
+		lv2:symbol "aux" ;
+		lv2:name "aux" ;# AUX_OUTPUT
+	] .

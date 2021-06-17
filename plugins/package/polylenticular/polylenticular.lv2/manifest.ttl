@@ -1,0 +1,104 @@
+@prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix warps: <http://polyeffects.com/lv2/polywarps#> .
+@prefix clouds: <http://polyeffects.com/lv2/polyclouds#> .
+
+clouds:resonestor
+	a lv2:Plugin ;
+	lv2:binary <polyclouds.so> ;
+	rdfs:seeAlso <polyclouds.ttl> .
+
+clouds:oliverb
+	a lv2:Plugin ;
+	lv2:binary <polyclouds.so> ;
+	rdfs:seeAlso <polyclouds.ttl> .
+
+clouds:spectral
+	a lv2:Plugin ;
+	lv2:binary <polyclouds.so> ;
+	rdfs:seeAlso <polyclouds.ttl> .
+
+clouds:looping_delay
+	a lv2:Plugin ;
+	lv2:binary <polyclouds.so> ;
+	rdfs:seeAlso <polyclouds.ttl> .
+
+clouds:stretch
+	a lv2:Plugin ;
+	lv2:binary <polyclouds.so> ;
+	rdfs:seeAlso <polyclouds.ttl> .
+
+clouds:granular
+	a lv2:Plugin ;
+	lv2:binary <polyclouds.so> ;
+	rdfs:seeAlso <polyclouds.ttl> .
+
+clouds:beat_repeat
+	a lv2:Plugin ;
+	lv2:binary <polyclouds.so> ;
+	rdfs:seeAlso <polyclouds.ttl> .
+
+warps:doppler
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:fold
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:chebyschev
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:frequency_shifter
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:bitcrusher
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:comparator
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:vocoder
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:delay
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+warps:meta
+	a lv2:Plugin ;
+	lv2:binary <polywarps.so> ;
+	rdfs:seeAlso <polywarps.ttl> .
+
+<http://polyeffects.com/lv2/polyplaits>
+	a lv2:Plugin ;
+	lv2:binary <polyplaits.so> ;
+	rdfs:seeAlso <polyplaits.ttl> .
+
+<http://polyeffects.com/lv2/polygrids>
+	a lv2:Plugin ;
+	lv2:binary <polygrids.so> ;
+	rdfs:seeAlso <polygrids.ttl> .
+
+<http://polyeffects.com/lv2/polymarbles>
+	a lv2:Plugin ;
+	lv2:binary <polymarbles.so> ;
+	rdfs:seeAlso <polymarbles.ttl> .
+
+<http://polyeffects.com/lv2/polyrings>
+	a lv2:Plugin ;
+	lv2:binary <polyrings.so> ;
+	rdfs:seeAlso <polyrings.ttl> .
