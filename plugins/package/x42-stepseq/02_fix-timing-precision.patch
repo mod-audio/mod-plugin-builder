@@ -7,7 +7,7 @@ index 57460d1..89be811 100644
  	/* Settings */
  	double sample_rate; // samples per second
 -	double sps; // samples per step
-+	long double sps;    // samples per step (needs high precision)
++	float sps; // samples per step
  
  	double swing;
  	bool   drum_mode;
