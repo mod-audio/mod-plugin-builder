@@ -1,0 +1,13 @@
+diff --git a/src/stepseq.c b/src/stepseq.c
+index 57460d1..89be811 100644
+--- a/src/stepseq.c
++++ b/src/stepseq.c
+@@ -86,7 +86,7 @@ typedef struct {
+ 
+ 	/* Settings */
+ 	double sample_rate; // samples per second
+-	double sps; // samples per step
++	long double sps;    // samples per step (needs high precision)
+ 
+ 	double swing;
+ 	bool   drum_mode;

@@ -1,0 +1,13 @@
+diff --git a/src/stepseq.c b/src/stepseq.c
+index 57460d1..89be811 100644
+--- a/src/stepseq.c
++++ b/src/stepseq.c
+@@ -530,7 +530,7 @@ run (LV2_Handle instance, uint32_t n_samples)
+ 		self->sps = self->sample_rate * 60.0 * self->div / self->bpm;
+ 		if (self->sps < 64) { self->sps = 64; }
+ 		if (self->sps > 60 * self->sample_rate) { self->sps = 60 * self->sample_rate; }
+-		self->stme = self->stme * self->sps / old;
++		self->stme = fmod (self->stme * self->sps / old, N_STEPS * self->sps);
+ 	}
+ 
+ 	const double sps = self->sps;
