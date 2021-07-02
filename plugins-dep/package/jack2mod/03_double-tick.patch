@@ -26,3 +26,37 @@ index 2dccf34f1..d4ed3d7ab 100644
  
      /* When (unique_1 == unique_2) the contents are consistent. */
      jack_unique_t       unique_2;       /**< unique ID */
+From 01c884be4a5adccf73c830b1452d1ef6c0f3aa7e Mon Sep 17 00:00:00 2001
+From: falkTX <falktx@falktx.com>
+Date: Fri, 2 Jul 2021 07:18:40 +0100
+Subject: [PATCH] Make tick_double follow upcoming upstream changes
+
+Signed-off-by: falkTX <falktx@falktx.com>
+---
+ common/jack/types.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/common/jack/types.h b/common/jack/types.h
+index 84fb658cb..1f8a54570 100644
+--- a/common/jack/types.h
++++ b/common/jack/types.h
+@@ -542,7 +542,8 @@ typedef enum {
+     JackPositionTimecode = 0x20,        /**< External timecode */
+     JackBBTFrameOffset =      0x40,     /**< Frame offset of BBT information */
+     JackAudioVideoRatio =     0x80, /**< audio frames per video frame */
+-    JackVideoFrameOffset =   0x100  /**< frame offset of first video frame */
++    JackVideoFrameOffset =   0x100,  /**< frame offset of first video frame */
++    JackTickDouble       = 0x200
+ 
+ } jack_position_bits_t;
+ 
+@@ -550,6 +551,9 @@ typedef enum {
+ #define JACK_POSITION_MASK (JackPositionBBT|JackPositionTimecode)
+ #define EXTENDED_TIME_INFO
+ 
++/** MOD hack: tick in double resolution */
++#define JACK_TICK_DOUBLE
++
+ PRE_PACKED_STRUCTURE
+ struct _jack_position {
+ 
