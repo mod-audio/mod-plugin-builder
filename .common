@@ -40,6 +40,15 @@ if [ -z "${PLATFORM}" ]; then
 fi
 
 #######################################################################################################################
+# check for readlink binary
+
+if [ -f "/opt/local/bin/greadlink" ]; then
+  readlink="/opt/local/bin/greadlink"
+else
+  readlink="readlink"
+fi
+
+#######################################################################################################################
 # crosstool-ng variables
 
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
@@ -59,7 +68,7 @@ BUILDROOT_LINK=http://buildroot.uclibc.org/downloads/
 BUILDROOT_VERSION=buildroot-2016.02
 BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.bz2
 
-SOURCE_DIR=$(readlink -f $(dirname $0))
+SOURCE_DIR=$("${readlink}" -f $(dirname $0))
 BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}/plugins-dep"
 BR2_TARGET=${WORKDIR}/${PLATFORM}/target
 
