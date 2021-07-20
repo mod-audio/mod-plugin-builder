@@ -4,7 +4,7 @@
 #
 ######################################
 
-SFIZZ_LABS_VERSION = ce2170c88d8a670eddef493401cd886e26fda89f
+SFIZZ_LABS_VERSION = a1cef9ba16c2c6603e1c7611932b61a701cc7647
 SFIZZ_LABS_SITE = $(call github,sfztools,sfizz,$(SFIZZ_LABS_VERSION))
 SFIZZ_LABS_DEPENDENCIES = libsndfile host-cmake
 # ENABLE_LTO
