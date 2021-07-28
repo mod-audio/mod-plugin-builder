@@ -13,7 +13,7 @@ if [[ "${PLATFORM}" == "" ]] || [[ "${PACKAGE}" == "" ]]; then
     exit 1
 fi
 
-if [ "${PLATFORM}" != "modduo" ] && [ "${PLATFORM}" != "modduox" ] && [ "${PLATFORM}" != "modduox-static" ] && [ "${PLATFORM}" != "moddwarf" ] && [ "${PLATFORM}" != "x86_64" ]; then
+if [ "${PLATFORM}" != "modduo" ] && [ "${PLATFORM}" != "modduo-static" ] && [ "${PLATFORM}" != "modduox" ] && [ "${PLATFORM}" != "modduox-static" ] && [ "${PLATFORM}" != "moddwarf" ] && [ "${PLATFORM}" != "x86_64" ]; then
     echo -e "\e[0;31mPlease provide either modduo, modduox, modduox-static, moddwarf or x86_64 as platform argument\e[0m"
     exit 1
 fi

@@ -26,8 +26,7 @@ endef
 define CHOW_CENTAUR_CONFIGURE_CMDS
 	(cd $(@D) && \
 		rm -f CMakeCache.txt && \
-		env $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-			"$(HOST_DIR)/usr/bin/cmake" . \
+		"$(HOST_DIR)/usr/bin/cmake" . \
 			-DCMAKE_C_COMPILER=$(TARGET_CC) \
 			-DCMAKE_CXX_COMPILER=$(TARGET_CXX) \
 			-DCMAKE_INSTALL_PREFIX="/usr" \
