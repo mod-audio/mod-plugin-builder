@@ -6,7 +6,8 @@
 
 CHOW_CENTAUR_VERSION = f3bb633a593b6fbb22a44c1ef9d1dbedbfe92d5b
 CHOW_CENTAUR_SITE = $(call github,jatinchowdhury18,KlonCentaur,$(CHOW_CENTAUR_VERSION))
-CHOW_CENTAUR_DEPENDENCIES = freetype xlib_libXcursor xlib_libXinerama xlib_libXrandr host-cmake
+# TODO make some libs optional
+CHOW_CENTAUR_DEPENDENCIES = freetype jack2mod xlib_libXcursor xlib_libXinerama xlib_libXrandr host-cmake
 CHOW_CENTAUR_BUNDLES = ChowCentaur.lv2
 
 # call make with the current arguments and path. "$(@D)" is the build directory.
@@ -25,9 +26,13 @@ endef
 define CHOW_CENTAUR_CONFIGURE_CMDS
 	(cd $(@D) && \
 		rm -f CMakeCache.txt && \
-		"$(HOST_DIR)/usr/bin/cmake" . \
+		env $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+			"$(HOST_DIR)/usr/bin/cmake" . \
 			-DCMAKE_C_COMPILER=$(TARGET_CC) \
 			-DCMAKE_CXX_COMPILER=$(TARGET_CXX) \
+			-DCMAKE_CFLAGS="$(TARGET_CFLAGS)" \
+			-DCMAKE_CXXFLAGS="$(TARGET_CXXFLAGS)" \
+			-DCMAKE_LDFLAGS="$(TARGET_LDFLAGS)" \
 			-DCMAKE_INSTALL_PREFIX="/usr" \
 			-DCMAKE_BUILD_TYPE=Release)
 endef
