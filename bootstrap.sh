@@ -7,7 +7,7 @@ PLATFORM=$1
 
 if [ "${PLATFORM}" == "" ]; then
   echo "Usage: $0 <platform>"
-  echo "  Where platform can be modduo, modduox, moddwarf or x86_64"
+  echo "  Where platform can be modduo[-static], modduox[-static], moddwarf or x86_64"
   exit 1
 fi
 
@@ -68,9 +68,11 @@ if [ ! -f .stamp_built1 ]; then
   touch .stamp_built1
 fi
 
-if [ "${PLATFORM}" == "modduox-static" ]; then
-  # keep old name for backwards compatibility, plus add static suffix
-  sed -i "s/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/" scripts/functions
+# for static targets: keep old name for backwards compatibility, plus add static suffix
+if [ "${PLATFORM}" == "modduo-static" ]; then
+  sed -i 's/CT_TARGET_SYS="${CT_TARGET_SYS}hf"/CT_TARGET_SYS="${CT_TARGET_SYS}hf.static"/' scripts/build/arch/arm.sh
+elif [ "${PLATFORM}" == "modduox-static" ]; then
+  sed -i 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
 fi
 
 if [ ! -f .stamp_built2 ]; then
