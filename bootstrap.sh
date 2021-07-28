@@ -70,7 +70,7 @@ fi
 
 if [ "${PLATFORM}" == "modduox-static" ]; then
   # keep old name for backwards compatibility, plus add static suffix
-  sed -i "s/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi-static;/" scripts/functions
+  sed -i "s/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/" scripts/functions
 fi
 
 if [ ! -f .stamp_built2 ]; then
@@ -91,7 +91,6 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/001_aarch64-and-cortex-a53.patch
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/002_cortex-a35.patch
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/003_gcc-7.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/004_automake-fix-unescaped-left-brace-warning.patch
 fi
 
 #######################################################################################################################
