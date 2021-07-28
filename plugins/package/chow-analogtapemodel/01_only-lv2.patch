@@ -12,15 +12,3 @@ index c58a115..d5750d1 100644
  juce_add_plugin(CHOWTapeModel
      COMPANY_NAME chowdsp
      PLUGIN_MANUFACTURER_CODE Chow
-diff --git a/Plugin/modules/JUCE b/Plugin/modules/JUCE
---- a/Plugin/modules/JUCE
-+++ b/Plugin/modules/JUCE
-@@ -1 +1 @@
--Subproject commit f00a420bc348d79c4688b33b2b905b8ca0f25a3a
-+Subproject commit f00a420bc348d79c4688b33b2b905b8ca0f25a3a-dirty
-diff --git a/Plugin/modules/RTNeural b/Plugin/modules/RTNeural
---- a/Plugin/modules/RTNeural
-+++ b/Plugin/modules/RTNeural
-@@ -1 +1 @@
--Subproject commit fcd9b66b6a6dd85a014cca1f52c87d2424fdf0f2
-+Subproject commit fcd9b66b6a6dd85a014cca1f52c87d2424fdf0f2-dirty
