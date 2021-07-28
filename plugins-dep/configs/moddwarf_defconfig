@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_GENERATE_LOCALE="en_US.UTF-8"
-BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a35 -mtune=cortex-a35 -ffast-math -fno-finite-math-only -D__MOD_DEVICES__ -D_MOD_DEVICE_DWARF"
+BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a35 -mtune=cortex-a35 -ffast-math -fno-finite-math-only -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DWARF -Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
 BR2_TARGET_LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
 BR2_TARGET_GENERIC_HOSTNAME=""
 BR2_TARGET_GENERIC_ISSUE=""
