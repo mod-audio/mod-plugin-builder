@@ -1,0 +1,16 @@
+diff --git a/src/shared/missing.h b/src/shared/missing.h
+index b33a70c..c98c24a 100644
+--- a/src/shared/missing.h
++++ b/src/shared/missing.h
+@@ -745,9 +745,10 @@ static inline pid_t raw_getpid(void) {
+ #  endif
+ #endif
+ 
+-static inline int renameat2(int oldfd, const char *oldname, int newfd, const char *newname, unsigned flags) {
++static inline int missing_renameat2(int oldfd, const char *oldname, int newfd, const char *newname, unsigned flags) {
+         return syscall(__NR_renameat2, oldfd, oldname, newfd, newname, flags);
+ }
++# define renameat2 missing_renameat2
+ #endif
+ 
+ #ifndef RENAME_NOREPLACE

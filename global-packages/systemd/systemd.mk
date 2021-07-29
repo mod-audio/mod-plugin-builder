@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SYSTEMD_VERSION = 221
+SYSTEMD_VERSION = 219
 SYSTEMD_SITE = http://www.freedesktop.org/software/systemd
 SYSTEMD_SOURCE = systemd-$(SYSTEMD_VERSION).tar.xz
 SYSTEMD_LICENSE = LGPLv2.1+, GPLv2+ (udev), Public Domain (few source files, see README)
@@ -129,6 +129,13 @@ define SYSTEMD_INSTALL_RESOLVCONF_HOOK
 endef
 else
 SYSTEMD_CONF_OPTS += --disable-networkd
+define SYSTEMD_INSTALL_SERVICE_NETWORK
+	$(INSTALL) -D -m 644 package/systemd/network.service \
+		$(TARGET_DIR)/etc/systemd/system/network.service
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	ln -fs ../network.service \
+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/network.service
+endef
 endif
 
 ifeq ($(BR2_PACKAGE_SYSTEMD_TIMESYNCD),y)
@@ -215,10 +222,38 @@ define SYSTEMD_INSTALL_SERVICE_TTY
 endef
 endif
 
+ifeq ($(BR2_cortex_a7),y)
+# Get rid of journald completely. (MOD Duo only)
+define SYSTEMD_KILL_JOURNALD_WITH_FIRE
+	rm -f $(TARGET_DIR)/lib/systemd/system/sockets.target.wants/systemd-journald-audit.socket
+	rm -f $(TARGET_DIR)/lib/systemd/system/sockets.target.wants/systemd-journald-dev-log.socket
+	rm -f $(TARGET_DIR)/lib/systemd/system/sockets.target.wants/systemd-journald.socket
+	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/systemd-journal-catalog-update.service
+	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/systemd-journal-flush.service
+	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/systemd-journald.service
+	rm -f $(TARGET_DIR)/lib/systemd/system/systemd-journal-catalog-update.service
+	rm -f $(TARGET_DIR)/lib/systemd/system/systemd-journal-flush.service
+	rm -f $(TARGET_DIR)/lib/systemd/system/systemd-journald-audit.socket
+	rm -f $(TARGET_DIR)/lib/systemd/system/systemd-journald-dev-log.socket
+	rm -f $(TARGET_DIR)/lib/systemd/system/systemd-journald.service
+	rm -f $(TARGET_DIR)/lib/systemd/system/systemd-journald.socket
+	rm -f $(TARGET_DIR)/lib/systemd/systemd-journald
+endef
+endif
+
+define SYSTEMD_DISABLE_USELESS_SERVICES
+	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/systemd-machine-id-commit.service
+	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/sys-fs-fuse-connections.mount
+	rm -f $(TARGET_DIR)/lib/systemd/system/sysinit.target.wants/sys-kernel-debug.mount
+endef
+
 define SYSTEMD_INSTALL_INIT_SYSTEMD
 	$(SYSTEMD_DISABLE_SERVICE_TTY1)
 	$(SYSTEMD_INSTALL_SERVICE_TTY)
+	$(SYSTEMD_INSTALL_SERVICE_NETWORK)
 	$(SYSTEMD_INSTALL_SERVICE_TIMESYNC)
+	$(SYSTEMD_KILL_JOURNALD_WITH_FIRE)
+	$(SYSTEMD_DISABLE_USELESS_SERVICES)
 endef
 
 $(eval $(autotools-package))

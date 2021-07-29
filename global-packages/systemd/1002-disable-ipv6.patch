@@ -3,11 +3,11 @@ diff -U 3 -H -d -r -N -- systemd-219.orig/src/core/kmod-setup.c systemd-219/src/
 +++ systemd-219/src/core/kmod-setup.c	2016-01-18 11:05:13.746668013 +0100
 @@ -65,9 +65,6 @@
                  /* auto-loading on use doesn't work before udev is up */
-                 { "autofs4",   "/sys/class/misc/autofs",    true,   false,   NULL      },
+                 { "autofs4", "/sys/class/misc/autofs", true, NULL                 },
  
 -                /* early configure of ::1 on the loopback device */
--                { "ipv6",      "/sys/module/ipv6",          false,  true,    NULL      },
+-                { "ipv6",    "/sys/module/ipv6",       true, NULL                 },
 -
                  /* this should never be a module */
-                 { "unix",      "/proc/net/unix",            true,   true,    NULL      },
+                 { "unix",    "/proc/net/unix",         true, NULL                 },
  
