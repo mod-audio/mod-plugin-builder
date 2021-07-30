@@ -4,10 +4,10 @@
 #
 ######################################
 
-CHOW_ANALOGTAPEMODEL_VERSION = b3d284be1f0e391c72eb22d05953f8047a7a03eb
+CHOW_ANALOGTAPEMODEL_VERSION = 139ab8b5c2030d432ec258887f852a274582a862
 CHOW_ANALOGTAPEMODEL_SITE = $(call github,jatinchowdhury18,AnalogTapeModel,$(CHOW_ANALOGTAPEMODEL_VERSION))
 # TODO make some libs optional
-CHOW_ANALOGTAPEMODEL_DEPENDENCIES = freetype jack2mod xlib_libXcursor xlib_libXinerama xlib_libXrandr host-cmake
+CHOW_ANALOGTAPEMODEL_DEPENDENCIES = freetype xlib_libXcursor xlib_libXinerama xlib_libXrandr host-cmake
 CHOW_ANALOGTAPEMODEL_BUNDLES = CHOWTapeModel.lv2
 
 # call make with the current arguments and path. "$(@D)" is the build directory.

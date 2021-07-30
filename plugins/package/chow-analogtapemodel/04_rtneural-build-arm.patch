@@ -1,0 +1,37 @@
+diff --git a/Plugin/Source/Processors/Hysteresis/STNModel.h b/Plugin/Source/Processors/Hysteresis/STNModel.h
+index 9c81683..5ddbef3 100644
+--- a/Plugin/Source/Processors/Hysteresis/STNModel.h
++++ b/Plugin/Source/Processors/Hysteresis/STNModel.h
+@@ -12,8 +12,8 @@
+ #undef Component
+ #endif
+ 
+-#define USE_RTNEURAL_POLY 0
+-#define USE_RTNEURAL_STATIC 1
++#define USE_RTNEURAL_POLY 1
++#define USE_RTNEURAL_STATIC 0
+ 
+ namespace STNSpace
+ {
+@@ -137,7 +137,7 @@ public:
+ 
+     inline void forward (const v_type* input) noexcept
+     {
+-#if defined(_M_ARM64) || defined(__arm64__) || defined(__aarch64__)
++#if 0
+         alignas (16) double x[4];
+         input[0].copyToRawArray (x);
+         input[1].copyToRawArray (&x[2]);
+diff --git a/Plugin/modules/CMakeLists.txt b/Plugin/modules/CMakeLists.txt
+index 39f671e..2708316 100644
+--- a/Plugin/modules/CMakeLists.txt
++++ b/Plugin/modules/CMakeLists.txt
+@@ -7,8 +7,6 @@ juce_add_modules(foleys_gui_magic)
+ juce_add_modules(chowdsp_utils)
+ 
+ # Using RTNeural with XSimd backend
+-set(RTNEURAL_XSIMD ON CACHE BOOL "Use RTNeural with XSimd backend" FORCE)
+-add_definitions(-DUSE_XSIMD=1)
+ add_subdirectory(RTNeural)
+ 
+ include(cmake/WarningFlags.cmake)
