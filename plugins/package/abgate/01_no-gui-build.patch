@@ -1,0 +1,16 @@
+diff --git a/Makefile b/Makefile
+index 0eaca77..fea6344 100644
+--- a/Makefile
++++ b/Makefile
+@@ -5,9 +5,9 @@ PREFIX ?= /usr
+ INSTALL_DIR ?= $(DESTDIR)$(PREFIX)/lib/lv2
+ CXXFLAGS ?= -g -O3
+ CXX ?= g++
+-TARGET ?= gate_gui.so abGateQt/libabGateQt.so gate.so
++TARGET ?= gate.so
+ 
+-$(BUNDLE): manifest.ttl gate.ttl bypass_on.png bypass_off.png knob.png background.png $(TARGET)
++$(BUNDLE): manifest.ttl gate.ttl $(TARGET)
+ 	rm -rf $(BUNDLE)
+ 	mkdir $(BUNDLE)
+ 	cp $^ $(BUNDLE)

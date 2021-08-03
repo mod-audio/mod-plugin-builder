@@ -4,9 +4,8 @@
 #
 ######################################
 
-ABGATE_VERSION = 1.1.7
-ABGATE_SITE = http://download.sourceforge.net/abgate/
-ABGATE_SOURCE = abGate-$(ABGATE_VERSION).tar.gz
+ABGATE_VERSION = c416c29d66c09da610dc632605adad14781ede8d
+ABGATE_SITE = $(call github,antanasbruzas,abGate,$(ABGATE_VERSION))
 ABGATE_BUNDLES = abGate.lv2
 
 ABGATE_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
