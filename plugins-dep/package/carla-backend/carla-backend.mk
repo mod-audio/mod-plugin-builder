@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CARLA_BACKEND_VERSION = 0e37f4534d32572d061b5c8fe47d0afe9f2b8806
+CARLA_BACKEND_VERSION = 06c8bf8c337fe3042f276a087c00a9ab81138693
 CARLA_BACKEND_SITE = $(call github,falkTX,Carla,$(CARLA_BACKEND_VERSION))
 
 CARLA_BACKEND_EXTRAFLAGS += PREFIX=$(TARGET_DIR)/usr

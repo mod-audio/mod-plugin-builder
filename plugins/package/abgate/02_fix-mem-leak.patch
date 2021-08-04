@@ -1,0 +1,52 @@
+diff --git a/gate.cpp b/gate.cpp
+index bfd3135..420392a 100644
+--- a/gate.cpp
++++ b/gate.cpp
+@@ -27,7 +27,7 @@
+ #define OPENED 3
+ #define DECAY 4
+ 
+-static LV2_Descriptor *gateDescriptor = NULL;
++static LV2_Descriptor gateDescriptor;
+ 
+ class Gate {
+ public:
+@@ -191,28 +191,26 @@ static void cleanupGate(LV2_Handle instance) {
+ }
+ 
+ static void init() {
+-
+-	gateDescriptor = (LV2_Descriptor *) malloc(sizeof(LV2_Descriptor));
+-	gateDescriptor->URI = p_uri;
+-	gateDescriptor->instantiate = instantiateGate;
+-	gateDescriptor->connect_port = connectPortGate;
+-	gateDescriptor->activate = NULL;
+-	gateDescriptor->run = runGate;
+-	gateDescriptor->deactivate = NULL;
+-	gateDescriptor->cleanup = cleanupGate;
+-	gateDescriptor->extension_data = NULL;
++	gateDescriptor.URI = p_uri;
++	gateDescriptor.instantiate = instantiateGate;
++	gateDescriptor.connect_port = connectPortGate;
++	gateDescriptor.activate = NULL;
++	gateDescriptor.run = runGate;
++	gateDescriptor.deactivate = NULL;
++	gateDescriptor.cleanup = cleanupGate;
++	gateDescriptor.extension_data = NULL;
+ }
+ 
+ LV2_SYMBOL_EXPORT
+ const LV2_Descriptor *lv2_descriptor(uint32_t index) {
+ 
+-	if (!gateDescriptor) {
++	if (!gateDescriptor.URI) {
+ 		init();
+ 	}
+ 
+ 	switch (index) {
+ 	case 0:
+-		return gateDescriptor;
++		return &gateDescriptor;
+ 	default:
+ 		return NULL;
+ 	}

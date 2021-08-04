@@ -109,7 +109,8 @@ if [ -e "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" ]; then
             echo "Valgrind check ${plugin}..."
             env CARLA_BRIDGE_DUMMY=1 CARLA_BRIDGE_TESTING=native \
                 VALGRIND_LIB="${WORKDIR}/${PLATFORM}/target/lib/valgrind" \
-                "${WORKDIR}/${PLATFORM}/target/bin/valgrind" --leak-check=full \
+                "${WORKDIR}/${PLATFORM}/target/bin/valgrind" \
+                    --leak-check=full --suppressions=plugins-dep/valgrind-libdl.supp \
                     "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" lv2 "" "${plugin}" 1>/dev/null
         else
             echo -n "Verifying ${plugin}... "
