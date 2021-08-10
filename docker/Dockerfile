@@ -30,6 +30,7 @@ RUN apt-get install -qy multiarch-support:armhf qemu-user-static && \
     apt-get install -qy locales acl bash bash-completion bc curl cvs git mercurial rsync subversion sudo wget dosfstools && \
     apt-get install -qy bison bundler bzip2 cpio flex gawk gperf gzip help2man nano perl patch python tar texinfo unzip python3-dev python3-setuptools && \
     apt-get install -qy automake binutils build-essential device-tree-compiler premake4 sunxi-tools libtool-bin ncurses-dev libc6:i386 libstdc++6:i386 zlib1g:i386 jq && \
+    apt-get install -qy libfreetype6-dev libx11-dev libxcursor-dev libxinerama-dev libxrandr-dev pkg-config && \
     apt-get clean
 RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/p/premake/premake_3.7-1_amd64.deb && \
     dpkg -i premake_3.7-1_amd64.deb && \
