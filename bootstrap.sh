@@ -48,11 +48,12 @@ cd ${BUILD_DIR}/${CT_NG_VERSION}
 
 if [ ! -f .config ]; then
   cp ${SOURCE_DIR}/toolchain/${PLATFORM}.config .config
-  sed -i "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
-  sed -i "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
+  sed -i -e "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
+  sed -i -e "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
 fi
 
 if [ ! -f .stamp_configured ]; then
+  # ./bootstrap
   ./configure --enable-local
   touch .stamp_configured
 fi
@@ -60,7 +61,7 @@ fi
 if [ ! -f .stamp_built1 ]; then
   # ct-ng 1.22 does not build correctly against latest distros
   if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ]; then
-    sed -i Makefile -e 's/ifneq ($(strip $(CT_MAKEFLAGS)),)/ifneq (,)/'
+    sed -i -e 's/ifneq ($(strip $(CT_MAKEFLAGS)),)/ifneq (,)/' Makefile
     make build-bin build-lib
   else
     make
@@ -70,9 +71,9 @@ fi
 
 # for static targets: keep old name for backwards compatibility, plus add static suffix
 if [ "${PLATFORM}" == "modduo-static" ]; then
-  sed -i 's/CT_TARGET_SYS="${CT_TARGET_SYS}hf"/CT_TARGET_SYS="${CT_TARGET_SYS}hf.static"/' scripts/build/arch/arm.sh
+  sed -i -e 's/CT_TARGET_SYS="${CT_TARGET_SYS}hf"/CT_TARGET_SYS="${CT_TARGET_SYS}hf.static"/' scripts/build/arch/arm.sh
 elif [ "${PLATFORM}" == "modduox-static" ]; then
-  sed -i 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
+  sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
 fi
 
 if [ ! -f .stamp_built2 ]; then

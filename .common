@@ -49,6 +49,15 @@ else
 fi
 
 #######################################################################################################################
+# macOS support through homebrew
+
+if [ -d "/opt/homebrew/opt/binutils/bin" ]; then
+    export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include -I/opt/homebrew/opt/gettext/include"
+    export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib -L/opt/homebrew/opt/gettext/lib"
+    export PATH="/opt/homebrew/opt/binutils/bin:${PATH}"
+fi
+
+#######################################################################################################################
 # crosstool-ng variables
 
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
