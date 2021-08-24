@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b4236a4..0bdd82e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -25,6 +25,9 @@ if(TARGET juce_vst2_sdk)
+     list(APPEND JUCE_FORMATS VST)
+ endif()
+ 
++# MOD build
++set(JUCE_FORMATS JUCE_FORMATS LV2)
++
+ juce_add_plugin(ChowKick
+     COMPANY_NAME chowdsp
+     PLUGIN_MANUFACTURER_CODE Chow
