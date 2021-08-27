@@ -1,0 +1,28 @@
+diff --git a/modules/JUCE/modules/juce_audio_plugin_client/LV2/juce_LV2_Wrapper.cpp b/modules/JUCE/modules/juce_audio_plugin_client/LV2/juce_LV2_Wrapper.cpp
+index 94c5cba02..5ca151bfd 100644
+--- a/modules/JUCE/modules/juce_audio_plugin_client/LV2/juce_LV2_Wrapper.cpp
++++ b/modules/JUCE/modules/juce_audio_plugin_client/LV2/juce_LV2_Wrapper.cpp
+@@ -21,12 +21,12 @@
+ 
+ /** Enable latency port */
+ #ifndef JucePlugin_WantsLV2Latency
+- #define JucePlugin_WantsLV2Latency 1
++ #define JucePlugin_WantsLV2Latency 0
+ #endif
+ 
+ /** Use non-parameter states */
+ #ifndef JucePlugin_WantsLV2State
+- #define JucePlugin_WantsLV2State 1
++ #define JucePlugin_WantsLV2State 0
+ #endif
+ 
+ /** States are strings, needs custom get/setStateInformationString */
+@@ -41,7 +41,7 @@
+ 
+ /** Request time position */
+ #ifndef JucePlugin_WantsLV2TimePos
+- #define JucePlugin_WantsLV2TimePos 1
++ #define JucePlugin_WantsLV2TimePos 0
+ #endif
+ 
+ /** Using string states require enabling states first */
