@@ -10,8 +10,8 @@ CHOW_KICK_SITE_METHOD = git
 CHOW_KICK_DEPENDENCIES = juce host-juce
 # TODO make some jack2mod optional
 CHOW_KICK_DEPENDENCIES += jack2mod
-CHOW_KICK_CONF_ENV = MOD_TOOLCHAIN_FILE=/home/builder/mod-plugin-builder/toolchainfile.cmake
-CHOW_KICK_CONF_OPTS = -DCMAKE_CXX_FLAGS="-fno-lto"
+CHOW_KICK_CONF_ENV = MOD_TOOLCHAIN_FILE=$(BR2_EXTERNAL)/package/juce/toolchain.cmake
+CHOW_KICK_CONF_OPTS = -DCMAKE_CXX_FLAGS_RELEASE="-fno-lto"
 CHOW_KICK_BUNDLES = ChowKick.lv2
 
 # needed for submodules support
