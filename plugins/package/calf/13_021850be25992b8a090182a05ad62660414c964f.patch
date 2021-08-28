@@ -1,0 +1,33 @@
+From 021850be25992b8a090182a05ad62660414c964f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Sat, 19 Jan 2019 21:48:29 +0100
+Subject: [PATCH] Fix detection of LV2 for latest git
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+LV2 removed lv2-core.pc in [1]. So find lv2 and set required version to 1.1.4
+which was released in September 2016 and should be avalaible on most
+environments. This should be compatible to LV2 1.1.14 because from pkg-config
+point of view lv2-core.pc and lv2.pc look similar.
+
+[1] https://github.com/drobilla/lv2/commit/4db67120efca2d4c200d2e1ba5cf3d7b97cab97e
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index b9c3d5007..a03687731 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -79,7 +79,7 @@ if test "$JACK_FOUND" = "yes"; then
+   PKG_CHECK_MODULES(JACK_RENAME_PORT, jack >= 1.9.11, JACK_HAS_RENAME="yes", JACK_HAS_RENAME_DUMMY="no")
+ fi
+ 
+-PKG_CHECK_MODULES(LV2_DEPS, lv2core >= 6, LV2_FOUND="yes", LV2_FOUND="no")
++PKG_CHECK_MODULES(LV2_DEPS, lv2 >= 1.1.14, LV2_FOUND="yes", LV2_FOUND="no")
+ 
+ PKG_CHECK_MODULES(LASH_DEPS, lash-1.0 >= 0.6.0,
+   AC_CHECK_LIB([lash], [lash_client_is_being_restored], LASH_0_6_FOUND="yes", LASH_0_6_FOUND="no"),
