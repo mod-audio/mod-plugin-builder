@@ -138,7 +138,7 @@ done
 
 ${BR2_MAKE} ${PLATFORM}_defconfig
 
-if [ "${BUILDTARGET}" == "toolchain" ]; then
+if [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
 fi
 
