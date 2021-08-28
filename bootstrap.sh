@@ -3,12 +3,21 @@
 #######################################################################################################################
 # check arguments
 
-PLATFORM=$1
+PLATFORM=${1}
+BUILDTARGET=${2}
 
-if [ "${PLATFORM}" == "" ]; then
+if [ -z "${PLATFORM}" ]; then
   echo "Usage: $0 <platform>"
   echo "  Where platform can be modduo[-static], modduox[-static], moddwarf or x86_64"
   exit 1
+fi
+
+if [ -n "${BUILDTARGET}" ]; then
+  if [ "${BUILDTARGET}" != "all" ] && [ "${BUILDTARGET}" != "toolchain" ]; then
+    echo "Usage: $0 <platform> [build-target]"
+    echo "  Where build-target can be toolchain or all"
+    exit 1
+  fi
 fi
 
 #######################################################################################################################
@@ -116,18 +125,21 @@ cd ${BUILD_DIR}/${BUILDROOT_VERSION}
 # patching buildroot packages
 
 for dir in `ls ${SOURCE_DIR}/global-packages`; do
-    rm -rf package/${dir}
-    cp -r ${SOURCE_DIR}/global-packages/${dir} package/${dir}
+  rm -rf package/${dir}
+  cp -r ${SOURCE_DIR}/global-packages/${dir} package/${dir}
 done
 
 for dir in `ls ${SOURCE_DIR}/patches/packages`; do
-    cp ${SOURCE_DIR}/patches/packages/${dir}/*.patch package/${dir}/
+  cp ${SOURCE_DIR}/patches/packages/${dir}/*.patch package/${dir}/
 done
 
 #######################################################################################################################
 # initial first build
 
 ${BR2_MAKE} ${PLATFORM}_defconfig
-${BR2_MAKE}
+
+if [ "${BUILDTARGET}" == "toolchain" ]; then
+  ${BR2_MAKE}
+fi
 
 #######################################################################################################################
