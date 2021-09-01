@@ -11,5 +11,13 @@ JUCE_DEPENDENCIES = freetype xlib_libXcursor
 $(eval $(generic-package))
 $(eval $(host-generic-package))
 
+# Configure build with library components only
+# cmake -B cmake-build-install -DCMAKE_INSTALL_PREFIX=/path/to/JUCE/install
+# Run the installation
+# cmake --build cmake-build-install --target install
+
+# plugin side
+# find_package(JUCE CONFIG REQUIRED)
+
 # $(eval $(cmake-package))
 # $(eval $(host-cmake-package))
