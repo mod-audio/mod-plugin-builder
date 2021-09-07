@@ -13,9 +13,9 @@ if [ -z "${PLATFORM}" ]; then
 fi
 
 if [ -n "${BUILDTARGET}" ]; then
-  if [ "${BUILDTARGET}" != "all" ] && [ "${BUILDTARGET}" != "toolchain" ]; then
+  if [ "${BUILDTARGET}" != "all" ] && [ "${BUILDTARGET}" != "minimal" ] && [ "${BUILDTARGET}" != "toolchain" ]; then
     echo "Usage: $0 <platform> [build-target]"
-    echo "  Where build-target can be toolchain or all"
+    echo "  Where build-target can be minimal, toolchain or all"
     exit 1
   fi
 fi
@@ -138,7 +138,11 @@ done
 
 ${BR2_MAKE} ${PLATFORM}_defconfig
 
-if [ "${BUILDTARGET}" != "toolchain" ]; then
+if [ "${BUILDTARGET}" = "minimal" ]; then
+  ${BR2_MAKE} fftw-double
+  ${BR2_MAKE} fftw-single
+  ${BR2_MAKE} lv2
+elif [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
 fi
 
