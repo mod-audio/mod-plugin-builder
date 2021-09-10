@@ -11,6 +11,18 @@ ONEKNOB_SERIES_LABS_BUNDLES = OK-AB-InputSelector.lv2 OK-AB-OutputSelector.lv2 O
 # not working yet
 # OK-Compressor.lv2
 
+# TODO remove this define once this rule gets into cloud builders
+define MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
+	if [ ! -e $($(PKG)_DL_DIR).tar.gz ]; then                             \
+		rm -rf $(@D);                                                 \
+		git clone --recursive $($(PKG)_SITE) $(@D);                   \
+		git -C $(@D) reset --hard $($(PKG)_VERSION);                  \
+		git -C $(@D) submodule update;                                \
+		tar --exclude=".git" -czf $($(PKG)_DL_DIR).tar.gz -C $(@D) .; \
+		touch $(@D)/.stamp_downloaded $(@D)/.stamp_extracted;         \
+	fi
+endef
+
 # needed for submodules support
 ONEKNOB_SERIES_LABS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 

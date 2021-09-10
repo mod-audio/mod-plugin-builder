@@ -14,7 +14,7 @@ define MOD_PLUGIN_BUILDER_EXTRACT_CMDS
 endef
 
 define MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
-	if [ ! -e $($(PKG)_DL_DIR).tar.gz ]; then                         \
+	if [ ! -e $($(PKG)_DL_DIR).tar.gz ]; then                             \
 		rm -rf $(@D);                                                 \
 		git clone --recursive $($(PKG)_SITE) $(@D);                   \
 		git -C $(@D) reset --hard $($(PKG)_VERSION);                  \
