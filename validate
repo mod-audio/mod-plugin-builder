@@ -91,10 +91,10 @@ export LV2_PATH=/tmp/mpb-plugin-check
 
 for bundle in ${bundles[@]}; do
     echo "Checking ${bundle}..."
-    "${WORKDIR}/${PLATFORM}/target/bin/lv2_validate" \
-        "${WORKDIR}/${PLATFORM}/target/lib/lv2/kx-*/*.ttl" \
-        "${WORKDIR}/${PLATFORM}/target/lib/lv2/mod.lv2/*.ttl" \
-        "${WORKDIR}/${PLATFORM}/target/lib/lv2/modgui.lv2/*.ttl" \
+    "${WORKDIR}/${PLATFORM}/target/usr/bin/lv2_validate" \
+        "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/kx-*/*.ttl" \
+        "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/mod.lv2/*.ttl" \
+        "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/modgui.lv2/*.ttl" \
         "/tmp/mpb-plugin-check/${bundle}/*.ttl"
 done
 
@@ -103,19 +103,19 @@ plugins=($(lv2ls | tr -d '\r'))
 echo "Found ${#plugins[@]} plugin(s)"
 
 # real host test, if possible
-if [ -e "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" ]; then
+if [ -e "${WORKDIR}/${PLATFORM}/target/usr/lib/carla/carla-bridge-native" ]; then
     for plugin in ${plugins[@]}; do
         if [ -n "${VALGRIND}" ]; then
             echo "Valgrind check ${plugin}..."
             env CARLA_BRIDGE_DUMMY=1 CARLA_BRIDGE_TESTING=native \
-                VALGRIND_LIB="${WORKDIR}/${PLATFORM}/target/lib/valgrind" \
-                "${WORKDIR}/${PLATFORM}/target/bin/valgrind" \
+                VALGRIND_LIB="${WORKDIR}/${PLATFORM}/target/usr/lib/valgrind" \
+                "${WORKDIR}/${PLATFORM}/target/usr/bin/valgrind" \
                     --leak-check=full --suppressions=plugins-dep/valgrind-libdl.supp \
-                    "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" lv2 "" "${plugin}" 1>/dev/null
+                    "${WORKDIR}/${PLATFORM}/target/usr/lib/carla/carla-bridge-native" lv2 "" "${plugin}" 1>/dev/null
         else
             echo -n "Verifying ${plugin}... "
             env CARLA_BRIDGE_DUMMY=1 CARLA_BRIDGE_TESTING=native \
-                "${WORKDIR}/${PLATFORM}/target/lib/carla/carla-bridge-native" lv2 "" "${plugin}" 1>/dev/null
+                "${WORKDIR}/${PLATFORM}/target/usr/lib/carla/carla-bridge-native" lv2 "" "${plugin}" 1>/dev/null
             echo "ok"
         fi
     done
