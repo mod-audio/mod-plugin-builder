@@ -142,6 +142,7 @@ if [ "${BUILDTARGET}" = "minimal" ]; then
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} lv2
+  ${BR2_MAKE} mod-plugin-builder
 elif [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
 fi

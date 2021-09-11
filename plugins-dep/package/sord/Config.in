@@ -1,3 +1,4 @@
 config BR2_PACKAGE_SORD
 	bool "sord"
+	select BR2_PACKAGE_PCRE
 	select BR2_PACKAGE_SERD

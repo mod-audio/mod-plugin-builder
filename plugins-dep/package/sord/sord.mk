@@ -7,7 +7,7 @@
 SORD_VERSION = 31ea384f24e12778d6e30cc7a30b0f48f3d50523
 SORD_SITE = http://git.drobilla.net/sord.git
 SORD_SITE_METHOD = git
-SORD_DEPENDENCIES = serd
+SORD_DEPENDENCIES = serd pcre
 SORD_INSTALL_STAGING = YES
 
 SORD_WAF = $(HOST_DIR)/usr/bin/python ./waf
