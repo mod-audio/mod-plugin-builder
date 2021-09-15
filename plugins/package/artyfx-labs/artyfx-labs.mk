@@ -11,10 +11,13 @@ ARTYFX_LABS_CONF_OPTS = -DBUILD_GUI=OFF -DBUILD_SSE=OFF
 ARTYFX_LABS_BUNDLES = artyfx-labs.lv2
 
 define ARTYFX_LABS_POST_INSTALL_TARGET_TTLFILES
-	mv $(TARGET_DIR)/usr/lib/lv2/artyfx.lv2 $(TARGET_DIR)/usr/lib/lv2/artyfx-labs.lv2
-	cp -rL $($(PKG)_PKGDIR)/artyfx-labs.lv2/* $(TARGET_DIR)/usr/lib/lv2/artyfx-labs.lv2/
-	# unused plugin
-	rm $(TARGET_DIR)/usr/lib/lv2/artyfx.lv2/driva.ttl
+	mv $(TARGET_DIR)/usr/lib/lv2/artyfx.lv2 $(TARGET_DIR)/usr/lib/lv2/$(ARTYFX_LABS_BUNDLES)
+	cp -rL $($(PKG)_PKGDIR)/$(ARTYFX_LABS_BUNDLES)/* $(TARGET_DIR)/usr/lib/lv2/$(ARTYFX_LABS_BUNDLES)/
+	# unused plugins
+	rm $(TARGET_DIR)/usr/lib/lv2/$(ARTYFX_LABS_BUNDLES)/bitta.ttl
+	rm $(TARGET_DIR)/usr/lib/lv2/$(ARTYFX_LABS_BUNDLES)/filta.ttl
+	rm $(TARGET_DIR)/usr/lib/lv2/$(ARTYFX_LABS_BUNDLES)/kuiza.ttl
+	rm $(TARGET_DIR)/usr/lib/lv2/$(ARTYFX_LABS_BUNDLES)/roomy.ttl
 endef
 
 ARTYFX_LABS_POST_INSTALL_TARGET_HOOKS += ARTYFX_LABS_POST_INSTALL_TARGET_TTLFILES
