@@ -1,0 +1,39 @@
+diff --git a/src/dsp/bitta.cxx b/src/dsp/bitta.cxx
+index 5c7a4e9..3d15ee0 100644
+--- a/src/dsp/bitta.cxx
++++ b/src/dsp/bitta.cxx
+@@ -148,7 +148,7 @@ void Bitta::run(LV2_Handle instance, uint32_t n_samples)
+ 	else
+ 		self->bitcrusher->active( false );
+ 
+-	self->bitcrusher->setValue( width );
++	self->bitcrusher->setRealValue( width );
+ 
+ 	self->bitcrusher->setDryWet( dryWet );
+ 
+diff --git a/src/dsp/dsp_bitcrusher.hxx b/src/dsp/dsp_bitcrusher.hxx
+index a90257f..7177839 100644
+--- a/src/dsp/dsp_bitcrusher.hxx
++++ b/src/dsp/dsp_bitcrusher.hxx
+@@ -52,11 +52,20 @@ public:
+ 		dryWet = 1;
+ 	}
+ 
+-	float getValue()
++	float getRealValue()
+ 	{
+ 		return bits;
+ 	}
+ 
++	void setRealValue(int v)
++	{
++		if ( v < 1 ) v = 1;
++		if ( v > 16 ) v = 16;
++
++		bits = v;
++		m = 1 << (v-1);
++	}
++
+ 	void setValue(float v)
+ 	{
+ 		if ( v < 0.f ) v = 0.f;
