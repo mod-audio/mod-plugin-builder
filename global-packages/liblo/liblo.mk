@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LIBLO_VERSION = 0.28
+LIBLO_VERSION = 0.31
 LIBLO_SITE = http://download.sourceforge.net/liblo
 LIBLO_SOURCE = liblo-$(LIBLO_VERSION).tar.gz
 LIBLO_LICENSE = LGPLv2.1+
