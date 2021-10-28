@@ -85,6 +85,15 @@ elif [ "${PLATFORM}" == "modduox-static" ]; then
   sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
 fi
 
+# workaround until isl download works again
+if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ] && [ ! -f build/tarballs/isl-0.12.2.tar.bz2 ]; then
+  mkdir -p build/tarballs
+  cd build/tarballs
+  wget -c http://deb.debian.org/debian/pool/main/i/isl/isl_0.12.2.orig.tar.bz2
+  mv isl_0.12.2.orig.tar.bz2 isl-0.12.2.tar.bz2
+  cd ../..
+fi
+
 if [ ! -f .stamp_built2 ]; then
   ./ct-ng build
   touch .stamp_built2
