@@ -92,9 +92,16 @@ if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ] && [ ! -f build/tarballs/isl-0
   wget -c http://deb.debian.org/debian/pool/main/i/isl/isl_0.12.2.orig.tar.bz2
   mv isl_0.12.2.orig.tar.bz2 isl-0.12.2.tar.bz2
   cd ../..
+elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.24.0" ] && [ ! -f build/tarballs/isl-0.20.tar.xz ]; then
+  mkdir -p build/tarballs
+  cd build/tarballs
+  wget -c http://deb.debian.org/debian/pool/main/i/isl/isl_0.20.orig.tar.xz
+  mv isl_0.20.orig.tar.xz isl-0.20.tar.xz
+  cd ../..
 fi
 
 if [ ! -f .stamp_built2 ]; then
+  sed -i 's/.PHONY: $(PHONY)/.PHONY: build $(PHONY)/' ct-ng
   ./ct-ng build
   touch .stamp_built2
 fi
