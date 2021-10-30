@@ -33,7 +33,7 @@ If you're running a debian based system you can install all dependencies by runn
 ```
 sudo apt install acl bc curl cvs git mercurial rsync subversion wget \
 bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
-automake binutils build-essential cpio libtool libncurses-dev pkg-config libtool-bin
+automake binutils build-essential cpio libtool libncurses-dev pkg-config python libtool-bin
 ```
 
 Note that libtool-bin is not available on old distros.<br/>
