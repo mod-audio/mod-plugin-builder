@@ -1,0 +1,12 @@
+diff --git a/src/dsp/dsp_filters.hxx b/src/dsp/dsp_filters.hxx
+index 922fd64..b9d5441 100644
+--- a/src/dsp/dsp_filters.hxx
++++ b/src/dsp/dsp_filters.hxx
+@@ -107,6 +107,7 @@ public:
+ 		return 2;
+ 	}
+ 
++	__attribute__((optimize(3)))
+ 	void process (long count, float** inputs, float** outputs)
+ 	{
+ 		float* input0 = inputs[0];
