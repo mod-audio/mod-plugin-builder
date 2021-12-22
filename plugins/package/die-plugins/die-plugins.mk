@@ -4,7 +4,7 @@
 #
 ######################################
 
-DIE_PLUGINS_VERSION = cb0544d167f1ad750140372c174d928591565fd8
+DIE_PLUGINS_VERSION = d4c3922368710531b2adbebea292fd277cdc3ba0
 DIE_PLUGINS_SITE = $(call github,DISTRHO,DIE-Plugins,$(DIE_PLUGINS_VERSION))
 DIE_PLUGINS_DEPENDENCIES = fluidsynth libsndfile
 DIE_PLUGINS_BUNDLES = distrho-a-fluidsynth.lv2
