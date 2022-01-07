@@ -4,10 +4,9 @@
 #
 ######################################
 
-MOD_MDA_LV2_VERSION = 3d6dd099146b72c1fe88e06679034715fb999a5b
+MOD_MDA_LV2_VERSION = 20f3bd633ebf3d1350bfc94b5f637b58a82f057c
 MOD_MDA_LV2_SITE = $(call github,moddevices,mda-lv2,$(MOD_MDA_LV2_VERSION))
 MOD_MDA_LV2_BUNDLES = mod-mda-Ambience.lv2 mod-mda-BeatBox.lv2 mod-mda-Detune.lv2 mod-mda-DubDelay.lv2 mod-mda-DX10.lv2 mod-mda-EPiano.lv2 mod-mda-JX10.lv2 mod-mda-Leslie.lv2 mod-mda-Overdrive.lv2 mod-mda-Piano.lv2 mod-mda-RePsycho.lv2 mod-mda-RingMod.lv2 mod-mda-RoundPan.lv2 mod-mda-SubSynth.lv2 mod-mda-ThruZero.lv2 mod-mda-Vocoder.lv2
-
 
 MOD_MDA_LV2_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf
 
@@ -20,7 +19,11 @@ define MOD_MDA_LV2_BUILD_CMDS
 endef
 
 define MOD_MDA_LV2_INSTALL_TARGET_CMDS
+	# make sure to delete old files
+	rm -rf $(TARGET_DIR)/usr/lib/lv2/mod-mda-*.lv2/
+	# install fresh
 	(cd $(@D); $(MOD_MDA_LV2_TARGET_WAF) install --destdir=$(TARGET_DIR) -j 1)
+	# and ship with our custom bundles
 	cp -rL $($(PKG)_PKGDIR)/mod-mda-Ambience.lv2/*  $(TARGET_DIR)/usr/lib/lv2/mod-mda-Ambience.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-mda-BeatBox.lv2/*   $(TARGET_DIR)/usr/lib/lv2/mod-mda-BeatBox.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-mda-Detune.lv2/*    $(TARGET_DIR)/usr/lib/lv2/mod-mda-Detune.lv2/

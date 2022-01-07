@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_MDA_LV2_LABS_VERSION = 3d6dd099146b72c1fe88e06679034715fb999a5b
+MOD_MDA_LV2_LABS_VERSION = 20f3bd633ebf3d1350bfc94b5f637b58a82f057c
 MOD_MDA_LV2_LABS_SITE = $(call github,moddevices,mda-lv2,$(MOD_MDA_LV2_LABS_VERSION))
 MOD_MDA_LV2_LABS_BUNDLES = mod-mda-Bandisto.lv2 mod-mda-Combo.lv2 mod-mda-DeEss.lv2 mod-mda-Degrade.lv2 mod-mda-Delay.lv2 mod-mda-Dither.lv2 mod-mda-Dynamics.lv2 mod-mda-Image.lv2 mod-mda-Limiter.lv2 mod-mda-Loudness.lv2 mod-mda-MultiBand.lv2 mod-mda-RezFilter.lv2 mod-mda-Shepard.lv2 mod-mda-Splitter.lv2 mod-mda-Stereo.lv2 mod-mda-TalkBox.lv2 mod-mda-TestTone.lv2 mod-mda-Tracker.lv2 mod-mda-Transient.lv2 mod-mda-VocInput.lv2
 
@@ -19,7 +19,11 @@ define MOD_MDA_LV2_LABS_BUILD_CMDS
 endef
 
 define MOD_MDA_LV2_LABS_INSTALL_TARGET_CMDS
+	# make sure to delete old files
+	rm -rf $(TARGET_DIR)/usr/lib/lv2/mod-mda-*.lv2/
+	# install fresh
 	(cd $(@D); $(MOD_MDA_LV2_LABS_TARGET_WAF) install --destdir=$(TARGET_DIR) -j 1)
+	# and ship with our custom bundles
 	cp -rL $($(PKG)_PKGDIR)/mod-mda-Bandisto.lv2/*  $(TARGET_DIR)/usr/lib/lv2/mod-mda-Bandisto.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-mda-Combo.lv2/*     $(TARGET_DIR)/usr/lib/lv2/mod-mda-Combo.lv2/
 	cp -rL $($(PKG)_PKGDIR)/mod-mda-DeEss.lv2/*     $(TARGET_DIR)/usr/lib/lv2/mod-mda-DeEss.lv2/
