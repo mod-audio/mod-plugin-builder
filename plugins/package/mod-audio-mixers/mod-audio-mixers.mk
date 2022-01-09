@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_AUDIO_MIXERS_VERSION = 416143802b88c7717798b1bd62558f8e7b45d5bc
+MOD_AUDIO_MIXERS_VERSION = 80367aa5a2ddacb19dbd85ca14123ed48fdbac6c
 MOD_AUDIO_MIXERS_SITE = $(call github,moddevices,mod-audio-mixer-lv2,$(MOD_AUDIO_MIXERS_VERSION))
 MOD_AUDIO_MIXERS_BUNDLES = mod-mixer.lv2 mod-mixer-stereo.lv2
 
