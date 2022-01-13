@@ -159,6 +159,7 @@ ${BR2_MAKE} ${PLATFORM}_defconfig
 if [ "${BUILDTARGET}" = "minimal" ]; then
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
+  ${BR2_MAKE} liblo
   ${BR2_MAKE} libmodla
   ${BR2_MAKE} lv2
   ${BR2_MAKE} mod-plugin-builder
