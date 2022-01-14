@@ -4,7 +4,7 @@
 #
 ######################################
 
-COLLISIONDRIVE_VERSION = 0460588501529160117d98476eabf5e2ee340ba5
+COLLISIONDRIVE_VERSION = 2a25dfcdcb0cd02e6952754134d5d206fdfcd2d9
 COLLISIONDRIVE_SITE = $(call github,brummer10,CollisionDrive,$(COLLISIONDRIVE_VERSION))
 COLLISIONDRIVE_BUNDLES = CollisionDrive.lv2
 
