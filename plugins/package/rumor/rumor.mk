@@ -4,7 +4,7 @@
 #
 ######################################
 
-RUMOR_VERSION = 61ef7593889bdb81306fe23e5fbacafde57f8b18
+RUMOR_VERSION = 5ad260520f118960c51123ecc6890afba7d81f61
 RUMOR_SITE = $(call github,brummer10,Rumor,$(RUMOR_VERSION))
 RUMOR_BUNDLES = Rumor.lv2
 
