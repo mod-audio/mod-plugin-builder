@@ -4,7 +4,7 @@
 #
 ######################################
 
-METALTONE_VERSION = b305acf3ea89a8a6267414915c162fb2de71ed1c
+METALTONE_VERSION = a782bda563515e5be3b0094965fac4ae945400c3
 METALTONE_SITE = $(call github,brummer10,MetalTone,$(METALTONE_VERSION))
 METALTONE_BUNDLES = MetalTone.lv2
 
