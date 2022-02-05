@@ -8,16 +8,19 @@ set -e
 PLATFORM="${1}"
 DOCKER_IMAGE="${2}"
 
-if [[ "${PLATFORM}" == "" ]] || [[ "${DOCKER_IMAGE}" == "" ]]; then
-  echo "Usage: $0 <platform> <docker-image>"
-  echo "  Where platform can be modduo[-static], modduox[-static], moddwarf or x86_64"
+cd $(dirname ${0})
+
+if [[ -z "${PLATFORM}" ]] || [[ ! -a "toolchain/${PLATFORM}.config" ]]; then
+  echo "Usage: $0 <platform>"
+  echo "  Where <platform> can be one of:"
+  echo -n "  "
+  echo $(ls toolchain | sed 's/\.config//g')
   exit 1
 fi
 
 #######################################################################################################################
 # Import common code and variables
 
-cd $(dirname ${0})
 source .common
 
 #######################################################################################################################
