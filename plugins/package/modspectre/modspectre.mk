@@ -4,7 +4,7 @@
 #
 ######################################
 
-MODSPECTRE_VERSION = 5cdc84be448826328aec916bf535093f80b2ae4a
+MODSPECTRE_VERSION = ec65c2fed8e65e38f656d57ea3e12c76bd046bba
 MODSPECTRE_SITE = $(call github,x42,modspectre.lv2,$(MODSPECTRE_VERSION))
 MODSPECTRE_BUNDLES = modspectre.lv2
 
