@@ -4,7 +4,7 @@
 #
 ######################################
 
-MODMETER_VERSION = a06806593e719fc8d357ef73a62cab03c11a2f37
+MODMETER_VERSION = 5c6e81456cb1ca17bb516bd45e2f423d9ab09f3b
 MODMETER_SITE = $(call github,x42,modmeter.lv2,$(MODMETER_VERSION))
 MODMETER_BUNDLES = modmeter.lv2
 
