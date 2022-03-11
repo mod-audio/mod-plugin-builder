@@ -4,7 +4,7 @@
 #
 ######################################
 
-CARDINAL_VERSION = 718538beb8706cfad383c834c19bf7933c5b58bc
+CARDINAL_VERSION = 5a31b544a94ea1e17705cd7cc87dbe6fbd7354ea
 CARDINAL_SITE = https://github.com/DISTRHO/Cardinal.git
 CARDINAL_SITE_METHOD = git
 # CARDINAL_DEPENDENCIES = libsndfile
