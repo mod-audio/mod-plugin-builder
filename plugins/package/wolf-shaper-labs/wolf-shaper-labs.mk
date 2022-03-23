@@ -13,7 +13,7 @@ WOLF_SHAPER_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAK
 # needed for git submodules
 define WOLF_SHAPER_LABS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/pdesaulniers/wolf-shaper $(@D)
+	git clone --recursive https://github.com/pdesaulniers/wolf-shaper.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(WOLF_SHAPER_LABS_VERSION) && \
 		git submodule update)

@@ -11,7 +11,7 @@ MOD_CV_PLUGINS_BUNDLES = mod-audio-to-cv.lv2 mod-cv-attenuverter.lv2 mod-cv-cloc
 # needed for git submodules
 define MOD_CV_PLUGINS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/moddevices/mod-cv-plugins $(@D)
+	git clone --recursive https://github.com/moddevices/mod-cv-plugins.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(MOD_CV_PLUGINS_VERSION) && \
 		git submodule update)

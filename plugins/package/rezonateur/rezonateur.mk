@@ -13,7 +13,7 @@ REZONATEUR_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) HAV
 # needed for git submodules
 define REZONATEUR_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/jpcima/rezonateur $(@D)
+	git clone --recursive https://github.com/jpcima/rezonateur.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(REZONATEUR_VERSION) && \
 		git submodule update)

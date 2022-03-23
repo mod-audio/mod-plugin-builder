@@ -13,7 +13,7 @@ STRING_MACHINE_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(
 # needed for git submodules
 define STRING_MACHINE_LABS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/jpcima/string-machine $(@D)
+	git clone --recursive https://github.com/jpcima/string-machine.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(STRING_MACHINE_LABS_VERSION) && \
 		git submodule update)

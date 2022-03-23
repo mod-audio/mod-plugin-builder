@@ -18,7 +18,7 @@ SFIZZ_LABS_BUNDLES = sfizz.lv2
 # needed for git submodules
 define SFIZZ_LABS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/sfztools/sfizz $(@D)
+	git clone --recursive https://github.com/sfztools/sfizz.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(SFIZZ_LABS_VERSION) && \
 		git submodule update)

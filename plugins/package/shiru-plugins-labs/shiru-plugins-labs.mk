@@ -13,7 +13,7 @@ SHIRU_PLUGINS_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(M
 # needed for git submodules
 define SHIRU_PLUGINS_LABS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/linuxmao-org/shiru-plugins $(@D)
+	git clone --recursive https://github.com/linuxmao-org/shiru-plugins.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(SHIRU_PLUGINS_LABS_VERSION) && \
 		git submodule update)

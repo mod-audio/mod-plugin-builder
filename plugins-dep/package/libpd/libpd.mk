@@ -13,7 +13,7 @@ LIBPD_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) UTIL=tru
 # needed for git submodules
 define LIBPD_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/libpd/libpd $(@D)
+	git clone --recursive https://github.com/libpd/libpd.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(LIBPD_VERSION) && \
 		git submodule update)

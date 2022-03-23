@@ -13,7 +13,7 @@ MOD_AUDIO_TO_CV_PITCH_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) 
 # needed for git submodules
 define MOD_AUDIO_TO_CV_PITCH_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/BramGiesen/audio-to-cv-pitch-lv2 $(@D)
+	git clone --recursive https://github.com/BramGiesen/audio-to-cv-pitch-lv2.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(MOD_AUDIO_TO_CV_PITCH_VERSION) && \
 		git submodule update --init --recursive)
