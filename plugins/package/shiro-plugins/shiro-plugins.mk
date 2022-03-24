@@ -13,9 +13,11 @@ SHIRO_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) 
 # needed for git submodules
 define SHIRO_PLUGINS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive https://github.com/ninodewit/SHIRO-Plugins.git $(@D)
+	git clone https://github.com/ninodewit/SHIRO-Plugins.git $(@D)
+	git clone https://github.com/DISTRHO/DPF.git $(@D)/dpf
 	(cd $(@D) && \
 		git reset --hard $(SHIRO_PLUGINS_VERSION) && \
+		git submodule init && \
 		git submodule update)
 	touch $(@D)/.stamp_downloaded
 endef
