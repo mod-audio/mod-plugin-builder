@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_MDA_LV2_LABS_VERSION = bbd8da8b869af15c5fc99ae844591d3848d2a4a9
+MOD_MDA_LV2_LABS_VERSION = 8ffaabf0016b0dd6a3d0d479e40e8720c8c2ff8f
 MOD_MDA_LV2_LABS_SITE = $(call github,moddevices,mda-lv2,$(MOD_MDA_LV2_LABS_VERSION))
 MOD_MDA_LV2_LABS_BUNDLES = mod-mda-Bandisto.lv2 mod-mda-Combo.lv2 mod-mda-DeEss.lv2 mod-mda-Delay.lv2 mod-mda-Dither.lv2 mod-mda-Dynamics.lv2 mod-mda-Image.lv2 mod-mda-Limiter.lv2 mod-mda-Loudness.lv2 mod-mda-MultiBand.lv2 mod-mda-RezFilter.lv2 mod-mda-Splitter.lv2 mod-mda-Stereo.lv2 mod-mda-TalkBox.lv2 mod-mda-TestTone.lv2 mod-mda-Tracker.lv2 mod-mda-Transient.lv2 mod-mda-VocInput.lv2
 
