@@ -13,7 +13,7 @@ if [ -z "${PLATFORM}" ]; then
 fi
 
 if [ -n "${BUILDTARGET}" ]; then
-  if [ "${BUILDTARGET}" != "all" ] && [ "${BUILDTARGET}" != "minimal" ] && [ "${BUILDTARGET}" != "toolchain" ]; then
+  if [ "${BUILDTARGET}" != "all" ] && [ "${BUILDTARGET}" != "juce" ] && [ "${BUILDTARGET}" != "minimal" ] && [ "${BUILDTARGET}" != "toolchain" ]; then
     echo "Usage: $0 <platform> [build-target]"
     echo "  Where build-target can be minimal, toolchain or all"
     exit 1
@@ -162,6 +162,11 @@ if [ "${BUILDTARGET}" = "minimal" ]; then
   ${BR2_MAKE} liblo
   ${BR2_MAKE} libmodla
   ${BR2_MAKE} lv2
+  ${BR2_MAKE} mod-plugin-builder
+elif [ "${BUILDTARGET}" = "juce" ]; then
+  ${BR2_MAKE} fftw-double
+  ${BR2_MAKE} fftw-single
+  ${BR2_MAKE} host-juce
   ${BR2_MAKE} mod-plugin-builder
 elif [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
