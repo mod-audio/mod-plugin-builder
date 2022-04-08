@@ -11,3 +11,15 @@ index 3b4bf51..9a13948 100644
      _juce_create_pkgconfig_target(JUCE_CURL_LINUX_DEPS libcurl)
      _juce_create_pkgconfig_target(JUCE_BROWSER_LINUX_DEPS webkit2gtk-4.0 gtk+-x11-3.0)
  
+diff --git a/extras/Build/juceaide/CMakeLists.txt b/extras/Build/juceaide/CMakeLists.txt
+index 6f5c640..eeb67af 100644
+--- a/extras/Build/juceaide/CMakeLists.txt
++++ b/extras/Build/juceaide/CMakeLists.txt
+@@ -64,6 +64,7 @@ else()
+             "-DCMAKE_BUILD_TYPE=Debug"
+             "-DJUCE_BUILD_HELPER_TOOLS=ON"
+             "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
++            "-DCMAKE_TOOLCHAIN_FILE=$ENV{JUCE_TOOLCHAIN_FILE}"
+         WORKING_DIRECTORY "${JUCE_SOURCE_DIR}"
+         OUTPUT_VARIABLE command_output
+         ERROR_VARIABLE command_output

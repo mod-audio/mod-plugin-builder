@@ -1,0 +1,18 @@
+diff --git a/extras/Build/CMake/JUCEConfig.cmake.in b/extras/Build/CMake/JUCEConfig.cmake.in
+index 3e5c97de5..65360b7fd 100644
+--- a/extras/Build/CMake/JUCEConfig.cmake.in
++++ b/extras/Build/CMake/JUCEConfig.cmake.in
+@@ -20,10 +20,12 @@
+ 
+ @PACKAGE_INIT@
+ 
++set(PACKAGE_PREFIX_DIR "@CMAKE_INSTALL_PREFIX@")
++
+ if(NOT TARGET juce::juceaide)
+     add_executable(juce::juceaide IMPORTED)
+     set_target_properties(juce::juceaide PROPERTIES
+-        IMPORTED_LOCATION "@PACKAGE_JUCEAIDE_PATH@")
++        IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/bin/juceaide")
+ endif()
+ 
+ check_required_components("@PROJECT_NAME@")
