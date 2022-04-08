@@ -4,7 +4,7 @@
 #
 ######################################
 
-JUCE_VERSION = b8d8de99583fc03caca779cb5f47476382adbc50
+JUCE_VERSION = 8c4318e6e472ffa5d9d73ef8428e51ca0425a3c7
 JUCE_SITE = $(call github,DISTRHO,juce,$(JUCE_VERSION))
 JUCE_DEPENDENCIES = host-cmake freetype
 HOST_JUCE_DEPENDENCIES = host-cmake host-freetype
