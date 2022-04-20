@@ -10,14 +10,8 @@ AIRWINDOWS_SITE_METHOD = git
 AIRWINDOWS_SUBDIR = plugins/LV2
 AIRWINDOWS_BUNDLES = airwindows.lv2
 
-define AIRWINDOWS_EXTRACT_CMDS
-	rm -rf $(@D)
-	git clone --recursive $(AIRWINDOWS_SITE) $(@D)
-		(cd $(@D) && \
-		git reset --hard $(AIRWINDOWS_VERSION) && \
-		git submodule update)
-	touch $(@D)/.stamp_downloaded
-endef
+# needed for submodules support
+AIRWINDOWS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define AIRWINDOWS_INSTALL_TARGET_CMDS
 	cp -rL $(@D)/$(AIRWINDOWS_SUBDIR)/airwindows.lv2 $(TARGET_DIR)/usr/lib/lv2/
