@@ -9,7 +9,7 @@ JUCE_VERSION_PROJECT = JUCE-6.0.7
 JUCE_SITE = $(call github,DISTRHO,juce,$(JUCE_VERSION))
 JUCE_DEPENDENCIES = host-juce freetype
 JUCE_INSTALL_STAGING = YES
-HOST_JUCE_DEPENDENCIES = host-cmake host-freetype
+HOST_JUCE_DEPENDENCIES = host-cmake host-freetype host-xlib_libX11
 
 # this custom configure follows the same rules as buildroot, with these exceptions:
 # - CMAKE_FIND_ROOT_PATH_MODE_PROGRAM="ONLY" (buildroot uses "NEVER")
@@ -28,6 +28,7 @@ define HOST_JUCE_CONFIGURE_CMDS
 		-DCMAKE_MAKE_PROGRAM="/usr/bin/make" \
 		-DCMAKE_C_COMPILER="$(HOSTCC)" \
 		-DCMAKE_CXX_COMPILER="$(HOSTCXX)" \
+		-DCMAKE_CXX_FLAGS="-I$(HOST_DIR)/usr/include -DJUCE_USE_XCURSOR=0 -DJUCE_USE_XINERAMA=0 -DJUCE_USE_XRANDR=0 -DJUCE_USE_XSHM=0" \
 		-DJUCE_BUILD_HELPER_TOOLS=ON \
 		-DJUCE_INSTALL_DESTINATION=lib/cmake/JUCE \
 	)
@@ -42,6 +43,7 @@ endef
 define JUCE_INSTALL_STAGING_CMDS
 	install -d $(STAGING_DIR)/usr/include
 	install -d $(STAGING_DIR)/usr/lib/cmake
+	cp $(HOST_DIR)/usr/bin/juceaide $(STAGING_DIR)/usr/bin/
 	cp -r $(HOST_DIR)/usr/include/$(JUCE_VERSION_PROJECT) $(STAGING_DIR)/usr/include/
 	cp -r $(HOST_DIR)/usr/lib/cmake/JUCE $(STAGING_DIR)/usr/lib/cmake/
 	sed -i -e 's|/host/|/staging/|' $(STAGING_DIR)/usr/lib/cmake/JUCE/JUCEConfig.cmake
