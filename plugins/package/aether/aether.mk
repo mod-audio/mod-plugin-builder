@@ -4,10 +4,10 @@
 #
 ######################################
 
-AETHER_VERSION = c85b83e072a294f1b71151f5c5b6c46e27afd566#
+AETHER_VERSION = 2ccae056a612d2075650f2913a93cc4aa0df95ad
 AETHER_SITE = https://github.com/Dougal-s/Aether.git
 AETHER_SITE_METHOD = git
-AETHER_CONF_OPTS = -DBUILD_GUI="Off"
+AETHER_CONF_OPTS = -DBUILD_GUI="Off" -DFORCE_DISABLE_DENORMALS="Off"
 AETHER_BUNDLES = aether.lv2
 
 # needed for submodules support
