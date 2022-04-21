@@ -4,9 +4,11 @@
 #
 ######################################
 
-JUCE_VERSION = 74f7b0e893484e981721f8a8c6aed44a2d12cd85
+JUCE_VERSION = 18e46d57249931ee929047bfd5978f3a1ab40dc1
+JUCE_VERSION_PROJECT = JUCE-6.0.7
 JUCE_SITE = $(call github,DISTRHO,juce,$(JUCE_VERSION))
-JUCE_DEPENDENCIES = host-cmake freetype
+JUCE_DEPENDENCIES = host-juce freetype
+JUCE_INSTALL_STAGING = YES
 HOST_JUCE_DEPENDENCIES = host-cmake host-freetype
 
 # this custom configure follows the same rules as buildroot, with these exceptions:
@@ -33,7 +35,17 @@ endef
 
 define HOST_JUCE_POST_INSTALL_JUCEAIDE
 	$(INSTALL) -m 755 $(@D)/extras/Build/juceaide/juceaide_artefacts/juceaide $(HOST_DIR)/usr/bin/
-	$(INSTALL) -m 755 $($(PKG)_PKGDIR)/toolchainfile.cmake $(HOST_DIR)/usr/lib/cmake/JUCE/
+	$(INSTALL) -m 644 $(@D)/extras/Build/CMake/lv2_ttl_generator.c $(HOST_DIR)/usr/lib/cmake/JUCE/
+	$(INSTALL) -m 644 $($(PKG)_PKGDIR)/toolchainfile.cmake $(HOST_DIR)/usr/lib/cmake/JUCE/
+endef
+
+define JUCE_INSTALL_STAGING_CMDS
+	install -d $(STAGING_DIR)/usr/include
+	install -d $(STAGING_DIR)/usr/lib/cmake
+	cp -r $(HOST_DIR)/usr/include/$(JUCE_VERSION_PROJECT) $(STAGING_DIR)/usr/include/
+	cp -r $(HOST_DIR)/usr/lib/cmake/JUCE $(STAGING_DIR)/usr/lib/cmake/
+	sed -i -e 's|/host/|/staging/|' $(STAGING_DIR)/usr/lib/cmake/JUCE/JUCEConfig.cmake
+	sed -i -e 's|juce::juceaide|juceaide|' $(STAGING_DIR)/usr/lib/cmake/JUCE/*.cmake
 endef
 
 HOST_JUCE_POST_INSTALL_HOOKS += HOST_JUCE_POST_INSTALL_JUCEAIDE

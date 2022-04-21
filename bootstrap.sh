@@ -167,7 +167,6 @@ elif [ "${BUILDTARGET}" = "juce" ]; then
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} juce
-  ${BR2_MAKE} host-juce
   ${BR2_MAKE} mod-plugin-builder
 elif [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
