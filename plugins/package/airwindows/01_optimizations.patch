@@ -80,8 +80,8 @@ index 9636c5e..6696c38 100644
  add_plugin(UltrasonicLite)
  add_plugin(UltrasonicMed)
  
-+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto -ffat-lto-objects -ffast-math -fsingle-precision-constant -std=gnu99") # -Wno-implicit-fallthrough -Werror=incompatible-pointer-types
-+set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto -ffat-lto-objects -ffast-math -fsingle-precision-constant -Wl,-O1,--strip-all")
++set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto -ffat-lto-objects -ffast-math -fno-finite-math-only -fno-builtin -fsingle-precision-constant -std=gnu99") # -Wno-implicit-fallthrough -Werror=incompatible-pointer-types
++set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto -ffat-lto-objects -ffast-math -fno-finite-math-only -fno-builtin -fsingle-precision-constant -lm -Wl,-O1,--strip-all")
 +
  configure_file(src/manifest.ttl.in ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/manifest.ttl)
  
@@ -2896,7 +2896,7 @@ new file mode 100644
 index 0000000..8670aea
 --- /dev/null
 +++ b/src/optimizations.h
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,25 @@
 +#include <math.h>
 +#include <stdint.h>
 +#include <stdlib.h>
@@ -2905,8 +2905,13 @@ index 0000000..8670aea
 +typedef double realdouble;
 +#define double float
 +#define asin asinf
++#define atan2 atan2f
 +#define cos cosf
++#define exp expf
++#define exp2 exp2f
 +#define fabs fabsf
++#define log2 log2f
++#define log10 log10f
 +#define pow powf
 +#define sin sinf
 +#define tan tanf
