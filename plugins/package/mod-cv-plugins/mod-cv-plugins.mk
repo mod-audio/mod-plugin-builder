@@ -5,25 +5,15 @@
 ######################################
 
 MOD_CV_PLUGINS_VERSION = 96fac685a8f425ccdd28c55ddef5f6a64c835e53
-MOD_CV_PLUGINS_SITE = $(call github,moddevices,mod-cv-plugins,$(MOD_CV_PLUGINS_VERSION))
+MOD_CV_PLUGINS_SITE = https://github.com/moddevices/mod-cv-plugins.git
+MOD_CV_PLUGINS_DEPENDENCIES =
 MOD_CV_PLUGINS_BUNDLES = mod-audio-to-cv.lv2 mod-cv-attenuverter.lv2 mod-cv-clock.lv2 mod-cv-control.lv2 mod-cv-switch1.lv2 mod-cv-switch2.lv2 mod-cv-switch3.lv2 mod-cv-switch4.lv2 mod-midi-to-cv-mono.lv2 mod-midi-to-cv-poly.lv2 mod-cv-meter.lv2 mod-cv-random.lv2 mod-cv-slew.lv2 mod-cv-gate.lv2 mod-cv-range.lv2 mod-cv-round.lv2 mod-cv-abs.lv2 mod-cv-parameter-modulation.lv2 mod-cv-to-audio.lv2 logic-operators.lv2
 
-# needed for git submodules
-define MOD_CV_PLUGINS_EXTRACT_CMDS
-	rm -rf $(@D)
-	git clone --recursive https://github.com/moddevices/mod-cv-plugins.git $(@D)
-	(cd $(@D) && \
-		git reset --hard $(MOD_CV_PLUGINS_VERSION) && \
-		git submodule update)
-	touch $(@D)/.stamp_downloaded
-endef
-
-# dependencies (list of other buildroot packages, separated by space)
-MOD_CV_PLUGINS_DEPENDENCIES =
+# needed for submodules support
+MOD_CV_PLUGINS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 # call make with the current arguments and path. "$(@D)" is the build directory.
 MOD_CV_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
-
 
 define MOD_CV_PLUGINS_BUILD_CMDS
 	$(MOD_CV_PLUGINS_TARGET_MAKE)
