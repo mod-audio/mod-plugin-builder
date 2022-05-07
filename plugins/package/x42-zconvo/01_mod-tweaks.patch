@@ -12,7 +12,7 @@ index 8695a9a..52f261a 100644
  
  ifeq ($(shell $(PKG_CONFIG) --atleast-version=1.8.1 lv2 && echo yes), yes)
 diff --git a/src/lv2.cc b/src/lv2.cc
-index 515271f..4829609 100644
+index 515271f..54d7e69 100644
 --- a/src/lv2.cc
 +++ b/src/lv2.cc
 @@ -53,6 +53,10 @@
@@ -107,8 +107,9 @@ index 515271f..4829609 100644
 +		memcpy (self->next_queued_file, fn, fnsize + 1);
  		pthread_mutex_unlock (&self->state_lock);
 -		lv2_log_warning (&self->logger, "ZConvolv Work: offline instance in-use, load ignored.\n");
+-		return LV2_WORKER_ERR_UNKNOWN;
 +		lv2_log_note (&self->logger, "ZConvolv Work: queueing for later: ir=%s\n", ir_path.c_str());
- 		return LV2_WORKER_ERR_UNKNOWN;
++		return LV2_WORKER_SUCCESS;
  	}
  
 +	lv2_log_note (&self->logger, "ZConvolv opening: ir=%s\n", ir_path.c_str());
@@ -134,7 +135,7 @@ index 515271f..4829609 100644
  	pthread_mutex_unlock (&self->state_lock);
  
  	if (!ok) {
-@@ -705,8 +728,11 @@ restore (LV2_Handle                  instance,
+@@ -705,9 +728,22 @@ restore (LV2_Handle                  instance,
  
  	pthread_mutex_lock (&self->state_lock);
  	if (self->clv_offline) {
@@ -143,11 +144,23 @@ index 515271f..4829609 100644
 +		memcpy (self->next_queued_file, path, pathsize + 1);
  		pthread_mutex_unlock (&self->state_lock);
 -		lv2_log_warning (&self->logger, "ZConvolv State: offline instance in-use, state ignored.\n");
+-		return LV2_STATE_ERR_UNKNOWN;
 +		lv2_log_note (&self->logger, "ZConvolv State: queueing for later: ir=%s\n", path);
- 		return LV2_STATE_ERR_UNKNOWN;
++#ifdef LV2_STATE__freePath
++		if (free_path) {
++			free_path->free_path (free_path->handle, path);
++		} else
++#endif
++		{
++#ifndef _WIN32 // https://github.com/drobilla/lilv/issues/14
++			free (path);
++#endif
++		}
++		return LV2_STATE_SUCCESS;
  	}
  
-@@ -716,11 +742,11 @@ restore (LV2_Handle                  instance,
+ 	bool ok = false;
+@@ -716,11 +752,11 @@ restore (LV2_Handle                  instance,
  		self->clv_offline->reconfigure (self->block_size);
  		if (!(ok = self->clv_offline->ready ())) {
  			delete self->clv_offline;
