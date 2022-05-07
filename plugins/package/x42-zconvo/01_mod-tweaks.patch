@@ -12,7 +12,7 @@ index 8695a9a..52f261a 100644
  
  ifeq ($(shell $(PKG_CONFIG) --atleast-version=1.8.1 lv2 && echo yes), yes)
 diff --git a/src/lv2.cc b/src/lv2.cc
-index 515271f..8313e0d 100644
+index 515271f..4829609 100644
 --- a/src/lv2.cc
 +++ b/src/lv2.cc
 @@ -53,6 +53,10 @@
@@ -134,7 +134,20 @@ index 515271f..8313e0d 100644
  	pthread_mutex_unlock (&self->state_lock);
  
  	if (!ok) {
-@@ -716,11 +739,11 @@ restore (LV2_Handle                  instance,
+@@ -705,8 +728,11 @@ restore (LV2_Handle                  instance,
+ 
+ 	pthread_mutex_lock (&self->state_lock);
+ 	if (self->clv_offline) {
++		const size_t pathsize = strlen(path);
++		self->next_queued_file = (char*)realloc(self->next_queued_file, pathsize + 1);
++		memcpy (self->next_queued_file, path, pathsize + 1);
+ 		pthread_mutex_unlock (&self->state_lock);
+-		lv2_log_warning (&self->logger, "ZConvolv State: offline instance in-use, state ignored.\n");
++		lv2_log_note (&self->logger, "ZConvolv State: queueing for later: ir=%s\n", path);
+ 		return LV2_STATE_ERR_UNKNOWN;
+ 	}
+ 
+@@ -716,11 +742,11 @@ restore (LV2_Handle                  instance,
  		self->clv_offline->reconfigure (self->block_size);
  		if (!(ok = self->clv_offline->ready ())) {
  			delete self->clv_offline;
