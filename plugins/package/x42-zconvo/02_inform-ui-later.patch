@@ -1,5 +1,5 @@
 diff --git a/src/lv2.cc b/src/lv2.cc
-index fbf620d..0eb6ad5 100644
+index fbf620d..aa95680 100644
 --- a/src/lv2.cc
 +++ b/src/lv2.cc
 @@ -126,6 +126,7 @@ typedef struct {
@@ -35,12 +35,11 @@ index fbf620d..0eb6ad5 100644
  					}
  				}
  				break;
-@@ -1013,6 +1014,10 @@ run_cfg (LV2_Handle instance, uint32_t n_samples)
+@@ -1013,6 +1014,9 @@ run_cfg (LV2_Handle instance, uint32_t n_samples)
  	}
  
  	if (self->clv_online) {
-+		if (__sync_bool_compare_and_swap(&self->should_inform_ui, 1, 0)) {
-+			self->should_inform_ui = 0;
++		if (__sync_bool_compare_and_swap (&self->should_inform_ui, 1, 0)) {
 +			inform_ui (self, self->pset_dirty);
 +		}
  		run (instance, n_samples);
