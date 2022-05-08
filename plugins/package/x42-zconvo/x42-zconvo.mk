@@ -5,7 +5,7 @@
 ######################################
 
 # NOTE if updating, make sure to revert 2ba6328a4b15cca07d493fa14edcf5ab367b92fc (unwanted in MOD)
-X42_ZCONVO_VERSION = 9a056680a7d460ec93ec5ff355812586513ed2ea
+X42_ZCONVO_VERSION = f40007767b11b5a1eddbdb1fdc5dc9f1387b45a1
 X42_ZCONVO_SITE = $(call github,x42,zconvo.lv2,$(X42_ZCONVO_VERSION))
 X42_ZCONVO_DEPENDENCIES = fftw-single libsamplerate libsndfile
 X42_ZCONVO_BUNDLES = zeroconvo.lv2

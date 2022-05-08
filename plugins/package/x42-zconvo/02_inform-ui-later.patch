@@ -1,0 +1,21 @@
+diff --git a/src/lv2.cc b/src/lv2.cc
+index fbf620d..89e98cc 100644
+--- a/src/lv2.cc
++++ b/src/lv2.cc
+@@ -487,8 +487,6 @@ work_response (LV2_Handle  instance,
+ 
+ 	assert (self->clv_online != self->clv_offline || self->clv_online == NULL);
+ 
+-	inform_ui (self, self->pset_dirty);
+-
+ 	self->pset_dirty = true;
+ 
+ 	uint32_t d = CMD_FREE;
+@@ -592,6 +590,7 @@ work (LV2_Handle                  instance,
+ 						pthread_mutex_unlock (&self->state_lock);
+ 					}
+ 				}
++				inform_ui (self, self->pset_dirty);
+ 				break;
+ 			default:
+ 				return LV2_WORKER_ERR_UNKNOWN;

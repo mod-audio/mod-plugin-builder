@@ -1,0 +1,93 @@
+diff --git a/src/lv2.cc b/src/lv2.cc
+index d5e3266..fbf620d 100644
+--- a/src/lv2.cc
++++ b/src/lv2.cc
+@@ -66,10 +66,6 @@
+ #endif
+ /* clang-format on */
+ 
+-#ifdef WITH_STATIC_FFTW_CLEANUP
+-static pthread_mutex_t instance_count_lock = PTHREAD_MUTEX_INITIALIZER;
+-static unsigned int    instance_count      = 0;
+-#endif
+ 
+ enum {
+ 	CMD_APPLY = 0,
+@@ -347,12 +343,6 @@ instantiate (const LV2_Descriptor*     descriptor,
+ 	self->zc_sum_ins     = map->map (map->handle, ZC_sum_ins);
+ 	self->zc_ir          = map->map (map->handle, ZC_ir);
+ 
+-#ifdef WITH_STATIC_FFTW_CLEANUP
+-	pthread_mutex_lock (&instance_count_lock);
+-	++instance_count;
+-	pthread_mutex_unlock (&instance_count_lock);
+-#endif
+-
+ 	return (LV2_Handle)self;
+ }
+ 
+@@ -464,28 +454,6 @@ cleanup (LV2_Handle instance)
+ 	delete self->clv_offline;
+ 	pthread_mutex_destroy (&self->queue_lock);
+ 	pthread_mutex_destroy (&self->state_lock);
+-
+-#ifdef WITH_STATIC_FFTW_CLEANUP
+-	pthread_mutex_lock (&instance_count_lock);
+-	if (instance_count > 0) {
+-		--instance_count;
+-	}
+-	/* use this only when statically linking to a local fftw!
+-	 *
+-	 * "After calling fftw_cleanup, all existing plans become undefined,
+-	 *  and you should not attempt to execute them nor to destroy them."
+-	 * [http://www.fftw.org/fftw3_doc/Using-Plans.html]
+-	 *
+-	 * If libfftwf is shared with other plugins or the host this can
+-	 * cause undefined behavior.
+-	 */
+-	if (instance_count == 0) {
+-		fftwf_cleanup ();
+-	}
+-
+-	pthread_mutex_unlock (&instance_count_lock);
+-#endif
+-
+ 	free (instance);
+ }
+ 
+diff --git a/src/zeta-convolver.cc b/src/zeta-convolver.cc
+index 4632830..865db57 100644
+--- a/src/zeta-convolver.cc
++++ b/src/zeta-convolver.cc
+@@ -56,8 +56,6 @@
+ float Convproc::_mac_cost = 1.0f;
+ float Convproc::_fft_cost = 5.0f;
+ 
+-static pthread_mutex_t fftw_planner_lock = PTHREAD_MUTEX_INITIALIZER;
+-
+ static float*
+ calloc_real (uint32_t k)
+ {
+@@ -483,10 +481,8 @@ Convlevel::configure (int      prio,
+ 	_time_data = calloc_real (2 * _parsize);
+ 	_prep_data = calloc_real (2 * _parsize);
+ 	_freq_data = calloc_complex (_parsize + 1);
+-	pthread_mutex_lock (&fftw_planner_lock);
+ 	_plan_r2c = fftwf_plan_dft_r2c_1d (2 * _parsize, _time_data, _freq_data, fftwopt);
+ 	_plan_c2r = fftwf_plan_dft_c2r_1d (2 * _parsize, _freq_data, _time_data, fftwopt);
+-	pthread_mutex_unlock (&fftw_planner_lock);
+ 	if (_plan_r2c && _plan_c2r) {
+ 		return;
+ 	}
+@@ -718,11 +714,8 @@ Convlevel::cleanup (void)
+ 	}
+ 	_out_list = 0;
+ 
+-	pthread_mutex_lock (&fftw_planner_lock);
+ 	fftwf_destroy_plan (_plan_r2c);
+ 	fftwf_destroy_plan (_plan_c2r);
+-	pthread_mutex_unlock (&fftw_planner_lock);
+-
+ 	fftwf_free (_time_data);
+ 	fftwf_free (_prep_data);
+ 	fftwf_free (_freq_data);
