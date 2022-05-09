@@ -52,7 +52,7 @@ index d5e3266..fbf620d 100644
 -	pthread_mutex_unlock (&instance_count_lock);
 -#endif
 -
- 	free (instance);
+ 	delete self;
  }
  
 diff --git a/src/zeta-convolver.cc b/src/zeta-convolver.cc

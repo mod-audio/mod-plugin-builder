@@ -4,7 +4,7 @@
 #
 ######################################
 
-X42_ZCONVO_VERSION = f40007767b11b5a1eddbdb1fdc5dc9f1387b45a1
+X42_ZCONVO_VERSION = 151f5ceac359506fc0687fdb87e3138e1c40db64
 X42_ZCONVO_SITE = $(call github,x42,zconvo.lv2,$(X42_ZCONVO_VERSION))
 X42_ZCONVO_DEPENDENCIES = fftw-single libsamplerate libsndfile
 X42_ZCONVO_BUNDLES = zeroconvo.lv2
