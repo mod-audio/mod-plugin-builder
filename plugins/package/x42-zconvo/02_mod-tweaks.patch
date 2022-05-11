@@ -190,28 +190,28 @@ index 1f0fe29..b3cf590 100644
  	self->db_dry      = -60.f;
  	self->dry_coeff   = 0.f;
 @@ -988,11 +992,10 @@ connect_port_cfg (LV2_Handle instance,
- 			break;
  		case 2:
  		case 3:
--		case 4:
+		case 4:
+-		case 5:
 -			self->p_ctrl[port - 2] = (float*)data;
 +			self->p_ctrl[port - 1] = (float*)data;
  			break;
  		default:
--			connect_port (instance, port - 5, data);
-+			connect_port (instance, port - 4, data);
+-			connect_port (instance, port - 6, data);
++			connect_port (instance, port - 5, data);
  			break;
  	}
  }
-@@ -1026,8 +1029,6 @@ run_cfg (LV2_Handle instance, uint32_t n_samples)
+@@ -1026,8 +1029,7 @@ run_cfg (LV2_Handle instance, uint32_t n_samples)
  		}
  	}
  
 -	self->buffered = *self->p_ctrl[0] > 0;
--
+	bool enabled   = *self->p_ctrl[3] > 0;
+
  	float db_dry = *self->p_ctrl[1];
  	float db_wet = *self->p_ctrl[2];
- 
 diff --git a/src/zeta-convolver.cc b/src/zeta-convolver.cc
 index 3ae15cc..3bde8f9 100644
 --- a/src/zeta-convolver.cc
