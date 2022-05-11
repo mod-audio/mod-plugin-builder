@@ -201,14 +201,6 @@ index 6bd361d..024a369 100644
  		MAXQUANT = 8192
  	};
  
-@@ -417,7 +425,6 @@ private:
- 	uint32_t   _inpsize;         // size of input buffers
- 	uint32_t   _latecnt;         // count of cycles ending too late
- 	Convlevel* _convlev[MAXLEV]; // array of processors
--	void*      _dummy[64];
- 
- 	static float _mac_cost;
- 	static float _fft_cost;
 diff --git a/src/zeta-convolver.cc b/src/zeta-convolver.cc
 index 865db57..ec2633f 100644
 --- a/src/zeta-convolver.cc
