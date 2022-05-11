@@ -1,0 +1,224 @@
+diff --git a/src/convolver.cc b/src/convolver.cc
+index eeb27c0..1669d76 100644
+--- a/src/convolver.cc
++++ b/src/convolver.cc
+@@ -213,8 +213,21 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 	uint32_t n_part;
+ 
+ 	if (threaded) {
+-		_n_samples = 64;
+-		n_part     = Convproc::MAXPART;
++#if defined(_MOD_DEVICE_X86_64)
++		_n_samples = std::min(256u, block_size);        // buffer-size <= 256
++		n_part     = std::min(8192u, block_size * 32u); // 128 + 256 + 1024 + 4096 or 256 + 512 + 2048 + 8192
++#elif defined(_MOD_DEVICE_DUOX)
++		_n_samples = std::min(256u, block_size);        // buffer-size <= 256
++		n_part     = std::min(8192u, block_size * 32u); // 128 + 256 + 1024 + 4096 or 256 + 512 + 2048 + 8192
++#elif defined(_MOD_DEVICE_DWARF)
++		_n_samples = std::min(256u, std::max(128u, block_size)); // buffer-size >= 128, so either 128 or 256
++		n_part     = std::min(4096u, block_size * 16u);          // 128 + 512 + 2048 or 256 + 1024 + 4096
++#elif defined(_MOD_DEVICE_DUO)
++		_n_samples = std::min(512u, block_size * 2u);   // buffer-size * 2, so either 256 or 512
++		n_part     = std::min(4096u, block_size * 16u); // 256 + 512 or 512 + 1024
++#else
++#error Unknown MOD device model
++#endif
+ 	} else {
+ 		uint32_t power_of_two;
+ 		for (power_of_two = 1; 1U << power_of_two < block_size; ++power_of_two) ;
+@@ -239,7 +239,7 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 	    /*in*/  n_inputs (),
+ 	    /*out*/ n_outputs (),
+ 	    /*max-convolution length */ _max_size,
+-	    /*quantum, nominal-buffersize*/ _n_samples,
++	    /*quantum, nominal-buffersize*/ block_size,
+ 	    /*Convproc::MINPART*/ _n_samples,
+ 	    /*Convproc::MAXPART*/ n_part,
+ 	    /*density*/ 0);
+@@ -265,13 +278,6 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 
+ 	assert (n_imp <= 4);
+ 
+-	for (uint32_t i = 0; i < 4; ++i) {
+-		_tdc[i].reset ();
+-	}
+-
+-	_dly[0].reset (_n_samples);
+-	_dly[1].reset (_n_samples);
+-
+ 	for (uint32_t c = 0; c < n_imp && rv == 0; ++c) {
+ 		int ir_c = c % n_chn;
+ 		int io_o = c % n_outputs ();
+@@ -311,9 +317,6 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 			continue;
+ 		}
+ 
+-		assert ((io_i * 2 + io_o) < 4);
+-		_tdc[io_i * 2 + io_o].configure (r, chan_gain, chan_delay);
+-
+ 		uint32_t pos = 0;
+ 		while (true) {
+ 			float ir[8192];
+@@ -437,12 +440,6 @@ Convolver::run_buffered_mono (float* buf, uint32_t n_samples)
+ 
+ 		memcpy (&in[_offset], &buf[done], sizeof (float) * ns);
+ 
+-		if (_dry == _dry_target && _dry == 0) {
+-			_dly[0].clear ();
+-		} else {
+-			_dly[0].run (&buf[done], ns);
+-		}
+-
+ 		interpolate_gain ();
+ 		output (&buf[done], &out[_offset], ns);
+ 
+@@ -450,7 +447,7 @@ Convolver::run_buffered_mono (float* buf, uint32_t n_samples)
+ 		done    += ns;
+ 		remain  -= ns;
+ 
+-		if (_offset == _n_samples) {
++		{
+ 			_convproc.process ();
+ 			_offset = 0;
+ 		}
+@@ -474,14 +471,6 @@ Convolver::run_buffered_stereo (float* left, float* right, uint32_t n_samples)
+ 			memcpy (&_convproc.inpdata (1)[_offset], &right[done], sizeof (float) * ns);
+ 		}
+ 
+-		if (_dry == _dry_target && _dry == 0) {
+-			_dly[0].clear ();
+-			_dly[1].clear ();
+-		} else {
+-			_dly[0].run (&left[done], ns);
+-			_dly[1].run (&right[done], ns);
+-		}
+-
+ 		interpolate_gain ();
+ 		output (&left[done], &_convproc.outdata (0)[_offset], ns);
+ 		output (&right[done], &_convproc.outdata (1)[_offset], ns);
+@@ -490,7 +479,7 @@ Convolver::run_buffered_stereo (float* left, float* right, uint32_t n_samples)
+ 		done    += ns;
+ 		remain  -= ns;
+ 
+-		if (_offset == _n_samples) {
++		{
+ 			_convproc.process ();
+ 			_offset = 0;
+ 		}
+@@ -514,19 +503,13 @@ Convolver::run_mono (float* buf, uint32_t n_samples)
+ 
+ 		memcpy (&in[_offset], &buf[done], sizeof (float) * ns);
+ 
+-		if (_offset + ns == _n_samples) {
++		{
+ 			_convproc.process ();
+ 			interpolate_gain ();
+ 			output (&buf[done], &out[_offset], ns);
+ 			_offset = 0;
+-		} else {
+-			assert (remain == ns);
+-			_convproc.tailonly (_offset + ns);
+-			_tdc[0].run (&out[_offset], &buf[done], ns);
+-			interpolate_gain ();
+-			output (&buf[done], &out[_offset], ns);
+-			_offset += ns;
+ 		}
++
+ 		done   += ns;
+ 		remain -= ns;
+ 	}
+@@ -552,29 +535,14 @@ Convolver::run_stereo (float* left, float* right, uint32_t n_samples)
+ 			memcpy (&_convproc.inpdata (1)[_offset], &right[done], sizeof (float) * ns);
+ 		}
+ 
+-		if (_offset + ns == _n_samples) {
++		{
+ 			_convproc.process ();
+ 			interpolate_gain ();
+ 			output (&left[done],  &outL[_offset], ns);
+ 			output (&right[done], &outR[_offset], ns);
+ 			_offset = 0;
+-		} else {
+-			assert (remain == ns);
+-			_convproc.tailonly (_offset + ns);
+-
+-			_tdc[0].run (outL, _convproc.inpdata (0), _offset + ns);
+-			_tdc[2].run (outR, _convproc.inpdata (0), _offset + ns);
+-
+-			if (_irc >= Stereo) {
+-				_tdc[1].run (outL, _convproc.inpdata (1), _offset + ns);
+-				_tdc[3].run (outR, _convproc.inpdata (1), _offset + ns);
+-			}
+-
+-			interpolate_gain ();
+-			output (&left[done],  &outL[_offset], ns);
+-			output (&right[done], &outR[_offset], ns);
+-			_offset += ns;
+ 		}
++
+ 		done   += ns;
+ 		remain -= ns;
+ 	}
+diff --git a/src/convolver.h b/src/convolver.h
+index beba60c..e160e89 100644
+--- a/src/convolver.h
++++ b/src/convolver.h
+@@ -129,9 +129,6 @@ private:
+ 	int             _sched_priority;
+ 	IRSettings      _ir_settings;
+ 
+-	TimeDomainConvolver _tdc[4];
+-	DelayLine           _dly[2];
+-
+ 	uint32_t _samplerate;
+ 	uint32_t _n_samples;
+ 	uint32_t _max_size;
+diff --git a/src/zeta-convolver.h b/src/zeta-convolver.h
+index 6bd361d..024a369 100644
+--- a/src/zeta-convolver.h
++++ b/src/zeta-convolver.h
+@@ -342,11 +342,21 @@ public:
+ 	enum {
+ 		MAXINP   = 64,
+ 		MAXOUT   = 64,
+-		MAXLEV   = 8,
++#if defined(_MOD_DEVICE_X86_64) || defined(_MOD_DEVICE_DUOX)
++		MAXLEV   = 4,
+ 		MINPART  = 64,
++#elif defined(_MOD_DEVICE_DWARF)
++		MAXLEV   = 3,
++		MINPART  = 128,
++#elif defined(_MOD_DEVICE_DUO)
++		MAXLEV   = 2,
++		MINPART  = 256,
++#else
++#error Unknown MOD device model
++#endif
+ 		MAXPART  = 8192,
+ 		MAXDIVIS = 16,
+-		MINQUANT = 16,
++		MINQUANT = 64,
+ 		MAXQUANT = 8192
+ 	};
+ 
+@@ -417,7 +425,6 @@ private:
+ 	uint32_t   _inpsize;         // size of input buffers
+ 	uint32_t   _latecnt;         // count of cycles ending too late
+ 	Convlevel* _convlev[MAXLEV]; // array of processors
+-	void*      _dummy[64];
+ 
+ 	static float _mac_cost;
+ 	static float _fft_cost;
+diff --git a/src/zeta-convolver.cc b/src/zeta-convolver.cc
+index 865db57..ec2633f 100644
+--- a/src/zeta-convolver.cc
++++ b/src/zeta-convolver.cc
+@@ -165,7 +165,7 @@ Convproc::configure (uint32_t ninp,
+ 	}
+ 
+ 	try {
+-		for (offs = pind = 0; offs < maxsize; pind++) {
++		for (offs = pind = 0; offs < maxsize && pind < MAXLEV; pind++) {
+ 			npar = (maxsize - offs + size - 1) / size;
+ 			if ((size < maxpart) && (npar > nmin)) {
+ 				r = 1 << s;
