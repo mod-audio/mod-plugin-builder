@@ -4,11 +4,11 @@
 #
 ######################################
 
-AIRWINDOWS_VERSION = f175688c1b9c9285c41d1048ceef3683f32972e7
+AIRWINDOWS_VERSION = 9b48123f778e0ed623b0e432695d6b5d32f70638
 AIRWINDOWS_SITE = https://github.com/hannesbraun/airwindows-lv2.git
 AIRWINDOWS_SITE_METHOD = git
 AIRWINDOWS_CONF_OPTS = -DCMAKE_INSTALL_PREFIX=/usr/lib/lv2
-AIRWINDOWS_BUNDLES = Airwindows-Dyno.lv2 Airwindows-Mojo.lv2 Airwindows-Spiral.lv2 Airwindows-Galactic.lv2 Airwindows-PocketVerbs.lv2 Airwindows-StarChild.lv2 Airwindows-DeBess.lv2 Airwindows-Baxandall.lv2 Airwindows-Channel8.lv2 Airwindows-EveryTrim.lv2 Airwindows-Mackity.lv2 Airwindows-Acceleration2.lv2 Airwindows-ADClip7.lv2 Airwindows-Capacitor.lv2 Airwindows-Capacitor2.lv2 Airwindows-ClipOnly.lv2 Airwindows-ClipOnly2.lv2 Airwindows-Console7Buss.lv2 Airwindows-Console7Cascade.lv2 Airwindows-Console7Channel.lv2 Airwindows-Console7Crunch.lv2 Airwindows-EdIsDim.lv2 Airwindows-MidSide.lv2 Airwindows-MV.lv2 Airwindows-Nikola.lv2 Airwindows-Pressure5.lv2 Airwindows-Sidepass.lv2
+AIRWINDOWS_BUNDLES = Airwindows-Dyno.lv2 Airwindows-Mojo.lv2 Airwindows-Spiral.lv2 Airwindows-Galactic.lv2 Airwindows-PocketVerbs.lv2 Airwindows-StarChild.lv2 Airwindows-DeBess.lv2 Airwindows-Baxandall.lv2 Airwindows-Channel8.lv2 Airwindows-EveryTrim.lv2 Airwindows-Mackity.lv2 Airwindows-Acceleration2.lv2 Airwindows-ADClip7.lv2 Airwindows-Capacitor.lv2 Airwindows-Capacitor2.lv2 Airwindows-ClipOnly.lv2 Airwindows-ClipOnly2.lv2 Airwindows-Console7Buss.lv2 Airwindows-Console7Cascade.lv2 Airwindows-Console7Channel.lv2 Airwindows-Console7Crunch.lv2 Airwindows-EdIsDim.lv2 Airwindows-MidSide.lv2 Airwindows-MV.lv2 Airwindows-Nikola.lv2 Airwindows-Pressure5.lv2 Airwindows-Sidepass.lv2 Airwindows-Vibrato.lv2
 
 define AIRWINDOWS_INSTALL_TARGET_CMDS
 	rm -rf $(@D)/bundles

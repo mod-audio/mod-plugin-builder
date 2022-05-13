@@ -1,84 +1,10 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9636c5e..6696c38 100644
+index 37cd72f..5f8e689 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -39,52 +39,64 @@ function(add_plugin PLUGIN_NAME)
-   configure_file(src/${PLUGIN_NAME}/${PLUGIN_NAME}.ttl ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${PLUGIN_NAME}.ttl)
- endfunction()
- 
--add_plugin(Acceleration)
-+# Yay Distortions
-+add_plugin(Dyno)
-+add_plugin(Mojo)
-+add_plugin(Spiral)
-+
-+# Yay Reverbs
-+add_plugin(Galactic)
-+add_plugin(PocketVerbs)
-+add_plugin(StarChild)
-+
-+# Yay Misc
-+add_plugin(DeBess)
-+add_plugin(Baxandall)
-+add_plugin(Channel8)
-+add_plugin(EveryTrim)
-+add_plugin(Mackity)
-+
-+# Maybe
- add_plugin(Acceleration2)
- add_plugin(ADClip7)
--add_plugin(Baxandall)
--add_plugin(BitShiftGain)
- add_plugin(Capacitor)
- add_plugin(Capacitor2)
--add_plugin(Channel8)
- add_plugin(ClipOnly)
- add_plugin(ClipOnly2)
- add_plugin(Console7Buss)
- add_plugin(Console7Cascade)
- add_plugin(Console7Channel)
- add_plugin(Console7Crunch)
--add_plugin(DCVoltage)
--add_plugin(DeBess)
--add_plugin(Dyno)
- add_plugin(EdIsDim)
--add_plugin(EveryTrim)
--add_plugin(Galactic)
-+add_plugin(MidSide)
-+add_plugin(MV)
-+add_plugin(Nikola)
-+add_plugin(Pressure5)
-+add_plugin(Sidepass)
-+
-+# Nay
-+add_plugin(Acceleration)
-+add_plugin(BitShiftGain)
-+add_plugin(DCVoltage)
- add_plugin(HermeTrim)
- add_plugin(Hypersonic)
- add_plugin(Infrasonic)
- add_plugin(Interstage)
- add_plugin(LeftoMono)
--add_plugin(Mackity)
--add_plugin(MidSide)
--add_plugin(Mojo)
--add_plugin(MV)
--add_plugin(Nikola)
--add_plugin(PocketVerbs)
--add_plugin(Pressure5)
- add_plugin(PurestConsoleBuss)
- add_plugin(PurestConsoleChannel)
- add_plugin(PurestGain)
- add_plugin(RightoMono)
--add_plugin(Sidepass)
- add_plugin(Slew)
- add_plugin(SlewOnly)
--add_plugin(Spiral)
--add_plugin(StarChild)
- add_plugin(SubsOnly)
- add_plugin(Ultrasonic)
- add_plugin(UltrasonicLite)
+@@ -95,6 +95,9 @@ add_plugin(UltrasonicLite)
  add_plugin(UltrasonicMed)
+ add_plugin(Vibrato)
  
 +set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -flto -ffat-lto-objects -ffast-math -fno-finite-math-only -fno-builtin -fsingle-precision-constant -std=gnu99") # -Wno-implicit-fallthrough -Werror=incompatible-pointer-types
 +set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -flto -ffat-lto-objects -ffast-math -fno-finite-math-only -fno-builtin -fsingle-precision-constant -lm -Wl,-O1,--strip-all")
@@ -599,6 +525,77 @@ index 5130655..80e75a7 100644
 -		channel8->fpdR ^= channel8->fpdR >> 17;
 -		channel8->fpdR ^= channel8->fpdR << 5;
 -		inputSampleR += (((double)channel8->fpdR - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		//end 32 bit stereo floating point dither
+-
+ 		*out1 = (float) inputSampleL;
+ 		*out2 = (float) inputSampleR;
+ 
+diff --git a/src/Channel9/Channel9.c b/src/Channel9/Channel9.c
+index 5e18790..da51ecd 100644
+--- a/src/Channel9/Channel9.c
++++ b/src/Channel9/Channel9.c
+@@ -4,6 +4,7 @@
+ #include <stdbool.h>
+ #include <stdint.h>
+ #include <stdlib.h>
++#include "../optimizations.h"
+ 
+ #define CHANNEL9_URI "https://hannesbraun.net/ns/lv2/airwindows/channel9"
+ 
+@@ -25,8 +26,6 @@ typedef struct {
+ 	const float* drive;
+ 	const float* outputGain;
+ 
+-	uint32_t fpdL;
+-	uint32_t fpdR;
+ 	//default stuff
+ 	double iirSampleLA;
+ 	double iirSampleRA;
+@@ -48,7 +47,7 @@ typedef struct {
+ 
+ static LV2_Handle instantiate(
+ 	const LV2_Descriptor* descriptor,
+-	double rate,
++	realdouble rate,
+ 	const char* bundle_path,
+ 	const LV2_Feature* const* features)
+ {
+@@ -94,10 +93,6 @@ static void activate(LV2_Handle instance)
+ 		channel9->biquadA[x] = 0.0;
+ 		channel9->biquadB[x] = 0.0;
+ 	}
+-	channel9->fpdL = 1.0;
+-	while (channel9->fpdL < 16386) channel9->fpdL = rand() * UINT32_MAX;
+-	channel9->fpdR = 1.0;
+-	while (channel9->fpdR < 16386) channel9->fpdR = rand() * UINT32_MAX;
+ 	channel9->iirSampleLA = 0.0;
+ 	channel9->iirSampleRA = 0.0;
+ 	channel9->iirSampleLB = 0.0;
+@@ -188,8 +183,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 	while (sampleFrames-- > 0) {
+ 		double inputSampleL = *in1;
+ 		double inputSampleR = *in2;
+-		if (fabs(inputSampleL) < 1.18e-23) inputSampleL = channel9->fpdL * 1.18e-17;
+-		if (fabs(inputSampleR) < 1.18e-23) inputSampleR = channel9->fpdR * 1.18e-17;
+ 		double tempSample;
+ 
+ 		if (channel9->biquadA[0] < 0.49999) {
+@@ -313,20 +306,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 			channel9->biquadB[13] = inputSampleR; //DF1 right
+ 		}
+ 
+-		//begin 32 bit stereo floating point dither
+-		int expon;
+-		frexpf((float)inputSampleL, &expon);
+-		channel9->fpdL ^= channel9->fpdL << 13;
+-		channel9->fpdL ^= channel9->fpdL >> 17;
+-		channel9->fpdL ^= channel9->fpdL << 5;
+-		inputSampleL += (((double)channel9->fpdL - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		frexpf((float)inputSampleR, &expon);
+-		channel9->fpdR ^= channel9->fpdR << 13;
+-		channel9->fpdR ^= channel9->fpdR >> 17;
+-		channel9->fpdR ^= channel9->fpdR << 5;
+-		inputSampleR += (((double)channel9->fpdR - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
 -		//end 32 bit stereo floating point dither
 -
  		*out1 = (float) inputSampleL;
@@ -1844,6 +1841,80 @@ index 4c27ce7..7ee0c90 100644
  		*out1 = (float) mid;
  		*out2 = (float) side;
  
+diff --git a/src/MoNoam/MoNoam.c b/src/MoNoam/MoNoam.c
+index 8c9a33b..b59a4bc 100644
+--- a/src/MoNoam/MoNoam.c
++++ b/src/MoNoam/MoNoam.c
+@@ -3,6 +3,7 @@
+ #include <math.h>
+ #include <stdint.h>
+ #include <stdlib.h>
++#include "../optimizations.h"
+ 
+ #define MONOAM_URI "https://hannesbraun.net/ns/lv2/airwindows/monoam"
+ 
+@@ -27,14 +28,11 @@ typedef struct {
+ 	const float* input[2];
+ 	float* output[2];
+ 	const float* monotor;
+-
+-	uint32_t fpdL;
+-	uint32_t fpdR;
+ } MoNoam;
+ 
+ static LV2_Handle instantiate(
+ 	const LV2_Descriptor* descriptor,
+-	double rate,
++	realdouble rate,
+ 	const char* bundle_path,
+ 	const LV2_Feature* const* features)
+ {
+@@ -65,14 +63,7 @@ static void connect_port(LV2_Handle instance, uint32_t port, void* data)
+ 	}
+ }
+ 
+-static void activate(LV2_Handle instance)
+-{
+-	MoNoam* moNoam = (MoNoam*) instance;
+-	moNoam->fpdL = 1.0;
+-	while (moNoam->fpdL < 16386) moNoam->fpdL = rand() * UINT32_MAX;
+-	moNoam->fpdR = 1.0;
+-	while (moNoam->fpdR < 16386) moNoam->fpdR = rand() * UINT32_MAX;
+-}
++static void activate(LV2_Handle instance) {}
+ 
+ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ {
+@@ -93,8 +84,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 	while (sampleFrames-- > 0) {
+ 		double inputSampleL = *in1;
+ 		double inputSampleR = *in2;
+-		if (fabs(inputSampleL) < 1.18e-23) inputSampleL = moNoam->fpdL * 1.18e-17;
+-		if (fabs(inputSampleR) < 1.18e-23) inputSampleR = moNoam->fpdR * 1.18e-17;
+ 
+ 		double mid;
+ 		mid = inputSampleL + inputSampleR;
+@@ -117,20 +106,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 			inputSampleR = *in2;
+ 		}
+ 
+-		//begin 32 bit stereo floating point dither
+-		int expon;
+-		frexpf((float)inputSampleL, &expon);
+-		moNoam->fpdL ^= moNoam->fpdL << 13;
+-		moNoam->fpdL ^= moNoam->fpdL >> 17;
+-		moNoam->fpdL ^= moNoam->fpdL << 5;
+-		inputSampleL += (((double)moNoam->fpdL - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		frexpf((float)inputSampleR, &expon);
+-		moNoam->fpdR ^= moNoam->fpdR << 13;
+-		moNoam->fpdR ^= moNoam->fpdR >> 17;
+-		moNoam->fpdR ^= moNoam->fpdR << 5;
+-		inputSampleR += (((double)moNoam->fpdR - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		//end 32 bit stereo floating point dither
+-
+ 		*out1 = (float) inputSampleL;
+ 		*out2 = (float) inputSampleR;
+ 
 diff --git a/src/Mojo/Mojo.c b/src/Mojo/Mojo.c
 index ee39090..d8ef7cf 100644
 --- a/src/Mojo/Mojo.c
@@ -2123,6 +2194,142 @@ index 0ea5c79..e16c291 100644
 -		pressure5->fpdR ^= pressure5->fpdR >> 17;
 -		pressure5->fpdR ^= pressure5->fpdR << 5;
 -		inputSampleR += (((double)pressure5->fpdR - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		//end 32 bit stereo floating point dither
+-
+ 		*out1 = (float) inputSampleL;
+ 		*out2 = (float) inputSampleR;
+ 
+diff --git a/src/PurestConsole2Buss/PurestConsole2Buss.c b/src/PurestConsole2Buss/PurestConsole2Buss.c
+index bd444ec..75c6163 100644
+--- a/src/PurestConsole2Buss/PurestConsole2Buss.c
++++ b/src/PurestConsole2Buss/PurestConsole2Buss.c
+@@ -3,6 +3,7 @@
+ #include <math.h>
+ #include <stdint.h>
+ #include <stdlib.h>
++#include "../optimizations.h"
+ 
+ #define PURESTCONSOLE2BUSS_URI "https://hannesbraun.net/ns/lv2/airwindows/purestconsole2buss"
+ 
+@@ -19,13 +20,11 @@ typedef struct {
+ 	float* output[2];
+ 
+ 	double biquadA[15];
+-	uint32_t fpdL;
+-	uint32_t fpdR;
+ } PurestConsole2Buss;
+ 
+ static LV2_Handle instantiate(
+ 	const LV2_Descriptor* descriptor,
+-	double rate,
++	realdouble rate,
+ 	const char* bundle_path,
+ 	const LV2_Feature* const* features)
+ {
+@@ -60,10 +59,6 @@ static void activate(LV2_Handle instance)
+ 	for (int x = 0; x < 15; x++) {
+ 		purestConsole2Buss->biquadA[x] = 0.0;
+ 	}
+-	purestConsole2Buss->fpdL = 1.0;
+-	while (purestConsole2Buss->fpdL < 16386) purestConsole2Buss->fpdL = rand() * UINT32_MAX;
+-	purestConsole2Buss->fpdR = 1.0;
+-	while (purestConsole2Buss->fpdR < 16386) purestConsole2Buss->fpdR = rand() * UINT32_MAX;
+ }
+ 
+ static void run(LV2_Handle instance, uint32_t sampleFrames)
+@@ -89,8 +84,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 	while (sampleFrames-- > 0) {
+ 		double inputSampleL = *in1;
+ 		double inputSampleR = *in2;
+-		if (fabs(inputSampleL) < 1.18e-23) inputSampleL = purestConsole2Buss->fpdL * 1.18e-17;
+-		if (fabs(inputSampleR) < 1.18e-23) inputSampleR = purestConsole2Buss->fpdR * 1.18e-17;
+ 
+ 		if (purestConsole2Buss->biquadA[0] < 0.49999) {
+ 			double tempSample = purestConsole2Buss->biquadA[2] * inputSampleL + purestConsole2Buss->biquadA[3] * purestConsole2Buss->biquadA[7] + purestConsole2Buss->biquadA[4] * purestConsole2Buss->biquadA[8] - purestConsole2Buss->biquadA[5] * purestConsole2Buss->biquadA[9] - purestConsole2Buss->biquadA[6] * purestConsole2Buss->biquadA[10];
+@@ -117,20 +110,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 		inputSampleR = asin(inputSampleR);
+ 		//amplitude aspect
+ 
+-		//begin 32 bit stereo floating point dither
+-		int expon;
+-		frexpf((float)inputSampleL, &expon);
+-		purestConsole2Buss->fpdL ^= purestConsole2Buss->fpdL << 13;
+-		purestConsole2Buss->fpdL ^= purestConsole2Buss->fpdL >> 17;
+-		purestConsole2Buss->fpdL ^= purestConsole2Buss->fpdL << 5;
+-		inputSampleL += (((double)purestConsole2Buss->fpdL - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		frexpf((float)inputSampleR, &expon);
+-		purestConsole2Buss->fpdR ^= purestConsole2Buss->fpdR << 13;
+-		purestConsole2Buss->fpdR ^= purestConsole2Buss->fpdR >> 17;
+-		purestConsole2Buss->fpdR ^= purestConsole2Buss->fpdR << 5;
+-		inputSampleR += (((double)purestConsole2Buss->fpdR - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		//end 32 bit stereo floating point dither
+-
+ 		*out1 = (float) inputSampleL;
+ 		*out2 = (float) inputSampleR;
+ 
+diff --git a/src/PurestConsole2Channel/PurestConsole2Channel.c b/src/PurestConsole2Channel/PurestConsole2Channel.c
+index 32c7d35..37ed37a 100644
+--- a/src/PurestConsole2Channel/PurestConsole2Channel.c
++++ b/src/PurestConsole2Channel/PurestConsole2Channel.c
+@@ -3,6 +3,7 @@
+ #include <math.h>
+ #include <stdint.h>
+ #include <stdlib.h>
++#include "../optimizations.h"
+ 
+ #define PURESTCONSOLE2CHANNEL_URI "https://hannesbraun.net/ns/lv2/airwindows/purestconsole2channel"
+ 
+@@ -19,13 +20,11 @@ typedef struct {
+ 	float* output[2];
+ 
+ 	double biquadA[15];
+-	uint32_t fpdL;
+-	uint32_t fpdR;
+ } PurestConsole2Channel;
+ 
+ static LV2_Handle instantiate(
+ 	const LV2_Descriptor* descriptor,
+-	double rate,
++	realdouble rate,
+ 	const char* bundle_path,
+ 	const LV2_Feature* const* features)
+ {
+@@ -61,10 +60,6 @@ static void activate(LV2_Handle instance)
+ 	for (int x = 0; x < 15; x++) {
+ 		purestConsole2Channel->biquadA[x] = 0.0;
+ 	}
+-	purestConsole2Channel->fpdL = 1.0;
+-	while (purestConsole2Channel->fpdL < 16386) purestConsole2Channel->fpdL = rand() * UINT32_MAX;
+-	purestConsole2Channel->fpdR = 1.0;
+-	while (purestConsole2Channel->fpdR < 16386) purestConsole2Channel->fpdR = rand() * UINT32_MAX;
+ }
+ 
+ static void run(LV2_Handle instance, uint32_t sampleFrames)
+@@ -90,8 +85,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 	while (sampleFrames-- > 0) {
+ 		double inputSampleL = *in1;
+ 		double inputSampleR = *in2;
+-		if (fabs(inputSampleL) < 1.18e-23) inputSampleL = purestConsole2Channel->fpdL * 1.18e-17;
+-		if (fabs(inputSampleR) < 1.18e-23) inputSampleR = purestConsole2Channel->fpdR * 1.18e-17;
+ 
+ 		if (purestConsole2Channel->biquadA[0] < 0.49999) {
+ 			double tempSample = purestConsole2Channel->biquadA[2] * inputSampleL + purestConsole2Channel->biquadA[3] * purestConsole2Channel->biquadA[7] + purestConsole2Channel->biquadA[4] * purestConsole2Channel->biquadA[8] - purestConsole2Channel->biquadA[5] * purestConsole2Channel->biquadA[9] - purestConsole2Channel->biquadA[6] * purestConsole2Channel->biquadA[10];
+@@ -117,20 +110,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 		inputSampleR = sin(inputSampleR);
+ 		//amplitude aspect
+ 
+-		//begin 32 bit stereo floating point dither
+-		int expon;
+-		frexpf((float)inputSampleL, &expon);
+-		purestConsole2Channel->fpdL ^= purestConsole2Channel->fpdL << 13;
+-		purestConsole2Channel->fpdL ^= purestConsole2Channel->fpdL >> 17;
+-		purestConsole2Channel->fpdL ^= purestConsole2Channel->fpdL << 5;
+-		inputSampleL += (((double)purestConsole2Channel->fpdL - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		frexpf((float)inputSampleR, &expon);
+-		purestConsole2Channel->fpdR ^= purestConsole2Channel->fpdR << 13;
+-		purestConsole2Channel->fpdR ^= purestConsole2Channel->fpdR >> 17;
+-		purestConsole2Channel->fpdR ^= purestConsole2Channel->fpdR << 5;
+-		inputSampleR += (((double)purestConsole2Channel->fpdR - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
 -		//end 32 bit stereo floating point dither
 -
  		*out1 = (float) inputSampleL;
@@ -2891,9 +3098,78 @@ index 2231697..29d91be 100644
  		*out1 = (float) inputSampleL;
  		*out2 = (float) inputSampleR;
  
+diff --git a/src/Vibrato/Vibrato.c b/src/Vibrato/Vibrato.c
+index 8f63069..551d6d1 100644
+--- a/src/Vibrato/Vibrato.c
++++ b/src/Vibrato/Vibrato.c
+@@ -4,6 +4,7 @@
+ #include <stdbool.h>
+ #include <stdint.h>
+ #include <stdlib.h>
++#include "../optimizations.h"
+ 
+ #define VIBRATO_URI "https://hannesbraun.net/ns/lv2/airwindows/vibrato"
+ 
+@@ -44,13 +45,11 @@ typedef struct {
+ 	double airFactorR;
+ 
+ 	bool flip;
+-	uint32_t fpdL;
+-	uint32_t fpdR;
+ } Vibrato;
+ 
+ static LV2_Handle instantiate(
+ 	const LV2_Descriptor* descriptor,
+-	double rate,
++	realdouble rate,
+ 	const char* bundle_path,
+ 	const LV2_Feature* const* features)
+ {
+@@ -115,11 +114,6 @@ static void activate(LV2_Handle instance)
+ 	vibrato->airFactorR = 0.0;
+ 
+ 	vibrato->flip = false;
+-
+-	vibrato->fpdL = 1.0;
+-	while (vibrato->fpdL < 16386) vibrato->fpdL = rand() * UINT32_MAX;
+-	vibrato->fpdR = 1.0;
+-	while (vibrato->fpdR < 16386) vibrato->fpdR = rand() * UINT32_MAX;
+ }
+ 
+ static void run(LV2_Handle instance, uint32_t sampleFrames)
+@@ -141,8 +135,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 	while (sampleFrames-- > 0) {
+ 		double inputSampleL = *in1;
+ 		double inputSampleR = *in2;
+-		if (fabs(inputSampleL) < 1.18e-23) inputSampleL = vibrato->fpdL * 1.18e-17;
+-		if (fabs(inputSampleR) < 1.18e-23) inputSampleR = vibrato->fpdR * 1.18e-17;
+ 		double drySampleL = inputSampleL;
+ 		double drySampleR = inputSampleR;
+ 
+@@ -219,20 +211,6 @@ static void run(LV2_Handle instance, uint32_t sampleFrames)
+ 		}
+ 		//Inv/Dry/Wet control
+ 
+-		//begin 32 bit stereo floating point dither
+-		int expon;
+-		frexpf((float)inputSampleL, &expon);
+-		vibrato->fpdL ^= vibrato->fpdL << 13;
+-		vibrato->fpdL ^= vibrato->fpdL >> 17;
+-		vibrato->fpdL ^= vibrato->fpdL << 5;
+-		inputSampleL += (((double)vibrato->fpdL - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		frexpf((float)inputSampleR, &expon);
+-		vibrato->fpdR ^= vibrato->fpdR << 13;
+-		vibrato->fpdR ^= vibrato->fpdR >> 17;
+-		vibrato->fpdR ^= vibrato->fpdR << 5;
+-		inputSampleR += (((double)vibrato->fpdR - (uint32_t)0x7fffffff) * 5.5e-36l * pow(2, expon + 62));
+-		//end 32 bit stereo floating point dither
+-
+ 		*out1 = (float) inputSampleL;
+ 		*out2 = (float) inputSampleR;
+ 
 diff --git a/src/optimizations.h b/src/optimizations.h
 new file mode 100644
-index 0000000..8670aea
+index 0000000..1f6516b
 --- /dev/null
 +++ b/src/optimizations.h
 @@ -0,0 +1,25 @@
