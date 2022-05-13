@@ -12,7 +12,6 @@ X42_ZCONVO_BUNDLES = zeroconvo.lv2
 X42_ZCONVO_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) OPTIMIZATIONS="-fno-finite-math-only -DNDEBUG" PREFIX=/usr -C $(@D)
 
 define X42_ZCONVO_BUILD_CMDS
-	cp -rL $($(PKG)_PKGDIR)/mod-semaphore.h $(@D)/src/
 	$(X42_ZCONVO_TARGET_MAKE)
 endef
 
