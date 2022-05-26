@@ -89,11 +89,11 @@ index eeb27c0..78051dd 100644
 +	_n_samples = std::min(256u, block_size);        // buffer-size <= 256
 +	n_part     = std::min(8192u, block_size * 32u); // 128 + 256 + 1024 + 4096 or 256 + 512 + 2048 + 8192
 +#elif defined(_MOD_DEVICE_DWARF)
-+	_n_samples = std::min(512u, block_size * 2u);   // buffer-size * 2, so either 256 or 512
-+	n_part     = std::min(8192u, block_size * 32u); // 256 + 1024 + 4096 or 256 + 2048 + 8192
++	_n_samples = std::min(256u, block_size);        // buffer-size <= 256
++	n_part     = std::min(8192u, block_size * 32u); // 128 + 256 + 1024 + 4096 or 256 + 512 + 2048 + 8192
 +#elif defined(_MOD_DEVICE_DUO)
-+	_n_samples = std::min(1024u, block_size * 4u);  // buffer-size * 4, so either 512 or 1024
-+	n_part     = std::min(8192u, block_size * 32u); // 512 + 4096 or 1024 + 8192
++	_n_samples = std::min(512u, block_size * 2u);   // buffer-size * 2, so either 256 or 512
++	n_part     = std::min(8192u, block_size * 32u); // 256 + 2048 + 8192 or 512 + 4096 + 16384
 +#else
 +#error Unknown MOD device model
 +#endif
@@ -229,7 +229,7 @@ index beba60c..45bb276 100644
 +// #undef _MOD_DEVICE_X86_64
 +// #define _MOD_DEVICE_DWARF
 +
-+#if defined(_MOD_DEVICE_DUO) || defined(_MOD_DEVICE_DWARF)
++#if defined(_MOD_DEVICE_DUO)
 +#define BUFFERED_CONVOLVER
 +#endif
 +
@@ -413,11 +413,11 @@ index 666e56e..ada79fb 100644
 +		MAXINP   = 2,
 +		MAXOUT   = 2,
 +#if defined(_MOD_DEVICE_X86_64) || defined(_MOD_DEVICE_RASPBERRYPI4) || defined(_MOD_DEVICE_DUOX)
-+		MAXLEV   = 4,
++		MAXLEV   = 5,
 +#elif defined(_MOD_DEVICE_DWARF)
-+		MAXLEV   = 3,
++		MAXLEV   = 4,
 +#elif defined(_MOD_DEVICE_DUO)
-+		MAXLEV   = 2,
++		MAXLEV   = 3,
 +#else
 +#error Unknown MOD device model
 +#endif
