@@ -4,10 +4,13 @@
 #
 ######################################
 
-DRAGONFLY_REVERB_VERSION = 73774a742a72fefb8da59471fc10a01913b092ae
+DRAGONFLY_REVERB_VERSION = 3d1e043524fcef5102cbb8362cc948abab106240
 DRAGONFLY_REVERB_SITE = https://github.com/michaelwillis/dragonfly-reverb.git
+DRAGONFLY_REVERB_SITE = https://github.com/falkTX/dragonfly-reverb.git
 DRAGONFLY_REVERB_SITE_METHOD = git
 DRAGONFLY_REVERB_BUNDLES = DragonflyEarlyReflections.lv2 DragonflyHallReverb.lv2 DragonflyPlateReverb.lv2 DragonflyRoomReverb.lv2
+
+# DISABLE_UNDENORMAL
 
 # needed for submodules support
 DRAGONFLY_REVERB_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
