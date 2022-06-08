@@ -26,6 +26,7 @@ define AIRWINDOWS_INSTALL_TARGET_CMDS
 		echo "a lv2:Plugin ; lv2:binary <$$pl.so> ; rdfs:seeAlso <$$pl.ttl> ." >> $(@D)/bundles/Airwindows-$$pl.lv2/manifest.ttl; \
 	done)
 	cp -rL $(@D)/bundles/*.lv2 $(TARGET_DIR)/usr/lib/lv2/
+	cp -rL $($(PKG)_PKGDIR)/Airwindows-StarChild.lv2/* $(TARGET_DIR)/usr/lib/lv2/Airwindows-StarChild.lv2/
 endef
 
 $(eval $(cmake-package))
