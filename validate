@@ -97,6 +97,8 @@ for bundle in ${bundles[@]}; do
         "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/kx-*/*.ttl" \
         "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/mod.lv2/*.ttl" \
         "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/modgui.lv2/*.ttl" \
+        "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/mod-hmi.lv2/*.ttl" \
+        "${WORKDIR}/${PLATFORM}/target/usr/lib/lv2/mod-license.lv2/*.ttl" \
         "/tmp/mpb-plugin-check/${bundle}/*.ttl"
 done
 
