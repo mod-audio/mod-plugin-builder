@@ -4,7 +4,7 @@
 #
 ######################################
 
-DRAGONFLY_REVERB_VERSION = 3d1e043524fcef5102cbb8362cc948abab106240
+DRAGONFLY_REVERB_VERSION = 582b9c65248023f710ae3245951fff678d38c3a2
 DRAGONFLY_REVERB_SITE = https://github.com/michaelwillis/dragonfly-reverb.git
 DRAGONFLY_REVERB_SITE = https://github.com/falkTX/dragonfly-reverb.git
 DRAGONFLY_REVERB_SITE_METHOD = git
