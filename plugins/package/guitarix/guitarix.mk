@@ -58,8 +58,6 @@ define GUITARIX_INSTALL_TARGET_CMDS
 	cp -rL $($(PKG)_PKGDIR)/gx_room_simulator.lv2/*      $(TARGET_DIR)/usr/lib/lv2/gx_room_simulator.lv2/
 	cp -rL $($(PKG)_PKGDIR)/gx_scream.lv2/*              $(TARGET_DIR)/usr/lib/lv2/gx_scream.lv2/
 	cp -rL $($(PKG)_PKGDIR)/gx_shimmizita.lv2/*          $(TARGET_DIR)/usr/lib/lv2/gx_shimmizita.lv2/
-	cp -rL $($(PKG)_PKGDIR)/gx_studiopre.lv2/*           $(TARGET_DIR)/usr/lib/lv2/gx_studiopre.lv2/
-	cp -rL $($(PKG)_PKGDIR)/gx_studiopre_st.lv2/*        $(TARGET_DIR)/usr/lib/lv2/gx_studiopre_st.lv2/
 	cp -rL $($(PKG)_PKGDIR)/gx_susta.lv2/*               $(TARGET_DIR)/usr/lib/lv2/gx_susta.lv2/
 	cp -rL $($(PKG)_PKGDIR)/gx_switched_tremolo.lv2/*    $(TARGET_DIR)/usr/lib/lv2/gx_switched_tremolo.lv2/
 	cp -rL $($(PKG)_PKGDIR)/gxbooster.lv2/*              $(TARGET_DIR)/usr/lib/lv2/gxbooster.lv2/
