@@ -164,7 +164,6 @@ if [ "${BUILDTARGET}" = "minimal" ]; then
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} liblo
-  ${BR2_MAKE} libmodla
   ${BR2_MAKE} lv2
   ${BR2_MAKE} kxstudio-lv2-extensions
   ${BR2_MAKE} mod-lv2-extensions
@@ -172,6 +171,8 @@ if [ "${BUILDTARGET}" = "minimal" ]; then
   if [ "${TOOLCHAIN_PLATFORM}" = "x86_64" ]; then
     ${BR2_MAKE} carla-backend
     ${BR2_MAKE} valgrind
+  else
+    ${BR2_MAKE} libmodla
   fi
 elif [ "${BUILDTARGET}" = "juce" ]; then
   ${BR2_MAKE} fftw-double
