@@ -30,35 +30,35 @@ source .common
 #######################################################################################################################
 # download and extract crosstool-ng
 
-if [ ! -f ${BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
+if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
   if [ ! -f ${DOWNLOAD_DIR}/${CT_NG_FILE} ]; then
     wget ${CT_NG_LINK}/${CT_NG_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_FILE}
   fi
 
-  mkdir -p ${BUILD_DIR}/${CT_NG_VERSION}
-  tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
+  mkdir -p ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}
+  tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
 
   if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ]; then
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_bash5-compat.patch
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_binutils-2.26.patch
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/003_linaro-2017.01.patch
+    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_bash5-compat.patch
+    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_binutils-2.26.patch
+    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/003_linaro-2017.01.patch
 
-    cp -r ${SOURCE_DIR}/patches/${CT_NG_VERSION}/bin-utils-2.26    ${BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/2.26
-    cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-4.9.3/*.patch ${BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/4.9.3/
+    cp -r ${SOURCE_DIR}/patches/${CT_NG_VERSION}/bin-utils-2.26    ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/2.26
+    cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-4.9.3/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/4.9.3/
 
   elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.24.0" ]; then
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_linaro-2019.12.patch
-    patch -d ${BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_linaro-gcc7-selects.patch
+    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_linaro-2019.12.patch
+    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_linaro-gcc7-selects.patch
   fi
 fi
 
 #######################################################################################################################
 # build crosstool-ng
 
-cd ${BUILD_DIR}/${CT_NG_VERSION}
+cd ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}
 
 if [ ! -f .config ]; then
-  cp ${SOURCE_DIR}/toolchain/${PLATFORM}.config .config
+  cp ${SOURCE_DIR}/toolchain/${TOOLCHAIN_PLATFORM}.config .config
   sed -i -e "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
   sed -i -e "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
 fi
@@ -81,9 +81,9 @@ if [ ! -f .stamp_built1 ]; then
 fi
 
 # for static targets: keep old name for backwards compatibility, plus add static suffix
-if [ "${PLATFORM}" == "modduo-static" ]; then
+if [ "${TOOLCHAIN_PLATFORM}" == "modduo-static" ]; then
   sed -i -e 's/CT_TARGET_SYS="${CT_TARGET_SYS}hf"/CT_TARGET_SYS="${CT_TARGET_SYS}hf.static"/' scripts/build/arch/arm.sh
-elif [ "${PLATFORM}" == "modduox-static" ]; then
+elif [ "${TOOLCHAIN_PLATFORM}" == "modduox-static" ]; then
   sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
 fi
 

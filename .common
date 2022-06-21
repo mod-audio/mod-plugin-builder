@@ -81,13 +81,20 @@ SOURCE_DIR=$("${readlink}" -f $(dirname $0))
 BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}/plugins-dep"
 BR2_TARGET=${WORKDIR}/${PLATFORM}/target
 
+if [[ "${PLATFORM}" == *"-debug" ]]; then
+    TOOLCHAIN_PLATFORM="$(echo ${PLATFORM} | sed 's/-debug//')"
+else
+    TOOLCHAIN_PLATFORM="${PLATFORM}"
+fi
+
 #######################################################################################################################
 # setup directories
 
 BUILD_DIR=${WORKDIR}/${PLATFORM}/build
 DOWNLOAD_DIR=${WORKDIR}/download
 PLUGINS_DIR=${WORKDIR}/${PLATFORM}/plugins
-TOOLCHAIN_DIR=${WORKDIR}/${PLATFORM}/toolchain
+TOOLCHAIN_DIR=${WORKDIR}/${TOOLCHAIN_PLATFORM}/toolchain
+TOOLCHAIN_BUILD_DIR=${WORKDIR}/${TOOLCHAIN_PLATFORM}/build
 
 mkdir -p ${BUILD_DIR}
 mkdir -p ${DOWNLOAD_DIR}
