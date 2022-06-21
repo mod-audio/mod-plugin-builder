@@ -1,29 +1,21 @@
 #!/bin/bash
 
+cd $(dirname ${0})
+
 #######################################################################################################################
 # check arguments
 
 PLATFORM=${1}
 BUILDTARGET=${2}
 
-if [ -z "${PLATFORM}" ]; then
-  echo "Usage: $0 <platform>"
-  echo "  Where platform can be modduo[-static], modduox[-static], moddwarf or x86_64"
+if [ -z "${PLATFORM}" ] || [ ! -e "plugins-dep/configs/${PLATFORM}_defconfig" ]; then
+  echo "Usage: $0 <platform> [build-target]"
+  echo "  Where platform can be one of: $(echo $(ls plugins-dep/configs | grep _defconfig | sed 's/_defconfig//g' | sort))"
   exit 1
-fi
-
-if [ -n "${BUILDTARGET}" ]; then
-  if [ "${BUILDTARGET}" != "all" ] && [ "${BUILDTARGET}" != "juce" ] && [ "${BUILDTARGET}" != "minimal" ] && [ "${BUILDTARGET}" != "toolchain" ]; then
-    echo "Usage: $0 <platform> [build-target]"
-    echo "  Where build-target can be minimal, toolchain or all"
-    exit 1
-  fi
 fi
 
 #######################################################################################################################
 # Import common code and variables
-
-cd $(dirname ${0})
 
 source .common
 

@@ -2,22 +2,23 @@
 
 set -e
 
+cd $(dirname ${0})
+
 #######################################################################################################################
 # check arguments
 
 PLATFORM="${1}"
 DOCKER_IMAGE="${2}"
 
-if [[ "${PLATFORM}" == "" ]] || [[ "${DOCKER_IMAGE}" == "" ]]; then
+if [ -z "${PLATFORM}" ] || [ -z "${DOCKER_IMAGE}" ] || [ ! -e "plugins-dep/configs/${PLATFORM}_defconfig" ]; then
   echo "Usage: $0 <platform> <docker-image>"
-  echo "  Where platform can be modduo[-static], modduox[-static], moddwarf or x86_64"
+  echo "  Where platform can be one of: $(echo $(ls plugins-dep/configs | grep _defconfig | sed 's/_defconfig//g' | sort))"
   exit 1
 fi
 
 #######################################################################################################################
 # Import common code and variables
 
-cd $(dirname ${0})
 source .common
 
 #######################################################################################################################
