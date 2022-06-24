@@ -179,6 +179,11 @@ elif [ "${BUILDTARGET}" = "juce" ]; then
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} juce
   ${BR2_MAKE} mod-plugin-builder
+elif [ "${BUILDTARGET}" = "dev" ]; then
+  ${BR2_MAKE} host-python
+  # for cc-master
+  ${BR2_MAKE} jansson
+  ${BR2_MAKE} libserialport
 elif [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
 fi
