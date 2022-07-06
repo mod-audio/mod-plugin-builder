@@ -4,7 +4,7 @@
 #
 ######################################
 
-SFIZZ_LABS_VERSION = 0eceacee861ee9328f07e8672ded3f79f792441e
+SFIZZ_LABS_VERSION = 77fbfa50392d10ea7907b687d75986a36adadb88
 SFIZZ_LABS_SITE = https://github.com/sfztools/sfizz.git
 SFIZZ_LABS_SITE_METHOD = git
 SFIZZ_LABS_DEPENDENCIES = host-cmake
