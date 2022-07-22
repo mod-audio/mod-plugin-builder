@@ -13,7 +13,7 @@ ZAM_PLUGINS_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAK
 # needed for git submodules
 define ZAM_PLUGINS_LABS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/zamaudio/zam-plugins $(@D)
+	git clone --recursive https://github.com/zamaudio/zam-plugins.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(ZAM_PLUGINS_LABS_VERSION) && \
 		git submodule update)

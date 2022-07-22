@@ -10,7 +10,7 @@ BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
 BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a53 -mtune=cortex-a53 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -ffast-math -fno-finite-math-only -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DUOX -static-libstdc++ -Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
+BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a53 -mtune=cortex-a53 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -ftree-vectorize -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DUOX -static-libstdc++ -Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
 BR2_TARGET_LDFLAGS="-static-libstdc++ -Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
 BR2_TARGET_GENERIC_HOSTNAME=""
 BR2_TARGET_GENERIC_ISSUE=""
@@ -21,18 +21,13 @@ BR2_ROOTFS_STATIC_DEVICE_TABLE=""
 BR2_ROOTFS_SKELETON_CUSTOM=y
 BR2_ROOTFS_SKELETON_CUSTOM_PATH="/tmp/skeleton"
 # BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XLIB_LIBXCURSOR=y
-BR2_PACKAGE_XLIB_LIBXINERAMA=y
-BR2_PACKAGE_XLIB_LIBXRANDR=y
-BR2_PACKAGE_ALSA_LIB=y
 BR2_PACKAGE_LIBLO=y
-BR2_PACKAGE_FREETYPE=y
 BR2_PACKAGE_FFTW=y
 BR2_PACKAGE_FFTW_SINGLE=y
 BR2_PACKAGE_FFTW_DOUBLE=y
 BR2_PACKAGE_FFTW_FAST=y
 # BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_JUCE6=y
 BR2_PACKAGE_KXSTUDIO_LV2_EXTENSIONS=y
 BR2_PACKAGE_LIBMODLA=y
 BR2_PACKAGE_LV2=y

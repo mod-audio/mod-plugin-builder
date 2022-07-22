@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-JACK2MOD_VERSION = 852ba2b8ebc944865e75d8eb5d4550d408772f3b
+JACK2MOD_VERSION = 58194d90f4321e0a8a0fbc5708a637e13f77159a
 JACK2MOD_SITE = $(call github,jackaudio,jack2,$(JACK2MOD_VERSION))
 JACK2MOD_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
 JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib opus-custom host-python

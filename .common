@@ -40,6 +40,15 @@ if [ -z "${PLATFORM}" ]; then
 fi
 
 #######################################################################################################################
+# check for debug builds
+
+if [[ "${PLATFORM}" == *"-debug" ]]; then
+    TOOLCHAIN_PLATFORM="$(echo ${PLATFORM} | sed 's/-debug//')"
+else
+    TOOLCHAIN_PLATFORM="${PLATFORM}"
+fi
+
+#######################################################################################################################
 # check for readlink binary
 
 if [ -f "/opt/local/bin/greadlink" ]; then
@@ -62,7 +71,7 @@ fi
 
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
 
-if [ "${PLATFORM}" == "modduo" ] || [ "${PLATFORM}" == "modduox" ]; then
+if [ "${TOOLCHAIN_PLATFORM}" == "modduo" ] || [ "${TOOLCHAIN_PLATFORM}" == "modduox" ]; then
     CT_NG_VERSION=crosstool-ng-1.22.0
 else
     CT_NG_VERSION=crosstool-ng-1.24.0
@@ -87,7 +96,8 @@ BR2_TARGET=${WORKDIR}/${PLATFORM}/target
 BUILD_DIR=${WORKDIR}/${PLATFORM}/build
 DOWNLOAD_DIR=${WORKDIR}/download
 PLUGINS_DIR=${WORKDIR}/${PLATFORM}/plugins
-TOOLCHAIN_DIR=${WORKDIR}/${PLATFORM}/toolchain
+TOOLCHAIN_DIR=${WORKDIR}/${TOOLCHAIN_PLATFORM}/toolchain
+TOOLCHAIN_BUILD_DIR=${WORKDIR}/${TOOLCHAIN_PLATFORM}/build
 
 mkdir -p ${BUILD_DIR}
 mkdir -p ${DOWNLOAD_DIR}

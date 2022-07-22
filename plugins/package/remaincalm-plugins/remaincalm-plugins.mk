@@ -13,7 +13,7 @@ REMAINCALM_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(M
 define REMAINCALM_PLUGINS_BUILD_CMDS
 	(cd $(@D) && \
 		[ ! -d dpf ] && \
-		git clone git://github.com/DISTRHO/DPF dpf --depth=1 && \
+		git clone https://github.com/DISTRHO/DPF.git dpf --depth=1 && \
 		ln -sf ../dpf avocado/dpf && \
 		ln -sf ../dpf floaty/dpf && \
 		ln -sf ../dpf mud/dpf && \

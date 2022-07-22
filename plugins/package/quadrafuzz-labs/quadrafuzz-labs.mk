@@ -13,7 +13,7 @@ QUADRAFUZZ_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE
 # needed for git submodules
 define QUADRAFUZZ_LABS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/jpcima/quadrafuzz $(@D)
+	git clone --recursive https://github.com/jpcima/quadrafuzz.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(QUADRAFUZZ_LABS_VERSION) && \
 		git submodule update)

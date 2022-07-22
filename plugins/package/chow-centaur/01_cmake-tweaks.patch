@@ -1,0 +1,57 @@
+diff --git a/ChowCentaur/CMakeLists.txt b/ChowCentaur/CMakeLists.txt
+index 0d6782f..7fdd0aa 100644
+--- a/ChowCentaur/CMakeLists.txt
++++ b/ChowCentaur/CMakeLists.txt
+@@ -17,6 +17,9 @@ if(TARGET juce_vst2_sdk)
+     list(APPEND JUCE_FORMATS VST)
+ endif()
+ 
++# MOD build
++set(JUCE_FORMATS LV2)
++
+ juce_add_plugin(ChowCentaur
+     COMPANY_NAME chowdsp
+     PLUGIN_MANUFACTURER_CODE Chow
+diff --git a/modules/CMakeLists.txt b/modules/CMakeLists.txt
+index 29f4a75..99a9465 100644
+--- a/modules/CMakeLists.txt
++++ b/modules/CMakeLists.txt
+@@ -1,9 +1,6 @@
+-add_subdirectory(JUCE)
++find_package(JUCE6 REQUIRED)
+ include(cmake/SubprojectVersion.cmake)
+-subproject_version(JUCE juce_version)
+-message(STATUS "VERSION for JUCE: ${juce_version}")
+ 
+-juce_add_modules(foleys_gui_magic)
+ juce_add_modules(chowdsp_utils)
+ add_subdirectory(RTNeural)
+ add_subdirectory(toms917)
+@@ -15,7 +12,6 @@ target_link_libraries(juce_plugin_modules
+         BinaryData
+         juce::juce_audio_utils
+         juce::juce_audio_plugin_client
+-        foleys_gui_magic
+         chowdsp_utils
+         RTNeural
+         toms917
+@@ -33,13 +29,17 @@ target_compile_definitions(juce_plugin_modules
+         JUCE_USE_CURL=0
+         JUCE_VST3_CAN_REPLACE_VST2=0
+         # JUCE_ASIO=1
+-        JUCE_JACK=1
+-        JUCE_ALSA=1
++        JUCE_JACK=0
++        JUCE_ALSA=0
++        CHOWDSP_USE_FOLEYS_CLASSES=0
+         FOLEYS_SHOW_GUI_EDITOR_PALLETTE=0
+         FOLEYS_ENABLE_BINARY_DATA=1
+         JucePlugin_Manufacturer="chowdsp"
+         JucePlugin_VersionString="${CMAKE_PROJECT_VERSION}"
+         JucePlugin_Name="${CMAKE_PROJECT_NAME}"
++        JucePlugin_WantsLV2Latency=0
++        JucePlugin_WantsLV2State=0
++        JucePlugin_WantsLV2TimePos=0
+     INTERFACE
+         $<TARGET_PROPERTY:juce_plugin_modules,COMPILE_DEFINITIONS>
+ )

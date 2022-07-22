@@ -13,7 +13,7 @@ MOD_AUDIO_MIXERS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAK
 # needed for git submodules
 define MOD_AUDIO_MIXERS_EXTRACT_CMDS
 	rm -rf $(@D)
-	git clone --recursive git://github.com/moddevices/mod-audio-mixer-lv2 $(@D)
+	git clone --recursive https://github.com/moddevices/mod-audio-mixer-lv2.git $(@D)
 	(cd $(@D) && \
 		git reset --hard $(MOD_AUDIO_MIXERS_VERSION) && \
 		git submodule update)

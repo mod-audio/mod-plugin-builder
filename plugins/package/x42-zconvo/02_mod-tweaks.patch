@@ -1,0 +1,431 @@
+diff --git a/src/audiosrc.cc b/src/audiosrc.cc
+index dfa1d8f..9256751 100644
+--- a/src/audiosrc.cc
++++ b/src/audiosrc.cc
+@@ -42,7 +42,7 @@ SrcSource::SrcSource (Readable* r, uint32_t target_rate)
+ 	}
+ 
+ 	int err;
+-	if (0 == (_src_state = src_new (SRC_SINC_BEST_QUALITY, 1, &err))) {
++	if (0 == (_src_state = src_new (SRC_SINC_FASTEST, 1, &err))) {
+ 		std::string msg (std::string ("Error: src_new failed. ") + std::string (src_strerror (err)));
+ 		throw std::runtime_error (msg);
+ 	}
+diff --git a/src/convolver.cc b/src/convolver.cc
+index eeb27c0..78051dd 100644
+--- a/src/convolver.cc
++++ b/src/convolver.cc
+@@ -26,6 +26,7 @@
+ 
+ using namespace ZeroConvoLV2;
+ 
++#ifdef BUFFERED_CONVOLVER
+ DelayLine::DelayLine ()
+ 	: _buf (0)
+ 	, _written (false)
+@@ -92,17 +93,18 @@ TimeDomainConvolver::TimeDomainConvolver ()
+ void
+ TimeDomainConvolver::reset ()
+ {
+-	memset (_ir, 0, 64 * sizeof (float));
++	memset (_ir, 0, sizeof (_ir));
+ 	_enabled = false;
+ }
+ 
+ void
+ TimeDomainConvolver::configure (Readable* r, float gain, uint32_t delay)
+ {
+-	if (delay >= 64) {
++	const uint32_t _ir_len = sizeof (_ir) / sizeof (float);
++	if (delay >= _ir_len) {
+ 		return;
+ 	}
+-	uint32_t to_read = std::min ((uint32_t)64, delay);
++	uint32_t to_read = std::min (_ir_len, delay);
+ 	uint32_t max_len = r->readable_length ();
+ 	if (delay < max_len) {
+ 		to_read = std::min (to_read, max_len - delay);
+@@ -114,7 +116,7 @@ TimeDomainConvolver::configure (Readable* r, float gain, uint32_t delay)
+ 	r->read (&_ir[delay], 0, to_read, 0);
+ 
+ 	if (gain != 1.f) {
+-		for (uint64_t i = delay; i < 64; ++i) {
++		for (uint32_t i = delay; i < _ir_len; ++i) {
+ 			_ir[i] *= gain;
+ 		}
+ 	}
+@@ -133,6 +135,7 @@ TimeDomainConvolver::run (float* out, float const* in, uint32_t n_samples) const
+ 		}
+ 	}
+ }
++#endif
+ 
+ Convolver::Convolver (std::string const& path,
+                       uint32_t           sample_rate,
+@@ -202,7 +205,7 @@ Convolver::~Convolver ()
+ }
+ 
+ void
+-Convolver::reconfigure (uint32_t block_size, bool threaded)
++Convolver::reconfigure (uint32_t block_size)
+ {
+ 	_convproc.stop_process ();
+ 	_convproc.cleanup ();
+@@ -211,16 +214,18 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 	assert (!_readables.empty ());
+ 
+ 	uint32_t n_part;
+-
+-	if (threaded) {
+-		_n_samples = 64;
+-		n_part     = Convproc::MAXPART;
+-	} else {
+-		uint32_t power_of_two;
+-		for (power_of_two = 1; 1U << power_of_two < block_size; ++power_of_two) ;
+-		_n_samples = 1 << power_of_two;
+-		n_part     = _n_samples;
+-	}
++#if defined(_MOD_DEVICE_X86_64) || defined(_MOD_DEVICE_RASPBERRYPI4) || defined(_MOD_DEVICE_DUOX)
++	_n_samples = std::min(256u, block_size);        // buffer-size <= 256
++	n_part     = std::min(8192u, block_size * 32u); // 128 + 256 + 1024 + 4096 or 256 + 512 + 2048 + 8192
++#elif defined(_MOD_DEVICE_DWARF)
++	_n_samples = std::min(256u, block_size);        // buffer-size <= 256
++	n_part     = std::min(8192u, block_size * 32u); // 128 + 256 + 1024 + 4096 or 256 + 512 + 2048 + 8192
++#elif defined(_MOD_DEVICE_DUO)
++	_n_samples = std::min(512u, block_size * 2u);   // buffer-size * 2, so either 256 or 512
++	n_part     = std::min(8192u, block_size * 32u); // 256 + 2048 + 8192 or 512 + 4096 + 16384
++#else
++#error Unknown MOD device model
++#endif
+ 
+ 	_offset   = 0;
+ 	_max_size = _readables[0]->readable_length ();
+@@ -229,7 +234,7 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 	    /*in*/  n_inputs (),
+ 	    /*out*/ n_outputs (),
+ 	    /*max-convolution length */ _max_size,
+-	    /*quantum, nominal-buffersize*/ _n_samples,
++	    /*quantum, nominal-buffersize*/ std::max(_n_samples, block_size),
+ 	    /*Convproc::MINPART*/ _n_samples,
+ 	    /*Convproc::MAXPART*/ n_part,
+ 	    /*density*/ 0);
+@@ -265,12 +270,14 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 
+ 	assert (n_imp <= 4);
+ 
++#ifdef BUFFERED_CONVOLVER
+ 	for (uint32_t i = 0; i < 4; ++i) {
+ 		_tdc[i].reset ();
+ 	}
+ 
+ 	_dly[0].reset (_n_samples);
+ 	_dly[1].reset (_n_samples);
++#endif
+ 
+ 	for (uint32_t c = 0; c < n_imp && rv == 0; ++c) {
+ 		int ir_c = c % n_chn;
+@@ -311,8 +318,10 @@ Convolver::reconfigure (uint32_t block_size, bool threaded)
+ 			continue;
+ 		}
+ 
++#ifdef BUFFERED_CONVOLVER
+ 		assert ((io_i * 2 + io_o) < 4);
+ 		_tdc[io_i * 2 + io_o].configure (r, chan_gain, chan_delay);
++#endif
+ 
+ 		uint32_t pos = 0;
+ 		while (true) {
+@@ -414,12 +423,13 @@ Convolver::output (float* dst, const float* src, uint32_t n) const
+ 	} else {
+ 		const float dry = _dry;
+ 		const float wet = _wet;
+-		for (uint64_t i = 0; i < n; ++i) {
++		for (uint32_t i = 0; i < n; ++i) {
+ 			dst[i] = dry * dst[i] + wet * src[i];
+ 		}
+ 	}
+ }
+ 
++#ifdef BUFFERED_CONVOLVER
+ void
+ Convolver::run_buffered_mono (float* buf, uint32_t n_samples)
+ {
+@@ -496,6 +506,7 @@ Convolver::run_buffered_stereo (float* left, float* right, uint32_t n_samples)
+ 		}
+ 	}
+ }
++#endif
+ 
+ void
+ Convolver::run_mono (float* buf, uint32_t n_samples)
+@@ -514,12 +525,18 @@ Convolver::run_mono (float* buf, uint32_t n_samples)
+ 
+ 		memcpy (&in[_offset], &buf[done], sizeof (float) * ns);
+ 
+-		if (_offset + ns == _n_samples) {
++#ifdef BUFFERED_CONVOLVER
++		if (_offset + ns == _n_samples)
++#endif
++		{
+ 			_convproc.process ();
+ 			interpolate_gain ();
+ 			output (&buf[done], &out[_offset], ns);
+ 			_offset = 0;
+-		} else {
++		}
++#ifdef BUFFERED_CONVOLVER
++		else
++		{
+ 			assert (remain == ns);
+ 			_convproc.tailonly (_offset + ns);
+ 			_tdc[0].run (&out[_offset], &buf[done], ns);
+@@ -527,6 +544,7 @@ Convolver::run_mono (float* buf, uint32_t n_samples)
+ 			output (&buf[done], &out[_offset], ns);
+ 			_offset += ns;
+ 		}
++#endif
+ 		done   += ns;
+ 		remain -= ns;
+ 	}
+@@ -552,13 +570,19 @@ Convolver::run_stereo (float* left, float* right, uint32_t n_samples)
+ 			memcpy (&_convproc.inpdata (1)[_offset], &right[done], sizeof (float) * ns);
+ 		}
+ 
+-		if (_offset + ns == _n_samples) {
++#ifdef BUFFERED_CONVOLVER
++		if (_offset + ns == _n_samples)
++#endif
++		{
+ 			_convproc.process ();
+ 			interpolate_gain ();
+ 			output (&left[done],  &outL[_offset], ns);
+ 			output (&right[done], &outR[_offset], ns);
+ 			_offset = 0;
+-		} else {
++		}
++#ifdef BUFFERED_CONVOLVER
++		else
++		{
+ 			assert (remain == ns);
+ 			_convproc.tailonly (_offset + ns);
+ 
+@@ -575,6 +599,7 @@ Convolver::run_stereo (float* left, float* right, uint32_t n_samples)
+ 			output (&right[done], &outR[_offset], ns);
+ 			_offset += ns;
+ 		}
++#endif
+ 		done   += ns;
+ 		remain -= ns;
+ 	}
+diff --git a/src/convolver.h b/src/convolver.h
+index beba60c..45bb276 100644
+--- a/src/convolver.h
++++ b/src/convolver.h
+@@ -18,6 +18,14 @@
+ 
+ #pragma once
+ 
++// for testing
++// #undef _MOD_DEVICE_X86_64
++// #define _MOD_DEVICE_DWARF
++
++#if defined(_MOD_DEVICE_DUO)
++#define BUFFERED_CONVOLVER
++#endif
++
+ #include <string>
+ #include <vector>
+ 
+@@ -26,6 +34,7 @@
+ 
+ namespace ZeroConvoLV2
+ {
++#ifdef BUFFERED_CONVOLVER
+ class DelayLine
+ {
+ public:
+@@ -54,6 +63,7 @@ private:
+ 	bool  _enabled;
+ 	float _ir[64];
+ };
++#endif
+ 
+ class Convolver
+ {
+@@ -92,10 +102,12 @@ public:
+ 	           IRSettings      irs = IRSettings ());
+ 	~Convolver ();
+ 
+-	void reconfigure (uint32_t, bool threaded = true);
++	void reconfigure (uint32_t);
+ 
++#ifdef BUFFERED_CONVOLVER
+ 	void run_buffered_mono (float*, uint32_t);
+ 	void run_buffered_stereo (float* L, float* R, uint32_t);
++#endif
+ 
+ 	void run_mono (float*, uint32_t);
+ 	void run_stereo (float* L, float* R, uint32_t);
+@@ -129,8 +141,10 @@ private:
+ 	int             _sched_priority;
+ 	IRSettings      _ir_settings;
+ 
++#ifdef BUFFERED_CONVOLVER
+ 	TimeDomainConvolver _tdc[4];
+ 	DelayLine           _dly[2];
++#endif
+ 
+ 	uint32_t _samplerate;
+ 	uint32_t _n_samples;
+diff --git a/src/lv2.cc b/src/lv2.cc
+index 2352049..23214bb 100644
+--- a/src/lv2.cc
++++ b/src/lv2.cc
+@@ -324,7 +324,11 @@ instantiate (const LV2_Descriptor*     descriptor,
+ 	self->rt_policy   = rt_policy;
+ 	self->rt_priority = rt_priority;
+ 	self->rate        = rate;
++#ifdef BUFFERED_CONVOLVER
+ 	self->buffered    = true;
++#else
++	self->buffered    = false;
++#endif
+ 	self->db_wet      = 0.f;
+ 	self->db_dry      = -60.f;
+ 	self->dry_coeff   = 0.f;
+@@ -437,24 +441,33 @@ run (LV2_Handle instance, uint32_t n_samples)
+ 		} else {
+ 			copy_no_inplace_buffers (self->output[1], self->input[1], n_samples);
+ 		}
++#ifdef BUFFERED_CONVOLVER
+ 		if (buffered) {
+ 			self->clv_online->run_buffered_stereo (self->output[0], self->output[1], n_samples);
+-		} else {
++		} else
++#endif
++		{
+ 			self->clv_online->run_stereo (self->output[0], self->output[1], n_samples);
+ 		}
+ 	} else if (self->chn_out == 2) {
+ 		assert (self->chn_in == 1);
++#ifdef BUFFERED_CONVOLVER
+ 		if (buffered) {
+ 			self->clv_online->run_buffered_stereo (self->output[0], self->output[1], n_samples);
+-		} else {
++		} else
++#endif
++		{
+ 			self->clv_online->run_stereo (self->output[0], self->output[1], n_samples);
+ 		}
+ 	} else {
+ 		assert (self->chn_in == 1);
+ 		assert (self->chn_out == 1);
++#ifdef BUFFERED_CONVOLVER
+ 		if (buffered) {
+ 			self->clv_online->run_buffered_mono (self->output[0], n_samples);
+-		} else {
++		} else
++#endif
++		{
+ 			self->clv_online->run_mono (self->output[0], n_samples);
+ 		}
+ 	}
+@@ -989,11 +1002,10 @@ connect_port_cfg (LV2_Handle instance,
+ 		case 2:
+ 		case 3:
+ 		case 4:
+-		case 5:
+-			self->p_ctrl[port - 2] = (float*)data;
++			self->p_ctrl[port - 1] = (float*)data;
+ 			break;
+ 		default:
+-			connect_port (instance, port - 6, data);
++			connect_port (instance, port - 5, data);
+ 			break;
+ 	}
+ }
+@@ -1027,7 +1039,6 @@ run_cfg (LV2_Handle instance, uint32_t n_samples)
+ 		}
+ 	}
+ 
+-	self->buffered = *self->p_ctrl[0] > 0;
+ 	bool enabled   = *self->p_ctrl[3] > 0;
+ 
+ 	float db_dry = *self->p_ctrl[1];
+diff --git a/src/zeta-convolver.cc b/src/zeta-convolver.cc
+index 3ae15cc..1637824 100644
+--- a/src/zeta-convolver.cc
++++ b/src/zeta-convolver.cc
+@@ -89,9 +89,9 @@ Convproc::Convproc (void)
+ 	, _nlevels (0)
+ 	, _latecnt (0)
+ {
+-	memset (_inpbuff, 0, MAXINP * sizeof (float*));
+-	memset (_outbuff, 0, MAXOUT * sizeof (float*));
+-	memset (_convlev, 0, MAXLEV * sizeof (Convlevel*));
++	memset (_inpbuff, 0, sizeof (_inpbuff));
++	memset (_outbuff, 0, sizeof (_outbuff));
++	memset (_convlev, 0, sizeof (_convlev));
+ }
+ 
+ Convproc::~Convproc (void)
+@@ -153,6 +153,9 @@ Convproc::configure (uint32_t ninp,
+ 	} else {
+ 		s = 1;
+ 	}
++#if defined(_MOD_DEVICE_DUO)
++	s = 3;
++#endif
+ 	nmin = (s == 1) ? 2 : 6;
+ 	if (minpart == quantum) {
+ 		nmin++;
+@@ -165,7 +168,7 @@ Convproc::configure (uint32_t ninp,
+ 	}
+ 
+ 	try {
+-		for (offs = pind = 0; offs < maxsize; pind++) {
++		for (offs = pind = 0; offs < maxsize && pind < MAXLEV; pind++) {
+ 			npar = (maxsize - offs + size - 1) / size;
+ 			if ((size < maxpart) && (npar > nmin)) {
+ 				r = 1 << s;
+diff --git a/src/zeta-convolver.h b/src/zeta-convolver.h
+index 666e56e..ada79fb 100644
+--- a/src/zeta-convolver.h
++++ b/src/zeta-convolver.h
+@@ -20,6 +20,10 @@
+ #ifndef _ZETA_CONVOLVER_H
+ #define _ZETA_CONVOLVER_H
+ 
++// for testing
++// #undef _MOD_DEVICE_X86_64
++// #define _MOD_DEVICE_DWARF
++
+ #include <fftw3.h>
+ #include <pthread.h>
+ #include <stdint.h>
+@@ -340,13 +344,21 @@ public:
+ 	};
+ 
+ 	enum {
+-		MAXINP   = 64,
+-		MAXOUT   = 64,
+-		MAXLEV   = 8,
++		MAXINP   = 2,
++		MAXOUT   = 2,
++#if defined(_MOD_DEVICE_X86_64) || defined(_MOD_DEVICE_RASPBERRYPI4) || defined(_MOD_DEVICE_DUOX)
++		MAXLEV   = 5,
++#elif defined(_MOD_DEVICE_DWARF)
++		MAXLEV   = 4,
++#elif defined(_MOD_DEVICE_DUO)
++		MAXLEV   = 3,
++#else
++#error Unknown MOD device model
++#endif
+ 		MINPART  = 64,
+ 		MAXPART  = 8192,
+ 		MAXDIVIS = 16,
+-		MINQUANT = 16,
++		MINQUANT = 64,
+ 		MAXQUANT = 8192
+ 	};
+ 

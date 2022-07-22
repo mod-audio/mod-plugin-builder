@@ -1,0 +1,1113 @@
+diff --git a/common/AbstractUI.hpp b/common/AbstractUI.hpp
+index b49bf4d..db732d7 100644
+--- a/common/AbstractUI.hpp
++++ b/common/AbstractUI.hpp
+@@ -32,7 +32,7 @@ protected:
+   const Param* params;
+   Image knobImage;
+ 
+-  ImageButton *aboutButton;
++  ScopedPointer<ImageButton> aboutButton;
+   bool displayAbout = false;
+ 
+   LabelledKnob * createLabelledKnob(const Param *param, const char * numberFormat, int x, int y);
+diff --git a/common/freeverb/allpass.cpp b/common/freeverb/allpass.cpp
+index 8f2d7d1..647840e 100644
+--- a/common/freeverb/allpass.cpp
++++ b/common/freeverb/allpass.cpp
+@@ -25,9 +25,11 @@
+ 
+ // simple allpass filter
+ 
++#undef DEBUG
++
+ FV3_(allpass)::FV3_(allpass)()
+ {
+-  bufsize = bufidx = 0; decay = 1; buffer = NULL;
++  bufsize = bufidx = 0; decay = 1;
+ }
+ 
+ FV3_(allpass)::FV3_(~allpass)()
+@@ -47,17 +49,12 @@ void FV3_(allpass)::setsize(long size)
+   std::fprintf(stderr, "allpass::setsize(%ld)\n", size);
+ #endif
+   if(size <= 0) return;
+-  fv3_float_t * new_buffer = NULL;
+-  try
+-    {
+-      new_buffer = new fv3_float_t[size];
+-    }
+-  catch(std::bad_alloc&)
++  if(size > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "allpass::setsize(%ld) bad_alloc\n", size);
+-      delete[] new_buffer;
+-      throw;
++      throw std::bad_alloc();
+     }
++  fv3_float_t * new_buffer = buffer;
+   FV3_(utils)::mute(new_buffer, size);
+   
+   if(bufsize > 0&&bufsize <= size)
+@@ -75,19 +72,17 @@ void FV3_(allpass)::setsize(long size)
+   free();
+   bufidx = 0;
+   bufsize = size;
+-  buffer = new_buffer;
+ }
+ 
+ void FV3_(allpass)::free()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
+-  delete[] buffer;
+-  buffer = NULL; bufidx = bufsize = 0;
++  if(bufsize == 0) return;
++  bufidx = bufsize = 0;
+ }
+ 
+ void FV3_(allpass)::mute()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
++  if(bufsize == 0) return;
+   FV3_(utils)::mute(buffer, bufsize);
+   bufidx = 0;
+ }
+@@ -118,7 +113,7 @@ FV3_(allpassm)::FV3_(allpassm)()
+ {
+   bufsize = readidx = writeidx = modulationsize = 0;
+   feedback = feedback_mod = z_1 = modulationsize_f = 0;
+-  buffer = NULL; decay = 1;
++  decay = 1;
+ }
+ 
+ FV3_(allpassm)::FV3_(~allpassm)()
+@@ -157,18 +152,12 @@ void FV3_(allpassm)::setsize(long size, long modsize)
+   if(modsize < 0) modsize = 0;
+   if(modsize > size) modsize = size;
+   long newsize = size + modsize;
+-  fv3_float_t * new_buffer = NULL;
+-  try
+-    {
+-      new_buffer = new fv3_float_t[newsize];
+-    }
+-  catch(std::bad_alloc&)
++  if(newsize > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "allpassm::setsize(%ld) bad_alloc\n", newsize);
+-      delete[] new_buffer;
+-      throw;
++      throw std::bad_alloc();
+     }
+-  FV3_(utils)::mute(new_buffer, newsize);
++  FV3_(utils)::mute(buffer, newsize);
+   
+   this->free();
+   bufsize = newsize;
+@@ -176,20 +165,18 @@ void FV3_(allpassm)::setsize(long size, long modsize)
+   writeidx = 0;
+   modulationsize = modsize;
+   modulationsize_f = (fv3_float_t)modulationsize;
+-  buffer = new_buffer;
+   z_1 = 0;
+ }
+ 
+ void FV3_(allpassm)::free()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
+-  delete[] buffer;
+-  buffer = NULL; writeidx = bufsize = 0; z_1 = 0;
++  if(bufsize == 0) return;
++  writeidx = bufsize = 0; z_1 = 0;
+ }
+ 
+ void FV3_(allpassm)::mute()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
++  if(bufsize == 0) return;
+   FV3_(utils)::mute(buffer, bufsize);
+   writeidx = 0; z_1 = 0; readidx = modulationsize * 2; feedback_mod = feedback;
+ }
+@@ -226,7 +213,6 @@ FV3_(allpass2)::FV3_(allpass2)()
+ {
+   bufsize1 = bufidx1 = bufsize2 = bufidx2 = 0; decay1 = decay2 = 1;
+   feedback1 = feedback2 = 0;
+-  buffer1 = buffer2 = NULL;
+ }
+ 
+ FV3_(allpass2)::FV3_(~allpass2)()
+@@ -242,17 +228,11 @@ void FV3_(allpass2)::setsize(long size1, long size2)
+ #endif
+   if(size1 <= 0||size2 <= 0) return;
+   free();
+-  try
+-    {
+-      buffer1 = new fv3_float_t[size1];
+-      buffer2 = new fv3_float_t[size2];
+-    }
+-  catch(std::bad_alloc&)
++  if(size1 > (long)(sizeof(buffer1)/sizeof(buffer1[0])) ||
++     size2 > (long)(sizeof(buffer2)/sizeof(buffer2[0])))
+     {
+       std::fprintf(stderr, "allpass2::setsize(%ld,%ld) bad_alloc\n", size1, size2);
+-      delete[] buffer1;
+-      delete[] buffer2;
+-      throw;
++      throw std::bad_alloc();
+    }
+   bufsize1 = size1;
+   bufsize2 = size2;
+@@ -261,14 +241,13 @@ void FV3_(allpass2)::setsize(long size1, long size2)
+ 
+ void FV3_(allpass2)::free()
+ {
+-  if(buffer1 == NULL||bufsize1 == 0||buffer2 == NULL||bufsize2 == 0) return;
+-  delete[] buffer1; delete[] buffer2;
+-  buffer1 = buffer2 = NULL; bufidx1 = bufidx2 = bufsize1 = bufsize2 = 0;
++  if(bufsize1 == 0||bufsize2 == 0) return;
++  bufidx1 = bufidx2 = bufsize1 = bufsize2 = 0;
+ }
+ 
+ void FV3_(allpass2)::mute()
+ {
+-  if(buffer1 == NULL||bufsize1 == 0||buffer2 == NULL||bufsize2 == 0) return;
++  if(bufsize1 == 0||bufsize2 == 0) return;
+   FV3_(utils)::mute(buffer1, bufsize1);
+   FV3_(utils)::mute(buffer2, bufsize2);
+ }
+@@ -299,7 +278,6 @@ FV3_(allpass3)::FV3_(allpass3)()
+ {
+   bufsize1 = readidx1 = writeidx1 = bufsize2 = bufidx2 = bufsize3 = bufidx3 = modulationsize = 0;
+   decay1 = decay2 = decay3 = 1;
+-  buffer1 = buffer2 = buffer3 = NULL;
+   feedback1 = feedback2 = feedback3 = modulationsize_f = 0;
+ }
+ 
+@@ -324,19 +302,12 @@ void FV3_(allpass3)::setsize(long size1, long size1mod, long size2, long size3)
+   if(size1mod < 0) size1mod = 0;
+   if(size1mod > size1) size1mod = size1;
+   this->free();
+-  try
+-    {
+-      buffer1 = new fv3_float_t[size1+size1mod];
+-      buffer2 = new fv3_float_t[size2];
+-      buffer3 = new fv3_float_t[size3];
+-    }
+-  catch(std::bad_alloc&)
++  if(size1 > (long)(sizeof(buffer1)/sizeof(buffer1[0])) ||
++     size2 > (long)(sizeof(buffer2)/sizeof(buffer2[0])) ||
++     size3 > (long)(sizeof(buffer3)/sizeof(buffer3[0])))
+     {
+       std::fprintf(stderr, "allpass3::setsize(%ld,%ld,%ld) bad_alloc\n", size1, size2, size3);
+-      delete[] buffer1;
+-      delete[] buffer2;
+-      delete[] buffer3;
+-      throw;
++      throw std::bad_alloc();
+     }
+   bufsize1 = size1+size1mod;
+   readidx1 = size1mod*2;
+@@ -350,15 +321,13 @@ void FV3_(allpass3)::setsize(long size1, long size1mod, long size2, long size3)
+ 
+ void FV3_(allpass3)::free()
+ {
+-  if(buffer1 == NULL||bufsize1 == 0||buffer2 == NULL||bufsize2 == 0||buffer3 == NULL||bufsize3 == 0) return;
+-  delete[] buffer1; delete[] buffer2; delete[] buffer3;
+-  buffer1 = buffer2 = buffer3 = NULL;
++  if(bufsize1 == 0||bufsize2 == 0||bufsize3 == 0) return;
+   readidx1 = writeidx1 = bufidx2 = bufidx3 = bufsize1 = bufsize2 = bufsize3 = 0;
+ }
+ 
+ void FV3_(allpass3)::mute()
+ {
+-  if(buffer1 == NULL||bufsize1 == 0||buffer2 == NULL||bufsize2 == 0||buffer3 == NULL||bufsize3 == 0) return;
++  if(bufsize1 == 0||bufsize2 == 0||bufsize3 == 0) return;
+   FV3_(utils)::mute(buffer1, bufsize1);
+   FV3_(utils)::mute(buffer2, bufsize2);
+   FV3_(utils)::mute(buffer3, bufsize3);
+diff --git a/common/freeverb/allpass_t.hpp b/common/freeverb/allpass_t.hpp
+index c877ac2..1a68c22 100644
+--- a/common/freeverb/allpass_t.hpp
++++ b/common/freeverb/allpass_t.hpp
+@@ -129,7 +129,7 @@ class _FV3_(allpass)
+  private:
+   _FV3_(allpass)(const _FV3_(allpass)& x);
+   _FV3_(allpass)& operator=(const _FV3_(allpass)& x);
+-  _fv3_float_t feedback, *buffer, decay;
++  _fv3_float_t feedback, buffer[16384], decay;
+   long bufsize, bufidx;
+ };
+ 
+@@ -310,7 +310,7 @@ class _FV3_(allpassm)
+  private:
+   _FV3_(allpassm)(const _FV3_(allpassm)& x);
+   _FV3_(allpassm)& operator=(const _FV3_(allpassm)& x);
+-  _fv3_float_t feedback, feedback_mod, *buffer, z_1, decay, modulationsize_f;
++  _fv3_float_t feedback, feedback_mod, buffer[16384], z_1, decay, modulationsize_f;
+   long bufsize, readidx, writeidx, modulationsize;
+ };
+ 
+@@ -430,7 +430,7 @@ class _FV3_(allpass2)
+  private:
+   _FV3_(allpass2)(const _FV3_(allpass2)& x);
+   _FV3_(allpass2)& operator=(const _FV3_(allpass2)& x);
+-  _fv3_float_t feedback1, feedback2, decay1, decay2, *buffer1, *buffer2;
++  _fv3_float_t feedback1, feedback2, decay1, decay2, buffer1[16384], buffer2[16384];
+   long bufsize1, bufidx1, bufsize2, bufidx2;
+ };
+ 
+@@ -561,6 +561,6 @@ class _FV3_(allpass3)
+  private:
+   _FV3_(allpass3)(const _FV3_(allpass3)& x);
+   _FV3_(allpass3)& operator=(const _FV3_(allpass3)& x);
+-  _fv3_float_t feedback1, feedback2, feedback3, *buffer1, *buffer2, *buffer3, decay1, decay2, decay3, modulationsize_f;
++  _fv3_float_t feedback1, feedback2, feedback3, buffer1[16384], buffer2[16384], buffer3[16384], decay1, decay2, decay3, modulationsize_f;
+   long bufsize1, readidx1, writeidx1, bufsize2, bufidx2, bufsize3, bufidx3, modulationsize;
+ };
+diff --git a/common/freeverb/comb.cpp b/common/freeverb/comb.cpp
+index 08b3b68..0a966f6 100644
+--- a/common/freeverb/comb.cpp
++++ b/common/freeverb/comb.cpp
+@@ -25,9 +25,11 @@
+ 
+ // simple comb filter
+ 
++#undef DEBUG
++
+ FV3_(comb)::FV3_(comb)()
+ {
+-  bufsize = bufidx = 0; buffer = NULL; setdamp(0);
++  bufsize = bufidx = 0; setdamp(0);
+   feedback = filterstore = 0;
+ }
+ 
+@@ -48,17 +50,12 @@ void FV3_(comb)::setsize(long size)
+   std::fprintf(stderr, "comb::setsize(%ld)\n", size);
+ #endif
+   if(size <= 0) return;
+-  fv3_float_t * new_buffer = NULL;
+-  try
+-    {
+-      new_buffer = new fv3_float_t[size];
+-    }
+-  catch(std::bad_alloc&)
++  if(size > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "comb::setsize(%ld) bad_alloc\n", size);
+-      delete[] new_buffer;
+-      throw;
++      throw std::bad_alloc();
+     }
++  fv3_float_t * new_buffer = buffer;
+   FV3_(utils)::mute(new_buffer, size);
+   
+   if(bufsize > 0&&bufsize <= size)
+@@ -76,20 +73,18 @@ void FV3_(comb)::setsize(long size)
+   this->free();
+   bufidx = 0;
+   bufsize = size;
+-  buffer = new_buffer;
+   filterstore = 0;
+ }
+ 
+ void FV3_(comb)::free()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
+-  delete[] buffer;
+-  buffer = NULL; bufidx = bufsize = 0; filterstore = 0;
++  if(bufsize == 0) return;
++  bufidx = bufsize = 0; filterstore = 0;
+ }
+ 
+ void FV3_(comb)::mute()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
++  if(bufsize == 0) return;
+   FV3_(utils)::mute(buffer, bufsize);
+   filterstore = 0; bufidx = 0;
+ }
+@@ -114,7 +109,7 @@ fv3_float_t FV3_(comb)::getfeedback()
+ FV3_(combm)::FV3_(combm)()
+ {
+   bufsize = readidx = writeidx = delaysize = modulationsize = 0;
+-  buffer = NULL; setdamp(0);
++  setdamp(0);
+   feedback = 1; z_1 = filterstore = modulationsize_f = 0;
+ }
+ 
+@@ -154,18 +149,12 @@ void FV3_(combm)::setsize(long size, long modsize)
+  if(modsize < 0) modsize = 0;
+   if(modsize > size) modsize = size;
+   long newsize = size+modsize;
+-  fv3_float_t * new_buffer = NULL;
+-  try
+-    {
+-      new_buffer = new fv3_float_t[newsize];
+-    }
+-  catch(std::bad_alloc&)
++  if(newsize > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "combm::setsize(%ld) bad_alloc\n", newsize);
+-      delete[] new_buffer;
+-      throw;
++      throw std::bad_alloc();
+     }
+-  FV3_(utils)::mute(new_buffer, newsize);
++  FV3_(utils)::mute(buffer, newsize);
+ 
+   this->free();
+   bufsize = newsize;
+@@ -173,21 +162,19 @@ void FV3_(combm)::setsize(long size, long modsize)
+   delaysize = size;
+   modulationsize = modsize;
+   modulationsize = (fv3_float_t)modulationsize;
+-  buffer = new_buffer;
+   writeidx = 0;
+   z_1 = 0;
+ }
+ 
+ void FV3_(combm)::free()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
+-  delete[] buffer;
+-  buffer = NULL; writeidx = bufsize = 0; z_1 = filterstore = 0;
++  if(bufsize == 0) return;
++  writeidx = bufsize = 0; z_1 = filterstore = 0;
+ }
+ 
+ void FV3_(combm)::mute()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
++  if(bufsize == 0) return;
+   FV3_(utils)::mute(buffer, bufsize);
+   writeidx = 0; filterstore = z_1 = 0; readidx = modulationsize*2;
+ }
+diff --git a/common/freeverb/comb_t.hpp b/common/freeverb/comb_t.hpp
+index e9e3856..fa53138 100644
+--- a/common/freeverb/comb_t.hpp
++++ b/common/freeverb/comb_t.hpp
+@@ -107,7 +107,7 @@ public:
+ private:
+   _FV3_(comb)(const _FV3_(comb)& x);
+   _FV3_(comb)& operator=(const _FV3_(comb)& x);
+-  _fv3_float_t *buffer, feedback, filterstore, damp1, damp2;
++  _fv3_float_t buffer[8192], feedback, filterstore, damp1, damp2;
+   long bufsize, bufidx;
+ };
+ 
+@@ -163,6 +163,6 @@ public:
+ private:
+   _FV3_(combm)(const _FV3_(combm)& x);
+   _FV3_(combm)& operator=(const _FV3_(combm)& x);
+-  _fv3_float_t *buffer, feedback, filterstore, damp1, damp2, z_1, modulationsize_f;
++  _fv3_float_t buffer[8192], feedback, filterstore, damp1, damp2, z_1, modulationsize_f;
+   long bufsize, readidx, writeidx, delaysize, modulationsize;
+ };
+diff --git a/common/freeverb/delay.cpp b/common/freeverb/delay.cpp
+index 644d241..8f69a47 100644
+--- a/common/freeverb/delay.cpp
++++ b/common/freeverb/delay.cpp
+@@ -22,11 +22,13 @@
+ #include "freeverb/fv3_type_float.h"
+ #include "freeverb/fv3_ns_start.h"
+ 
++#undef DEBUG
++
+ // simple delay
+ 
+ FV3_(delay)::FV3_(delay)()
+ {
+-  feedback = 1.; bufsize = bufidx = 0; buffer = NULL;
++  feedback = 1.; bufsize = bufidx = 0;
+ }
+ 
+ FV3_(delay)::~FV3_(delay)()
+@@ -43,17 +45,12 @@ void FV3_(delay)::setsize(long size)
+                  throw(std::bad_alloc)
+ {
+   if(size <= 0) return;
+-  fv3_float_t * new_buffer = NULL;
+-  try
+-    {
+-      new_buffer = new fv3_float_t[size];
+-    }
+-  catch(std::bad_alloc&)
++  if(size > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "delay::setsize(%ld) bad_alloc\n", size);
+-      delete[] new_buffer;
+-      throw;
++      throw std::bad_alloc();
+     }
++  fv3_float_t * new_buffer = buffer;
+   FV3_(utils)::mute(new_buffer, size);
+   
+   if(bufsize > 0&&bufsize <= size)
+@@ -71,19 +68,17 @@ void FV3_(delay)::setsize(long size)
+   this->free();
+   bufidx = 0;
+   bufsize = size;
+-  buffer = new_buffer;
+ }
+ 
+ void FV3_(delay)::free()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
+-  delete[] buffer;
+-  buffer = NULL; bufidx = bufsize = 0;
++  if(bufsize == 0) return;
++  bufidx = bufsize = 0;
+ }
+ 
+ void FV3_(delay)::mute()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
++  if(bufsize == 0) return;
+   FV3_(utils)::mute(buffer, bufsize);
+   bufidx = 0;
+ }
+@@ -105,12 +100,10 @@ FV3_(delaym)::FV3_(delaym)()
+   bufsize = readidx = writeidx = modulationsize = 0;
+   feedback = 1.;
+   z_1 = modulationsize_f = 0;
+-  buffer = NULL;
+ }
+ 
+ FV3_(delaym)::~FV3_(delaym)()
+ {
+-  if(bufsize != 0) delete[] buffer;
+ }
+ 
+ long FV3_(delaym)::getsize()
+@@ -144,18 +137,12 @@ void FV3_(delaym)::setsize(long size, long modsize)
+   if(modsize < 0) modsize = 0;
+   if(modsize > size) modsize = size;
+   long newsize = size + modsize;
+-  fv3_float_t * new_buffer = NULL;
+-  try
+-    {
+-      new_buffer = new fv3_float_t[newsize];
+-    }
+-  catch(std::bad_alloc&)
++  if(size > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "delaym::setsize(%ld) bad_alloc\n", newsize);
+-      delete[] new_buffer;
+-      throw;
++      throw std::bad_alloc();
+     }
+-  FV3_(utils)::mute(new_buffer, newsize);
++  FV3_(utils)::mute(buffer, newsize);
+   
+   this->free();
+   bufsize = newsize;
+@@ -163,20 +150,18 @@ void FV3_(delaym)::setsize(long size, long modsize)
+   writeidx = 0;
+   modulationsize = modsize;
+   modulationsize_f = (fv3_float_t)modulationsize;
+-  buffer = new_buffer;
+   z_1 = 0;
+ }
+ 
+ void FV3_(delaym)::free()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
+-  delete[] buffer;
+-  buffer = NULL; writeidx = bufsize = 0; z_1 = 0;
++  if(bufsize == 0) return;
++  writeidx = bufsize = 0; z_1 = 0;
+ }
+ 
+ void FV3_(delaym)::mute()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
++  if(bufsize == 0) return;
+   FV3_(utils)::mute(buffer, bufsize);
+   writeidx = 0; z_1 = 0; readidx = modulationsize*2;
+ }
+diff --git a/common/freeverb/delay_t.hpp b/common/freeverb/delay_t.hpp
+index 52087f0..25a3b45 100644
+--- a/common/freeverb/delay_t.hpp
++++ b/common/freeverb/delay_t.hpp
+@@ -102,7 +102,7 @@ class _FV3_(delay)
+  private:
+   _FV3_(delay)(const _FV3_(delay)& x);
+   _FV3_(delay)& operator=(const _FV3_(delay)& x);  
+-  _fv3_float_t feedback, *buffer;
++  _fv3_float_t feedback, buffer[8192];
+   long bufsize, bufidx;
+ };
+ 
+@@ -161,6 +161,6 @@ class _FV3_(delaym)
+  private:
+   _FV3_(delaym)(const _FV3_(delaym)& x);
+   _FV3_(delaym)& operator=(const _FV3_(delaym)& x);  
+-  _fv3_float_t feedback, *buffer, z_1, modulationsize_f;
++  _fv3_float_t feedback, buffer[16384], z_1, modulationsize_f;
+   long bufsize, readidx, writeidx, modulationsize;
+ };
+diff --git a/common/freeverb/delayline.cpp b/common/freeverb/delayline.cpp
+index c838847..a6d77c4 100644
+--- a/common/freeverb/delayline.cpp
++++ b/common/freeverb/delayline.cpp
+@@ -26,7 +26,7 @@ FV3_(delayline)::FV3_(delayline)()
+ 		throw(std::bad_alloc)
+ {
+   currentfs = FV3_REVBASE_DEFAULT_FS;
+-  bufsize = baseidx = 0, buffer = NULL;
++  bufsize = baseidx = 0;
+ }
+ 
+ FV3_(delayline)::~FV3_(delayline)()
+@@ -54,17 +54,12 @@ void FV3_(delayline)::setsize(long size)
+ 		 throw(std::bad_alloc)
+ {
+   if(size <= 0) return;
+-  fv3_float_t * new_buffer = NULL;
+-  try
+-    {
+-      new_buffer = new fv3_float_t[size];
+-    }
+-  catch(std::bad_alloc&)
++  if(size > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "delayline::setsize(%ld) bad_alloc\n", size);
+-      delete[] new_buffer;
+-      throw;
++      throw std::bad_alloc();
+     }
++  fv3_float_t * new_buffer = buffer;
+   FV3_(utils)::mute(new_buffer, size);
+ 
+   if(bufsize > 0&&bufsize <= size)
+@@ -79,19 +74,17 @@ void FV3_(delayline)::setsize(long size)
+ 
+   this->free();
+   bufsize = size;
+-  buffer = new_buffer;
+ }
+ 
+ void FV3_(delayline)::free()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
+-  delete[] buffer;
+-  buffer = NULL; baseidx = bufsize = 0;
++  if(bufsize == 0) return;
++  baseidx = bufsize = 0;
+ }
+ 
+ void FV3_(delayline)::mute()
+ {
+-  if(buffer == NULL||bufsize == 0) return;
++  if(bufsize == 0) return;
+   FV3_(utils)::mute(buffer, bufsize);
+ }
+ 
+diff --git a/common/freeverb/delayline_t.hpp b/common/freeverb/delayline_t.hpp
+index 8a5838b..1c57a73 100644
+--- a/common/freeverb/delayline_t.hpp
++++ b/common/freeverb/delayline_t.hpp
+@@ -83,7 +83,7 @@ class _FV3_(delayline)
+   
+   _FV3_(delayline)(const _FV3_(delayline)& x);
+   _FV3_(delayline)& operator=(const _FV3_(delayline)& x);  
+-  _fv3_float_t *buffer, currentfs;
++  _fv3_float_t buffer[32768], currentfs;
+   long bufsize, baseidx;
+   bool primeMode;
+ };
+diff --git a/common/freeverb/earlyref.cpp b/common/freeverb/earlyref.cpp
+index 16e6fd8..850ee24 100644
+--- a/common/freeverb/earlyref.cpp
++++ b/common/freeverb/earlyref.cpp
+@@ -124,11 +124,25 @@ const fv3_float_t FV3_(earlyref)::preset22_gainL[] = { 0.963333, 0.810000, 0.720
+ const fv3_float_t FV3_(earlyref)::preset22_delayR[] =  { 0.003276, 0.010714, 0.019526, 0.024656, 0.033474, 0.037682, 0.044661, 0.052552, 0.058604, 0.069266, };
+ const fv3_float_t FV3_(earlyref)::preset22_gainR[] = { 0.970000,0.803333,0.720000,0.646667,0.596667,0.543333,0.523333,0.503333,0.483333,0.470000,};
+ 
++const long FV3_(earlyref)::longest_preset_size = FV3_(earlyref)::preset0_size;
++
+ FV3_(earlyref)::FV3_(earlyref)()
+   throw(std::bad_alloc)
+ {
+   tapLengthL = tapLengthR = 0;
+   gainTableL = gainTableR = delayTableL = delayTableR = NULL;
++  try
++    {
++      gainTableL = new fv3_float_t[longest_preset_size];
++      gainTableR = new fv3_float_t[longest_preset_size];
++      delayTableL = new fv3_float_t[longest_preset_size];
++      delayTableR = new fv3_float_t[longest_preset_size];
++    }
++  catch(std::bad_alloc&)
++    {
++      std::fprintf(stderr, "earlyref::loadReflection() bad_alloc\n");
++      throw;
++    }
+   setdryr(0.8); setwetr(0.5); setwidth(0.2);
+   setLRDelay(0.3);
+   setLRCrossApFreq(750, 4);
+@@ -141,7 +155,10 @@ FV3_(earlyref)::FV3_(earlyref)()
+ 
+ FV3_(earlyref)::FV3_(~earlyref)()
+ {
+-  unloadReflection();
++  delete[] gainTableL;
++  delete[] gainTableR;
++  delete[] delayTableL;
++  delete[] delayTableR;
+ }
+ 
+ void FV3_(earlyref)::mute()
+@@ -238,21 +255,10 @@ void FV3_(earlyref)::loadReflection(const fv3_float_t * delayL, const fv3_float_
+   throw(std::bad_alloc)
+ {
+   unloadReflection();
+-  try
+-    {
+-      gainTableL = new fv3_float_t[sizeL];
+-      gainTableR = new fv3_float_t[sizeR];
+-      delayTableL = new fv3_float_t[sizeL];
+-      delayTableR = new fv3_float_t[sizeR];
+-    }
+-  catch(std::bad_alloc&)
++  if (sizeL > longest_preset_size || sizeR > longest_preset_size)
+     {
+-      std::fprintf(stderr, "earlyref::loadReflection() bad_alloc\n");
+-      delete[] gainTableL;
+-      delete[] gainTableR;
+-      delete[] delayTableL;
+-      delete[] delayTableR;
+-      throw;
++      std::fprintf(stderr, "earlyref::loadReflection(%ld, %ld) bad_alloc\n", sizeL, sizeR);
++      throw std::bad_alloc();
+     }
+   tapLengthL = sizeL;
+   tapLengthR = sizeR;
+@@ -286,10 +292,6 @@ fv3_float_t FV3_(earlyref)::maxDelay(const fv3_float_t * delaySet, long size)
+ void FV3_(earlyref)::unloadReflection()
+ {
+   if(tapLengthL == 0||tapLengthR == 0) return;
+-  delete[] gainTableL;
+-  delete[] gainTableR;
+-  delete[] delayTableL;
+-  delete[] delayTableR;
+   tapLengthL = tapLengthR = 0;
+ }
+ 
+diff --git a/common/freeverb/earlyref_t.hpp b/common/freeverb/earlyref_t.hpp
+index 4856820..1efe82e 100644
+--- a/common/freeverb/earlyref_t.hpp
++++ b/common/freeverb/earlyref_t.hpp
+@@ -63,6 +63,7 @@ public:
+   _fv3_float_t lrCrossApFq, lrCrossApBw, diffApFq, diffApBw, outputlpf, outputhpf;
+   _fv3_float_t *gainTableL, *gainTableR, *delayTableL, *delayTableR;
+ 
++  const static long longest_preset_size;
+   const static long preset0_size;
+   const static _fv3_float_t preset0_delayL[], preset0_delayR[], preset0_gainL[], preset0_gainR[];
+   const static long preset1_size;
+diff --git a/common/freeverb/efilter.hpp b/common/freeverb/efilter.hpp
+index 00c38d1..d1d1ba6 100644
+--- a/common/freeverb/efilter.hpp
++++ b/common/freeverb/efilter.hpp
+@@ -24,6 +24,7 @@
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cmath>
++#include <algorithm>
+ 
+ #include "freeverb/fv3_defs.h"
+ #include "freeverb/slot.hpp"
+@@ -31,11 +32,13 @@
+ namespace fv3
+ {
+ 
++#define _fv3_float_single
+ #define _fv3_float_t float
+ #define _FV3_(name) name ## _f
+ #include "freeverb/efilter_t.hpp"
+ #undef _FV3_
+ #undef _fv3_float_t
++#undef _fv3_float_single
+ 
+ #define _fv3_float_t double
+ #define _FV3_(name) name ## _
+diff --git a/common/freeverb/efilter_t.hpp b/common/freeverb/efilter_t.hpp
+index dc04b10..1bc09f2 100644
+--- a/common/freeverb/efilter_t.hpp
++++ b/common/freeverb/efilter_t.hpp
+@@ -216,36 +216,26 @@ class _FV3_(ahdsr)
+ 
+ class _FV3_(noisegen_pink_frac)
+ {
++  // this noise gen generates fractals as noise source, this is quite cpu intensive!
++  // since we never need to change values for DragonFly usage, we can make them const here.
++  // this allows us to pre-generate the needed values on plugin load, and save on cpu later.
++  static constexpr const _fv3_float_t pfn1_param = FV3_NOISEGEN_PINK_FRACTAL_1_DEFAULT_HURST_CONST;
++  static constexpr const long pfn1_length = (1<<FV3_NOISEGEN_PINK_FRACTAL_1_DEFAULT_BUFSIZE);
++
+  public:
+   _FV3_(noisegen_pink_frac)()
+   {
+-    setParams(FV3_NOISEGEN_PINK_FRACTAL_1_DEFAULT_HURST_CONST, FV3_NOISEGEN_PINK_FRACTAL_1_DEFAULT_BUFSIZE);
+-  }
+-
+-  /**
+-   * Set the pink noise parameters.
+-   * @param[in] param1 The Hurst constant, between 0 and 0.9999 (fractal dimension).
+-   * @param[in] length The fractal noise generator size will be 2^length.
+-   */
+-  void setParams(_fv3_float_t param1, long length)
+-  {
+-    pfn1_param = param1;
+-    pfn1_length = (1<<length);
+-    if(pfn1_slot.getsize() != pfn1_length)
+-      {
+-	pfn1_slot.alloc(pfn1_length, 1);
+ 	pfn1_count = 0;
+-      }
+-    mute();
++    pfn1_slot.alloc(pfn1_length, 1);
++    fractal(pfn1_slot.L, pfn1_length, pfn1_param);
+   }
+   
+-  void mute(){ pfn1_slot.mute(); pfn1_count = 0; }
++  void mute(){ pfn1_count = 0; }
+   
+   inline _fv3_float_t process()
+   {
+     if(pfn1_count == 0)
+       {
+-	fractal(pfn1_slot.L, pfn1_length, pfn1_param);
+ 	pfn1_count = pfn1_length;
+       }
+     pfn1_count --;
+@@ -276,18 +266,16 @@ class _FV3_(noisegen_pink_frac)
+ 	k = N / l;
+ 	for (c = 0; c < k; c++)
+ 	  {
+-	    v[c*l + l/2] = (v[c*l] + v[((c+1) * l) % N]) / 2.0
+-	      + 2.0 * r * ((_fv3_float_t)std::rand() - (_fv3_float_t)RAND_MAX/2.0) / (_fv3_float_t)RAND_MAX;
+-	    if(v[c*l + l/2] < -1.) v[c*l + l/2] = -1.;
+-	    if(v[c*l + l/2] >  1.) v[c*l + l/2] =  1.;
++	    v[c*l + l/2] = (v[c*l] + v[((c+1) * l) % N]) / 2.f
++	      + 2.0 * r * ((_fv3_float_t)std::rand() - (_fv3_float_t)RAND_MAX/2.f) / (_fv3_float_t)RAND_MAX;
++	    v[c*l + l/2] = std::max((_fv3_float_t)0., std::min((_fv3_float_t)1., v[c*l + l/2]));
+ 	  }
+ 	l /= 2;
+ 	r /= std::pow((_fv3_float_t)2., H);
+       }
+   }
+   
+-  _fv3_float_t pfn1_param;
+-  long pfn1_length, pfn1_count;
++  long pfn1_count;
+   _FV3_(slot) pfn1_slot;
+ };
+ 
+diff --git a/common/freeverb/fv3_defs.h b/common/freeverb/fv3_defs.h
+index d98bd50..98fe8a5 100644
+--- a/common/freeverb/fv3_defs.h
++++ b/common/freeverb/fv3_defs.h
+@@ -44,7 +44,7 @@
+ #endif
+ 
+ #ifndef LIMIT_PLUSMINUS_ONE
+-#define LIMIT_PLUSMINUS_ONE(v) if(v < -1.){ v = -1.; } if(v > 1.){ v = 1.; }
++#define LIMIT_PLUSMINUS_ONE(v) if(v < -1.f){ v = -1.f; } else if(v > 1.f){ v = 1.f; }
+ #endif
+ 
+ #ifndef M_PI
+diff --git a/common/freeverb/revbase.cpp b/common/freeverb/revbase.cpp
+index aa41ac5..9e06282 100644
+--- a/common/freeverb/revbase.cpp
++++ b/common/freeverb/revbase.cpp
+@@ -22,6 +22,8 @@
+ #include "freeverb/fv3_type_float.h"
+ #include "freeverb/fv3_ns_start.h"
+ 
++#undef DEBUG
++
+ FV3_(revbase)::FV3_(revbase)()
+ 	      throw(std::bad_alloc)
+ {
+diff --git a/plugins/dragonfly-early-reflections/DSP.cpp b/plugins/dragonfly-early-reflections/DSP.cpp
+index e3baa58..eccf63b 100644
+--- a/plugins/dragonfly-early-reflections/DSP.cpp
++++ b/plugins/dragonfly-early-reflections/DSP.cpp
+@@ -52,6 +52,7 @@ void DragonflyReverbDSP::setParameterValue(uint32_t index, float value) {
+ }
+ 
+ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t frames) {
++  if (std::memcmp(oldParams, newParams, sizeof(oldParams)) != 0) {
+   for (uint32_t index = 0; index < paramCount; index++) {
+     if (d_isNotEqual(oldParams[index], newParams[index])) {
+       oldParams[index] = newParams[index];
+@@ -71,6 +72,7 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+       }
+     }
+   }
++  }
+ 
+   for (uint32_t offset = 0; offset < frames; offset += BUFFER_SIZE) {
+     long int buffer_frames = frames - offset < BUFFER_SIZE ? frames - offset : BUFFER_SIZE;
+@@ -81,8 +83,8 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+     }
+ 
+     model.processreplace(
+-        const_cast<float *>(input_buffer[0]),
+-        const_cast<float *>(input_buffer[1]),
++        input_buffer[0],
++        input_buffer[1],
+         output_buffer[0],
+         output_buffer[1],
+         buffer_frames
+diff --git a/plugins/dragonfly-early-reflections/DSP.hpp b/plugins/dragonfly-early-reflections/DSP.hpp
+index 6b43d74..486f218 100644
+--- a/plugins/dragonfly-early-reflections/DSP.hpp
++++ b/plugins/dragonfly-early-reflections/DSP.hpp
+@@ -39,7 +39,7 @@ private:
+   float dryLevel = 0.0;
+   float wetLevel = 0.0;
+ 
+-  static const uint32_t BUFFER_SIZE = 256;
++  static constexpr const uint32_t BUFFER_SIZE = 256;
+ 
+   fv3::earlyref_f model;
+ 
+diff --git a/plugins/dragonfly-early-reflections/Makefile b/plugins/dragonfly-early-reflections/Makefile
+index b30ea18..14d3a8a 100644
+--- a/plugins/dragonfly-early-reflections/Makefile
++++ b/plugins/dragonfly-early-reflections/Makefile
+@@ -67,6 +67,9 @@ endif
+ # TODO handle throw deprecation for freeverb
+ BUILD_CXX_FLAGS += -Wno-deprecated
+ 
++# custom MOD flags
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++
+ # --------------------------------------------------------------
+ # Link dependencies
+ 
+diff --git a/plugins/dragonfly-hall-reverb/DSP.cpp b/plugins/dragonfly-hall-reverb/DSP.cpp
+index 797a223..c0154f6 100644
+--- a/plugins/dragonfly-hall-reverb/DSP.cpp
++++ b/plugins/dragonfly-hall-reverb/DSP.cpp
+@@ -58,6 +58,7 @@ void DragonflyReverbDSP::setParameterValue(uint32_t index, float value) {
+ }
+ 
+ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t frames) {
++  if (std::memcmp(oldParams, newParams, sizeof(oldParams)) != 0) {
+   for (uint32_t index = 0; index < paramCount; index++) {
+     if (d_isNotEqual(oldParams[index], newParams[index])) {
+       oldParams[index] = newParams[index];
+@@ -95,6 +96,7 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+       }
+     }
+   }
++  }
+ 
+   for (uint32_t offset = 0; offset < frames; offset += BUFFER_SIZE) {
+     long int buffer_frames = frames - offset < BUFFER_SIZE ? frames - offset : BUFFER_SIZE;
+@@ -112,8 +114,8 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+     }
+     
+     late.processreplace(
+-      const_cast<float *>(late_in_buffer[0]),
+-      const_cast<float *>(late_in_buffer[1]),
++      late_in_buffer[0],
++      late_in_buffer[1],
+       late_out_buffer[0],
+       late_out_buffer[1],
+       buffer_frames);
+diff --git a/plugins/dragonfly-hall-reverb/DSP.hpp b/plugins/dragonfly-hall-reverb/DSP.hpp
+index 1271c6e..1de7eee 100644
+--- a/plugins/dragonfly-hall-reverb/DSP.hpp
++++ b/plugins/dragonfly-hall-reverb/DSP.hpp
+@@ -43,7 +43,7 @@ private:
+   fv3::earlyref_f early;
+   fv3::zrev2_f late;
+ 
+-  static const uint32_t BUFFER_SIZE = 256;
++  static constexpr const uint32_t BUFFER_SIZE = 256;
+   float early_out_buffer[2][BUFFER_SIZE];
+   float late_in_buffer[2][BUFFER_SIZE];
+   float late_out_buffer[2][BUFFER_SIZE];
+diff --git a/plugins/dragonfly-hall-reverb/Makefile b/plugins/dragonfly-hall-reverb/Makefile
+index 91a3c13..04afeec 100644
+--- a/plugins/dragonfly-hall-reverb/Makefile
++++ b/plugins/dragonfly-hall-reverb/Makefile
+@@ -68,6 +68,9 @@ endif
+ # TODO handle throw deprecation for freeverb
+ BUILD_CXX_FLAGS += -Wno-deprecated
+ 
++# custom MOD flags
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++
+ # --------------------------------------------------------------
+ # Link dependencies
+ 
+diff --git a/plugins/dragonfly-hall-reverb/Plugin.cpp b/plugins/dragonfly-hall-reverb/Plugin.cpp
+index e394b30..25deb5a 100644
+--- a/plugins/dragonfly-hall-reverb/Plugin.cpp
++++ b/plugins/dragonfly-hall-reverb/Plugin.cpp
+@@ -69,6 +69,7 @@ void DragonflyReverbPlugin::setState(const char* key, const char* value) {
+ 
+           // backward compatibility
+           setParameterValue(paramDecay, banks[b].presets[p].params[paramDecay]);
++          return;
+         }
+       }
+     }
+diff --git a/plugins/dragonfly-plate-reverb/DSP.cpp b/plugins/dragonfly-plate-reverb/DSP.cpp
+index b5f177c..6c771d2 100644
+--- a/plugins/dragonfly-plate-reverb/DSP.cpp
++++ b/plugins/dragonfly-plate-reverb/DSP.cpp
+@@ -176,6 +176,7 @@ void DragonflyReverbDSP::setParameterValue(uint32_t index, float value) {
+ }
+ 
+ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t frames) {
++  if (std::memcmp(oldParams, newParams, sizeof(oldParams)) != 0) {
+   for (uint32_t index = 0; index < paramCount; index++) {
+     if (d_isNotEqual(oldParams[index], newParams[index])) {
+       oldParams[index] = newParams[index];
+@@ -217,6 +218,7 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+       }
+     }
+   }
++  }
+ 
+   for (uint32_t offset = 0; offset < frames; offset += BUFFER_SIZE) {
+     long int buffer_frames = frames - offset < BUFFER_SIZE ? frames - offset : BUFFER_SIZE;
+@@ -227,8 +229,8 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+     }
+ 
+     model->processreplace(
+-        const_cast<float *>(filtered_input_buffer[0]),
+-        const_cast<float *>(filtered_input_buffer[1]),
++        filtered_input_buffer[0],
++        filtered_input_buffer[1],
+         output_buffer[0],
+         output_buffer[1],
+         buffer_frames
+diff --git a/plugins/dragonfly-plate-reverb/DSP.hpp b/plugins/dragonfly-plate-reverb/DSP.hpp
+index 8907af0..cf76408 100644
+--- a/plugins/dragonfly-plate-reverb/DSP.hpp
++++ b/plugins/dragonfly-plate-reverb/DSP.hpp
+@@ -67,7 +67,7 @@ private:
+   float dryLevel = 0.0;
+   float wetLevel = 0.0;
+ 
+-  static const uint32_t BUFFER_SIZE = 256;
++  static constexpr const uint32_t BUFFER_SIZE = 256;
+ 
+   fv3::iir_1st_f input_lpf_0, input_lpf_1, input_hpf_0, input_hpf_1;
+ 
+diff --git a/plugins/dragonfly-plate-reverb/Makefile b/plugins/dragonfly-plate-reverb/Makefile
+index f5c88df..105a4f6 100644
+--- a/plugins/dragonfly-plate-reverb/Makefile
++++ b/plugins/dragonfly-plate-reverb/Makefile
+@@ -71,6 +71,9 @@ BUILD_CXX_FLAGS += -Wno-unused-variable
+ # TODO handle throw deprecation for freeverb
+ BUILD_CXX_FLAGS += -Wno-deprecated
+ 
++# custom MOD flags
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++
+ # --------------------------------------------------------------
+ # Link dependencies
+ 
+diff --git a/plugins/dragonfly-plate-reverb/Plugin.cpp b/plugins/dragonfly-plate-reverb/Plugin.cpp
+index f65d66c..edcf7f9 100644
+--- a/plugins/dragonfly-plate-reverb/Plugin.cpp
++++ b/plugins/dragonfly-plate-reverb/Plugin.cpp
+@@ -61,7 +61,8 @@ void DragonflyReverbPlugin::setState(const char* key, const char* value) {
+   if (std::strcmp(key, "preset") == 0) {
+     for (int p = 0; p < NUM_PRESETS; p++) {
+       if (std::strcmp(value, presets[p].name) == 0) {
+-	preset = p;
++        preset = p;
++        return;
+       }
+     }
+   }
+diff --git a/plugins/dragonfly-room-reverb/DSP.cpp b/plugins/dragonfly-room-reverb/DSP.cpp
+index 4b8ba84..bbe2e51 100644
+--- a/plugins/dragonfly-room-reverb/DSP.cpp
++++ b/plugins/dragonfly-room-reverb/DSP.cpp
+@@ -68,6 +68,7 @@ void DragonflyReverbDSP::setParameterValue(uint32_t index, float value) {
+ }
+ 
+ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t frames) {
++  if (std::memcmp(oldParams, newParams, sizeof(oldParams)) != 0) {
+   for (uint32_t index = 0; index < paramCount; index++) {
+     if (d_isNotEqual(oldParams[index], newParams[index])) {
+       oldParams[index] = newParams[index];
+@@ -104,6 +105,7 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+       }
+     }
+   }
++  }
+ 
+   for (uint32_t offset = 0; offset < frames; offset += BUFFER_SIZE) {
+     long int buffer_frames = frames - offset < BUFFER_SIZE ? frames - offset : BUFFER_SIZE;
+@@ -114,8 +116,8 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+     }
+ 
+     early.processreplace(
+-      const_cast<float *>(filtered_input_buffer[0]),
+-      const_cast<float *>(filtered_input_buffer[1]),
++      filtered_input_buffer[0],
++      filtered_input_buffer[1],
+       early_out_buffer[0],
+       early_out_buffer[1],
+       buffer_frames);
+@@ -126,8 +128,8 @@ void DragonflyReverbDSP::run(const float** inputs, float** outputs, uint32_t fra
+     }
+     
+     late.processreplace(
+-      const_cast<float *>(late_in_buffer[0]),
+-      const_cast<float *>(late_in_buffer[1]),
++      late_in_buffer[0],
++      late_in_buffer[1],
+       late_out_buffer[0],
+       late_out_buffer[1],
+       buffer_frames);
+diff --git a/plugins/dragonfly-room-reverb/DSP.hpp b/plugins/dragonfly-room-reverb/DSP.hpp
+index b1a7aff..64dc542 100644
+--- a/plugins/dragonfly-room-reverb/DSP.hpp
++++ b/plugins/dragonfly-room-reverb/DSP.hpp
+@@ -46,7 +46,7 @@ private:
+   fv3::earlyref_f early;
+   fv3::progenitor2_f late;
+ 
+-  static const uint32_t BUFFER_SIZE = 256;
++  static constexpr const uint32_t BUFFER_SIZE = 256;
+   float filtered_input_buffer[2][BUFFER_SIZE];
+   float early_out_buffer[2][BUFFER_SIZE];
+   float late_in_buffer[2][BUFFER_SIZE];
+diff --git a/plugins/dragonfly-room-reverb/Makefile b/plugins/dragonfly-room-reverb/Makefile
+index db70159..7f2f273 100644
+--- a/plugins/dragonfly-room-reverb/Makefile
++++ b/plugins/dragonfly-room-reverb/Makefile
+@@ -68,6 +68,9 @@ endif
+ # TODO handle throw deprecation for freeverb
+ BUILD_CXX_FLAGS += -Wno-deprecated
+ 
++# custom MOD flags
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++
+ # --------------------------------------------------------------
+ # Link dependencies
+ 
+diff --git a/plugins/dragonfly-room-reverb/Plugin.cpp b/plugins/dragonfly-room-reverb/Plugin.cpp
+index 2fc372d..9bf6875 100644
+--- a/plugins/dragonfly-room-reverb/Plugin.cpp
++++ b/plugins/dragonfly-room-reverb/Plugin.cpp
+@@ -65,6 +65,7 @@ void DragonflyReverbPlugin::setState(const char* key, const char* value) {
+         if (std::strcmp(value, banks[b].presets[p].name) == 0) {
+           bank = b;
+           preset = p;
++          return;
+         }
+       }
+     }

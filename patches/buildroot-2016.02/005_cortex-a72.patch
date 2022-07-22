@@ -1,0 +1,28 @@
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index f2b4511..a04d67f 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -183,6 +183,15 @@ config BR2_cortex_a53
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
++config BR2_cortex_a72
++	bool "cortex-A72"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON
++	select BR2_ARM_CPU_HAS_THUMB2
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ config BR2_cortex_m3
+ 	bool "cortex-M3"
+ 	select BR2_ARM_CPU_HAS_THUMB
+@@ -487,6 +496,7 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a15"	if BR2_cortex_a15
+ 	default "cortex-a35"	if BR2_cortex_a35
+ 	default "cortex-a53"	if BR2_cortex_a53
++	default "cortex-a72"	if BR2_cortex_a72
+ 	default "cortex-m3"	if BR2_cortex_m3
+ 	default "fa526"		if BR2_fa526
+ 	default "marvell-pj4"	if BR2_pj4

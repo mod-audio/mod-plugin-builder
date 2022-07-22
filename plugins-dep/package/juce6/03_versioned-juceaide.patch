@@ -1,0 +1,98 @@
+diff --git a/extras/Build/CMake/JUCEConfig.cmake.in b/extras/Build/CMake/JUCEConfig.cmake.in
+index 3e5c97de5..5609fa7bd 100644
+--- a/extras/Build/CMake/JUCEConfig.cmake.in
++++ b/extras/Build/CMake/JUCEConfig.cmake.in
+@@ -20,10 +20,12 @@
+ 
+ @PACKAGE_INIT@
+ 
+-if(NOT TARGET juce::juceaide)
+-    add_executable(juce::juceaide IMPORTED)
+-    set_target_properties(juce::juceaide PROPERTIES
+-        IMPORTED_LOCATION "@PACKAGE_JUCEAIDE_PATH@")
++set(PACKAGE_PREFIX_DIR "@CMAKE_INSTALL_PREFIX@")
++
++if(NOT TARGET juceaide6)
++    add_executable(juceaide6 IMPORTED)
++    set_target_properties(juceaide6 PROPERTIES
++        IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/bin/juceaide6")
+ endif()
+ 
+ check_required_components("@PROJECT_NAME@")
+diff --git a/extras/Build/CMake/JUCEUtils.cmake b/extras/Build/CMake/JUCEUtils.cmake
+index 1d8408ebc..8c6a253fe 100644
+--- a/extras/Build/CMake/JUCEUtils.cmake
++++ b/extras/Build/CMake/JUCEUtils.cmake
+@@ -419,7 +419,7 @@ function(_juce_add_au_resource_fork shared_code_target au_target)
+     # In the end, it's simplest to generate a special single-purpose appconfig just for the
+     # resource compiler.
+     add_custom_command(OUTPUT "${secret_au_plugindefines}"
+-        COMMAND juce::juceaide auplugindefines "${defs_file}" "${secret_au_plugindefines}"
++        COMMAND juceaide6 auplugindefines "${defs_file}" "${secret_au_plugindefines}"
+         DEPENDS "${defs_file}"
+         VERBATIM)
+ 
+@@ -861,7 +861,7 @@ function(juce_add_binary_data target)
+     list(APPEND binary_file_names "${juce_binary_data_folder}/${JUCE_ARG_HEADER_NAME}")
+ 
+     add_custom_command(OUTPUT ${binary_file_names}
+-        COMMAND juce::juceaide binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
++        COMMAND juceaide6 binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
+             ${juce_binary_data_folder} ${JUCE_ARG_SOURCES}
+         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+         DEPENDS ${JUCE_ARG_SOURCES}
+@@ -958,7 +958,7 @@ function(juce_generate_juce_header target)
+     set(extra_args)
+ 
+     add_custom_command(OUTPUT "${juce_header}"
+-        COMMAND juce::juceaide header "${defs_file}" "${juce_header}" ${extra_args}
++        COMMAND juceaide6 header "${defs_file}" "${juce_header}" ${extra_args}
+         DEPENDS "${defs_file}"
+         VERBATIM)
+ endfunction()
+@@ -966,20 +966,20 @@ endfunction()
+ # ==================================================================================================
+ 
+ function(_juce_execute_juceaide)
+-    if(NOT TARGET juce::juceaide)
+-        message(FATAL_ERROR "The juceaide target does not exist")
++    if(NOT TARGET juceaide6)
++        message(FATAL_ERROR "The juceaide6 target does not exist")
+     endif()
+ 
+-    get_target_property(juceaide_location juce::juceaide IMPORTED_LOCATION)
++    get_target_property(juceaide6_location juceaide6 IMPORTED_LOCATION)
+ 
+-    if(NOT EXISTS "${juceaide_location}")
+-        message(FATAL_ERROR "juceaide was imported, but it doesn't exist!")
++    if(NOT EXISTS "${juceaide6_location}")
++        message(FATAL_ERROR "juceaide6 was imported, but it doesn't exist!")
+     endif()
+ 
+-    execute_process(COMMAND "${juceaide_location}" ${ARGN} RESULT_VARIABLE result_variable)
++    execute_process(COMMAND "${juceaide6_location}" ${ARGN} RESULT_VARIABLE result_variable)
+ 
+     if(result_variable)
+-        message(FATAL_ERROR "Running juceaide failed")
++        message(FATAL_ERROR "Running juceaide6 failed")
+     endif()
+ endfunction()
+ 
+@@ -1100,7 +1100,7 @@ function(_juce_configure_bundle source_target dest_target)
+         MACOSX_BUNDLE_INFO_PLIST "${this_output_plist}")
+ 
+     add_custom_command(OUTPUT "${this_output_pkginfo}"
+-        COMMAND juce::juceaide pkginfo "${juce_kind_string}" "${this_output_pkginfo}"
++        COMMAND juceaide6 pkginfo "${juce_kind_string}" "${this_output_pkginfo}"
+         VERBATIM)
+ 
+     set(output_folder "$<TARGET_BUNDLE_CONTENT_DIR:${dest_target}>")
+@@ -1192,7 +1192,7 @@ function(_juce_add_resources_rc source_target dest_target)
+     set(resource_rc_file "${juce_library_code}/resources.rc")
+ 
+     add_custom_command(OUTPUT "${resource_rc_file}"
+-        COMMAND juce::juceaide rcfile "${input_info_file}" "${resource_rc_file}"
++        COMMAND juceaide6 rcfile "${input_info_file}" "${resource_rc_file}"
+         ${dependency}
+         VERBATIM)
+ 

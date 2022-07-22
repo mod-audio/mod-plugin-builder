@@ -1,0 +1,144 @@
+diff --git a/ChowCentaur/ChowCentaurPlugin.cpp b/ChowCentaur/ChowCentaurPlugin.cpp
+index 2dcd08e..f98d392 100644
+--- a/ChowCentaur/ChowCentaurPlugin.cpp
++++ b/ChowCentaur/ChowCentaurPlugin.cpp
+@@ -23,8 +23,10 @@ ChowCentaur::ChowCentaur() : gainStageMLProc (vts)
+     bypassParam = vts.getRawParameterValue (bypassTag);
+     monoParam = vts.getRawParameterValue (monoTag);
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     LookAndFeel::setDefaultLookAndFeel (&myLNF);
+     scope = magicState.createAndAddObject<foleys::MagicOscilloscope> ("scope");
++#endif
+ }
+ 
+ ChowCentaur::~ChowCentaur()
+@@ -54,7 +56,9 @@ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
+         outProc[ch].prepare ((float) sampleRate);
+     }
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     scope->prepareToPlay (sampleRate, samplesPerBlock);
++#endif
+ 
+     useMLPrev = static_cast<bool> (*mlParam);
+     fadeBuffer.setSize (getMainBusNumOutputChannels(), samplesPerBlock);
+@@ -145,8 +149,9 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
+         dsp::ProcessContextReplacing<float> context (block);
+         dcBlocker.process (context);
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+         scope->pushSamples (buffer);
+-
++#endif
+         return;
+     }
+ 
+@@ -202,9 +207,12 @@ void ChowCentaur::processAudioBlock (AudioBuffer<float>& buffer)
+     dsp::ProcessContextReplacing<float> context (block);
+     dcBlocker.process (context);
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     scope->pushSamples (buffer);
++#endif
+ }
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ AudioProcessorEditor* ChowCentaur::createEditor()
+ {
+     auto builder = chowdsp::createGUIBuilder (magicState);
+@@ -223,6 +231,7 @@ AudioProcessorEditor* ChowCentaur::createEditor()
+ 
+     return editor;
+ }
++#endif
+ 
+ void ChowCentaur::setStateInformation (const void* data, int sizeInBytes)
+ {
+@@ -232,7 +241,7 @@ void ChowCentaur::setStateInformation (const void* data, int sizeInBytes)
+     if (xmlState.get() != nullptr)
+         if (xmlState->hasTagName (vts.state.getType()))
+             vts.replaceState (juce::ValueTree::fromXml (*xmlState));
+-#else
++#elif !JUCE_AUDIOPROCESSOR_NO_GUI
+     MessageManagerLock mml;
+     magicState.setStateInformation (data, sizeInBytes, getActiveEditor());
+ #endif
+@@ -244,7 +253,7 @@ void ChowCentaur::getStateInformation (MemoryBlock& data)
+     auto state = vts.copyState();
+     std::unique_ptr<XmlElement> xml (state.createXml());
+     copyXmlToBinary (*xml, data);
+-#else
++#elif !JUCE_AUDIOPROCESSOR_NO_GUI
+     magicState.getStateInformation (data);
+ #endif
+ }
+diff --git a/ChowCentaur/ChowCentaurPlugin.h b/ChowCentaur/ChowCentaurPlugin.h
+index 9822b1c..0fbe0d1 100644
+--- a/ChowCentaur/ChowCentaurPlugin.h
++++ b/ChowCentaur/ChowCentaurPlugin.h
+@@ -20,7 +20,9 @@ public:
+     void processAudioBlock (AudioBuffer<float>& buffer) override;
+     void processInternalBuffer (AudioBuffer<float>& buffer);
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     AudioProcessorEditor* createEditor() override;
++#endif
+     void setStateInformation (const void* data, int sizeInBytes) override;
+     void getStateInformation (MemoryBlock& data) override;
+ 
+@@ -48,8 +50,10 @@ private:
+     using StereoIIR = dsp::ProcessorDuplicator<dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>;
+     StereoIIR dcBlocker;
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     chowdsp::ChowLNF myLNF;
+     foleys::MagicPlotSource* scope = nullptr;
++#endif
+ 
+     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ChowCentaur)
+ };
+diff --git a/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h b/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h
+index 9466179..7f32bc3 100644
+--- a/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h
++++ b/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h
+@@ -37,12 +37,14 @@ public:
+     void processBlock (juce::AudioBuffer<double>&, juce::MidiBuffer&) override {}
+     virtual void processAudioBlock (juce::AudioBuffer<float>&) = 0;
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     bool hasEditor() const override { return true; }
+ #if CHOWDSP_USE_FOLEYS_CLASSES
+     juce::AudioProcessorEditor* createEditor() override
+     {
+         return new foleys::MagicPluginEditor (magicState);
+     }
++#endif
+ #endif
+ 
+     void getStateInformation (juce::MemoryBlock& data) override;
+diff --git a/modules/chowdsp_utils/chowdsp_utils.cpp b/modules/chowdsp_utils/chowdsp_utils.cpp
+index 7ce2d8b..3678fe3 100644
+--- a/modules/chowdsp_utils/chowdsp_utils.cpp
++++ b/modules/chowdsp_utils/chowdsp_utils.cpp
+@@ -1,5 +1,7 @@
+ #include "chowdsp_utils.h"
+ 
+ #include "DSP/chowdsp_DSP.cpp"
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ #include "GUI/chowdsp_GUI.cpp"
+ #include "PluginUtils/chowdsp_ParamUtils.cpp"
++#endif
+diff --git a/modules/chowdsp_utils/chowdsp_utils.h b/modules/chowdsp_utils/chowdsp_utils.h
+index 3bfb8b2..d82009a 100644
+--- a/modules/chowdsp_utils/chowdsp_utils.h
++++ b/modules/chowdsp_utils/chowdsp_utils.h
+@@ -9,7 +9,7 @@
+     name:          ChowDSP Shared Code
+     description:   Shared code for ChowDSP plugins and applications
+     dependencies:  juce_core, juce_audio_basics, juce_audio_devices, juce_audio_formats,
+-                   juce_audio_utils, juce_audio_processors, juce_gui_basics, juce_dsp
++                   juce_audio_utils, juce_audio_processors, juce_dsp
+ 
+     website:       https://ccrma.stanford.edu/~jatin/chowdsp
+     license:       Dual license: non commercial under BSD V2 3-clause

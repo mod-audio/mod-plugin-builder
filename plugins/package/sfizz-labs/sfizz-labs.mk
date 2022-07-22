@@ -4,8 +4,9 @@
 #
 ######################################
 
-SFIZZ_LABS_VERSION = a1cef9ba16c2c6603e1c7611932b61a701cc7647
-SFIZZ_LABS_SITE = $(call github,sfztools,sfizz,$(SFIZZ_LABS_VERSION))
+SFIZZ_LABS_VERSION = 77fbfa50392d10ea7907b687d75986a36adadb88
+SFIZZ_LABS_SITE = https://github.com/sfztools/sfizz.git
+SFIZZ_LABS_SITE_METHOD = git
 SFIZZ_LABS_DEPENDENCIES = host-cmake
 SFIZZ_LABS_CONF_OPTS  = -DSFIZZ_JACK=OFF
 SFIZZ_LABS_CONF_OPTS += -DSFIZZ_RENDER=OFF
@@ -15,20 +16,13 @@ SFIZZ_LABS_CONF_OPTS += -DSFIZZ_SHARED=OFF
 SFIZZ_LABS_CONF_OPTS += -DBUILD_SHARED_LIBS=FALSE
 SFIZZ_LABS_BUNDLES = sfizz.lv2
 
-# needed for git submodules
-define SFIZZ_LABS_EXTRACT_CMDS
-	rm -rf $(@D)
-	git clone --recursive git://github.com/sfztools/sfizz $(@D)
-	(cd $(@D) && \
-		git reset --hard $(SFIZZ_LABS_VERSION) && \
-		git submodule update)
-	touch $(@D)/.stamp_downloaded
+# needed for submodules support
+SFIZZ_LABS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
+
+define SFIZZ_LABS_POST_INSTALL_TARGET_TTLFILES
+	cp -rL $($(PKG)_PKGDIR)/sfizz.lv2/* $(TARGET_DIR)/usr/lib/lv2/sfizz.lv2/
 endef
 
-# define SFIZZ_LABS_POST_INSTALL_TARGET_TTLFILES
-# 	cp -rL $($(PKG)_PKGDIR)/sfizz.lv2/* $(TARGET_DIR)/usr/lib/lv2/sfizz.lv2/
-# endef
-
-# SFIZZ_LABS_POST_INSTALL_TARGET_HOOKS += SFIZZ_LABS_POST_INSTALL_TARGET_TTLFILES
+SFIZZ_LABS_POST_INSTALL_TARGET_HOOKS += SFIZZ_LABS_POST_INSTALL_TARGET_TTLFILES
 
 $(eval $(cmake-package))

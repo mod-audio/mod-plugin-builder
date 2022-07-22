@@ -5,7 +5,7 @@
 ################################################################################
 
 ZITA_CONVOLVER_VERSION = 3.1.0
-ZITA_CONVOLVER_SITE = http.debian.net/debian/pool/main/z/zita-convolver
+ZITA_CONVOLVER_SITE = http://deb.debian.org/debian/pool/main/z/zita-convolver
 ZITA_CONVOLVER_SOURCE = zita-convolver_$(ZITA_CONVOLVER_VERSION).orig.tar.bz2
 ZITA_CONVOLVER_DEPENDENCIES = ffmpeg
 ZITA_CONVOLVER_LICENSE = GPLv3+

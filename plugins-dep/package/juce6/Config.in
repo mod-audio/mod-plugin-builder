@@ -1,0 +1,3 @@
+config BR2_PACKAGE_JUCE6
+	bool "juce"
+	select BR2_PACKAGE_FREETYPE

@@ -1,4 +1,0 @@
-config BR2_PACKAGE_JUCE
-	bool "juce"
-	select BR2_PACKAGE_FREETYPE
-	select BR2_PACKAGE_XLIB_LIBXCURSOR
