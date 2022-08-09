@@ -22,6 +22,8 @@ else ifdef BR2_arm
 MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.duo
 else ifdef BR2_x86_64
 MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.x86_64
+else ifdef BR2_cortex_a72
+MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.raspberrypi4
 endif
 
 ifeq ($(BR2_arm)$(BR2_aarch64)$(BR2_x86_64),y)
