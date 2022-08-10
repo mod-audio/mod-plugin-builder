@@ -4,7 +4,7 @@
 #
 ######################################
 
-TAMGAMP_LABS_VERSION = 9b0d417728d3c36fa0f445375de48dc5f380c364
+TAMGAMP_LABS_VERSION = 426da74142fcb6b7687a35b2b1dda3392e171b92
 TAMGAMP_LABS_SITE = $(call github,sadko4u,tamgamp.lv2,$(TAMGAMP_LABS_VERSION))
 TAMGAMP_LABS_BUNDLES = tamgamp.lv2
 
