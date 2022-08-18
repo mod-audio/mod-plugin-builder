@@ -13,4 +13,9 @@ AIDADSPLV2_BUNDLES = rt-neural-generic.lv2
 # needed for submodules support
 AIDADSPLV2_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
+define AIDADSPLV2_INSTALL_TARGET_CMDS
+    mkdir -p $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2
+    cp -rL $(TARGET_DIR)/rt-neural-generic.lv2/* $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2/
+endef
+
 $(eval $(cmake-package))
