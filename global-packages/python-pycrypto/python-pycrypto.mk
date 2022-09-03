@@ -8,7 +8,7 @@ PYTHON_PYCRYPTO_VERSION = 2.7a1
 PYTHON_PYCRYPTO_SOURCE = pycrypto-$(PYTHON_PYCRYPTO_VERSION).tar.gz
 # NOTE: pycrypto is a dead project, URL no longer works so we host it ourselves
 # PYTHON_PYCRYPTO_SITE = http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto
-PYTHON_PYCRYPTO_SITE = https://modclouddownloadprod.blob.core.windows.net/shared
+PYTHON_PYCRYPTO_SITE = https://falktx.com/data/mod
 PYTHON_PYCRYPTO_SETUP_TYPE = distutils
 
 PYTHON_PYCRYPTO_LICENSE = Public Domain, Python 2.2 License (HMAC.py, setup.py)
