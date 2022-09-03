@@ -15,7 +15,7 @@ AIDADSP_LV2_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define AIDADSP_LV2_INSTALL_TARGET_CMDS
     mkdir -p $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2
-    cp -rL $(TARGET_DIR)/rt-neural-generic.lv2/* $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2/
+    cp -rL $(@D)/rt-neural-generic/* $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2/
 endef
 
 $(eval $(cmake-package))
