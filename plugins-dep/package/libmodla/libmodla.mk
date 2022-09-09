@@ -17,7 +17,7 @@ LIBMODLA_SOURCE_EXTRA_SUFFIX = -gcc7
 endif
 
 LIBMODLA_VERSION = v1.2.3
-LIBMODLA_SITE = https://modclouddownloadprod.blob.core.windows.net/shared
+LIBMODLA_SITE = https://falktx.com/data/mod
 LIBMODLA_SOURCE = libmodla-$(LIBMODLA_VERSION)-$(LIBMODLA_SOURCE_SUFFIX)$(LIBMODLA_SOURCE_EXTRA_SUFFIX).tar.gz
 LIBMODLA_INSTALL_STAGING = YES
 
