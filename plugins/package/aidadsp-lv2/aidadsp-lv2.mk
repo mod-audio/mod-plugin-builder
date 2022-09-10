@@ -18,11 +18,7 @@ endif
 
 define AIDADSP_LV2_INSTALL_TARGET_CMDS
     mkdir -p $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2
-    cp -rL $(TARGET_DIR)/rt-neural-generic.lv2/* $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2/
-endef
-
-define AIDADSP_LV2_INSTALL_TARGET_CMDS
-    $(AIDADSP_LV2_TARGET_MAKE) install DESTDIR=$(TARGET_DIR)/usr/lib/lv2
+    cp -rL $(@D)/rt-neural-generic/* $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2/
 endef
 
 $(eval $(cmake-package))
