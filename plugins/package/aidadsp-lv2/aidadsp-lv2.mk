@@ -16,9 +16,12 @@ ifdef BR2_cortex_a35
     AIDADSP_LV2_CONF_OPTS = -DMOD_DWARF_GCC_750=ON -DRTNEURAL_EIGEN=ON
 endif
 
-define AIDADSP_LV2_INSTALL_TARGET_CMDS
+define AIDADSP_LV2_POST_INSTALL_TARGET_FILES
     mkdir -p $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2
-    cp -rL $(@D)/rt-neural-generic/* $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2/
+    cp -rL $(TARGET_DIR)/rt-neural-generic.lv2/* $(TARGET_DIR)/usr/lib/lv2/rt-neural-generic.lv2/
+    rm -rf $(TARGET_DIR)/rt-neural-generic.lv2
 endef
+
+AIDADSP_LV2_POST_INSTALL_TARGET_HOOKS += AIDADSP_LV2_POST_INSTALL_TARGET_FILES
 
 $(eval $(cmake-package))
