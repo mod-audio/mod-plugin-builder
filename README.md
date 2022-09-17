@@ -39,8 +39,14 @@ automake binutils build-essential cpio libtool libncurses-dev pkg-config python-
 Note that `libtool-bin` and `python-is-python3` are not available on old distros.<br/>
 If that is the case for you, simply skip these packages but install everything else.
 
-To begin simply run the bootstrap.sh script with either modduo, modduox, moddwarf or x86_64 as argument.<br/>
-The bootstrap.sh script will build the toolchain (ct-ng) and buildroot.<br/>
+To begin simply run:<br/>
+```
+./bootstrap.sh <platform>
+```
+
+Where `platform` is either modduo, modduox, moddwarf or x86_64.
+
+The script will build the toolchain (ct-ng) and buildroot.<br/>
 Depending on your machine it can take more than 1 hour.<br/>
 
 All files will be installed in `~/mod-workdir`.<br/>
