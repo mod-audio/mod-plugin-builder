@@ -71,7 +71,9 @@ fi
 
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
 
-if [ "${TOOLCHAIN_PLATFORM}" == "modduo" ] || [ "${TOOLCHAIN_PLATFORM}" == "modduox" ]; then
+if [ "${TOOLCHAIN_PLATFORM}" == "moddwarf-new" ]; then
+    CT_NG_VERSION=crosstool-ng-1.25.0
+elif [ "${TOOLCHAIN_PLATFORM}" == "modduo" ] || [ "${TOOLCHAIN_PLATFORM}" == "modduox" ]; then
     CT_NG_VERSION=crosstool-ng-1.22.0
 else
     CT_NG_VERSION=crosstool-ng-1.24.0

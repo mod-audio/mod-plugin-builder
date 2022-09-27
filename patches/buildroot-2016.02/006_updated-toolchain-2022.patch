@@ -1,0 +1,94 @@
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index d6cb238..3c1cff5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -79,6 +79,10 @@ choice
+ 		bool "Linux 4.4.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+ 
++	config BR2_KERNEL_HEADERS_5_16
++		bool "Linux 5.16.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -100,6 +104,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16
++	bool "5.16.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4
+ 	bool "4.4.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+@@ -228,4 +228,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
+ 	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
+ 	default "4.4.3"		if BR2_KERNEL_HEADERS_4_4
++	default "5.16.9"	if BR2_KERNEL_HEADERS_5_16
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index 43a090b..24b1a7e 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -233,10 +233,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "5.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+ 	default "4.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+ 	default "4.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
+ 	default "4.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
+@@ -303,10 +308,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
++config BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "11" if BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	default "5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index e276fce..6af2767 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -725,6 +725,10 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_11
++	bool "11.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 	bool "7.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+@@ -784,6 +788,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_16
++	bool "5.16.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
+ 	bool "4.4.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4

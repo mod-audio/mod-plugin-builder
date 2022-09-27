@@ -1,0 +1,26 @@
+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
+index ab62e2d..bb5f1d0 100644
+--- a/gio/gdbusauth.c
++++ b/gio/gdbusauth.c
+@@ -1054,9 +1054,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
+         case SERVER_STATE_WAITING_FOR_AUTH:
+           debug_print ("SERVER: WaitingForAuth");
+           line = _my_g_data_input_stream_read_line (dis, &line_length, cancellable, error);
+-          debug_print ("SERVER: WaitingForAuth, read '%s'", line);
+           if (line == NULL)
+             goto out;
++          debug_print ("SERVER: WaitingForAuth, read '%s'", line);
+           if (g_strcmp0 (line, "AUTH") == 0)
+             {
+               s = get_auth_mechanisms (auth, allow_anonymous, "REJECTED ", "\r\n", " ");
+@@ -1243,9 +1243,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
+         case SERVER_STATE_WAITING_FOR_DATA:
+           debug_print ("SERVER: WaitingForData");
+           line = _my_g_data_input_stream_read_line (dis, &line_length, cancellable, error);
+-          debug_print ("SERVER: WaitingForData, read '%s'", line);
+           if (line == NULL)
+             goto out;
++          debug_print ("SERVER: WaitingForData, read '%s'", line);
+           if (g_str_has_prefix (line, "DATA "))
+             {
+               gchar *encoded;
