@@ -10,9 +10,25 @@ PACKAGE=$2
 
 if [ -z "${PLATFORM}" ] || [ -z "${PACKAGE}" ] || [ ! -e "plugins-dep/configs/${PLATFORM}_defconfig" ]; then
     echo "Usage: $0 <platform> <plugin-package-name>"
-  echo "  Where platform can be one of: $(echo $(ls plugins-dep/configs | grep _defconfig | sed 's/_defconfig//g' | sort))"
+    echo "  Where platform can be one of: $(echo $(ls plugins-dep/configs | grep _defconfig | sed 's/_defconfig//g' | sort))"
     echo "  and plugin-package-name is a folder inside ./plugins/package"
     exit 1
+fi
+
+#######################################################################################################################
+# Verify device connection
+
+if ping -c 1 -W 0.05 192.168.51.1 > /dev/null; then
+  TARGET=192.168.51.1
+elif ping -c 1 -W 0.2 moddwarf.local > /dev/null; then
+  TARGET=moddwarf.local
+elif ping -c 1 -W 0.2 modduox.local > /dev/null; then
+  TARGET=modduox.local
+elif ping -c 1 -W 0.2 modduo.local > /dev/null; then
+  TARGET=modduo.local
+else
+  echo "not connected"
+  exit 1
 fi
 
 #######################################################################################################################
@@ -79,7 +95,7 @@ done
 
 pushd "${PLUGIN_PATH}" >/dev/null
 for bundle in ${bundles[@]}; do
-    tar cz "${bundle}" | base64 | curl -F 'package=@-' http://192.168.51.1/sdk/install; echo
+    tar cz "${bundle}" | base64 | curl -F 'package=@-' http://${TARGET}/sdk/install; echo
 done
 popd >/dev/null
 
