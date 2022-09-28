@@ -1,0 +1,20 @@
+diff --git a/src/shared/nss-util.h b/src/shared/nss-util.h
+index 230a986..31d19b2 100644
+--- a/src/shared/nss-util.h
++++ b/src/shared/nss-util.h
+@@ -90,15 +90,6 @@ enum nss_status _nss_##module##_gethostbyname_r(        \
+                 int *errnop, int *h_errnop) {           \
+         enum nss_status ret = NSS_STATUS_NOTFOUND;      \
+                                                         \
+-        if (_res.options & RES_USE_INET6)               \
+-                ret = _nss_##module##_gethostbyname3_r( \
+-                        name,                           \
+-                        AF_INET6,                       \
+-                        host,                           \
+-                        buffer, buflen,                 \
+-                        errnop, h_errnop,               \
+-                        NULL,                           \
+-                        NULL);                          \
+         if (ret == NSS_STATUS_NOTFOUND)                 \
+                 ret = _nss_##module##_gethostbyname3_r( \
+                         name,                           \
