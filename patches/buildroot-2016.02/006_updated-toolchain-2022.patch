@@ -54,7 +54,7 @@ index 43a090b..24b1a7e 100644
  	bool
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
  
-+config BR2_TOOLCHAIN_GCC_AT_LEAST_11
++config BR2_TOOLCHAIN_GCC_AT_LEAST_9
 +	bool
 +	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
 +
@@ -62,7 +62,7 @@ index 43a090b..24b1a7e 100644
  # stops affecting a value on the first matching default.
  config BR2_TOOLCHAIN_GCC_AT_LEAST
  	string
-+	default "11" if BR2_TOOLCHAIN_GCC_AT_LEAST_11
++	default "9" if BR2_TOOLCHAIN_GCC_AT_LEAST_9
  	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
  	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
  	default "5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_5
@@ -74,9 +74,9 @@ index e276fce..6af2767 100644
  	  Set to the gcc version that is used by your external
  	  toolchain.
  
-+config BR2_TOOLCHAIN_EXTERNAL_GCC_11
-+	bool "11.x"
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++config BR2_TOOLCHAIN_EXTERNAL_GCC_9
++	bool "9.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
 +
  config BR2_TOOLCHAIN_EXTERNAL_GCC_7
  	bool "7.x"
