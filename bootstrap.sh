@@ -108,7 +108,7 @@ fi
 
 if [ ! -f .stamp_built2 ]; then
   sed -i -e 's/.PHONY: $(PHONY)/.PHONY: build $(PHONY)/' ct-ng
-  ./ct-ng build
+  CT_JOBS=$PARALLEL_JOBS ./ct-ng build
   touch .stamp_built2
 fi
 
