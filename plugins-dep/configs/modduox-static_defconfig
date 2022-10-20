@@ -10,8 +10,8 @@ BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
 BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a53 -mtune=cortex-a53 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -ftree-vectorize -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DUOX -static-libstdc++ -Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
-BR2_TARGET_LDFLAGS="-static-libstdc++ -Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
+BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a53 -mtune=cortex-a53 -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -ftree-vectorize -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DUOX -static-libstdc++ -Wl,-O1,--as-needed,--strip-all"
+BR2_TARGET_LDFLAGS="-static-libstdc++ -Wl,-O1,--as-needed,--strip-all"
 BR2_TARGET_GENERIC_HOSTNAME=""
 BR2_TARGET_GENERIC_ISSUE=""
 BR2_INIT_NONE=y

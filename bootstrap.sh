@@ -78,11 +78,13 @@ fi
 # for static targets: keep old name for backwards compatibility, plus add static suffix
 if [ "${TOOLCHAIN_PLATFORM}" == "modduo-static" ]; then
   sed -i -e 's/CT_TARGET_SYS="${CT_TARGET_SYS}hf"/CT_TARGET_SYS="${CT_TARGET_SYS}hf.static"/' scripts/build/arch/arm.sh
+elif [ "${TOOLCHAIN_PLATFORM}" == "modduox-new" ]; then
+  sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi;/' scripts/functions
 elif [ "${TOOLCHAIN_PLATFORM}" == "modduox-static" ]; then
   sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
 fi
 
-# workaround until isl download works again
+# workaround for isl download
 if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ] && [ ! -f build/tarballs/isl-0.12.2.tar.bz2 ]; then
   mkdir -p build/tarballs
   cd build/tarballs
@@ -151,10 +153,10 @@ done
 #######################################################################################################################
 # fix missing shared libs
 
-if [ "${TOOLCHAIN_PLATFORM}" = "x86_64" ] && [ ! -e "${BR2_TARGET}/usr/lib/libmvec.so.1" ]; then
-  mkdir -p "${BR2_TARGET}/usr/lib"
-  cp "${TOOLCHAIN_DIR}/x86_64-mod-linux-gnu/sysroot/lib/libmvec.so.1" "${BR2_TARGET}/usr/lib/libmvec.so.1"
-fi
+# if [ "${TOOLCHAIN_PLATFORM}" = "x86_64" ] && [ ! -e "${BR2_TARGET}/usr/lib/libmvec.so.1" ]; then
+#   mkdir -p "${BR2_TARGET}/usr/lib"
+#   cp "${TOOLCHAIN_DIR}/x86_64-mod-linux-gnu/sysroot/lib/libmvec.so.1" "${BR2_TARGET}/usr/lib/libmvec.so.1"
+# fi
 
 #######################################################################################################################
 # initial first build

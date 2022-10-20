@@ -71,13 +71,28 @@ fi
 
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
 
-if [ "${TOOLCHAIN_PLATFORM}" == "moddwarf-new" ]; then
-    CT_NG_VERSION=crosstool-ng-1.25.0
-elif [ "${TOOLCHAIN_PLATFORM}" == "modduo" ] || [ "${TOOLCHAIN_PLATFORM}" == "modduox" ]; then
-    CT_NG_VERSION=crosstool-ng-1.22.0
-else
-    CT_NG_VERSION=crosstool-ng-1.24.0
-fi
+case "${TOOLCHAIN_PLATFORM}" in
+    # old targets: ct-ng 1.22 with gcc 4.9 + glibc 2.21
+    "modduo"|"modduox")
+        CT_NG_VERSION=crosstool-ng-1.22.0
+        ;;
+    # intermediate targets: ct-ng 1.24 with gcc 7.5 + glibc 2.27 on dwarf, 2.21 on duo/duox (static)
+    "modduo-static"|"modduox-static"|"moddwarf")
+        CT_NG_VERSION=crosstool-ng-1.24.0
+        ;;
+    # TODO: update to 1.25 setup
+    "raspberrypi4")
+        CT_NG_VERSION=crosstool-ng-1.24.0
+        ;;
+    # new targets: ct-ng 1.25 with gcc 9 + glibc 2.35
+    "modduo-new"|"modduox-new"|"moddwarf-new"|"x86_64")
+        CT_NG_VERSION=crosstool-ng-1.25.0
+        ;;
+    # fallback
+    *)
+        CT_NG_VERSION=crosstool-ng-1.24.0
+        ;;
+esac
 
 CT_NG_FILE=${CT_NG_VERSION}.tar.bz2
 
