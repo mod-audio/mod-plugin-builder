@@ -1,0 +1,5 @@
+This custom package exists because the original fails to build with gcc9.
+We not only add a patch to fix the build, but inject -std=gnu++11 in CXXFLAGS.
+The latter is why this needs a custom package.
+
+Can be dropped if updated buildroot has an official fix.
