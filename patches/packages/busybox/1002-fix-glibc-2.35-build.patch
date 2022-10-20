@@ -1,0 +1,22 @@
+diff --git a/include/libbb.h b/include/libbb.h
+index a8ceb44..e3a5b6e 100644
+--- a/include/libbb.h
++++ b/include/libbb.h
+@@ -326,6 +326,17 @@ extern int *const bb_errno;
+ uint64_t bb_bswap_64(uint64_t x) FAST_FUNC;
+ #endif
+ 
++#if defined(__GLIBC__) && (__GLIBC__ * 1000 + __GLIBC_MINOR__) >= 2035
++static inline
++int stime(const time_t *t)
++{
++	struct timeval tv;
++	tv.tv_sec = *t;
++	tv.tv_usec = 0;
++	return settimeofday(&tv, NULL);
++}
++#endif
++
+ unsigned long long monotonic_ns(void) FAST_FUNC;
+ unsigned long long monotonic_us(void) FAST_FUNC;
+ unsigned long long monotonic_ms(void) FAST_FUNC;
