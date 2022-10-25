@@ -56,6 +56,10 @@ if [ ! -f .config ]; then
   cp ${SOURCE_DIR}/toolchain/${TOOLCHAIN_PLATFORM}.config .config
   sed -i -e "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
   sed -i -e "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
+  # static toolchains not supported under macOS, see https://github.com/crosstool-ng/crosstool-ng/issues/396
+  if [ -d "/opt/homebrew/opt/binutils/bin" ]; then
+    sed -i -e "/CT_WANTS_STATIC_LINK/d" .config
+  fi
 fi
 
 if [ ! -f .stamp_configured ]; then
@@ -100,7 +104,7 @@ elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.24.0" ] && [ ! -f build/tarballs/isl
 fi
 
 if [ ! -f .stamp_built2 ]; then
-  sed -i 's/.PHONY: $(PHONY)/.PHONY: build $(PHONY)/' ct-ng
+  sed -i -e 's/.PHONY: $(PHONY)/.PHONY: build $(PHONY)/' ct-ng
   ./ct-ng build
   touch .stamp_built2
 fi
