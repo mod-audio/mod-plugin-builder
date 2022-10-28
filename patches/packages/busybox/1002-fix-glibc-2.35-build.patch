@@ -6,7 +6,7 @@ index a8ceb44..e3a5b6e 100644
  uint64_t bb_bswap_64(uint64_t x) FAST_FUNC;
  #endif
  
-+#if defined(__GLIBC__) && (__GLIBC__ * 1000 + __GLIBC_MINOR__) >= 2035
++#if defined(__GLIBC__) && (__GLIBC__ * 1000 + __GLIBC_MINOR__) >= 2034
 +static inline
 +int stime(const time_t *t)
 +{
