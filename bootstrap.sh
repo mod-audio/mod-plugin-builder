@@ -194,6 +194,10 @@ elif [ "${BUILDTARGET}" = "dev" ]; then
   # for cc-master
   ${BR2_MAKE} jansson
   ${BR2_MAKE} libserialport
+  # for mod-host
+  ${BR2_MAKE} jack2mod
+  ${BR2_MAKE} hylia
+  ${BR2_MAKE} readline
 elif [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
 fi
