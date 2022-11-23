@@ -4,7 +4,7 @@
 #
 ######################################
 
-SCRECORD_VERSION = 036dde2f75794ace129f51d6daa1aa1e2a68cbee
+SCRECORD_VERSION = 8faadb15799b53cbc5a75f696f37c19db632d3c0
 SCRECORD_SITE = $(call github,brummer10,screcord.lv2,$(SCRECORD_VERSION))
 SCRECORD_BUNDLES = sc_record.lv2
 
