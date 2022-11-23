@@ -4,7 +4,7 @@
 #
 ######################################
 
-ONEKNOB_SERIES_LABS_VERSION = 2eeb5654e0e7f8609d396fe8b5a1c29f1e8331f5
+ONEKNOB_SERIES_LABS_VERSION = 9970eed4ef80fdc7a2c66d9d7801ab23acbe5818
 ONEKNOB_SERIES_LABS_SITE = https://github.com/DISTRHO/OneKnob-Series.git
 ONEKNOB_SERIES_LABS_SITE_METHOD = git
 ONEKNOB_SERIES_LABS_BUNDLES = OK-AB-InputSelector.lv2 OK-AB-OutputSelector.lv2 OK-BrickwallLimiter.lv2 OK-DevilDistortion.lv2
