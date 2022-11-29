@@ -4,7 +4,7 @@
 #
 ######################################
 
-CARDINAL_BIN_VERSION = 22.10
+CARDINAL_BIN_VERSION = 22.11
 CARDINAL_BIN_SITE_METHOD = local
 CARDINAL_BIN_SITE = $($(PKG)_PKGDIR)/
 CARDINAL_BIN_BUNDLES = Cardinal.lv2 CardinalFX.lv2
