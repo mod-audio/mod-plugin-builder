@@ -1,0 +1,22 @@
+diff --git a/common/freeverb/delay.cpp b/common/freeverb/delay.cpp
+index 8f69a47..f5321ce 100644
+--- a/common/freeverb/delay.cpp
++++ b/common/freeverb/delay.cpp
+@@ -44,7 +44,7 @@ long FV3_(delay)::getsize()
+ void FV3_(delay)::setsize(long size)
+                  throw(std::bad_alloc)
+ {
+-  if(size <= 0) return;
++  if(size <= 0) size = 1;
+   if(size > (long)(sizeof(buffer)/sizeof(buffer[0])))
+     {
+       std::fprintf(stderr, "delay::setsize(%ld) bad_alloc\n", size);
+@@ -133,7 +133,7 @@ void FV3_(delaym)::setsize(long size, long modsize)
+ #ifdef DEBUG
+   std::fprintf(stderr, "delaym::setsize(%ld,%ld)\n", size, modsize);
+ #endif
+-  if(size <= 0) return;
++  if(size <= 0) size = 1;
+   if(modsize < 0) modsize = 0;
+   if(modsize > size) modsize = size;
+   long newsize = size + modsize;
