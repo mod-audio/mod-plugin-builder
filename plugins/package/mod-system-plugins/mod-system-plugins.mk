@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_SYSTEM_PLUGINS_VERSION = 40c0e6b29dfaeea4b0e95790a86c616b63fe40f1
+MOD_SYSTEM_PLUGINS_VERSION = db77cf51e43bc89eefa5c28d9073fe69b0a894c5
 MOD_SYSTEM_PLUGINS_SITE = $(call github,moddevices,mod-system-plugins,$(MOD_SYSTEM_PLUGINS_VERSION))
 MOD_SYSTEM_PLUGINS_BUNDLES = system-noisegate.lv2 advanced-noisegate.lv2 system-compressor.lv2 advanced-compressor.lv2
 
