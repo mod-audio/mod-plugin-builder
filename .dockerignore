@@ -1,0 +1,6 @@
+.git/*
+docker-compose.yml
+docker-workdir/*
+lv2-data/*
+lv2-data-creative-commons/*
+plugins/*

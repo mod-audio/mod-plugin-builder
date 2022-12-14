@@ -1,0 +1,20 @@
+#!/bin/sh
+
+PACKAGE=$1
+
+if [ -z "${PACKAGE}" ]; then
+	echo "Usage: $0 <plugin-package-name>"
+	echo "  Where plugin-package-name is a folder inside ./plugins/package"
+	exit 1
+fi
+
+. ./.docker
+
+for i in $DOCKER_PLATFORMS; do
+	./docker-build $i $@
+
+	if [ $? -ne 0 ]; then
+		echo "Building for platform $i failed! Exiting..."
+		exit 1
+	fi
+done

@@ -1,0 +1,61 @@
+version: "3.9"
+services:
+  x86_64:
+    image: ${DOCKER_ORGANIZATION}/${DOCKER_IMG_PREFIX}x86_64:latest
+    build:
+      context: .
+      args:
+        MPB_PLATFORM: x86_64
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    volumes:
+      - type: volume
+        source: mpb
+        target: /home/builder/mod-plugin-builder
+        volume:
+          nocopy: true
+      - download:/home/builder/mod-workdir/download
+      - plugins_x86_64:/home/builder/mod-workdir/x86_64/plugins
+  modduo-new:
+    image: ${DOCKER_ORGANIZATION}/${DOCKER_IMG_PREFIX}modduo-new:latest
+    build:
+      context: .
+      args:
+        MPB_PLATFORM: modduo-new
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+    volumes:
+      - type: volume
+        source: mpb
+        target: /home/builder/mod-plugin-builder
+        volume:
+          nocopy: true
+      - download:/home/builder/mod-workdir/download
+      - plugins_modduo_new:/home/builder/mod-workdir/modduo-new/plugins
+volumes:
+  mpb:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}'
+  download:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/docker-workdir/download'
+  plugins_x86_64:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/docker-workdir/x86_64'
+  plugins_modduo_new:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/docker-workdir/modduo-new'
