@@ -1,0 +1,12 @@
+diff --git a/src/WolfShaperPlugin.cpp b/src/WolfShaperPlugin.cpp
+index 1551c8e..b98a1db 100644
+--- a/src/WolfShaperPlugin.cpp
++++ b/src/WolfShaperPlugin.cpp
+@@ -208,6 +208,7 @@ protected:
+         case 0:
+             state.key = "graph";
+             state.label = "Graph";
++            state.hints = kStateIsHostReadable;
+ 
+             // generated using printf("%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, wolf::CurveType::Exponential, 1.0f, 1.0f, 0.0f, wolf::CurveType::Exponential);
+             state.defaultValue = String("0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;");
