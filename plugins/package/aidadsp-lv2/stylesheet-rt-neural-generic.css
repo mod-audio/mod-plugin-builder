@@ -1,0 +1,287 @@
+@font-face {
+  font-family: "conthrax-sb";
+  src: url(/resources/fonts/conthrax-sb.ttf{{{ns}}});
+}
+
+.rt-neural {
+  border-radius: 5px;
+  background-repeat: no-repeat;
+  color: white;
+  width: 800px;
+}
+
+.rt-neural h1 {
+  font-family: "conthrax-sb", sans-serif !important;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  /* font-size: 12em; */
+  /* font-weight: bold; */
+}
+
+.rt-neural h1 .stronger {
+  font-family: "conthrax-sb", sans-serif !important;
+  font-weight: 800;
+  /* color: rgb(241, 241, 241); */
+}
+
+.rt-neural .lbl-knob {
+  font-size: 1rem;
+}
+
+/* AMPHAED */
+
+
+
+.rt-neural .grid {
+  display: grid;
+  color: white;
+  width: 800px;
+  grid-template-columns: 1fr 1fr 1fr;
+  background-color: rgba(35, 35, 35, 1);
+  border-radius: 12px;
+  background: linear-gradient(
+    140deg,
+    rgba(35, 35, 35, 1) 0%,
+    rgba(25, 25, 25, 1) 52%,
+    rgba(19, 19, 19, 1) 100%
+  );
+}
+
+.rt-neural .head-border {
+  padding: 5px 0;
+  grid-column: 1 / span 3;
+}
+
+.rt-neural .background_head {
+  display: grid;
+  grid-column: 1 / span 3;
+  grid-template-columns: 2fr 3fr 2fr;
+  grid-gap: 15px;
+  width: fit-content;
+  padding: 0;
+  margin: 0 10px;
+  border-radius: 8px;
+  border: 4spx solid #000;
+  box-shadow: inset 0 0px 10px #000;
+  background: linear-gradient(
+      45deg,
+      rgba(131, 185, 65, 1) 12%,
+      transparent 0,
+      transparent 88%,
+      rgba(131, 185, 65, 1) 0
+    ),
+    linear-gradient(
+      135deg,
+      transparent 37%,
+      rgba(91, 134, 37, 0.8) 0,
+      rgba(91, 134, 37, 0.8) 63%,
+      transparent 0
+    ),
+    linear-gradient(
+      45deg,
+      transparent 37%,
+      rgba(131, 185, 65, 1) 0,
+      rgba(131, 185, 65, 1) 63%,
+      transparent 0
+    ),
+    rgb(26, 29, 27);
+  background-size: 40px 40px;
+}
+
+/* animation 
+if you want to go bonkers bind it to a gate and animate accordingly */
+/* .background_head {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+} */
+
+.rt-neural .block_name {
+  padding: 15px 25px;
+  color: #fff;
+  text-align: center;
+  align-content: center;
+  justify-items: center;
+  border-radius: 16px;
+  /* text-shadow: 0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 6px 0px #444, 0px 7px 0px #333, 0px 8px 7px #001135; */
+}
+
+.rt-neural .plate {
+  /* width: fit-content; */
+  align-self: center;
+  grid-column: 2;
+  padding: 0px;
+  margin: 35px auto;
+  background-color: rgba(25, 25, 25, 1);
+  border-radius: 8px;
+  background: linear-gradient(
+    140deg,
+    rgba(35, 35, 35, 1) 0%,
+    rgba(25, 25, 25, 1) 52%,
+    rgba(19, 19, 19, 1) 100%
+  );
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.2),
+    0 4px 4px rgba(0, 0, 0, 0.15), 0 8px 8px rgba(0, 0, 0, 0.1),
+    0 16px 16px rgba(0, 0, 0, 0.05);
+}
+
+.rt-neural .plate img {
+  height: 50px;
+}
+
+.rt-neural .brand {
+  margin: 15px 15px;
+  justify-self: start;
+  align-self: end;
+  grid-column: 1;
+}
+
+.rt-neural .brand img {
+  height: 30px;
+  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.2),
+    0 4px 4px rgba(0, 0, 0, 0.15), 0 8px 8px rgba(0, 0, 0, 0.1),
+    0 16px 16px rgba(0, 0, 0, 0.05); */
+    filter: drop-shadow(7px 7px 7px #666666);
+    -webkit-filter: drop-shadow(7px 7px 7px #666666);
+}
+
+.rt-neural .model {
+  font-weight: lighter;
+  font-size: 1em;
+  padding: 25px 25px;
+  justify-self: end;
+  align-self: end;
+  grid-column: 3;
+  background-color: #25252591;
+}
+
+/* CONTROLS */
+
+.rt-neural .rt-neural-controls {
+  display: grid;
+  grid-column: 1 / span 3;
+  grid-template-columns: repeat(10, 1fr);
+  grid-gap: 15px;
+  width: 780px;
+  justify-items: center;
+  align-self: center;
+
+
+  text-align: center;
+  text-transform: uppercase;
+  padding: 5px;
+  margin: 0 10px;
+  border-radius: 8px;
+  border: 4spx solid #000;
+}
+
+.rt-neural .controls .label {
+  grid-area: label;
+  justify-self: center;
+}
+
+.rt-neural .seperator-grid {
+  margin: 0 5px;
+  border-left: 2px solid rgba(131, 185, 65, 1);
+  height: 120px;
+}
+
+/* KNOBS */
+.rt-neural .knob-grid {
+  display: grid;
+  grid-template-areas: "knob" "label";
+}
+.rt-neural .knob-bg {
+  height: 50px;
+  width: 50px;
+  margin: 15px auto;
+  background: center/cover
+    url("/resources/knobs/rw_knob_large_dark.svg{{{ns}}}");
+  grid-area: knob;
+}
+
+.rt-neural .knob-scale {
+  align-self: end;
+  width: 80px;
+  height: 80px;
+  background: center/cover url("/resources/knobs/scale.png{{{ns}}}");
+}
+
+/* SWITCH */
+
+.rt-neural .switch {
+  align-self: center;
+}
+
+.rt-neural .switch-grid {
+  display: grid;
+  align-self: center;
+}
+
+.rt-neural .switch-grid .flipsw {
+  padding: 5px;
+}
+
+.rt-neural .text-switch {
+  font-size: 0.5rem;
+}
+
+.rt-neural .on .toggle-sw,
+.rt-neural .off .toggle-sw {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 25px;
+  height: 50px;
+  background: rgba(131, 185, 65, 1);
+  display: inline-block;
+  border-radius: 100px;
+  position: relative;
+}
+
+.rt-neural .on .toggle-sw {
+  background: rgb(84, 84, 84);
+}
+
+.rt-neural .on .toggle-sw:after,
+.rt-neural .off .toggle-sw:after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: rgb(14, 60, 4);
+  border-radius: 90px;
+  transition: 0.2s;
+}
+
+.rt-neural .off .toggle-sw:after {
+  top: calc(-80% + 25px);
+  transform: translateY(100%);
+}
+
+.rt-neural .on .toggle-sw:after {
+  background: rgb(218, 214, 203);
+}
+
+.rt-neural .on .toggle-sw:after {
+  top: calc(100% - 5px);
+  transform: translateY(-100%);
+}

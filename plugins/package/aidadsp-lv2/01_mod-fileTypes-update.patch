@@ -1,0 +1,13 @@
+diff --git a/rt-neural-generic/ttl/rt-neural-generic.ttl b/rt-neural-generic/ttl/rt-neural-generic.ttl
+index 96c09fc..bb655b1 100644
+--- a/rt-neural-generic/ttl/rt-neural-generic.ttl
++++ b/rt-neural-generic/ttl/rt-neural-generic.ttl
+@@ -15,7 +15,7 @@
+ 
+ <http://aidadsp.cc/plugins/aidadsp-bundle/rt-neural-generic#json>
+     a lv2:Parameter ;
+-    mod:fileTypes "modelsim" ;
++    mod:fileTypes "aidadspmodel" ;
+     rdfs:label "Neural Model" ;
+     rdfs:range atom:Path .
+ 
