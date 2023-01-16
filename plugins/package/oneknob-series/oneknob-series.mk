@@ -4,7 +4,7 @@
 #
 ######################################
 
-ONEKNOB_SERIES_VERSION = 5867b61a8f75e9a31901fe3bc698a46b0ef4c3e0
+ONEKNOB_SERIES_VERSION = d3e790f0030a3999b72d89d95bcedcdca851bea4
 ONEKNOB_SERIES_SITE = https://github.com/DISTRHO/OneKnob-Series.git
 ONEKNOB_SERIES_SITE_METHOD = git
 ONEKNOB_SERIES_BUNDLES = MOD-ConvolutionLoader.lv2
