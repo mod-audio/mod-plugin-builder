@@ -197,6 +197,7 @@ elif [ "${BUILDTARGET}" = "dev" ]; then
   # for mod-host
   ${BR2_MAKE} jack2mod
   ${BR2_MAKE} hylia
+  ${BR2_MAKE} lilv
   ${BR2_MAKE} readline
 elif [ "${BUILDTARGET}" != "toolchain" ]; then
   ${BR2_MAKE}
