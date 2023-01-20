@@ -4,8 +4,8 @@
 #
 ######################################
 
-WOLF_SHAPER_VERSION = 4c8edd5b36e93b7ad18c2fb1ce6f383c7ac27188
-WOLF_SHAPER_SITE = https://github.com/pdesaulniers/wolf-shaper.git
+WOLF_SHAPER_VERSION = ed9db523859437cba61d05d3fd08fd579a4a4992
+WOLF_SHAPER_SITE = https://github.com/falkTX/wolf-shaper.git
 WOLF_SHAPER_SITE_METHOD = git
 WOLF_SHAPER_BUNDLES = wolf-shaper.lv2
 
