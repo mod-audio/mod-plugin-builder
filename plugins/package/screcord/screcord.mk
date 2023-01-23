@@ -6,7 +6,7 @@
 
 SCRECORD_VERSION = c3eef0dbb86396df5ca72bbf122d9e79b112d527
 SCRECORD_SITE = $(call github,brummer10,screcord.lv2,$(SCRECORD_VERSION))
-SCRECORD_BUNDLES = sc_record.lv2
+SCRECORD_BUNDLES = sc_record.lv2 sc_record_mini.lv2
 
 ifdef BR2_cortex_a7
 SCRECORD_SSE_CFLAGS = -mfpu=vfpv3
