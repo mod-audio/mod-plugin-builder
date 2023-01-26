@@ -4,7 +4,7 @@
 #
 ######################################
 
-MATK_VERSION = 838059558d590641ac861f662dd0e4745a096b2c
+MATK_VERSION = e7d026b15659c90259376cadda1297e628069451
 MATK_SITE = $(call github,brummer10,ModularAmpToolKit.lv2,$(MATK_VERSION))
 MATK_BUNDLES = PreAmps.lv2 PreAmpImpulses.lv2 poweramps.lv2 PowerAmpImpulses.lv2
 
