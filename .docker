@@ -1,0 +1,3 @@
+: "${DOCKER_PLATFORMS:=x86_64 modduo-new}"
+
+. ./.env

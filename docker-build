@@ -1,0 +1,28 @@
+#!/bin/sh
+
+PLATFORM=$1
+PACKAGE=$2
+
+if [ -z "${PLATFORM}" ] || [ -z "${PACKAGE}" ] || [ ! -e "plugins-dep/configs/${PLATFORM}_defconfig" ]; then
+	echo "Usage: $0 <platform> <plugin-package-name>"
+	echo "  Where platform can be one of: $(echo $(ls plugins-dep/configs | grep _defconfig | sed 's/_defconfig//g' | sort))"
+	echo "  and plugin-package-name is a folder inside ./plugins/package"
+	exit 1
+fi
+
+. ./.docker
+
+if ! docker image inspect ${DOCKER_IMG_PREFIX}$1 -f " " > /dev/null 2>&1; then
+	echo "Initializing platform $1..."
+	DOCKER_PLATFORMS="$1" ./docker-init
+	if [ $? -ne 0 ]; then
+		echo "Pulling the image failed! Try running \`docker compose build ${PLATFORM}\` to build one locally."
+		exit 1
+	fi
+fi
+
+docker compose run --rm "$1" ./build $@
+
+if [ $? -eq 0 ]; then
+	echo "Build artifacts should be available in 'docker-workdir/$1'"
+fi

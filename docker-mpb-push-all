@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# You should have a builder set up consisting of at least one node building amd64 natively and one for arm64.
+# Otherwise, the build would take forever and simply time out. You can use a command similar to these:
+#
+# docker context create --docker host=ssh://my_user@192.168.1.120 node-arm64
+# docker buildx create --append --name my_builder default
+# docker buildx create --append --name my_builder node-arm64
+# docker buildx use my_builder
+#
+
+. ./.docker
+
+for i in $DOCKER_PLATFORMS; do
+	docker buildx build --build-arg MPB_PLATFORM=$i --platform=linux/arm64,linux/amd64 -t ${DOCKER_ORGANIZATION}/${DOCKER_IMG_PREFIX}${i}:latest --push .
+done
