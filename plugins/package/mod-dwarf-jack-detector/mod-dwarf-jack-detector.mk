@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_DWARF_JACK_DETECTOR_VERSION = c3eb2464c13938b681ba91e4dfb20bcbc1502210
+MOD_DWARF_JACK_DETECTOR_VERSION = 711d07b2ef59d93a04de09a5039e3c043506e230
 MOD_DWARF_JACK_DETECTOR_SITE = $(call github,moddevices,mod-dwarf-jack-detector,$(MOD_DWARF_JACK_DETECTOR_VERSION))
 MOD_DWARF_JACK_DETECTOR_DEPENDENCIES = alsa-lib
 MOD_DWARF_JACK_DETECTOR_BUNDLES = mod-auto-input-selector.lv2 mod-auto-output-selector.lv2 mod-cv-jack-detector.lv2
