@@ -2,8 +2,8 @@ FROM ubuntu:18.04
 LABEL maintainer="Alexandre Cunha <ale@moddevices.com>"
 ENV DEBIAN_FRONTEND noninteractive
 
-# platform argument must be provided, e.g. --build-arg platform=modduo
-ARG platform=modduo
+# platform argument must be provided, e.g. --build-arg platform=moddwarf
+ARG platform=moddwarf
 
 # enable i386, armhf and arm64
 RUN dpkg --add-architecture i386

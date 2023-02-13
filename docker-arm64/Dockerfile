@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 LABEL maintainer="Filipe Coelho <falktx@falktx.com>"
 ENV DEBIAN_FRONTEND noninteractive
 
-# platform argument must be provided, e.g. --build-arg platform=modduo
+# platform argument must be provided, e.g. --build-arg platform=moddwarf
 ARG platform=moddwarf
 
 # enable armhf
