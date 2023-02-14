@@ -26,9 +26,13 @@ endif
 define DM_GRAINDELAY_CONFIGURE_CMDS
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --no-modify-path --profile minimal
 	~/.cargo/bin/rustup target add $(DM_GRAINDELAY_RUST_TARGET)
+	# FIXME update cloud builders
+	# sudo apt-get update
+	# sudo apt-get install -qy llvm clang gcc-multilib
 endef
 
 define DM_GRAINDELAY_BUILD_CMDS
+	rm -f $(@D)/lv2/dm-GrainDelay.lv2/libdm_graindelay.so
 	(cd $(@D)/lv2 && \
 		~/.cargo/bin/cargo build \
 			--release \
@@ -40,6 +44,7 @@ endef
 define DM_GRAINDELAY_INSTALL_TARGET_CMDS
 	$(INSTALL) -d $(TARGET_DIR)/usr/lib/lv2
 	cp -rv $(@D)/lv2/dm-GrainDelay.lv2 $(TARGET_DIR)/usr/lib/lv2/
+	$(INSTALL) -m 644 $(@D)/lv2/target/$(DM_GRAINDELAY_RUST_TARGET)/release/libdm_graindelay.so $(TARGET_DIR)/usr/lib/lv2/dm-GrainDelay.lv2/
 endef
 
 $(eval $(generic-package))
