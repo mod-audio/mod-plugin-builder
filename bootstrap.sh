@@ -187,7 +187,7 @@ if [ "${BUILDTARGET}" = "minimal" ]; then
 elif [ "${BUILDTARGET}" = "juce" ]; then
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
-  ${BR2_MAKE} juce
+  ${BR2_MAKE} juce6
   ${BR2_MAKE} mod-plugin-builder
 elif [ "${BUILDTARGET}" = "dev" ]; then
   ${BR2_MAKE} host-python
