@@ -1,0 +1,361 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b46e4b5..9aeaf4e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,16 +36,12 @@ endif()
+ project (SCHRAMMEL_OJD VERSION 0.9.8)
+ 
+ # Adding JUCE
+-add_subdirectory (Ext/JUCE)
+-
+-# The subdirectory contains its own CMakeLists that creates BinaryData targets containing graphics and fonts
+-add_subdirectory (BinaryResources)
++find_package (JUCE6 REQUIRED)
+ 
+ # Adding JSON
+ set (JSON_BuildTests OFF CACHE INTERNAL "")
+ set (JSON_Install OFF CACHE INTERNAL "")
+ add_subdirectory (Ext/JBPluginBase)
+-add_subdirectory (Ext/Resvg4JUCE)
+ 
+ function (add_ojd_version format)
+ 
+@@ -55,7 +51,7 @@ juce_add_plugin (OJD-${format}
+         COMPANY_NAME Schrammel
+         PRODUCT_NAME "OJD"
+ 
+-        COPY_PLUGIN_AFTER_BUILD TRUE
++        COPY_PLUGIN_AFTER_BUILD FALSE
+         FORMATS ${format}
+ 
+         ${ARGN})
+@@ -68,8 +64,6 @@ jb_add_git_version_info (OJD-${format})
+ 
+ # Adding all source files to the plugin target
+ target_sources (OJD-${format} PRIVATE
+-        Source/OJDPedalComponent.cpp
+-        Source/OJDAudioProcessorEditor.cpp
+         Source/OJDProcessor.cpp
+         Source/OJDParameters.cpp)
+ 
+@@ -81,6 +75,10 @@ target_compile_definitions (OJD-${format}
+         JUCE_USE_CURL=0
+         JUCE_STRICT_REFCOUNTEDPTR=1
+         JUCE_VST3_CAN_REPLACE_VST2=0
++        JucePlugin_LV2URI="https://github.com/JanosGit/Schrammel_OJD"
++        JucePlugin_WantsLV2Latency=0
++        JucePlugin_WantsLV2State=0
++        JucePlugin_WantsLV2TimePos=0
+         JB_INCLUDE_JSON=1)
+ 
+ target_link_libraries (OJD-${format} PRIVATE
+@@ -90,14 +88,10 @@ target_link_libraries (OJD-${format} PRIVATE
+ 
+         # Custom modules
+         jb_plugin_base
+-        jb::Resvg4JUCE
+ 
+         # JSON dependncy in plugin base
+         nlohmann_json::nlohmann_json
+ 
+-        # Binary Data
+-        EmbeddedBinaryData
+-
+         # Recommended flags
+         juce::juce_recommended_lto_flags
+         juce::juce_recommended_warning_flags
+@@ -105,17 +99,11 @@ target_link_libraries (OJD-${format} PRIVATE
+ 
+ endfunction()
+ 
+-add_ojd_version(VST3
++add_ojd_version(LV2
+         # A four-character manufacturer id with at least one upper-case character
+         PLUGIN_MANUFACTURER_CODE Srml
+         # A unique four-character plugin id with at least one upper-case character
+-        PLUGIN_CODE SOJD
+-
+-        # When the OJD was released, there was a bug in JUCE that wrongly reported the plugin code "proj". Applying this
+-        # to not break existing sessions
+-        USE_LEGACY_COMPATIBILITY_PLUGIN_CODE TRUE
+-
+-        VST3_CATEGORIES Fx Distortion)
++        PLUGIN_CODE Sojd)
+ 
+ if (APPLE)
+ add_ojd_version(AU
+Submodule Ext/JBPluginBase contains modified content
+diff --git a/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.cpp b/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.cpp
+index 273a316..5e902d6 100644
+--- a/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.cpp
++++ b/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.cpp
+@@ -46,6 +46,7 @@ StateAndPresetManager::~StateAndPresetManager()
+     allManagers.removeAllInstancesOf (this);
+ }
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ std::unique_ptr<PresetManagerComponent> StateAndPresetManager::createPresetManagerComponent (juce::Component& editor, bool withUndoRedoButtons)
+ {
+     // Only one preset manager component can be active at the same time
+@@ -55,6 +56,7 @@ std::unique_ptr<PresetManagerComponent> StateAndPresetManager::createPresetManag
+ 
+     return std::unique_ptr<PresetManagerComponent> (presetManagerComponent);
+ }
++#endif
+ 
+ bool StateAndPresetManager::loadPreset (const juce::String& presetName)
+ {
+@@ -147,8 +149,10 @@ void StateAndPresetManager::presetFilesAvailableChanged()
+     for (auto& presetFile : presetFilesAvailable)
+         presets.emplace_back (std::make_pair (presetFile.getFileNameWithoutExtension(), presetFile));
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     if (presetManagerComponent != nullptr)
+         presetManagerComponent->presetsAvailableChanged();
++#endif
+ }
+ 
+ juce::StringArray StateAndPresetManager::getPresetList()
+@@ -206,8 +210,10 @@ void StateAndPresetManager::modifiedCurrentPreset ()
+     currentPresetWasModified = true;
+     currentPresetName = "***" + currentPresetName;
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     if (presetManagerComponent != nullptr)
+         presetManagerComponent->modifiedCurrentPreset();
++#endif
+ }
+ 
+ const File StateAndPresetManager::presetDirectory = File::getSpecialLocation (File::SpecialLocationType::userApplicationDataDirectory)
+@@ -223,6 +229,7 @@ juce::Array<StateAndPresetManager*> StateAndPresetManager::allManagers;
+ juce::CriticalSection               StateAndPresetManager::sharedResourcesLock;
+ 
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ PresetManagerComponent::PresetManagerComponent (juce::Component& editorToOverlayWithSaveDialogue,
+                                                 jb::StateAndPresetManager* managerToReferTo,
+                                                 bool withRedoUndoButtons)
+@@ -390,5 +397,6 @@ void PresetManagerComponent::SaveComponent::resized()
+     saveButton.setBounds (bounds.removeFromLeft (bounds.proportionOfWidth (0.5f)).withTrimmedRight (sideTrim));
+     cancelButton.setBounds (bounds.withTrimmedLeft (sideTrim));
+ }
++#endif
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.h b/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.h
+index c079c7e..e08dd1f 100644
+--- a/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.h
++++ b/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.h
+@@ -36,7 +36,9 @@ public:
+ 
+     ~StateAndPresetManager() override;
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     std::unique_ptr<PresetManagerComponent> createPresetManagerComponent (juce::Component& editor, bool withUndoRedoButtons);
++#endif
+ 
+     bool loadPreset (const juce::String& presetName);
+ 
+@@ -84,6 +86,7 @@ private:
+     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (StateAndPresetManager)
+ };
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ class PresetManagerComponent : public juce::Component
+ {
+ public:
+@@ -139,5 +142,6 @@ private:
+ 
+     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PresetManagerComponent)
+ };
++#endif
+ 
+ }
+diff --git a/Ext/JBPluginBase/jb_plugin_base/Processor/PluginAudioProcessorBase.h b/Ext/JBPluginBase/jb_plugin_base/Processor/PluginAudioProcessorBase.h
+index d9df485..8e7da25 100644
+--- a/Ext/JBPluginBase/jb_plugin_base/Processor/PluginAudioProcessorBase.h
++++ b/Ext/JBPluginBase/jb_plugin_base/Processor/PluginAudioProcessorBase.h
+@@ -247,8 +247,10 @@ private:
+         }
+     }
+ 
++    #if !JUCE_AUDIOPROCESSOR_NO_GUI
+     // I don't ever plan to build a plugin without editor
+     bool hasEditor() const override { return true; }
++    #endif
+ 
+     #ifdef JucePlugin_Name
+     const juce::String getName() const override { return JucePlugin_Name; }
+diff --git a/Ext/JBPluginBase/jb_plugin_base/jb_plugin_base.h b/Ext/JBPluginBase/jb_plugin_base/jb_plugin_base.h
+index ed475cf..e50fa19 100644
+--- a/Ext/JBPluginBase/jb_plugin_base/jb_plugin_base.h
++++ b/Ext/JBPluginBase/jb_plugin_base/jb_plugin_base.h
+@@ -87,12 +87,16 @@
+ #include "Presets/SettingsManager.h"
+ 
+ #include "Utils/Memory.h"
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ #include "Utils/MessageOfTheDay.h"
++#endif
+ 
+ #include "Processor/PluginAudioProcessorBase.h"
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ #include "Editor/HighlightableWidget.h"
+ #include "Editor/PluginEditorBase.h"
+ #include "Editor/RectangleUtils.h"
+ 
+ #include "Parameters/AttachedWidget.h"
++#endif
+diff --git a/Source/OJDProcessor.cpp b/Source/OJDProcessor.cpp
+index 2a16f23..a58e81f 100644
+--- a/Source/OJDProcessor.cpp
++++ b/Source/OJDProcessor.cpp
+@@ -20,10 +20,12 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+  */
+ 
+ #include "OJDProcessor.h"
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ #include "OJDAudioProcessorEditor.h"
++#endif
+ 
+ // To avoid extremely much typing when assigning filter coefficients
+-using BiquadCoeffs = juce::dsp::IIR::ArrayCoefficients<float>;
++using BiquadCoeffs = juce::dsp::IIR::Coefficients<float>;
+ 
+ OJDAudioProcessor::OJDAudioProcessor()
+   : rawValueDrive  (*parameters.getRawParameterValue (OJDParameters::Sliders::Drive::id)),
+@@ -39,11 +41,13 @@ OJDAudioProcessor::OJDAudioProcessor()
+     parameters.addParameterListener (OJDParameters::Sliders::Drive::id, this);
+     parameters.addParameterListener (OJDParameters::Switches::HpLp::id, this);
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     // Add a subtree where the editor stores some states
+     parameters.state.appendChild (OJDAudioProcessorEditor::createUIStateSubtree(), nullptr);
+ 
+     // Try to reach the schrammel server to find out if there is e.g. an update message to display
+     checkForMessageOfTheDay();
++#endif
+ }
+ 
+ void OJDAudioProcessor::prepareResources (bool sampleRateChanged, bool maxBlockSizeChanged, bool numChannelsChanged)
+@@ -62,8 +66,8 @@ void OJDAudioProcessor::prepareResources (bool sampleRateChanged, bool maxBlockS
+     recalculateFilters();
+ 
+     // Some fixed coefficients
+-    *chain.get<hpf30>()  .state = BiquadCoeffs::makeFirstOrderHighPass (spec.sampleRate, 30.0f);
+-    *chain.get<lpf6_3k>().state = BiquadCoeffs::makeFirstOrderLowPass  (spec.sampleRate, 6.3e3f);
++    *chain.get<hpf30>()  .state = *BiquadCoeffs::makeFirstOrderHighPass (spec.sampleRate, 30.0f);
++    *chain.get<lpf6_3k>().state = *BiquadCoeffs::makeFirstOrderLowPass  (spec.sampleRate, 6.3e3f);
+ 
+     updateParametersForProcessorChain();
+ 
+@@ -94,6 +98,7 @@ void OJDAudioProcessor::processBlock (juce::dsp::AudioBlock<float>& block)
+ }
+ 
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+ juce::AudioProcessorEditor* OJDAudioProcessor::createEditor() { return new OJDAudioProcessorEditor (*this); }
+ 
+ void OJDAudioProcessor::checkForMessageOfTheDay()
+@@ -118,6 +123,7 @@ std::unique_ptr<jb::MessageOfTheDay::InfoAndUpdate> OJDAudioProcessor::getMessag
+     // Timeout has been reached
+     return nullptr;
+ }
++#endif
+ 
+ void OJDAudioProcessor::updateParametersForProcessorChain()
+ {
+@@ -177,7 +183,7 @@ void OJDAudioProcessor::recalculateFilters()
+         juce::SpinLock::ScopedLockType scopedLock(biquadParameterLock);
+ 
+         // to avoid extremely long lines below
+-#define CREATE_BIQUAD_COEFFICIENTS(stage) stage##Coeffs = BiquadCoeffs::makePeakFilter (sr, stage##Freq, stage##Q, juce::Decibels::decibelsToGain (stage##Gain))
++#define CREATE_BIQUAD_COEFFICIENTS(stage) stage##Coeffs = *BiquadCoeffs::makePeakFilter (sr, stage##Freq, stage##Q, juce::Decibels::decibelsToGain (stage##Gain))
+ 
+         CREATE_BIQUAD_COEFFICIENTS (biquadPreDriveBoost);
+         CREATE_BIQUAD_COEFFICIENTS (biquadPreDriveNotch);
+diff --git a/Source/OJDProcessor.h b/Source/OJDProcessor.h
+index 708776e..b6cd4d1 100644
+--- a/Source/OJDProcessor.h
++++ b/Source/OJDProcessor.h
+@@ -46,6 +46,7 @@ public:
+ 
+     void parameterChanged (const juce::String &parameterID, float newValue) override;
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     juce::AudioProcessorEditor* createEditor() override;
+ 
+     /**
+@@ -53,6 +54,7 @@ public:
+      * a nullpointer if either the server didn't respond (yet) or the message has already been displayed
+      */
+     std::unique_ptr<jb::MessageOfTheDay::InfoAndUpdate> getMessageOfTheDay (int timeoutMilliseconds);
++#endif
+ 
+ private:
+     int numChannels = 1;
+@@ -90,16 +92,19 @@ private:
+     juce::SpinLock biquadParameterLock;
+     std::atomic<bool> biquadParametersUpdated { false };
+ 
+-    std::array<float, 6> biquadPreDriveBoostCoeffs;
+-    std::array<float, 6> biquadPreDriveNotchCoeffs;
+-    std::array<float, 6> biquadPostDriveBoost1Coeffs;
+-    std::array<float, 6> biquadPostDriveBoost2Coeffs;
+-    std::array<float, 6> biquadPostDriveBoost3Coeffs;
++    juce::dsp::IIR::Coefficients<float> biquadPreDriveBoostCoeffs;
++    juce::dsp::IIR::Coefficients<float> biquadPreDriveNotchCoeffs;
++    juce::dsp::IIR::Coefficients<float> biquadPostDriveBoost1Coeffs;
++    juce::dsp::IIR::Coefficients<float> biquadPostDriveBoost2Coeffs;
++    juce::dsp::IIR::Coefficients<float> biquadPostDriveBoost3Coeffs;
+ 
++#if !JUCE_AUDIOPROCESSOR_NO_GUI
+     jb::MessageOfTheDay messageOfTheDay { juce::URL ("https://schrammel.io/motd/ojd.json"), JucePlugin_VersionCode };
+     std::future<jb::MessageOfTheDay::InfoAndUpdate> infoAndUpdateMessage;
+ 
+     void checkForMessageOfTheDay();
++#endif
++
+     void recalculateFilters();
+     void updateParametersForProcessorChain();
+ 
+diff --git a/Source/ToneStack.h b/Source/ToneStack.h
+index a64391a..533ec93 100644
+--- a/Source/ToneStack.h
++++ b/Source/ToneStack.h
+@@ -42,11 +42,11 @@ public:
+         constexpr auto hpModeFreq = 358.0f;
+         constexpr auto lpModeFreq = 160.0f;
+ 
+-        hpfCoeffsHPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderHighPass (spec.sampleRate, hpModeFreq);
+-        hpfCoeffsLPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderHighPass (spec.sampleRate, lpModeFreq);
++        hpfCoeffsHPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderHighPass (spec.sampleRate, hpModeFreq);
++        hpfCoeffsLPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderHighPass (spec.sampleRate, lpModeFreq);
+ 
+-        lpfCoeffsHPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderLowPass (spec.sampleRate, hpModeFreq);
+-        lpfCoeffsLPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderLowPass (spec.sampleRate, lpModeFreq);
++        lpfCoeffsHPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderLowPass (spec.sampleRate, hpModeFreq);
++        lpfCoeffsLPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderLowPass (spec.sampleRate, lpModeFreq);
+ 
+         *hpf.state = currentMode == hp ? hpfCoeffsHPMode : hpfCoeffsLPMode;
+         *lpf.state = currentMode == hp ? lpfCoeffsHPMode : lpfCoeffsLPMode;
+@@ -95,12 +95,12 @@ private:
+ 
+     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> hpf, lpf;
+ 
+-    std::array<float, 4> hpfCoeffsHPMode, hpfCoeffsLPMode;
+-    std::array<float, 4> lpfCoeffsHPMode, lpfCoeffsLPMode;
++    juce::dsp::IIR::Coefficients<float> hpfCoeffsHPMode, hpfCoeffsLPMode;
++    juce::dsp::IIR::Coefficients<float> lpfCoeffsHPMode, lpfCoeffsLPMode;
+ 
+     juce::dsp::Gain<float> hpfGain;
+     float tone = 1.0f;
+ 
+     juce::AudioBuffer<float> hpfTempBuffer;
+     std::unique_ptr<juce::dsp::AudioBlock<float>> hpfTempBlock;
+-};
+\ No newline at end of file
++};
