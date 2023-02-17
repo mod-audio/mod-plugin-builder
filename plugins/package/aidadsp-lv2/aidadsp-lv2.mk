@@ -4,10 +4,10 @@
 #
 ######################################
 
-AIDADSP_LV2_VERSION = 3c7a2b4e3f283a7df2b593c2c6dd3f0a24f5069f
+AIDADSP_LV2_VERSION = 29a3dd1291b16da60349a9825dc3be429ba6fb52
 AIDADSP_LV2_SITE = https://github.com/AidaDSP/aidadsp-lv2.git
 AIDADSP_LV2_SITE_METHOD = git
-AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_EIGEN=ON
+AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_XSIMD=ON
 AIDADSP_LV2_BUNDLES = rt-neural-generic.lv2
 
 # needed for submodules support

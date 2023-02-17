@@ -7,7 +7,7 @@
   border-radius: 5px;
   background-repeat: no-repeat;
   color: white;
-  width: 800px;
+  width: 900px;
 }
 
 .rt-neural h1 {
@@ -40,7 +40,7 @@
 .rt-neural .grid {
   display: grid;
   color: white;
-  width: 800px;
+  width: 900px;
   grid-template-columns: 1fr 1fr 1fr;
   background-color: rgba(35, 35, 35, 1);
   border-radius: 12px;
@@ -66,14 +66,14 @@
   padding: 0;
   margin: 0 10px;
   border-radius: 8px;
-  border: 4spx solid #000;
+  border: 4px solid #000;
   box-shadow: inset 0 0px 10px #000;
   background: linear-gradient(
       45deg,
       rgba(131, 185, 65, 1) 12%,
       transparent 0,
       transparent 88%,
-      rgba(131, 185, 65, 1) 0
+      rgba(131, 185, 65, 1)
     ),
     linear-gradient(
       135deg,
@@ -93,7 +93,7 @@
   background-size: 40px 40px;
 }
 
-/* animation 
+/* animation
 if you want to go bonkers bind it to a gate and animate accordingly */
 /* .background_head {
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
@@ -174,12 +174,12 @@ if you want to go bonkers bind it to a gate and animate accordingly */
 
 /* CONTROLS */
 
-.rt-neural .rt-neural-controls {
+.rt-neural-controls {
   display: grid;
   grid-column: 1 / span 3;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(13, 1fr);
   grid-gap: 15px;
-  width: 780px;
+  width: 880px;
   justify-items: center;
   align-self: center;
 
@@ -189,7 +189,7 @@ if you want to go bonkers bind it to a gate and animate accordingly */
   padding: 5px;
   margin: 0 10px;
   border-radius: 8px;
-  border: 4spx solid #000;
+  border: 4px solid #000;
 }
 
 .rt-neural .controls .label {
@@ -208,6 +208,7 @@ if you want to go bonkers bind it to a gate and animate accordingly */
   display: grid;
   grid-template-areas: "knob" "label";
 }
+
 .rt-neural .knob-bg {
   height: 50px;
   width: 50px;
