@@ -37,7 +37,7 @@ define MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 		rm -rf $(@D);                                                 \
 		git clone --recursive $($(PKG)_SITE) $(@D);                   \
 		git -C $(@D) reset --hard $($(PKG)_VERSION);                  \
-		git -C $(@D) submodule update;                                \
+		git -C $(@D) submodule update --init --recursive;             \
 		tar --exclude=".git" -czf $($(PKG)_DL_DIR).tar.gz -C $(@D) .; \
 		touch $(@D)/.stamp_downloaded $(@D)/.stamp_extracted;         \
 	fi
