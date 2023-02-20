@@ -1,0 +1,19 @@
+diff --git a/Source/OJDProcessor.cpp b/Source/OJDProcessor.cpp
+index a58e81f..e86c7d1 100644
+--- a/Source/OJDProcessor.cpp
++++ b/Source/OJDProcessor.cpp
+@@ -79,12 +79,8 @@ void OJDAudioProcessor::prepareResources (bool sampleRateChanged, bool maxBlockS
+ 
+ bool OJDAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+ {
+-    auto mono   = juce::AudioChannelSet::mono();
+-    auto stereo = juce::AudioChannelSet::stereo();
+-
+-    // We are supporting mono -> mono or stereo -> stereo setups
+-    return (layouts.getMainInputChannelSet() == mono   && layouts.getMainOutputChannelSet() == mono) ||
+-           (layouts.getMainInputChannelSet() == stereo && layouts.getMainOutputChannelSet() == stereo) ;
++    auto mono = juce::AudioChannelSet::mono();
++    return layouts.getMainInputChannelSet() == mono && layouts.getMainOutputChannelSet() == mono;
+ }
+ 
+ void OJDAudioProcessor::processBlock (juce::dsp::AudioBlock<float>& block)
