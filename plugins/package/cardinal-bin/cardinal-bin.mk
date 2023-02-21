@@ -4,10 +4,10 @@
 #
 ######################################
 
-CARDINAL_BIN_VERSION = 22.12
+CARDINAL_BIN_VERSION = 23.02
 CARDINAL_BIN_SITE_METHOD = local
 CARDINAL_BIN_SITE = $($(PKG)_PKGDIR)/
-CARDINAL_BIN_BUNDLES = Cardinal.lv2 CardinalFX.lv2
+CARDINAL_BIN_BUNDLES = Cardinal.lv2 CardinalFX.lv2 CardinalMini.lv2
 
 define CARDINAL_BIN_INSTALL_TARGET_CMDS
 	tar xf $(@D)/binaries.tar.xz -C $(@D) \
