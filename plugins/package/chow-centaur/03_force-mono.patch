@@ -1,0 +1,35 @@
+diff --git a/modules/CMakeLists.txt b/modules/CMakeLists.txt
+index 1d1ccee..ad04948 100644
+--- a/modules/CMakeLists.txt
++++ b/modules/CMakeLists.txt
+@@ -41,6 +41,7 @@ target_compile_definitions(juce_plugin_modules
+         JucePlugin_WantsLV2State=0
+         JucePlugin_WantsLV2TimePos=0
+         JucePlugin_WantsLV2TimePos=0
++        JucePlugin_PreferredChannelConfigurations={1,1}
+     INTERFACE
+         $<TARGET_PROPERTY:juce_plugin_modules,COMPILE_DEFINITIONS>
+ )
+diff --git a/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h b/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h
+index 7f32bc3..ea0c436 100644
+--- a/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h
++++ b/modules/chowdsp_utils/PluginUtils/chowdsp_PluginBase.h
+@@ -117,16 +117,8 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginBase<Processor>::creat
+ template <class Processor>
+ bool PluginBase<Processor>::isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const
+ {
+-    // only supports mono and stereo (for now)
+-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
+-        && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+-        return false;
+-
+-    // input and output layout must be the same
+-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
+-        return false;
+-
+-    return true;
++    auto mono = juce::AudioChannelSet::mono();
++    return layouts.getMainInputChannelSet() == mono && layouts.getMainOutputChannelSet() == mono;
+ }
+ 
+ template <class Processor>
