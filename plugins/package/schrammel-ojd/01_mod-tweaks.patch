@@ -84,7 +84,6 @@ index b46e4b5..9aeaf4e 100644
  
  if (APPLE)
  add_ojd_version(AU
-Submodule Ext/JBPluginBase contains modified content
 diff --git a/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.cpp b/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.cpp
 index 273a316..5e902d6 100644
 --- a/Ext/JBPluginBase/jb_plugin_base/Presets/PresetManager.cpp
@@ -210,10 +209,10 @@ index ed475cf..e50fa19 100644
  #include "Parameters/AttachedWidget.h"
 +#endif
 diff --git a/Source/OJDProcessor.cpp b/Source/OJDProcessor.cpp
-index 2a16f23..a58e81f 100644
+index 919431f..0e1d669 100644
 --- a/Source/OJDProcessor.cpp
 +++ b/Source/OJDProcessor.cpp
-@@ -20,10 +20,12 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+@@ -20,7 +20,9 @@ Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
   */
  
  #include "OJDProcessor.h"
@@ -222,11 +221,7 @@ index 2a16f23..a58e81f 100644
 +#endif
  
  // To avoid extremely much typing when assigning filter coefficients
--using BiquadCoeffs = juce::dsp::IIR::ArrayCoefficients<float>;
-+using BiquadCoeffs = juce::dsp::IIR::Coefficients<float>;
- 
- OJDAudioProcessor::OJDAudioProcessor()
-   : rawValueDrive  (*parameters.getRawParameterValue (OJDParameters::Sliders::Drive::id)),
+ using BiquadCoeffs = juce::dsp::IIR::ArrayCoefficients<float>;
 @@ -39,11 +41,13 @@ OJDAudioProcessor::OJDAudioProcessor()
      parameters.addParameterListener (OJDParameters::Sliders::Drive::id, this);
      parameters.addParameterListener (OJDParameters::Switches::HpLp::id, this);
@@ -241,18 +236,7 @@ index 2a16f23..a58e81f 100644
  }
  
  void OJDAudioProcessor::prepareResources (bool sampleRateChanged, bool maxBlockSizeChanged, bool numChannelsChanged)
-@@ -62,8 +66,8 @@ void OJDAudioProcessor::prepareResources (bool sampleRateChanged, bool maxBlockS
-     recalculateFilters();
- 
-     // Some fixed coefficients
--    *chain.get<hpf30>()  .state = BiquadCoeffs::makeFirstOrderHighPass (spec.sampleRate, 30.0f);
--    *chain.get<lpf6_3k>().state = BiquadCoeffs::makeFirstOrderLowPass  (spec.sampleRate, 6.3e3f);
-+    *chain.get<hpf30>()  .state = *BiquadCoeffs::makeFirstOrderHighPass (spec.sampleRate, 30.0f);
-+    *chain.get<lpf6_3k>().state = *BiquadCoeffs::makeFirstOrderLowPass  (spec.sampleRate, 6.3e3f);
- 
-     updateParametersForProcessorChain();
- 
-@@ -94,6 +98,7 @@ void OJDAudioProcessor::processBlock (juce::dsp::AudioBlock<float>& block)
+@@ -90,6 +94,7 @@ void OJDAudioProcessor::processBlock (juce::dsp::AudioBlock<float>& block)
  }
  
  
@@ -260,7 +244,7 @@ index 2a16f23..a58e81f 100644
  juce::AudioProcessorEditor* OJDAudioProcessor::createEditor() { return new OJDAudioProcessorEditor (*this); }
  
  void OJDAudioProcessor::checkForMessageOfTheDay()
-@@ -118,6 +123,7 @@ std::unique_ptr<jb::MessageOfTheDay::InfoAndUpdate> OJDAudioProcessor::getMessag
+@@ -114,6 +119,7 @@ std::unique_ptr<jb::MessageOfTheDay::InfoAndUpdate> OJDAudioProcessor::getMessag
      // Timeout has been reached
      return nullptr;
  }
@@ -268,17 +252,8 @@ index 2a16f23..a58e81f 100644
  
  void OJDAudioProcessor::updateParametersForProcessorChain()
  {
-@@ -177,7 +183,7 @@ void OJDAudioProcessor::recalculateFilters()
-         juce::SpinLock::ScopedLockType scopedLock(biquadParameterLock);
- 
-         // to avoid extremely long lines below
--#define CREATE_BIQUAD_COEFFICIENTS(stage) stage##Coeffs = BiquadCoeffs::makePeakFilter (sr, stage##Freq, stage##Q, juce::Decibels::decibelsToGain (stage##Gain))
-+#define CREATE_BIQUAD_COEFFICIENTS(stage) stage##Coeffs = *BiquadCoeffs::makePeakFilter (sr, stage##Freq, stage##Q, juce::Decibels::decibelsToGain (stage##Gain))
- 
-         CREATE_BIQUAD_COEFFICIENTS (biquadPreDriveBoost);
-         CREATE_BIQUAD_COEFFICIENTS (biquadPreDriveNotch);
 diff --git a/Source/OJDProcessor.h b/Source/OJDProcessor.h
-index 708776e..b6cd4d1 100644
+index 708776e..dab1801 100644
 --- a/Source/OJDProcessor.h
 +++ b/Source/OJDProcessor.h
 @@ -46,6 +46,7 @@ public:
@@ -297,20 +272,9 @@ index 708776e..b6cd4d1 100644
  
  private:
      int numChannels = 1;
-@@ -90,16 +92,19 @@ private:
-     juce::SpinLock biquadParameterLock;
-     std::atomic<bool> biquadParametersUpdated { false };
- 
--    std::array<float, 6> biquadPreDriveBoostCoeffs;
--    std::array<float, 6> biquadPreDriveNotchCoeffs;
--    std::array<float, 6> biquadPostDriveBoost1Coeffs;
--    std::array<float, 6> biquadPostDriveBoost2Coeffs;
--    std::array<float, 6> biquadPostDriveBoost3Coeffs;
-+    juce::dsp::IIR::Coefficients<float> biquadPreDriveBoostCoeffs;
-+    juce::dsp::IIR::Coefficients<float> biquadPreDriveNotchCoeffs;
-+    juce::dsp::IIR::Coefficients<float> biquadPostDriveBoost1Coeffs;
-+    juce::dsp::IIR::Coefficients<float> biquadPostDriveBoost2Coeffs;
-+    juce::dsp::IIR::Coefficients<float> biquadPostDriveBoost3Coeffs;
+@@ -96,10 +98,13 @@ private:
+     std::array<float, 6> biquadPostDriveBoost2Coeffs;
+     std::array<float, 6> biquadPostDriveBoost3Coeffs;
  
 +#if !JUCE_AUDIOPROCESSOR_NO_GUI
      jb::MessageOfTheDay messageOfTheDay { juce::URL ("https://schrammel.io/motd/ojd.json"), JucePlugin_VersionCode };
@@ -322,40 +286,3 @@ index 708776e..b6cd4d1 100644
      void recalculateFilters();
      void updateParametersForProcessorChain();
  
-diff --git a/Source/ToneStack.h b/Source/ToneStack.h
-index a64391a..533ec93 100644
---- a/Source/ToneStack.h
-+++ b/Source/ToneStack.h
-@@ -42,11 +42,11 @@ public:
-         constexpr auto hpModeFreq = 358.0f;
-         constexpr auto lpModeFreq = 160.0f;
- 
--        hpfCoeffsHPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderHighPass (spec.sampleRate, hpModeFreq);
--        hpfCoeffsLPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderHighPass (spec.sampleRate, lpModeFreq);
-+        hpfCoeffsHPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderHighPass (spec.sampleRate, hpModeFreq);
-+        hpfCoeffsLPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderHighPass (spec.sampleRate, lpModeFreq);
- 
--        lpfCoeffsHPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderLowPass (spec.sampleRate, hpModeFreq);
--        lpfCoeffsLPMode = juce::dsp::IIR::ArrayCoefficients<float>::makeFirstOrderLowPass (spec.sampleRate, lpModeFreq);
-+        lpfCoeffsHPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderLowPass (spec.sampleRate, hpModeFreq);
-+        lpfCoeffsLPMode = *juce::dsp::IIR::Coefficients<float>::makeFirstOrderLowPass (spec.sampleRate, lpModeFreq);
- 
-         *hpf.state = currentMode == hp ? hpfCoeffsHPMode : hpfCoeffsLPMode;
-         *lpf.state = currentMode == hp ? lpfCoeffsHPMode : lpfCoeffsLPMode;
-@@ -95,12 +95,12 @@ private:
- 
-     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>> hpf, lpf;
- 
--    std::array<float, 4> hpfCoeffsHPMode, hpfCoeffsLPMode;
--    std::array<float, 4> lpfCoeffsHPMode, lpfCoeffsLPMode;
-+    juce::dsp::IIR::Coefficients<float> hpfCoeffsHPMode, hpfCoeffsLPMode;
-+    juce::dsp::IIR::Coefficients<float> lpfCoeffsHPMode, lpfCoeffsLPMode;
- 
-     juce::dsp::Gain<float> hpfGain;
-     float tone = 1.0f;
- 
-     juce::AudioBuffer<float> hpfTempBuffer;
-     std::unique_ptr<juce::dsp::AudioBlock<float>> hpfTempBlock;
--};
-\ No newline at end of file
-+};
