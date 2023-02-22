@@ -1,5 +1,5 @@
 diff --git a/extras/Build/CMake/JUCEConfig.cmake.in b/extras/Build/CMake/JUCEConfig.cmake.in
-index 3e5c97de5..5609fa7bd 100644
+index 782c732..9f29061 100644
 --- a/extras/Build/CMake/JUCEConfig.cmake.in
 +++ b/extras/Build/CMake/JUCEConfig.cmake.in
 @@ -20,10 +20,12 @@
@@ -20,10 +20,10 @@ index 3e5c97de5..5609fa7bd 100644
  
  check_required_components("@PROJECT_NAME@")
 diff --git a/extras/Build/CMake/JUCEUtils.cmake b/extras/Build/CMake/JUCEUtils.cmake
-index 1d8408ebc..8c6a253fe 100644
+index 786fc3a..86af138 100644
 --- a/extras/Build/CMake/JUCEUtils.cmake
 +++ b/extras/Build/CMake/JUCEUtils.cmake
-@@ -419,7 +419,7 @@ function(_juce_add_au_resource_fork shared_code_target au_target)
+@@ -187,7 +187,7 @@ function(_juce_add_au_resource_fork shared_code_target au_target)
      # In the end, it's simplest to generate a special single-purpose appconfig just for the
      # resource compiler.
      add_custom_command(OUTPUT "${secret_au_plugindefines}"
@@ -32,16 +32,16 @@ index 1d8408ebc..8c6a253fe 100644
          DEPENDS "${defs_file}"
          VERBATIM)
  
-@@ -861,7 +861,7 @@ function(juce_add_binary_data target)
-     list(APPEND binary_file_names "${juce_binary_data_folder}/${JUCE_ARG_HEADER_NAME}")
+@@ -409,7 +409,7 @@ function(juce_add_binary_data target)
+     file(WRITE "${input_file_list}" "${newline_delimited_input}")
  
      add_custom_command(OUTPUT ${binary_file_names}
 -        COMMAND juce::juceaide binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
 +        COMMAND juceaide6 binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
-             ${juce_binary_data_folder} ${JUCE_ARG_SOURCES}
+             ${juce_binary_data_folder} "${input_file_list}"
          WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-         DEPENDS ${JUCE_ARG_SOURCES}
-@@ -958,7 +958,7 @@ function(juce_generate_juce_header target)
+         DEPENDS "${input_file_list}"
+@@ -493,7 +493,7 @@ function(juce_generate_juce_header target)
      set(extra_args)
  
      add_custom_command(OUTPUT "${juce_header}"
@@ -50,7 +50,7 @@ index 1d8408ebc..8c6a253fe 100644
          DEPENDS "${defs_file}"
          VERBATIM)
  endfunction()
-@@ -966,20 +966,20 @@ endfunction()
+@@ -501,20 +501,20 @@ endfunction()
  # ==================================================================================================
  
  function(_juce_execute_juceaide)
@@ -78,7 +78,7 @@ index 1d8408ebc..8c6a253fe 100644
      endif()
  endfunction()
  
-@@ -1100,7 +1100,7 @@ function(_juce_configure_bundle source_target dest_target)
+@@ -651,7 +651,7 @@ function(_juce_configure_bundle source_target dest_target)
          MACOSX_BUNDLE_INFO_PLIST "${this_output_plist}")
  
      add_custom_command(OUTPUT "${this_output_pkginfo}"
@@ -87,7 +87,7 @@ index 1d8408ebc..8c6a253fe 100644
          VERBATIM)
  
      set(output_folder "$<TARGET_BUNDLE_CONTENT_DIR:${dest_target}>")
-@@ -1192,7 +1192,7 @@ function(_juce_add_resources_rc source_target dest_target)
+@@ -743,7 +743,7 @@ function(_juce_add_resources_rc source_target dest_target)
      set(resource_rc_file "${juce_library_code}/resources.rc")
  
      add_custom_command(OUTPUT "${resource_rc_file}"

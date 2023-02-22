@@ -1,8 +1,8 @@
 diff --git a/modules/juce_audio_devices/juce_audio_devices.h b/modules/juce_audio_devices/juce_audio_devices.h
-index 0cc0a4496..f8297d4e7 100644
+index b407702..c7adc25 100644
 --- a/modules/juce_audio_devices/juce_audio_devices.h
 +++ b/modules/juce_audio_devices/juce_audio_devices.h
-@@ -41,7 +41,6 @@
+@@ -42,7 +42,6 @@
    dependencies:       juce_audio_basics, juce_events
    OSXFrameworks:      CoreAudio CoreMIDI AudioToolbox
    iOSFrameworks:      CoreAudio CoreMIDI AudioToolbox AVFoundation
@@ -11,12 +11,12 @@ index 0cc0a4496..f8297d4e7 100644
  
   END_JUCE_MODULE_DECLARATION
 diff --git a/modules/juce_audio_processors/juce_audio_processors.h b/modules/juce_audio_processors/juce_audio_processors.h
-index acabc82ec..7181a54b2 100644
+index 25dcf0f..e363697 100644
 --- a/modules/juce_audio_processors/juce_audio_processors.h
 +++ b/modules/juce_audio_processors/juce_audio_processors.h
-@@ -41,7 +41,7 @@
-   website:            http://www.juce.com/juce
+@@ -42,7 +42,7 @@
    license:            GPL/Commercial
+   minimumCppStandard: 14
  
 -  dependencies:       juce_gui_extra, juce_audio_basics
 +  dependencies:       juce_data_structures, juce_audio_basics
