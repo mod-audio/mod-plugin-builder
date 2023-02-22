@@ -20,6 +20,8 @@ fi
 
 if ping -c 1 -W 0.05 192.168.51.1 > /dev/null; then
   TARGET=192.168.51.1
+elif ping -c 1 -W 0.05 192.168.52.1 > /dev/null; then
+  TARGET=192.168.52.1
 elif ping -c 1 -W 0.2 moddwarf.local > /dev/null; then
   TARGET=moddwarf.local
 elif ping -c 1 -W 0.2 modduox.local > /dev/null; then
