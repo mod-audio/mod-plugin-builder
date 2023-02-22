@@ -1,0 +1,37 @@
+diff --git a/ChowCentaur/ChowCentaurPlugin.cpp b/ChowCentaur/ChowCentaurPlugin.cpp
+index f98d392..6aa9800 100644
+--- a/ChowCentaur/ChowCentaurPlugin.cpp
++++ b/ChowCentaur/ChowCentaurPlugin.cpp
+@@ -40,7 +40,7 @@ void ChowCentaur::addParameters (Parameters& params)
+     params.push_back (std::make_unique<AudioParameterFloat> (levelTag, "Level", 0.0f, 1.0f, 0.5f));
+     params.push_back (std::make_unique<AudioParameterChoice> (neuralTag, "Mode", StringArray { "Traditional", "Neural" }, 0));
+     params.push_back (std::make_unique<AudioParameterBool> (bypassTag, "Bypass", false));
+-    params.push_back (std::make_unique<AudioParameterBool> (monoTag, "Mono", false));
++    params.push_back (std::make_unique<AudioParameterBool> (monoTag, "Mono", true));
+ }
+ 
+ void ChowCentaur::prepareToPlay (double sampleRate, int samplesPerBlock)
+@@ -258,6 +258,11 @@ void ChowCentaur::getStateInformation (MemoryBlock& data)
+ #endif
+ }
+ 
++AudioProcessorParameter* ChowCentaur::getBypassParameter() const
++{
++    return vts.getParameter (bypassTag);
++}
++
+ // This creates new instances of the plugin..
+ AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+ {
+diff --git a/ChowCentaur/ChowCentaurPlugin.h b/ChowCentaur/ChowCentaurPlugin.h
+index 0fbe0d1..5797b8d 100644
+--- a/ChowCentaur/ChowCentaurPlugin.h
++++ b/ChowCentaur/ChowCentaurPlugin.h
+@@ -25,6 +25,7 @@ public:
+ #endif
+     void setStateInformation (const void* data, int sizeInBytes) override;
+     void getStateInformation (MemoryBlock& data) override;
++    AudioProcessorParameter* getBypassParameter() const override;
+ 
+ private:
+     std::atomic<float>* trebleParam = nullptr;
