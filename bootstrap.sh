@@ -46,6 +46,7 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
     patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_linaro-gcc7-selects.patch
 
   elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.25.0" ]; then
+    cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
     cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.35/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.35/
   fi
 fi

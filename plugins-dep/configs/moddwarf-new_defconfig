@@ -9,7 +9,6 @@ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="aarch64-modaudio-linux-gnu"
 BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
 BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-# BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_GENERATE_LOCALE="en_US.UTF-8"
 BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a35 -mtune=cortex-a35 -mno-fix-cortex-a53-835769 -mno-fix-cortex-a53-843419 -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DWARF -Wl,-O1,--as-needed,--strip-all"

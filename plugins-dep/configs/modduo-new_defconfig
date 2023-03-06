@@ -11,7 +11,6 @@ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="arm-modaudio-linux-gnueabihf"
 BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
 BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_10=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-# BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a7 -mtune=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard -mvectorize-with-neon-quad -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_DUO -Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
 BR2_TARGET_LDFLAGS="-Wl,-O1 -Wl,--as-needed -Wl,--strip-all"
