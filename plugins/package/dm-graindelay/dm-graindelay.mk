@@ -11,7 +11,7 @@ DM_GRAINDELAY_BUNDLES = dm-GrainDelay.lv2
 
 # define DM_GRAINDELAY_CONFIGURE_CMDS
 # 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --no-modify-path --profile minimal
-# 	~/.cargo/bin/rustup target add $(DM_GRAINDELAY_RUST_TARGET)
+# 	~/.cargo/bin/rustup target add $(MOD_PLUGIN_BUILDER_RUST_TARGET)
 # endef
 
 define DM_GRAINDELAY_BUILD_CMDS
