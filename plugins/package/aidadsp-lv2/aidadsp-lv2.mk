@@ -10,17 +10,20 @@ AIDADSP_LV2_SITE_METHOD = git
 AIDADSP_LV2_BUNDLES = rt-neural-generic.lv2
 
 # prepare custom build flags
+AIDADSP_LV2_TARGET_CFLAGS = $(TARGET_CFLAGS)
 AIDADSP_LV2_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
 
 # can't use -funsafe-loop-optimizations
-AIDADSP_LV2_TARGET_CXXFLAGS += $(filter-out -funsafe-loop-optimizations,$(subst ",,$(BR2_TARGET_OPTIMIZATION)))
+AIDADSP_LV2_TARGET_CFLAGS += $(filter-out -funsafe-loop-optimizations,$(subst ",,$(BR2_TARGET_OPTIMIZATION))) -fno-unsafe-loop-optimizations
+AIDADSP_LV2_TARGET_CXXFLAGS += $(filter-out -funsafe-loop-optimizations,$(subst ",,$(BR2_TARGET_OPTIMIZATION))) -fno-unsafe-loop-optimizations
 
 # LTO-specific flags (must be present on build and link stage)
 AIDADSP_LV2_LTO_FLAGS = -fno-strict-aliasing -flto -ffat-lto-objects
 
 # pass options into cmake
-AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_XSIMD=ON
-# AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_EIGEN=ON
+# AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_XSIMD=ON
+AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_EIGEN=ON
+AIDADSP_LV2_CONF_OPTS += -DCMAKE_C_FLAGS="$(AIDADSP_LV2_TARGET_CFLAGS) $(AIDADSP_LV2_LTO_FLAGS)"
 AIDADSP_LV2_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(AIDADSP_LV2_TARGET_CXXFLAGS) $(AIDADSP_LV2_LTO_FLAGS)"
 AIDADSP_LV2_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="$(TARGET_LDFLAGS) $(AIDADSP_LV2_LTO_FLAGS)"
 
