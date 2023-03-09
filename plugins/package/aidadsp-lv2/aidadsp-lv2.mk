@@ -4,13 +4,25 @@
 #
 ######################################
 
-AIDADSP_LV2_VERSION = 0bac2f3feb811115d696b11ec2293f5f03a535ac
+AIDADSP_LV2_VERSION = 6e54495ce95bcbaf2432ef4a3931299492b14671
 AIDADSP_LV2_SITE = https://github.com/AidaDSP/aidadsp-lv2.git
 AIDADSP_LV2_SITE_METHOD = git
-# FIXME something wrong here, overoptimization?
-# AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_XSIMD=ON
-AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_EIGEN=ON
 AIDADSP_LV2_BUNDLES = rt-neural-generic.lv2
+
+# prepare custom build flags
+AIDADSP_LV2_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+
+# can't use -funsafe-loop-optimizations
+AIDADSP_LV2_TARGET_CXXFLAGS += $(filter-out -funsafe-loop-optimizations,$(subst ",,$(BR2_TARGET_OPTIMIZATION)))
+
+# LTO-specific flags (must be present on build and link stage)
+AIDADSP_LV2_LTO_FLAGS = -fno-strict-aliasing -flto -ffat-lto-objects
+
+# pass options into cmake
+AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_XSIMD=ON
+# AIDADSP_LV2_CONF_OPTS = -DRTNEURAL_EIGEN=ON
+AIDADSP_LV2_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(AIDADSP_LV2_TARGET_CXXFLAGS) $(AIDADSP_LV2_LTO_FLAGS)"
+AIDADSP_LV2_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="$(TARGET_LDFLAGS) $(AIDADSP_LV2_LTO_FLAGS)"
 
 # needed for submodules support
 AIDADSP_LV2_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
