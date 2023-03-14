@@ -4,7 +4,7 @@
 #
 ######################################
 
-PORTAL_LV2_VERSION = bd4fbf2be07b1e1b348098011879de231fc7cdab
+PORTAL_LV2_VERSION = 0c3599f723de46d09f15d99db9885f03a8d2c3fd
 PORTAL_LV2_SITE = $(call github,falkTX,portal-lv2,$(PORTAL_LV2_VERSION))
 PORTAL_LV2_BUNDLES = portal.lv2
 
