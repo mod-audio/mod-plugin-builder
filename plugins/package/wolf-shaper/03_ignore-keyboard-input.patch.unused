@@ -1,0 +1,14 @@
+Submodule dpf contains modified content
+diff --git a/dpf/dgl/src/pugl-extra/wasm.c b/dpf/dgl/src/pugl-extra/wasm.c
+index 26793cde..6dc85c4f 100644
+--- a/dpf/dgl/src/pugl-extra/wasm.c
++++ b/dpf/dgl/src/pugl-extra/wasm.c
+@@ -25,7 +25,7 @@
+ #endif
+ 
+ // #define PUGL_WASM_AUTO_POINTER_LOCK
+-// #define PUGL_WASM_NO_KEYBOARD_INPUT
++#define PUGL_WASM_NO_KEYBOARD_INPUT
+ 
+ PuglWorldInternals*
+ puglInitWorldInternals(const PuglWorldType type, const PuglWorldFlags flags)
