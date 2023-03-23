@@ -1,0 +1,14 @@
+diff --git a/src/bollie-delay.c b/src/bollie-delay.c
+index b8529c0..ad7dc14 100644
+--- a/src/bollie-delay.c
++++ b/src/bollie-delay.c
+@@ -378,6 +378,9 @@ static void run(LV2_Handle instance, uint32_t n_samples) {
+ 
+         if (self->tgt_d_t_ch2-1 > MAX_TAPE_LEN)
+             self->tgt_d_t_ch2 = MAX_TAPE_LEN-1;
++
++        // Send current tempo to control port
++        *self->tempo_out = tempo;
+     }
+ 
+     // Let's do the vfade gain calculation
