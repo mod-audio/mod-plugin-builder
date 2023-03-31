@@ -4,7 +4,7 @@
 #
 ######################################
 
-NEURAL_AMP_MODELER_LV2_VERSION = 15642132ba2fd773b5281f13b71793efc45293c0
+NEURAL_AMP_MODELER_LV2_VERSION = ca90becaca5ac6f63e606d98f9506e85c931d4e1
 NEURAL_AMP_MODELER_LV2_SITE = https://github.com/mikeoliphant/neural-amp-modeler-lv2.git
 NEURAL_AMP_MODELER_LV2_SITE_METHOD = git
 NEURAL_AMP_MODELER_LV2_BUNDLES = neural_amp_modeler.lv2
