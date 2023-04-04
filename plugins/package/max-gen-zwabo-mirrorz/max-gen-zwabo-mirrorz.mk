@@ -4,7 +4,7 @@
 #
 ######################################
 
-MAX_GEN_ZWABO_MIRRORZ_VERSION = 0e92714525c0334908a0eb79d6760e06316c2148
+MAX_GEN_ZWABO_MIRRORZ_VERSION = 24eff0f7f85126a8adcdcbe8b38e5cf9e814e3d2
 MAX_GEN_ZWABO_MIRRORZ_SITE = https://github.com/moddevices/max-gen-plugins.git
 MAX_GEN_ZWABO_MIRRORZ_SITE_METHOD = git
 MAX_GEN_ZWABO_MIRRORZ_BUNDLES = zwabo-mirrorz.lv2
