@@ -4,7 +4,7 @@
 #
 ######################################
 
-AIDADSP_LV2_VERSION = a6bddd2d4741f86b5c6eb709097754c3d32af82c
+AIDADSP_LV2_VERSION = 70a451980b05bd154936652597364e8906b35e95
 AIDADSP_LV2_SITE = https://github.com/AidaDSP/aidadsp-lv2.git
 AIDADSP_LV2_SITE_METHOD = git
 AIDADSP_LV2_BUNDLES = rt-neural-generic.lv2
