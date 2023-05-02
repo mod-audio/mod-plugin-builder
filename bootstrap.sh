@@ -96,13 +96,13 @@ fi
 if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ] && [ ! -f build/tarballs/isl-0.12.2.tar.bz2 ]; then
   mkdir -p build/tarballs
   cd build/tarballs
-  wget -c http://deb.debian.org/debian/pool/main/i/isl/isl_0.12.2.orig.tar.bz2
+  wget -c https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/isl/0.12.2-1/isl_0.12.2.orig.tar.bz2
   mv isl_0.12.2.orig.tar.bz2 isl-0.12.2.tar.bz2
   cd ../..
 elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.24.0" ] && [ ! -f build/tarballs/isl-0.20.tar.xz ]; then
   mkdir -p build/tarballs
   cd build/tarballs
-  wget -c http://deb.debian.org/debian/pool/main/i/isl/isl_0.20.orig.tar.xz
+  wget -c https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/isl/0.20-1/isl_0.20.orig.tar.xz
   mv isl_0.20.orig.tar.xz isl-0.20.tar.xz
   cd ../..
 fi
