@@ -11,13 +11,13 @@ MOD_PLUGIN_BUILDER_SITE_METHOD = file
 MOD_PLUGIN_BUILDER_DEPENDENCIES = host-cmake
 
 ifdef BR2_cortex_a7
-MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a7","-Ctarget-feature=+a7,+neonfp,+vfp4sp"]
+MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a7","-Ctarget-feature=+a7,+neonfp,+vfp4sp","-Clink-args=--sysroot=$(STAGING_DIR)"]
 MOD_PLUGIN_BUILDER_RUST_TARGET = armv7-unknown-linux-gnueabihf
 else ifdef BR2_cortex_a35
-MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a35","-Ctarget-feature=+a35,-fix-cortex-a53-835769,+neon,+fp-armv8"]
+MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a35","-Ctarget-feature=+a35,-fix-cortex-a53-835769,+neon,+fp-armv8","-Clink-args=--sysroot=$(STAGING_DIR)"]
 MOD_PLUGIN_BUILDER_RUST_TARGET = aarch64-unknown-linux-gnu
 else ifdef BR2_aarch64
-MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a53","-Ctarget-feature=+a53,+fix-cortex-a53-835769,+neon,+fp-armv8"]
+MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a53","-Ctarget-feature=+a53,+fix-cortex-a53-835769,+neon,+fp-armv8","-Clink-args=--sysroot=$(STAGING_DIR)"]
 MOD_PLUGIN_BUILDER_RUST_TARGET = aarch64-unknown-linux-gnu
 else ifdef BR2_x86_64
 MOD_PLUGIN_BUILDER_RUST_FLAGS = []

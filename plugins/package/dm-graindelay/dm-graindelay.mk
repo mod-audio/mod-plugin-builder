@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_GRAINDELAY_VERSION = 3fcf7ba1c5f8f0bad3e283822226d2368075b465
+DM_GRAINDELAY_VERSION = 910f0f210a7ac2992d5250952d9bbbd18a5e5962
 DM_GRAINDELAY_SITE = https://github.com/davemollen/dm-GrainDelay.git
 DM_GRAINDELAY_SITE_METHOD = git
 DM_GRAINDELAY_BUNDLES = dm-GrainDelay.lv2
