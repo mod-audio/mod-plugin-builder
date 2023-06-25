@@ -39,6 +39,7 @@ mkdir ${BUILD_DIR}/${CT_NG_VERSION}
 touch ${BUILD_DIR}/${CT_NG_VERSION}/.stamp_configured
 touch ${BUILD_DIR}/${CT_NG_VERSION}/.stamp_built1
 touch ${BUILD_DIR}/${CT_NG_VERSION}/.stamp_built2
+touch ${BUILD_DIR}/${CT_NG_VERSION}/.stamp_patched
 touch ${BUILD_DIR}/${CT_NG_VERSION}/configure
 
 # fix various autoconf-related dependency_libs
