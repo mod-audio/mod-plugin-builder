@@ -84,12 +84,15 @@ if [ ! -f .stamp_built1 ]; then
 fi
 
 # for static targets: keep old name for backwards compatibility, plus add static suffix
-if [ "${TOOLCHAIN_PLATFORM}" == "modduo-static" ]; then
-  sed -i -e 's/CT_TARGET_SYS="${CT_TARGET_SYS}hf"/CT_TARGET_SYS="${CT_TARGET_SYS}hf.static"/' scripts/build/arch/arm.sh
-elif [ "${TOOLCHAIN_PLATFORM}" == "modduox-new" ]; then
-  sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi;/' scripts/functions
-elif [ "${TOOLCHAIN_PLATFORM}" == "modduox-static" ]; then
-  sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
+if [ ! -f .stamp_patched ]; then
+  if [ "${TOOLCHAIN_PLATFORM}" == "modduo-static" ]; then
+    sed -i -e 's/CT_TARGET_SYS="${CT_TARGET_SYS}hf"/CT_TARGET_SYS="${CT_TARGET_SYS}hf.static"/' scripts/build/arch/arm.sh
+  elif [ "${TOOLCHAIN_PLATFORM}" == "modduox-new" ]; then
+    sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi;/' scripts/functions
+  elif [ "${TOOLCHAIN_PLATFORM}" == "modduox-static" ]; then
+    sed -i -e 's/CT_TARGET_SYS=gnu;/CT_TARGET_SYS=gnueabi.static;/' scripts/functions
+  fi
+  touch .stamp_patched
 fi
 
 # workaround for isl download
