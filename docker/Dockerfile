@@ -39,6 +39,19 @@ RUN if test "$(dpkg-architecture -qDEB_TARGET_ARCH)" = "arm64"; then \
         rm premake_3.7-1_amd64.deb; \
     fi
 
+# rust support
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --no-modify-path --profile minimal
+RUN if test "$platform" = "modduo" || test "$platform" = "modduo-new" || test "$platform" = "modduo-static"; then \
+        ~/.cargo/bin/rustup target add armv7-unknown-linux-gnueabihf; \
+    elif test "$platform" = "modduox" || test "$platform" = "modduox-new" || test "$platform" = "modduox-static"; then \
+        ~/.cargo/bin/rustup target add aarch64-unknown-linux-gnu; \
+    elif test "$platform" = "moddwarf" || test "$platform" = "moddwarf-new"; then \
+        ~/.cargo/bin/rustup target add aarch64-unknown-linux-gnu; \
+    else \
+        ~/.cargo/bin/rustup target add x86_64-unknown-linux-gnu; \
+    fi
+
+# misc stuff
 RUN locale-gen en_US.UTF-8
 RUN echo "source /etc/bash_completion" >> $HOME/.bashrc
 
