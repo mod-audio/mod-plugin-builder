@@ -1,40 +1,43 @@
-FROM ubuntu:18.04
-LABEL maintainer="Alexandre Cunha <ale@moddevices.com>"
+FROM debian:bookworm
+LABEL maintainer="Filipe Coelho <falktx@mod.audio>"
 ENV DEBIAN_FRONTEND noninteractive
 
-# platform argument must be provided, e.g. --build-arg platform=moddwarf
-ARG platform=moddwarf
+# platform argument must be provided, e.g. --build-arg platform=moddwarf-new
+ARG platform=moddwarf-new
+
+# optional argument for specifying build target
+ARG target=full
 
 # enable i386, armhf and arm64
 RUN dpkg --add-architecture i386
 RUN dpkg --add-architecture armhf
 RUN dpkg --add-architecture arm64
 
-RUN echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic main restricted universe multiverse"                > /etc/apt/sources.list && \
-    echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic-updates main restricted universe multiverse"       >> /etc/apt/sources.list && \
-    echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ bionic-backports main restricted universe multiverse"     >> /etc/apt/sources.list && \
-    echo "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu bionic-security main restricted universe multiverse"      >> /etc/apt/sources.list && \
-    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic main restricted universe multiverse"           >> /etc/apt/sources.list && \
-    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-updates main restricted universe multiverse"   >> /etc/apt/sources.list && \
-    echo "deb [arch=armhf,arm64] http://ports.ubuntu.com/ubuntu-ports bionic-backports main restricted universe multiverse" >> /etc/apt/sources.list
-
 # update and upgrade system
-RUN apt-get update && apt-get upgrade -qy && apt-get clean
-
-# NOTE multiarch-support:armhf is installed but not multiarch-support:arm64, everything still works though
+RUN apt-get update && apt-get upgrade -qqy && apt-get clean
 
 # install packages for buildroot
-RUN apt-get install -qy multiarch-support:armhf qemu-user-static && \
-    apt-get install -qy libmxml1:armhf libfftw3-3:armhf liblo7:armhf libsndfile1:armhf zlib1g:armhf libstdc++6:armhf && \
-    apt-get install -qy libmxml1:arm64 libfftw3-3:arm64 liblo7:arm64 libsndfile1:arm64 zlib1g:arm64 libstdc++6:arm64 && \
-    apt-get install -qy locales acl bash bash-completion bc curl cvs git mercurial rsync subversion sudo wget dosfstools && \
-    apt-get install -qy bison bundler bzip2 cpio flex gawk gperf gzip help2man nano perl patch python tar texinfo unzip python3-dev python3-setuptools && \
-    apt-get install -qy automake binutils build-essential device-tree-compiler premake4 sunxi-tools libtool-bin ncurses-dev libc6:i386 libstdc++6:i386 zlib1g:i386 jq && \
-    apt-get install -qy libfreetype6-dev libx11-dev libxcursor-dev libxinerama-dev libxrandr-dev pkg-config && \
+RUN apt-get install -qqy qemu-user-static && \
+    apt-get install -qqy libc6:i386 libstdc++6:i386 zlib1g:i386 && \
+    apt-get install -qqy libc6:armhf libstdc++6:armhf zlib1g:armhf && \
+    apt-get install -qqy libc6:arm64 libstdc++6:arm64 zlib1g:arm64 && \
+    apt-get install -qqy locales acl bash bash-completion bc curl cvs git mercurial rsync subversion sudo wget dosfstools && \
+    apt-get install -qqy bison bundler bzip2 cpio flex gawk gperf gzip help2man nano perl patch tar texinfo unzip && \
+    apt-get install -qqy python-is-python3 python3-dev python3-setuptools && \
+    apt-get install -qqy automake binutils build-essential device-tree-compiler premake4 sunxi-tools libtool-bin ncurses-dev jq && \
+    apt-get install -qqy libfreetype6-dev libx11-dev libxcursor-dev libxinerama-dev libxrandr-dev pkg-config && \
     apt-get clean
-RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/p/premake/premake_3.7-1_amd64.deb && \
-    dpkg -i premake_3.7-1_amd64.deb && \
-    rm premake_3.7-1_amd64.deb
+
+# install old premake
+RUN if test "$(dpkg-architecture -qDEB_TARGET_ARCH)" = "arm64"; then \
+        wget http://ports.ubuntu.com/ubuntu-ports/pool/universe/p/premake/premake_3.7-1_arm64.deb && \
+        dpkg -i premake_3.7-1_arm64.deb && \
+        rm premake_3.7-1_arm64.deb; \
+    else \
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/p/premake/premake_3.7-1_amd64.deb && \
+        dpkg -i premake_3.7-1_amd64.deb && \
+        rm premake_3.7-1_amd64.deb; \
+    fi
 
 RUN locale-gen en_US.UTF-8
 RUN echo "source /etc/bash_completion" >> $HOME/.bashrc
@@ -58,7 +61,7 @@ USER $USER
 WORKDIR $HOME
 RUN git clone $MPB_GIT_URL
 WORKDIR mod-plugin-builder
-RUN ./bootstrap.sh $platform && ./.clean-install.sh $platform
+RUN ./bootstrap.sh $platform && ./.clean-install.sh $platform $target
 
 # CMD
 CMD ["bash"]

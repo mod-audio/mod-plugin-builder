@@ -1,0 +1,3 @@
+This custom package exists because the original is broken against new systems in old kernels.
+Issue is only present if docker image is based on 18.04, but the real OS is older than that.
+Can be dropped if we update MBS builder server OS to 18.04 or higher.

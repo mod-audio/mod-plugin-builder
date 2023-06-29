@@ -1,0 +1,16 @@
+diff --git a/src/shared/missing.h b/src/shared/missing.h
+index c98c24a..60acb36 100644
+--- a/src/shared/missing.h
++++ b/src/shared/missing.h
+@@ -157,9 +157,10 @@ static inline int pivot_root(const char *new_root, const char *put_old) {
+ #endif
+ 
+ #ifndef HAVE_MEMFD_CREATE
+-static inline int memfd_create(const char *name, unsigned int flags) {
++static inline int missing_memfd_create(const char *name, unsigned int flags) {
+         return syscall(__NR_memfd_create, name, flags);
+ }
++# define memfd_create missing_memfd_create
+ #endif
+ 
+ #ifndef __NR_getrandom
