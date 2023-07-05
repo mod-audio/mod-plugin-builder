@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_CONVOLUTION_LOADER_VERSION = a626adc3ccb18ce1d575523404c4d6eaa3b3f226
+MOD_CONVOLUTION_LOADER_VERSION = ee1e939f6de34a21a6db8c15e4dc320ecd9f355a
 MOD_CONVOLUTION_LOADER_SITE = https://github.com/moddevices/mod-convolution-loader.git
 MOD_CONVOLUTION_LOADER_SITE_METHOD = git
 MOD_CONVOLUTION_LOADER_BUNDLES = MOD-CabinetLoader.lv2 MOD-ConvolutionLoader.lv2
