@@ -1,0 +1,25 @@
+diff --git a/extras/Build/juceaide/CMakeLists.txt b/extras/Build/juceaide/CMakeLists.txt
+index ca0ef4c..5b1f5ef 100644
+--- a/extras/Build/juceaide/CMakeLists.txt
++++ b/extras/Build/juceaide/CMakeLists.txt
+@@ -43,6 +43,7 @@ if(JUCE_BUILD_HELPER_TOOLS)
+         juce::juce_recommended_warning_flags)
+ 
+     set_target_properties(juceaide PROPERTIES
++        CXX_STANDARD 14
+         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+ 
+     export(TARGETS juceaide
+diff --git a/modules/juce_gui_basics/juce_gui_basics.h b/modules/juce_gui_basics/juce_gui_basics.h
+index 205dc36..55a8c9f 100644
+--- a/modules/juce_gui_basics/juce_gui_basics.h
++++ b/modules/juce_gui_basics/juce_gui_basics.h
+@@ -57,6 +57,8 @@
+ #include <juce_graphics/juce_graphics.h>
+ #include <juce_data_structures/juce_data_structures.h>
+ 
++#include <utility>
++
+ //==============================================================================
+ /** Config: JUCE_ENABLE_REPAINT_DEBUGGING
+     If this option is turned on, each area of the screen that gets repainted will
