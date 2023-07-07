@@ -1,0 +1,31 @@
+diff --git a/Include/objimpl.h b/Include/objimpl.h
+index 3f21b70..3823915 100644
+--- a/Include/objimpl.h
++++ b/Include/objimpl.h
+@@ -249,7 +249,7 @@ typedef union _gc_head {
+         union _gc_head *gc_prev;
+         Py_ssize_t gc_refs;
+     } gc;
+-    double dummy;  /* force worst-case alignment */
++    long double dummy;  /* force worst-case alignment */
+ } PyGC_Head;
+ 
+ extern PyGC_Head *_PyGC_generation0;
+diff --git a/Objects/obmalloc.c b/Objects/obmalloc.c
+index 3c33255..93b9411 100644
+--- a/Objects/obmalloc.c
++++ b/Objects/obmalloc.c
+@@ -496,8 +496,13 @@ static int running_on_valgrind = -1;
+  *
+  * You shouldn't change this unless you know what you are doing.
+  */
++#if SIZEOF_VOID_P > 4
++#define ALIGNMENT              16               /* must be 2^N */
++#define ALIGNMENT_SHIFT         4
++#else
+ #define ALIGNMENT               8               /* must be 2^N */
+ #define ALIGNMENT_SHIFT         3
++#endif
+ 
+ /* Return the number of bytes in size class I, as a uint. */
+ #define INDEX2SIZE(I) (((uint)(I) + 1) << ALIGNMENT_SHIFT)
