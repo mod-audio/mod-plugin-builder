@@ -74,7 +74,7 @@ USER $USER
 WORKDIR $HOME
 RUN git clone $MPB_GIT_URL
 WORKDIR mod-plugin-builder
-RUN ./bootstrap.sh $platform && ./.clean-install.sh $platform $target
+RUN ./bootstrap.sh $platform $target && ./.clean-install.sh $platform
 
 # CMD
 CMD ["bash"]
