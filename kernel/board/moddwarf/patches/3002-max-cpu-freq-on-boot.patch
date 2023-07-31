@@ -1,0 +1,13 @@
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 80f535c..626b570 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1468,7 +1468,7 @@ static int cpufreq_online(unsigned int cpu)
+ 		/* Are we running at unknown frequency ? */
+ 		ret = cpufreq_frequency_table_get_index(policy, old_freq);
+ 		if (ret == -EINVAL) {
+-			ret = __cpufreq_driver_target(policy, old_freq - 1,
++			ret = __cpufreq_driver_target(policy, policy->max,
+ 						      CPUFREQ_RELATION_L);
+ 
+ 			/*

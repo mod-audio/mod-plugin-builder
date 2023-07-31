@@ -2,7 +2,6 @@
 *.bak
 .DS_Store
 .kdev_include_paths
-/kernel/
 /plugins/package/cardinal-bin-real/
 /plugins/package/cardinal-bin/binaries.tar.xz
 /plugins/package/cardinal-bin/bundles/

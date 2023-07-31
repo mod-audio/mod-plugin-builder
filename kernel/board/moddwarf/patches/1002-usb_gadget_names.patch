@@ -1,0 +1,61 @@
+diff --git a/drivers/usb/gadget/legacy/ether.c b/drivers/usb/gadget/legacy/ether.c
+index 25a2c2e..f71f7b4 100644
+--- a/drivers/usb/gadget/legacy/ether.c
++++ b/drivers/usb/gadget/legacy/ether.c
+@@ -61,14 +61,9 @@
+  * needlessly complex.  They borrow more from CDC ACM than CDC ECM.
+  */
+ 
+-#define DRIVER_DESC		"Ethernet Gadget"
+-#define DRIVER_VERSION		"Memorial Day 2008"
+-
+-#ifdef USB_ETH_RNDIS
+-#define PREFIX			"RNDIS/"
+-#else
+-#define PREFIX			""
+-#endif
++#define DRIVER_DESC    "Dwarf Ethernet"
++#define DRIVER_VERSION "Dwarf"
++#define PREFIX          ""
+ 
+ /*
+  * This driver aims for interoperability by using CDC ECM unless
+diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadget/legacy/mass_storage.c
+index fcba597..2d6f9bb 100644
+--- a/drivers/usb/gadget/legacy/mass_storage.c
++++ b/drivers/usb/gadget/legacy/mass_storage.c
+@@ -34,8 +34,8 @@
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-#define DRIVER_DESC		"Mass Storage Gadget"
+-#define DRIVER_VERSION		"2009/09/11"
++#define DRIVER_DESC    "Dwarf Mass Storage"
++#define DRIVER_VERSION "Dwarf"
+ 
+ /*
+  * Thanks to NetChip Technologies for donating this product ID.
+diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+index 70ac196..4bdb5b0 100644
+--- a/drivers/usb/gadget/function/f_midi.c
++++ b/drivers/usb/gadget/function/f_midi.c
+@@ -41,8 +41,8 @@
+ MODULE_AUTHOR("Ben Williamson");
+ MODULE_LICENSE("GPL v2");
+ 
+-static const char f_midi_shortname[] = "f_midi";
+-static const char f_midi_longname[] = "MIDI Gadget";
++static const char f_midi_shortname[] = "USB Gadget";
++static const char f_midi_longname[] = "Dwarf USB-MIDI Gadget";
+ 
+ /*
+  * We can only handle 16 cables on one single endpoint, as cable numbers are
+@@ -210,7 +210,7 @@ static struct usb_ms_endpoint_descriptor_16 ms_in_desc = {
+ #define STRING_FUNC_IDX			0
+ 
+ static struct usb_string midi_string_defs[] = {
+-	[STRING_FUNC_IDX].s = "MIDI function",
++	[STRING_FUNC_IDX].s = "MOD Dwarf MIDI",
+ 	{  } /* end of list */
+ };
+ 

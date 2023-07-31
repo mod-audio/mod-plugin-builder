@@ -1,0 +1,27 @@
+diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
+index fec17a2d2447..116231d8944f 100644
+--- a/drivers/usb/dwc2/core.c
++++ b/drivers/usb/dwc2/core.c
+@@ -530,6 +530,7 @@ int dwc2_core_reset(struct dwc2_hsotg *hsotg, bool skip_wait)
+ 					      GRSTCTL_CSFTRST, 10000)) {
+ 			dev_warn(hsotg->dev, "%s: HANG! Soft Reset timeout GRSTCTL_CSFTRST\n",
+ 				 __func__);
++			kobject_uevent(&hsotg->dev->kobj, KOBJ_CHANGE);
+ 			return -EBUSY;
+ 		}
+ 	} else {
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index 55f1d14fc414..46edc74efeb3 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -507,6 +507,10 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ 				"ignore suspend request before enumeration\n");
+ 			return;
+ 		}
++
++		dev_warn(hsotg->dev, "ignoring suspend request\n");
++		return;
++
+ 		if (dsts & DSTS_SUSPSTS) {
+ 			switch (hsotg->params.power_down) {
+ 			case DWC2_POWER_DOWN_PARAM_PARTIAL:

@@ -14,6 +14,10 @@ if [ -z "${PLATFORM}" ] || [ ! -e "plugins-dep/configs/${PLATFORM}_defconfig" ];
   exit 1
 fi
 
+if [ "${BUILDTARGET}" = "kernel" ]; then
+  PLATFORM+="-kernel"
+fi
+
 #######################################################################################################################
 # Import common code and variables
 
@@ -129,9 +133,12 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/001_aarch64-and-cortex-a53.patch
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/002_cortex-a35.patch
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/003_gcc-7.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/004_static-toolchain.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/005_cortex-a72.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/006_updated-toolchain-2022.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/004_fix-linux-host-flags.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/005_linux-needs-host-openssl.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/006_linux-fix-hostcc.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/007_static-toolchain.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/008_cortex-a72.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/009_updated-toolchain-2022.patch
 fi
 
 #######################################################################################################################
@@ -172,9 +179,13 @@ fi
 #######################################################################################################################
 # initial first build
 
-${BR2_MAKE} ${PLATFORM}_defconfig
+${BR2_MAKE} ${BR2_PLATFORM}_defconfig
 
-if [ "${BUILDTARGET}" = "minimal" ]; then
+if [ "${BUILDTARGET}" = "kernel" ]; then
+  ${BR2_MAKE} host-kmod
+  ${BR2_MAKE} host-pkgconf
+  ${BR2_MAKE} host-openssl
+elif [ "${BUILDTARGET}" = "minimal" ]; then
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} liblo

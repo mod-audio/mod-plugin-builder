@@ -1,0 +1,675 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright (c) 2018 Fuzhou Rockchip Electronics Co., Ltd
+ * Copyright (c) 2020 MOD Devices GmbH
+ */
+
+/dts-v1/;
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+#include "rockchip/px30.dtsi"
+
+// #define DWARF_GRAPH_CARD
+
+/ {
+	model = "MOD Dwarf";
+	compatible = "rockchip,px30";
+
+	aliases {
+		mmc0 = &emmc;
+		/delete-property/ ethernet0;
+		/delete-property/ i2c3;
+		/delete-property/ spi0;
+		/delete-property/ spi1;
+	};
+
+	cpus {
+		/delete-node/ idle-states;
+	};
+
+	l2: l2-cache0 {
+		compatible = "cache";
+		cache-level = <2>;
+		cache-size = <0x80000>;
+		cache-line-size = <64>;
+		cache-sets = <1024>;
+	};
+
+	vcc5v0_sys: vccsys {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc5v0_sys";
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+	};
+
+	simple_sound: sound {
+#ifdef DWARF_GRAPH_CARD
+		compatible = "audio-graph-card";
+		dais = <&i2s2_2ch_p0>;
+		label = "MOD DWARF";
+#else
+		compatible = "simple-audio-card";
+		simple-audio-card,name = "MOD DWARF";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,mclk-fs = <512>;
+		simple-audio-card,cpu {
+			sound-dai = <&i2s2_2ch>;
+		};
+		simple-audio-card,codec {
+			sound-dai = <&cs4265>;
+		};
+#endif // DWARF_GRAPH_CARD
+	};
+
+	dwarf_cpu0_opp_table: dwarf-opp-table {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		opp-1200000000 {
+			opp-hz = /bits/ 64 <1200000000>;
+			opp-microvolt = <1300000 1300000 1350000>;
+			/* TESTING
+			opp-microvolt-L0 = <1300000 1300000 1350000>;
+			opp-microvolt-L1 = <1275000 1275000 1350000>;
+			opp-microvolt-L2 = <1250000 1250000 1350000>;
+			opp-microvolt-L3 = <1200000 1200000 1350000>;
+			*/
+			clock-latency-ns = <40000>;
+		};
+		opp-1296000000 {
+			opp-hz = /bits/ 64 <1296000000>;
+			opp-microvolt = <1350000 1350000 1350000>;
+			/* TESTING
+			opp-microvolt-L0 = <1350000 1350000 1350000>;
+			opp-microvolt-L1 = <1350000 1350000 1350000>;
+			opp-microvolt-L2 = <1300000 1300000 1350000>;
+			opp-microvolt-L3 = <1250000 1250000 1350000>;
+			*/
+			clock-latency-ns = <40000>;
+		};
+		/* FIXME needs testing
+		opp-1416000000 {
+			opp-hz = /bits/ 64 <1416000000>;
+			opp-microvolt = <1350000 1350000 1350000>;
+			opp-microvolt-L0 = <1350000 1350000 1350000>;
+			opp-microvolt-L1 = <1350000 1350000 1350000>;
+			opp-microvolt-L2 = <1300000 1300000 1350000>;
+			opp-microvolt-L3 = <1250000 1250000 1350000>;
+			clock-latency-ns = <40000>;
+		};
+		*/
+	};
+};
+
+&cpu0 {
+	cpu-supply = <&vdd_arm>;
+	operating-points-v2 = <&dwarf_cpu0_opp_table>;
+	i-cache-size = <0x8000>;
+	i-cache-line-size = <64>;
+	i-cache-sets = <256>;
+	d-cache-size = <0x8000>;
+	d-cache-line-size = <64>;
+	d-cache-sets = <128>;
+	next-level-cache = <&l2>;
+};
+
+&cpu1 {
+	cpu-supply = <&vdd_arm>;
+	operating-points-v2 = <&dwarf_cpu0_opp_table>;
+	i-cache-size = <0x8000>;
+	i-cache-line-size = <64>;
+	i-cache-sets = <256>;
+	d-cache-size = <0x8000>;
+	d-cache-line-size = <64>;
+	d-cache-sets = <128>;
+	next-level-cache = <&l2>;
+};
+
+&cpu2 {
+	cpu-supply = <&vdd_arm>;
+	operating-points-v2 = <&dwarf_cpu0_opp_table>;
+	i-cache-size = <0x8000>;
+	i-cache-line-size = <64>;
+	i-cache-sets = <256>;
+	d-cache-size = <0x8000>;
+	d-cache-line-size = <64>;
+	d-cache-sets = <128>;
+	next-level-cache = <&l2>;
+};
+
+&cpu3 {
+	cpu-supply = <&vdd_arm>;
+	operating-points-v2 = <&dwarf_cpu0_opp_table>;
+	i-cache-size = <0x8000>;
+	i-cache-line-size = <64>;
+	i-cache-sets = <256>;
+	d-cache-size = <0x8000>;
+	d-cache-line-size = <64>;
+	d-cache-sets = <128>;
+	next-level-cache = <&l2>;
+};
+
+&dmac {
+	arm,pl330-broken-no-flushp;
+};
+
+&emmc {
+	cap-mmc-highspeed;
+	disable-wp;
+	mmc-hs200-1_8v;
+	non-removable;
+	status = "okay";
+};
+
+&i2c0 {
+	status = "okay";
+
+	rk809: pmic@20 {
+		compatible = "rockchip,rk809";
+		reg = <0x20>;
+		interrupt-parent = <&gpio0>;
+		interrupts = <RK_PA7 IRQ_TYPE_LEVEL_LOW>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pmic_int>;
+		rockchip,system-power-controller;
+		wakeup-source;
+		#clock-cells = <1>;
+		clock-output-names = "rk808-clkout1", "rk808-clkout2";
+
+		vcc1-supply = <&vcc5v0_sys>;
+		vcc2-supply = <&vcc5v0_sys>;
+		vcc3-supply = <&vcc5v0_sys>;
+		vcc4-supply = <&vcc5v0_sys>;
+		vcc5-supply = <&vcc3v3_sys>;
+		vcc6-supply = <&vcc3v3_sys>;
+		vcc7-supply = <&vcc3v3_sys>;
+		vcc8-supply = <&vcc3v3_sys>;
+		vcc9-supply = <&vcc5v0_sys>;
+
+		regulators {
+			vdd_logic: DCDC_REG1 {
+				regulator-name = "vdd_logic";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <950000>;
+				regulator-max-microvolt = <1350000>;
+				regulator-initial-mode = <0x2>;
+				regulator-ramp-delay = <6001>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <950000>;
+				};
+			};
+
+			vdd_arm: DCDC_REG2 {
+				regulator-name = "vdd_arm";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <950000>;
+				regulator-max-microvolt = <1350000>;
+				regulator-initial-mode = <0x2>;
+				regulator-ramp-delay = <6001>;
+
+				regulator-state-mem {
+					regulator-off-in-suspend;
+					regulator-suspend-microvolt = <950000>;
+				};
+			};
+
+			vcc_ddr: DCDC_REG3 {
+				regulator-name = "vcc_ddr";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-initial-mode = <0x2>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+				};
+			};
+
+			vcc_3v0: DCDC_REG4 {
+				regulator-name = "vcc_3v0";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <3000000>;
+				regulator-max-microvolt = <3000000>;
+				regulator-initial-mode = <0x2>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <3000000>;
+				};
+			};
+
+			vcc3v3_sys: DCDC_REG5 {
+				regulator-name = "vcc3v3_sys";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <3300000>;
+				};
+			};
+
+			vcc_1v0: LDO_REG1 {
+				regulator-name = "vcc_1v0";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <1000000>;
+				regulator-max-microvolt = <1000000>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <1000000>;
+				};
+			};
+
+			vcc1v8_soc: LDO_REG2 {
+				regulator-name = "vcc1v8_soc";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <1800000>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <1800000>;
+				};
+			};
+
+			vdd1v0_soc: LDO_REG3 {
+				regulator-name = "vdd1v0_soc";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <1000000>;
+				regulator-max-microvolt = <1000000>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <1000000>;
+				};
+			};
+
+			vcc3v0_pmu: LDO_REG4 {
+				regulator-name = "vcc3v0_pmu";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <3000000>;
+				regulator-max-microvolt = <3000000>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <3000000>;
+				};
+			};
+
+			vccio_sd: LDO_REG5 {
+				regulator-name = "vccio_sd";
+				regulator-always-on;
+				regulator-boot-on;
+				regulator-min-microvolt = <1800000>;
+				regulator-max-microvolt = <3300000>;
+
+				regulator-state-mem {
+					regulator-on-in-suspend;
+					regulator-suspend-microvolt = <3300000>;
+				};
+			};
+
+			vcc5v0_host: SWITCH_REG1 {
+				regulator-name = "vcc5v0_host";
+				/* FIXME, boot,always not on FF
+				regulator-always-on;
+				regulator-boot-on;
+				*/
+			};
+		};
+	};
+};
+
+/* used for general I2C IC's (UID, peakmeter) */
+&i2c1 {
+	status = "okay";
+	pinctrl-0 = <&i2c1_xfer &led_enable_controls>;
+};
+
+/* CS4265 codec I2C bus */
+&i2c2 {
+	status = "okay";
+
+	clock-frequency = <100000>;
+
+	/* These are relatively safe rise/fall times; TODO: measure */
+	i2c-scl-rising-time-ns = <300>;
+	i2c-scl-falling-time-ns = <50>;
+
+	cs4265: cs4265@4e {
+		#sound-dai-cells = <0>;
+		compatible = "cirrus,cs4265";
+		reg = <0x4e>;
+		reset-gpios = <&gpio2 3 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&codec_control_pins &codec_reset_pin>;
+
+		/* custom soundcard gpios */
+		headphone_clk-gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>;
+		headphone_dir-gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>;
+		gain_stage_left1-gpios = <&gpio2 2 GPIO_ACTIVE_HIGH>;
+		gain_stage_left2-gpios = <&gpio2 1 GPIO_ACTIVE_HIGH>;
+		gain_stage_right1-gpios = <&gpio1 19 GPIO_ACTIVE_HIGH>;
+		gain_stage_right2-gpios = <&gpio0 1 GPIO_ACTIVE_HIGH>;
+
+#ifdef DWARF_GRAPH_CARD
+		port@0 {
+			cs4265_p0_0: endpoint {
+				remote-endpoint = <&i2s2_2ch_p0_0>;
+			};
+		};
+#endif
+	};
+};
+
+&i2s2_2ch {
+	status = "okay";
+	clocks = <&cru SCLK_I2S2>, <&cru HCLK_I2S2>, <&cru SCLK_I2S2_OUT>;
+	clock-names = "i2s_clk", "i2s_hclk", "i2s_clk_out";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2s2_2ch_sclk &i2s2_2ch_lrck &i2s2_2ch_sdi &i2s2_2ch_sdo &i2s2_2ch_mclk>;
+	resets = <&cru SRST_I2S2>, <&cru SRST_I2S2_H>;
+	reset-names = "reset-m", "reset-h";
+	rockchip,capture-channels = <2>;
+	rockchip,playback-channels = <2>;
+	/* FIXME is this needed or even wanted?
+	rockchip,bclk-fs = <128>;
+	*/
+
+#ifdef DWARF_GRAPH_CARD
+	i2s2_2ch_p0: port {
+		i2s2_2ch_p0_0: endpoint {
+			dai-format = "i2s";
+			mclk-fs = <256>;
+			remote-endpoint = <&cs4265_p0_0>;
+		};
+	};
+#endif
+};
+
+&io_domains {
+	status = "okay";
+	vccio1-supply = <&vcc1v8_soc>;
+	vccio2-supply = <&vccio_sd>;
+	vccio3-supply = <&vcc_3v0>;
+	vccio4-supply = <&vcc3v0_pmu>;
+	vccio5-supply = <&vcc_3v0>;
+	/* FIXME not in FF
+	vccio6-supply = <&vcc1v8_soc>;
+	*/
+};
+
+&pinctrl {
+	pcfg_codec_reset: pcfg-codec-reset {
+		bias-disable;
+		output-low;
+	};
+
+	pcfg_jack_detection: pcfg-jack-detection {
+		bias-disable;
+		input-schmitt-enable;
+	};
+
+	pcfg_output_high_pull_up: pcfg-output-high-pull-up {
+		bias-pull-up;
+		output-high;
+	};
+
+	led-enable-control {
+		led_enable_controls: led-enable-controls {
+			rockchip,pins = <2 12 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+
+	pmic {
+		pmic_int: pmic_int {
+			rockchip,pins =
+				<0 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>;
+		};
+	};
+
+	sound {
+		codec_control_pins: codec-control-pins {
+			rockchip,pins =
+				/* Headphone Controls */
+				<0 0 RK_FUNC_GPIO &pcfg_pull_down>,
+				<2 11 RK_FUNC_GPIO &pcfg_pull_down>,
+
+				/* Gainstage controls */
+				<2 2 RK_FUNC_GPIO &pcfg_pull_none_12ma>,
+				<2 1 RK_FUNC_GPIO &pcfg_pull_none_12ma>,
+				<1 19 RK_FUNC_GPIO &pcfg_pull_none_12ma>,
+				<0 1 RK_FUNC_GPIO &pcfg_pull_none_12ma>,
+
+				/* Jack Detection Pins */
+				<2 13 RK_FUNC_GPIO &pcfg_jack_detection>,
+				<2 0 RK_FUNC_GPIO &pcfg_jack_detection>,
+				<1 31 RK_FUNC_GPIO &pcfg_jack_detection>,
+				<1 30 RK_FUNC_GPIO &pcfg_jack_detection>;
+		};
+
+		codec_reset_pin: codec-reset-pin {
+			rockchip,pins =
+				<2 3 RK_FUNC_GPIO &pcfg_codec_reset>;
+		};
+	};
+
+	usb-host-control {
+		usb_host_controls: usb-host-controls {
+			rockchip,pins =
+				<0 RK_PB4 RK_FUNC_GPIO &pcfg_output_high_pull_up>;
+		};
+	};
+};
+
+&pmu_io_domains {
+	status = "okay";
+	pmuio1-supply = <&vcc3v0_pmu>;
+	pmuio2-supply = <&vcc3v0_pmu>;
+};
+
+&saradc {
+	status = "okay";
+	vref-supply = <&vcc1v8_soc>;
+};
+
+&tsadc {
+	status = "okay";
+	rockchip,hw-tshut-mode = <1>;
+	rockchip,hw-tshut-polarity = <1>;
+};
+
+/* Control Chain UART */
+&uart0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_xfer>;
+};
+
+/* HMI UI UART */
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_xfer>;
+};
+
+/* CLI debug UART */
+&uart2 {
+	status = "okay";
+};
+
+/* HMI system-control UART */
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3m0_xfer>;
+};
+
+/* MIDI UART */
+&uart4 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart4_xfer>;
+};
+
+&u2phy {
+	status = "okay";
+};
+
+&u2phy_host {
+	status = "okay";
+};
+
+&u2phy_otg {
+	status = "okay";
+};
+
+&usb20_otg {
+	status = "okay";
+#ifndef _MOD_RESTORE
+	dr_mode = "peripheral";
+#endif
+};
+
+&usb_host0_ehci {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb_host_controls>;
+};
+
+&usb_host0_ohci {
+	status = "okay";
+};
+
+/* disable everything we do not need */
+
+&cpu0 {
+	/delete-property/ cpu-idle-states;
+};
+&cpu1 {
+	/delete-property/ cpu-idle-states;
+};
+&cpu2 {
+	/delete-property/ cpu-idle-states;
+};
+&cpu3 {
+	/delete-property/ cpu-idle-states;
+};
+
+/* fix a warning, thermal zone requires trips node */
+&gpu_thermal {
+	trips {
+		dummy {
+			temperature = <70000>;
+			hysteresis = <2000>;
+			type = "passive";
+		};
+	};
+};
+
+&pinctrl {
+	/delete-node/ cif-m1;
+	/delete-node/ cif-m1;
+	/delete-node/ gmac;
+	/delete-node/ i2s0;
+	/delete-node/ i2s1;
+	/delete-node/ flash;
+	/delete-node/ isp;
+	/delete-node/ lcdc;
+	/delete-node/ pdm;
+	/delete-node/ pwm0;
+	/delete-node/ pwm1;
+	/delete-node/ pwm2;
+	/delete-node/ pwm3;
+	/delete-node/ pwm4;
+	/delete-node/ pwm5;
+	/delete-node/ pwm6;
+	/delete-node/ pwm7;
+	/delete-node/ sdmmc;
+	/delete-node/ spi0;
+	/delete-node/ spi1;
+};
+
+&power {
+	/delete-node/ power-domain@PX30_PD_GMAC;
+	/delete-node/ power-domain@PX30_PD_GPU;
+	/delete-node/ power-domain@PX30_PD_SDCARD;
+	/delete-node/ power-domain@PX30_PD_VI;
+	/delete-node/ power-domain@PX30_PD_VO;
+	/delete-node/ power-domain@PX30_PD_VPU;
+};
+
+&soc_thermal {
+	cooling-maps {
+		/delete-node/ map1;
+	};
+};
+
+/delete-node/ &display_subsystem;
+/delete-node/ &csi_dphy;
+/delete-node/ &dsi;
+/delete-node/ &dsi_dphy;
+/delete-node/ &gmac;
+/delete-node/ &gmac_clkin;
+/delete-node/ &gpu;
+/delete-node/ &gpu_opp_table;
+/delete-node/ &isp;
+/delete-node/ &isp_mmu;
+/delete-node/ &lvds;
+/delete-node/ &nfc;
+/delete-node/ &pwm0;
+/delete-node/ &pwm1;
+/delete-node/ &pwm2;
+/delete-node/ &pwm3;
+/delete-node/ &pwm4;
+/delete-node/ &pwm5;
+/delete-node/ &pwm6;
+/delete-node/ &pwm7;
+/delete-node/ &qos_gmac;
+/delete-node/ &qos_isp_128;
+/delete-node/ &qos_isp_m1;
+/delete-node/ &qos_isp_rd;
+/delete-node/ &qos_isp_wr;
+/delete-node/ &qos_rga_rd;
+/delete-node/ &qos_rga_wr;
+/delete-node/ &qos_gpu;
+/delete-node/ &qos_sdmmc;
+/delete-node/ &qos_vip;
+/delete-node/ &qos_vop_m0;
+/delete-node/ &qos_vop_m1;
+/delete-node/ &qos_vpu;
+/delete-node/ &qos_vpu_r128;
+/delete-node/ &sdmmc;
+/delete-node/ &vopb;
+/delete-node/ &vopb_mmu;
+/delete-node/ &vopl;
+/delete-node/ &vopl_mmu;
+/delete-node/ &vpu;
+/delete-node/ &vpu_mmu;
+
+/delete-node/ &i2c3;
+/delete-node/ &i2s1_2ch;
+/delete-node/ &sdio;
+/delete-node/ &sfc;
+/delete-node/ &spi0;
+/delete-node/ &spi1;
+/delete-node/ &wdt;
+
+/* FIXME not compatible with older kernels, as used temporarily in restore mode */
+#ifndef _MOD_RESTORE
+/delete-node/ &i2s0_8ch;
+#endif

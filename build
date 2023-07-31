@@ -15,6 +15,10 @@ if [ -z "${PLATFORM}" ] || [ -z "${PACKAGE}" ] || [ ! -e "plugins-dep/configs/${
   exit 1
 fi
 
+if [[ "${PACKAGE}" == "kernel" ]]; then
+  PLATFORM+="-kernel"
+fi
+
 #######################################################################################################################
 # Import common code and variables
 
@@ -46,6 +50,14 @@ if [[ "${PACKAGE}" == "cleanup" ]]; then
 fi
 
 #######################################################################################################################
+# kernel "package"
+
+if [[ "${PACKAGE}" == "kernel" ]]; then
+    PACKAGE="linux"
+    PKGSUFFIX="-rebuild"
+fi
+
+#######################################################################################################################
 # if rebuilding, strip "-rebuild" suffix from PACKAGE
 
 if [[ "${PACKAGE}" == *"-rebuild" ]]; then
@@ -65,7 +77,7 @@ fi
 #######################################################################################################################
 # Check if requested plugin package exists
 
-if [[ "${PACKAGE}" != *"-dirclean" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then
+if [[ "${PACKAGE}" != *"-dirclean" ]] && [[ "${PACKAGE}" != "linux" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then
   PACKAGE=$(basename ${PACKAGE} | sed "s|\.mk||")
   PKGNAME=$(echo ${PACKAGE} | tr a-z- A-Z_)
 
@@ -97,7 +109,7 @@ mkdir -p /tmp/skeleton
 # now building...
 
 cd ${BUILD_DIR}/${BUILDROOT_VERSION}
-${BR2_MAKE} ${PLATFORM}_defconfig &>/dev/null
+${BR2_MAKE} ${BR2_PLATFORM}_defconfig &>/dev/null
 ${BR2_MAKE} ${PACKAGE}${PKGSUFFIX}
 
 #######################################################################################################################
@@ -176,7 +188,7 @@ function try_copy_plugin_bundles
 #######################################################################################################################
 # copy the requested plugin projects
 
-if [[ "${PACKAGE}" != "menuconfig" ]]; then
+if [[ "${PACKAGE}" != "linux" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then
   mkdir -p ${WORKDIR}/${PLATFORM}/plugins
 
   try_copy_plugin_bundles ${BR2_TARGET}/usr/lib/lv2

@@ -49,6 +49,18 @@ else
 fi
 
 #######################################################################################################################
+# check for kernel builds
+
+if [[ "${PLATFORM}" == *"-kernel" ]]; then
+    BR2_BUILD_CONFIG="kernel"
+    BR2_PLATFORM="$(echo ${PLATFORM} | sed 's/-kernel//' | sed 's/-new//')"
+    TOOLCHAIN_PLATFORM="$(echo ${PLATFORM} | sed 's/-kernel//' | sed 's/-new//')-new"
+else
+    BR2_BUILD_CONFIG="plugins-dep"
+    BR2_PLATFORM="${TOOLCHAIN_PLATFORM}"
+fi
+
+#######################################################################################################################
 # check for readlink binary
 
 if [ -f "/opt/local/bin/greadlink" ]; then
@@ -103,8 +115,8 @@ BUILDROOT_LINK=http://buildroot.uclibc.org/downloads/
 BUILDROOT_VERSION=buildroot-2016.02
 BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.bz2
 
-SOURCE_DIR=$("${readlink}" -f $(dirname $0))
-BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}/plugins-dep"
+SOURCE_DIR=$("${readlink}" -f $(dirname ${0}))
+BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}/${BR2_BUILD_CONFIG} BR2_PLATFORM=${BR2_PLATFORM}"
 BR2_TARGET=${WORKDIR}/${PLATFORM}/target
 
 #######################################################################################################################
@@ -112,13 +124,16 @@ BR2_TARGET=${WORKDIR}/${PLATFORM}/target
 
 BUILD_DIR=${WORKDIR}/${PLATFORM}/build
 DOWNLOAD_DIR=${WORKDIR}/download
-PLUGINS_DIR=${WORKDIR}/${PLATFORM}/plugins
 TOOLCHAIN_DIR=${WORKDIR}/${TOOLCHAIN_PLATFORM}/toolchain
 TOOLCHAIN_BUILD_DIR=${WORKDIR}/${TOOLCHAIN_PLATFORM}/build
 
 mkdir -p ${BUILD_DIR}
 mkdir -p ${DOWNLOAD_DIR}
-mkdir -p ${PLUGINS_DIR}
 mkdir -p ${TOOLCHAIN_DIR}
+
+if [[ "${BR2_BUILD_CONFIG}" != "kernel" ]]; then
+  PLUGINS_DIR=${WORKDIR}/${PLATFORM}/plugins
+  mkdir -p ${PLUGINS_DIR}
+fi
 
 #######################################################################################################################

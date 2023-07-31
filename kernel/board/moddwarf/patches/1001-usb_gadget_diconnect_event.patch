@@ -1,0 +1,14 @@
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 0a0d111..331c7d2 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -3304,6 +3304,9 @@ void dwc2_hsotg_disconnect(struct dwc2_hsotg *hsotg)
+ 	hsotg->lx_state = DWC2_L3;
+ 
+ 	usb_gadget_set_state(&hsotg->gadget, USB_STATE_NOTATTACHED);
++
++	printk("MOD Audio: USB Gadget disconnected\n");
++	kobject_uevent(&hsotg->dev->kobj, KOBJ_OFFLINE);
+ }
+ 
+ /**

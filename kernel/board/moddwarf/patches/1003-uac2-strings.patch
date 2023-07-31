@@ -1,0 +1,28 @@
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index ae29871bdcc1..1714ab2277e3 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -108,7 +108,7 @@ enum {
+ 
+ static struct usb_string strings_fn[] = {
+ 	/* [STR_ASSOC].s = DYNAMIC, */
+-	[STR_IF_CTRL].s = "Topology Control",
++	[STR_IF_CTRL].s = "MOD Dwarf Control",
+ 	[STR_CLKSRC_IN].s = "Input Clock",
+ 	[STR_CLKSRC_OUT].s = "Output Clock",
+ 	[STR_USB_IT].s = "USBH Out",
+@@ -117,10 +117,10 @@ static struct usb_string strings_fn[] = {
+ 	[STR_IO_OT].s = "USBD In",
+ 	[STR_FU_IN].s = "Capture Volume",
+ 	[STR_FU_OUT].s = "Playback Volume",
+-	[STR_AS_OUT_ALT0].s = "Playback Inactive",
+-	[STR_AS_OUT_ALT1].s = "Playback Active",
+-	[STR_AS_IN_ALT0].s = "Capture Inactive",
+-	[STR_AS_IN_ALT1].s = "Capture Active",
++	[STR_AS_OUT_ALT0].s = "MOD Dwarf Playback",
++	[STR_AS_OUT_ALT1].s = "MOD Dwarf Playback (Active)",
++	[STR_AS_IN_ALT0].s = "MOD Dwarf Capture",
++	[STR_AS_IN_ALT1].s = "MOD Dwarf Capture (Active)",
+ 	{ },
+ };
+ 

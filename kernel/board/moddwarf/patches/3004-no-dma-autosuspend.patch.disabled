@@ -1,0 +1,73 @@
+diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
+index 09915a5..a0590ea 100644
+--- a/drivers/dma/pl330.c
++++ b/drivers/dma/pl330.c
+@@ -2129,7 +2129,6 @@ static void pl330_tasklet(struct tasklet_struct *t)
+ 	/* If work list empty, power down */
+ 	if (power_down) {
+ 		pm_runtime_mark_last_busy(pch->dmac->ddma.dev);
+-		pm_runtime_put_autosuspend(pch->dmac->ddma.dev);
+ 	}
+ }
+ 
+@@ -2277,7 +2276,6 @@ static int pl330_terminate_all(struct dma_chan *chan)
+ 	struct dma_pl330_desc *desc;
+ 	unsigned long flags;
+ 	struct pl330_dmac *pl330 = pch->dmac;
+-	bool power_down = false;
+ 
+ 	pm_runtime_get_sync(pl330->ddma.dev);
+ 	spin_lock_irqsave(&pch->lock, flags);
+@@ -2289,7 +2287,6 @@ static int pl330_terminate_all(struct dma_chan *chan)
+ 	pch->thread->req_running = -1;
+ 	spin_unlock(&pl330->lock);
+ 
+-	power_down = pch->active;
+ 	pch->active = false;
+ 
+ 	/* Mark all desc done */
+@@ -2308,9 +2305,6 @@ static int pl330_terminate_all(struct dma_chan *chan)
+ 	list_splice_tail_init(&pch->completed_list, &pl330->desc_pool);
+ 	spin_unlock_irqrestore(&pch->lock, flags);
+ 	pm_runtime_mark_last_busy(pl330->ddma.dev);
+-	if (power_down)
+-		pm_runtime_put_autosuspend(pl330->ddma.dev);
+-	pm_runtime_put_autosuspend(pl330->ddma.dev);
+ 
+ 	return 0;
+ }
+@@ -2337,7 +2331,6 @@ static int pl330_pause(struct dma_chan *chan)
+ 
+ 	spin_unlock_irqrestore(&pch->lock, flags);
+ 	pm_runtime_mark_last_busy(pl330->ddma.dev);
+-	pm_runtime_put_autosuspend(pl330->ddma.dev);
+ 
+ 	return 0;
+ }
+@@ -2361,7 +2354,6 @@ static void pl330_free_chan_resources(struct dma_chan *chan)
+ 
+ 	spin_unlock_irqrestore(&pl330->lock, flags);
+ 	pm_runtime_mark_last_busy(pch->dmac->ddma.dev);
+-	pm_runtime_put_autosuspend(pch->dmac->ddma.dev);
+ 	pl330_unprep_slave_fifo(pch);
+ }
+ 
+@@ -2383,7 +2375,6 @@ static int pl330_get_current_xferred_count(struct dma_pl330_chan *pch,
+ 		addr = desc->px.dst_addr;
+ 	}
+ 	pm_runtime_mark_last_busy(pch->dmac->ddma.dev);
+-	pm_runtime_put_autosuspend(pl330->ddma.dev);
+ 
+ 	/* If DMAMOV hasn't finished yet, SAR/DAR can be zero */
+ 	if (!val)
+@@ -3166,10 +3157,7 @@ pl330_probe(struct amba_device *adev, const struct amba_id *id)
+ 		pcfg->num_peri, pcfg->num_events);
+ 
+ 	pm_runtime_irq_safe(&adev->dev);
+-	pm_runtime_use_autosuspend(&adev->dev);
+-	pm_runtime_set_autosuspend_delay(&adev->dev, PL330_AUTOSUSPEND_DELAY);
+ 	pm_runtime_mark_last_busy(&adev->dev);
+-	pm_runtime_put_autosuspend(&adev->dev);
+ 
+ 	return 0;
+ probe_err3:

@@ -1,0 +1,13 @@
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1d2de4a..5b96b5d 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -204,7 +204,7 @@ LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+ endif
+ LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
+ LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+-LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
++LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC_NOCCACHE)"
+ 
+ # If no package has yet set it, set it from the Kconfig option
+ LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
