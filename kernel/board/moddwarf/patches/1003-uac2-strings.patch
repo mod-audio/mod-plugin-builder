@@ -1,8 +1,16 @@
 diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index ae29871bdcc1..1714ab2277e3 100644
+index ae29871bdcc1..4ffbd525e468 100644
 --- a/drivers/usb/gadget/function/f_uac2.c
 +++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -108,7 +108,7 @@ enum {
+@@ -104,23 +104,31 @@ enum {
+ 	STR_AS_OUT_ALT1,
+ 	STR_AS_IN_ALT0,
+ 	STR_AS_IN_ALT1,
++	STR_DESC_CH_NAMES,
++	STR_DESC_CH_NAMES_2,
++	STR_DESC_CH_NAMES_3,
++	STR_DESC_CH_NAMES_4,
+ };
  
  static struct usb_string strings_fn[] = {
  	/* [STR_ASSOC].s = DYNAMIC, */
@@ -10,9 +18,14 @@ index ae29871bdcc1..1714ab2277e3 100644
 +	[STR_IF_CTRL].s = "MOD Dwarf Control",
  	[STR_CLKSRC_IN].s = "Input Clock",
  	[STR_CLKSRC_OUT].s = "Output Clock",
- 	[STR_USB_IT].s = "USBH Out",
-@@ -117,10 +117,10 @@ static struct usb_string strings_fn[] = {
- 	[STR_IO_OT].s = "USBD In",
+-	[STR_USB_IT].s = "USBH Out",
+-	[STR_IO_IT].s = "USBD Out",
+-	[STR_USB_OT].s = "USBH In",
+-	[STR_IO_OT].s = "USBD In",
++	[STR_USB_IT].s = "Playback Input terminal",
++	[STR_IO_IT].s = "Capture Input terminal",
++	[STR_USB_OT].s = "Capture Output terminal",
++	[STR_IO_OT].s = "Playback Output terminal",
  	[STR_FU_IN].s = "Capture Volume",
  	[STR_FU_OUT].s = "Playback Volume",
 -	[STR_AS_OUT_ALT0].s = "Playback Inactive",
@@ -23,6 +36,59 @@ index ae29871bdcc1..1714ab2277e3 100644
 +	[STR_AS_OUT_ALT1].s = "MOD Dwarf Playback (Active)",
 +	[STR_AS_IN_ALT0].s = "MOD Dwarf Capture",
 +	[STR_AS_IN_ALT1].s = "MOD Dwarf Capture (Active)",
++	[STR_DESC_CH_NAMES].s = "Pre-FX 1",
++	[STR_DESC_CH_NAMES_2].s = "Pre-FX 2",
++	[STR_DESC_CH_NAMES_3].s = "Post-FX 1",
++	[STR_DESC_CH_NAMES_4].s = "Post-FX 2",
  	{ },
  };
  
+@@ -201,7 +209,7 @@ static struct uac2_input_terminal_descriptor usb_out_it_desc = {
+ 	.wTerminalType = cpu_to_le16(UAC_TERMINAL_STREAMING),
+ 	.bAssocTerminal = 0,
+ 	/* .bCSourceID = DYNAMIC */
+-	.iChannelNames = 0,
++	/* .iChannelNames = DYNAMIC */
+ 	.bmControls = cpu_to_le16(CONTROL_RDWR << COPY_CTRL),
+ };
+ 
+@@ -215,7 +223,7 @@ static struct uac2_input_terminal_descriptor io_in_it_desc = {
+ 	.wTerminalType = cpu_to_le16(0x603),
+ 	.bAssocTerminal = 0,
+ 	/* .bCSourceID = DYNAMIC */
+-	.iChannelNames = 0,
++	/* .iChannelNames = DYNAMIC */
+ 	.bmControls = cpu_to_le16(CONTROL_RDWR << COPY_CTRL),
+ };
+ 
+@@ -1069,7 +1077,9 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
+ 	in_clk_src_desc.iClockSource = us[STR_CLKSRC_IN].id;
+ 	out_clk_src_desc.iClockSource = us[STR_CLKSRC_OUT].id;
+ 	usb_out_it_desc.iTerminal = us[STR_USB_IT].id;
++	usb_out_it_desc.iChannelNames = us[STR_DESC_CH_NAMES].id;
+ 	io_in_it_desc.iTerminal = us[STR_IO_IT].id;
++	io_in_it_desc.iChannelNames = us[STR_DESC_CH_NAMES].id;
+ 	usb_in_ot_desc.iTerminal = us[STR_USB_OT].id;
+ 	io_out_ot_desc.iTerminal = us[STR_IO_OT].id;
+ 	std_as_out_if0_desc.iInterface = us[STR_AS_OUT_ALT0].id;
+@@ -1088,16 +1098,15 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
+ 		*i_feature = us[STR_FU_IN].id;
+ 	}
+ 
+-
+ 	/* Initialize the configurable parameters */
+ 	usb_out_it_desc.bNrChannels = num_channels(uac2_opts->c_chmask);
+-	usb_out_it_desc.bmChannelConfig = cpu_to_le32(uac2_opts->c_chmask);
++	usb_out_it_desc.bmChannelConfig = 0;
+ 	io_in_it_desc.bNrChannels = num_channels(uac2_opts->p_chmask);
+-	io_in_it_desc.bmChannelConfig = cpu_to_le32(uac2_opts->p_chmask);
++	io_in_it_desc.bmChannelConfig = 0;
+ 	as_out_hdr_desc.bNrChannels = num_channels(uac2_opts->c_chmask);
+-	as_out_hdr_desc.bmChannelConfig = cpu_to_le32(uac2_opts->c_chmask);
++	as_out_hdr_desc.bmChannelConfig = 0;
+ 	as_in_hdr_desc.bNrChannels = num_channels(uac2_opts->p_chmask);
+-	as_in_hdr_desc.bmChannelConfig = cpu_to_le32(uac2_opts->p_chmask);
++	as_in_hdr_desc.bmChannelConfig = 0;
+ 	as_out_fmt1_desc.bSubslotSize = uac2_opts->c_ssize;
+ 	as_out_fmt1_desc.bBitResolution = uac2_opts->c_ssize * 8;
+ 	as_in_fmt1_desc.bSubslotSize = uac2_opts->p_ssize;

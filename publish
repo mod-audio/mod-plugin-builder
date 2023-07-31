@@ -15,6 +15,10 @@ if [ -z "${PLATFORM}" ] || [ -z "${PACKAGE}" ] || [ ! -e "plugins-dep/configs/${
     exit 1
 fi
 
+if [[ "${PACKAGE}" == "kernel" ]]; then
+  PLATFORM+="-kernel"
+fi
+
 #######################################################################################################################
 # Verify device connection
 
@@ -37,6 +41,17 @@ fi
 # Import common code and variables
 
 source .common
+
+#######################################################################################################################
+# kernel "package"
+
+if [[ "${PACKAGE}" == "kernel" ]]; then
+    ssh root@${TARGET} "mount / -o remount,rw"
+    # FIXME find name automatically
+    scp -O ${WORKDIR}/${PLATFORM}/images/Image root@${TARGET}:/boot/Image-ff-px30
+    scp -O -r ${WORKDIR}/${PLATFORM}/target/lib/modules/*.* root@${TARGET}:/lib/modules/
+    exit 0
+fi
 
 #######################################################################################################################
 # Check if requested plugin package exists
