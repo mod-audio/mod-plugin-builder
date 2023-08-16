@@ -1,0 +1,1077 @@
+Submodule deps/NeuralAmpModelerCore contains modified content
+diff --git a/deps/NeuralAmpModelerCore/NAM/convnet.cpp b/deps/NeuralAmpModelerCore/NAM/convnet.cpp
+index 20b2af9..de5c81c 100644
+--- a/deps/NeuralAmpModelerCore/NAM/convnet.cpp
++++ b/deps/NeuralAmpModelerCore/NAM/convnet.cpp
+@@ -113,15 +113,13 @@ convnet::ConvNet::ConvNet(const double loudness, const int channels, const std::
+   this->_head = _Head(channels, it);
+   if (it != params.end())
+     throw std::runtime_error("Didn't touch all the params when initializing wavenet");
+-  this->_reset_anti_pop_();
+ }
+ 
+-void convnet::ConvNet::_process_core_()
++void convnet::ConvNet::_process_core_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+-  this->_update_buffers_();
++  this->_update_buffers_(outputs, num_frames);
+   // Main computation!
+   const long i_start = this->_input_buffer_offset;
+-  const long num_frames = this->_input_post_gain.size();
+   const long i_end = i_start + num_frames;
+   // TODO one unnecessary copy :/ #speed
+   for (auto i = i_start; i < i_end; i++)
+@@ -132,9 +130,7 @@ void convnet::ConvNet::_process_core_()
+   this->_head.process_(this->_block_vals[this->_blocks.size()], this->_head_output, i_start, i_end);
+   // Copy to required output array (TODO tighten this up)
+   for (int s = 0; s < num_frames; s++)
+-    this->_core_dsp_output[s] = this->_head_output(s);
+-  // Apply anti-pop
+-  this->_anti_pop_();
++    outputs[s] = this->_head_output(s);
+ }
+ 
+ void convnet::ConvNet::_verify_params(const int channels, const std::vector<int>& dilations, const bool batchnorm,
+@@ -143,9 +139,9 @@ void convnet::ConvNet::_verify_params(const int channels, const std::vector<int>
+   // TODO
+ }
+ 
+-void convnet::ConvNet::_update_buffers_()
++void convnet::ConvNet::_update_buffers_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+-  this->Buffer::_update_buffers_();
++  this->Buffer::_update_buffers_(outputs, num_frames);
+   const size_t buffer_size = this->_input_buffer.size();
+   this->_block_vals[0].resize(1, buffer_size);
+   for (size_t i = 1; i < this->_block_vals.size(); i++)
+@@ -171,27 +167,3 @@ void convnet::ConvNet::_rewind_buffers_()
+   // Now we can do the rest of the rewind
+   this->Buffer::_rewind_buffers_();
+ }
+-
+-void convnet::ConvNet::_anti_pop_()
+-{
+-  if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
+-    return;
+-  const float slope = 1.0f / float(this->_anti_pop_ramp);
+-  for (size_t i = 0; i < this->_core_dsp_output.size(); i++)
+-  {
+-    if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
+-      break;
+-    const float gain = std::max(slope * float(this->_anti_pop_countdown), float(0.0));
+-    this->_core_dsp_output[i] *= gain;
+-    this->_anti_pop_countdown++;
+-  }
+-}
+-
+-void convnet::ConvNet::_reset_anti_pop_()
+-{
+-  // You need the "real" receptive field, not the buffers.
+-  long receptive_field = 1;
+-  for (size_t i = 0; i < this->_blocks.size(); i++)
+-    receptive_field += this->_blocks[i].conv.get_dilation();
+-  this->_anti_pop_countdown = -receptive_field;
+-}
+diff --git a/deps/NeuralAmpModelerCore/NAM/convnet.h b/deps/NeuralAmpModelerCore/NAM/convnet.h
+index baad344..436a713 100644
+--- a/deps/NeuralAmpModelerCore/NAM/convnet.h
++++ b/deps/NeuralAmpModelerCore/NAM/convnet.h
+@@ -77,18 +77,9 @@ protected:
+   _Head _head;
+   void _verify_params(const int channels, const std::vector<int>& dilations, const bool batchnorm,
+                       const size_t actual_params);
+-  void _update_buffers_() override;
++  void _update_buffers_(NAM_SAMPLE* outputs, const int num_frames) override;
+   void _rewind_buffers_() override;
+ 
+-  void _process_core_() override;
+-
+-  // The net starts with random parameters inside; we need to wait for a full
+-  // receptive field to pass through before we can count on the output being
+-  // ok. This implements a gentle "ramp-up" so that there's no "pop" at the
+-  // start.
+-  long _anti_pop_countdown;
+-  const long _anti_pop_ramp = 100;
+-  void _anti_pop_();
+-  void _reset_anti_pop_();
++  void _process_core_(NAM_SAMPLE* outputs, const int num_frames) override;
+ };
+ }; // namespace convnet
+diff --git a/deps/NeuralAmpModelerCore/NAM/dsp.cpp b/deps/NeuralAmpModelerCore/NAM/dsp.cpp
+index a4057ef..bb7f3be 100644
+--- a/deps/NeuralAmpModelerCore/NAM/dsp.cpp
++++ b/deps/NeuralAmpModelerCore/NAM/dsp.cpp
+@@ -32,15 +32,12 @@ DSP::DSP(const double loudness, const double expected_sample_rate)
+ {
+ }
+ 
+-void DSP::process(NAM_SAMPLE** inputs, NAM_SAMPLE** outputs, const int num_channels, const int num_frames,
+-                  const double input_gain, const double output_gain,
++void DSP::process(NAM_SAMPLE* outputs, const int num_frames,
+                   const std::unordered_map<std::string, double>& params)
+ {
+   this->_get_params_(params);
+-  this->_apply_input_level_(inputs, num_channels, num_frames, input_gain);
+-  this->_ensure_core_dsp_output_ready_();
+-  this->_process_core_();
+-  this->_apply_output_level_(outputs, num_channels, num_frames, output_gain);
++  this->_process_core_(outputs, num_frames);
++  this->_apply_output_level_(outputs, num_frames);
+ }
+ 
+ void DSP::finalize_(const int num_frames) {}
+@@ -60,38 +57,15 @@ void DSP::_get_params_(const std::unordered_map<std::string, double>& input_para
+   }
+ }
+ 
+-void DSP::_apply_input_level_(NAM_SAMPLE** inputs, const int num_channels, const int num_frames, const double gain)
++void DSP::_apply_output_level_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+-  // Must match exactly; we're going to use the size of _input_post_gain later
+-  // for num_frames.
+-  if ((int)this->_input_post_gain.size() != num_frames)
+-    this->_input_post_gain.resize(num_frames);
+-  // MONO ONLY
+-  const int channel = 0;
+-  for (int i = 0; i < num_frames; i++)
+-    this->_input_post_gain[i] = float(gain * inputs[channel][i]);
+-}
+-
+-void DSP::_ensure_core_dsp_output_ready_()
+-{
+-  if (this->_core_dsp_output.size() < this->_input_post_gain.size())
+-    this->_core_dsp_output.resize(this->_input_post_gain.size());
+-}
+-
+-void DSP::_process_core_()
+-{
+-  // Default implementation is the null operation
+-  for (size_t i = 0; i < this->_input_post_gain.size(); i++)
+-    this->_core_dsp_output[i] = this->_input_post_gain[i];
+-}
++  if (this->mNormalizeOutputLoudness)
++  {
++    const NAM_SAMPLE loudnessGain = pow(10.0, -(this->mLoudness - TARGET_DSP_LOUDNESS) / 20.0);
+ 
+-void DSP::_apply_output_level_(NAM_SAMPLE** outputs, const int num_channels, const int num_frames, const double gain)
+-{
+-  const double loudnessGain = pow(10.0, -(this->mLoudness - TARGET_DSP_LOUDNESS) / 20.0);
+-  const double finalGain = this->mNormalizeOutputLoudness ? gain * loudnessGain : gain;
+-  for (int c = 0; c < num_channels; c++)
+     for (int s = 0; s < num_frames; s++)
+-      outputs[c][s] = (NAM_SAMPLE)(finalGain * this->_core_dsp_output[s]);
++      outputs[s] *= loudnessGain;
++  }
+ }
+ 
+ // Buffer =====================================================================
+@@ -119,9 +93,8 @@ void Buffer::_set_receptive_field(const int new_receptive_field, const int input
+   this->_reset_input_buffer();
+ }
+ 
+-void Buffer::_update_buffers_()
++void Buffer::_update_buffers_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+-  const long int num_frames = this->_input_post_gain.size();
+   // Make sure that the buffer is big enough for the receptive field and the
+   // frames needed!
+   {
+@@ -141,7 +114,7 @@ void Buffer::_update_buffers_()
+     this->_rewind_buffers_();
+   // Put the new samples into the input buffer
+   for (long i = this->_input_buffer_offset, j = 0; j < num_frames; i++, j++)
+-    this->_input_buffer[i] = this->_input_post_gain[j];
++    this->_input_buffer[i] = outputs[j];
+   // And resize the output buffer:
+   this->_output_buffer.resize(num_frames);
+ }
+@@ -195,16 +168,16 @@ Linear::Linear(const double loudness, const int receptive_field, const bool _bia
+   this->_bias = _bias ? params[receptive_field] : (float)0.0;
+ }
+ 
+-void Linear::_process_core_()
++void Linear::_process_core_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+-  this->Buffer::_update_buffers_();
++  this->Buffer::_update_buffers_(outputs, num_frames);
+ 
+   // Main computation!
+-  for (size_t i = 0; i < this->_input_post_gain.size(); i++)
++  for (int i = 0; i < num_frames; i++)
+   {
+     const size_t offset = this->_input_buffer_offset - this->_weight.size() + i + 1;
+     auto input = Eigen::Map<const Eigen::VectorXf>(&this->_input_buffer[offset], this->_receptive_field);
+-    this->_core_dsp_output[i] = this->_bias + this->_weight.dot(input);
++    outputs[i] = this->_bias + this->_weight.dot(input);
+   }
+ }
+ 
+diff --git a/deps/NeuralAmpModelerCore/NAM/dsp.h b/deps/NeuralAmpModelerCore/NAM/dsp.h
+index 776ce6a..35052ff 100644
+--- a/deps/NeuralAmpModelerCore/NAM/dsp.h
++++ b/deps/NeuralAmpModelerCore/NAM/dsp.h
+@@ -57,8 +57,7 @@ public:
+   // 3. The core DSP algorithm is run (This is what should probably be
+   //    overridden in subclasses).
+   // 4. The output level is applied and the result stored to `output`.
+-  virtual void process(NAM_SAMPLE** inputs, NAM_SAMPLE** outputs, const int num_channels, const int num_frames,
+-                       const double input_gain, const double output_gain,
++  virtual void process(NAM_SAMPLE* outputs, const int num_frames,
+                        const std::unordered_map<std::string, double>& params);
+   // Anything to take care of before next buffer comes in.
+   // For example:
+@@ -82,10 +81,6 @@ protected:
+   std::unordered_map<std::string, double> _params;
+   // If the params have changed since the last buffer was processed:
+   bool _stale_params;
+-  // Where to store the samples after applying input gain
+-  std::vector<float> _input_post_gain;
+-  // Location for the output of the core DSP algorithm.
+-  std::vector<float> _core_dsp_output;
+ 
+   // Methods
+ 
+@@ -94,20 +89,11 @@ protected:
+   // (TODO use "listener" approach)
+   void _get_params_(const std::unordered_map<std::string, double>& input_params);
+ 
+-  // Apply the input gain
+-  // Result populates this->_input_post_gain
+-  void _apply_input_level_(NAM_SAMPLE** inputs, const int num_channels, const int num_frames, const double gain);
+-
+-  // i.e. ensure the size is correct.
+-  void _ensure_core_dsp_output_ready_();
+-
+   // The core of your DSP algorithm.
+-  // Access the inputs in this->_input_post_gain
+-  // Place the outputs in this->_core_dsp_output
+-  virtual void _process_core_();
++  virtual void _process_core_(NAM_SAMPLE* outputs, const int num_frames) = 0;
+ 
+-  // Copy this->_core_dsp_output to output and apply the output volume
+-  void _apply_output_level_(NAM_SAMPLE** outputs, const int num_channels, const int num_frames, const double gain);
++  // Apply the output volume
++  void _apply_output_level_(NAM_SAMPLE* outputs, const int num_frames);
+ };
+ 
+ // Class where an input buffer is kept so that long-time effects can be
+@@ -133,7 +119,7 @@ protected:
+   void _set_receptive_field(const int new_receptive_field);
+   void _reset_input_buffer();
+   // Use this->_input_post_gain
+-  virtual void _update_buffers_();
++  virtual void _update_buffers_(NAM_SAMPLE* outputs, const int num_frames);
+   virtual void _rewind_buffers_();
+ };
+ 
+@@ -145,7 +131,7 @@ public:
+          const double expected_sample_rate = -1.0);
+   Linear(const double loudness, const int receptive_field, const bool _bias, const std::vector<float>& params,
+          const double expected_sample_rate = -1.0);
+-  void _process_core_() override;
++  void _process_core_(NAM_SAMPLE* outputs, const int num_frames) override;
+ 
+ protected:
+   Eigen::VectorXf _weight;
+diff --git a/deps/NeuralAmpModelerCore/NAM/lstm.cpp b/deps/NeuralAmpModelerCore/NAM/lstm.cpp
+index 2327367..ca294ab 100644
+--- a/deps/NeuralAmpModelerCore/NAM/lstm.cpp
++++ b/deps/NeuralAmpModelerCore/NAM/lstm.cpp
+@@ -101,7 +101,7 @@ void lstm::LSTM::_init_parametric(nlohmann::json& parametric)
+   this->_input_and_params.resize(1 + parametric.size()); // TODO amp parameters
+ }
+ 
+-void lstm::LSTM::_process_core_()
++void lstm::LSTM::_process_core_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+   // Get params into the input vector before starting
+   if (this->_stale_params)
+@@ -111,8 +111,8 @@ void lstm::LSTM::_process_core_()
+     this->_stale_params = false;
+   }
+   // Process samples, placing results in the required output location
+-  for (size_t i = 0; i < this->_input_post_gain.size(); i++)
+-    this->_core_dsp_output[i] = this->_process_sample(this->_input_post_gain[i]);
++  for (int i = 0; i < num_frames; i++)
++    outputs[i] = this->_process_sample(outputs[i]);
+ }
+ 
+ float lstm::LSTM::_process_sample(const float x)
+diff --git a/deps/NeuralAmpModelerCore/NAM/lstm.h b/deps/NeuralAmpModelerCore/NAM/lstm.h
+index e855f64..a4e30a8 100644
+--- a/deps/NeuralAmpModelerCore/NAM/lstm.h
++++ b/deps/NeuralAmpModelerCore/NAM/lstm.h
+@@ -58,7 +58,7 @@ public:
+ protected:
+   Eigen::VectorXf _head_weight;
+   float _head_bias;
+-  void _process_core_() override;
++  void _process_core_(NAM_SAMPLE* outputs, const int num_frames) override;
+   std::vector<LSTMCell> _layers;
+ 
+   float _process_sample(const float x);
+diff --git a/deps/NeuralAmpModelerCore/NAM/wavenet.cpp b/deps/NeuralAmpModelerCore/NAM/wavenet.cpp
+index af754d5..00455c1 100644
+--- a/deps/NeuralAmpModelerCore/NAM/wavenet.cpp
++++ b/deps/NeuralAmpModelerCore/NAM/wavenet.cpp
+@@ -259,7 +259,6 @@ wavenet::WaveNet::WaveNet(const double loudness, const std::vector<wavenet::Laye
+   }
+   this->_head_output.resize(1, 0); // Mono output!
+   this->set_params_(params);
+-  this->_reset_anti_pop_();
+ }
+ 
+ void wavenet::WaveNet::finalize_(const int num_frames)
+@@ -309,9 +308,8 @@ void wavenet::WaveNet::_prepare_for_frames_(const long num_frames)
+     this->_layer_arrays[i].prepare_for_frames_(num_frames);
+ }
+ 
+-void wavenet::WaveNet::_process_core_()
++void wavenet::WaveNet::_process_core_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+-  const long num_frames = this->_input_post_gain.size();
+   this->_set_num_frames_(num_frames);
+   this->_prepare_for_frames_(num_frames);
+ 
+@@ -324,7 +322,7 @@ void wavenet::WaveNet::_process_core_()
+   // Clumsy...
+   for (int j = 0; j < num_frames; j++)
+   {
+-    this->_condition(0, j) = this->_input_post_gain[j];
++    this->_condition(0, j) = outputs[j];
+     if (this->_stale_params) // Column-major assignment; good for Eigen. Let the
+                              // compiler optimize this.
+       for (size_t i = 0; i < this->_param_names.size(); i++)
+@@ -351,13 +349,13 @@ void wavenet::WaveNet::_process_core_()
+   for (int s = 0; s < num_frames; s++)
+   {
+     float out = this->_head_scale * this->_head_arrays[final_head_array](0, s);
++#ifndef __MOD_DEVICES__
+     // This is the NaN check that we could fix with anti-popping the input
+     if (isnan(out))
+       out = 0.0;
+-    this->_core_dsp_output[s] = out;
++#endif
++    outputs[s] = out;
+   }
+-  // Apply anti-pop
+-  this->_anti_pop_();
+ }
+ 
+ void wavenet::WaveNet::_set_num_frames_(const long num_frames)
+@@ -377,27 +375,3 @@ void wavenet::WaveNet::_set_num_frames_(const long num_frames)
+   // this->_head.set_num_frames_(num_frames);
+   this->_num_frames = num_frames;
+ }
+-
+-void wavenet::WaveNet::_anti_pop_()
+-{
+-  if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
+-    return;
+-  const float slope = 1.0f / float(this->_anti_pop_ramp);
+-  for (size_t i = 0; i < this->_core_dsp_output.size(); i++)
+-  {
+-    if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
+-      break;
+-    const float gain = std::max(slope * float(this->_anti_pop_countdown), 0.0f);
+-    this->_core_dsp_output[i] *= gain;
+-    this->_anti_pop_countdown++;
+-  }
+-}
+-
+-void wavenet::WaveNet::_reset_anti_pop_()
+-{
+-  // You need the "real" receptive field, not the buffers.
+-  long receptive_field = 1;
+-  for (size_t i = 0; i < this->_layer_arrays.size(); i++)
+-    receptive_field += this->_layer_arrays[i].get_receptive_field();
+-  this->_anti_pop_countdown = -receptive_field;
+-}
+diff --git a/deps/NeuralAmpModelerCore/NAM/wavenet.h b/deps/NeuralAmpModelerCore/NAM/wavenet.h
+index ee7ebc0..b1806dc 100644
+--- a/deps/NeuralAmpModelerCore/NAM/wavenet.h
++++ b/deps/NeuralAmpModelerCore/NAM/wavenet.h
+@@ -203,18 +203,9 @@ private:
+   void _init_parametric_(nlohmann::json& parametric);
+   void _prepare_for_frames_(const long num_frames);
+   // Reminder: From ._input_post_gain to ._core_dsp_output
+-  void _process_core_() override;
++  void _process_core_(NAM_SAMPLE* outputs, const int num_frames) override;
+ 
+   // Ensure that all buffer arrays are the right size for this num_frames
+   void _set_num_frames_(const long num_frames);
+-
+-  // The net starts with random parameters inside; we need to wait for a full
+-  // receptive field to pass through before we can count on the output being
+-  // ok. This implements a gentle "ramp-up" so that there's no "pop" at the
+-  // start.
+-  long _anti_pop_countdown;
+-  const long _anti_pop_ramp = 4000;
+-  void _anti_pop_();
+-  void _reset_anti_pop_();
+ };
+ }; // namespace wavenet
+diff --git a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp b/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp
+index 7eb69b8..91e9246 100644
+--- a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp
++++ b/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp
+@@ -22,10 +22,10 @@ mOutputStart(outputDegree)
+   this->mOutputCoefficients.resize(outputDegree);
+ }
+ 
+-DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const size_t numChannels,
++DSP_SAMPLE* recursive_linear_filter::Base::Process(DSP_SAMPLE* inputs,
+                                                     const size_t numFrames)
+ {
+-  this->_PrepareBuffers(numChannels, numFrames);
++  this->_PrepareBuffers(numFrames);
+   long inputStart = 0;
+   long outputStart = 0;
+   // Degree = longest history
+@@ -35,34 +35,35 @@ DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const s
+   //  0,2,3,... are fine.
+   const size_t inputDegree = this->_GetInputDegree();
+   const size_t outputDegree = this->_GetOutputDegree();
+-  for (auto c = 0; c < numChannels; c++)
+   {
+     inputStart = this->mInputStart; // Should be plenty fine
+     outputStart = this->mOutputStart;
+-    for (auto s = 0; s < numFrames; s++)
++    for (size_t s = 0; s < numFrames; s++)
+     {
+       DSP_SAMPLE out = 0.0;
+       // Compute input terms
+       inputStart -= 1;
+       if (inputStart < 0)
+         inputStart = inputDegree - 1;
+-      this->mInputHistory[c][inputStart] = inputs[c][s]; // Store current input
+-      for (auto i = 0; i < inputDegree; i++)
+-        out += this->mInputCoefficients[i] * this->mInputHistory[c][(inputStart + i) % inputDegree];
++      this->mInputHistory[inputStart] = inputs[s]; // Store current input
++      for (size_t i = 0; i < inputDegree; i++)
++        out += this->mInputCoefficients[i] * this->mInputHistory[(inputStart + i) % inputDegree];
+ 
+       // Output terms
+       outputStart -= 1;
+       if (outputStart < 0)
+         outputStart = outputDegree - 1;
+-      for (auto i = 1; i < outputDegree; i++)
+-        out += this->mOutputCoefficients[i] * this->mOutputHistory[c][(outputStart + i) % outputDegree];
++      for (size_t i = 1; i < outputDegree; i++)
++        out += this->mOutputCoefficients[i] * this->mOutputHistory[(outputStart + i) % outputDegree];
++#ifndef __MOD_DEVICES__
+       // Prevent a NaN from jamming the filter!
+       if (std::isnan(out))
+         out = 0.0;
++#endif
+       // Store the output!
+       if (outputDegree >= 1)
+-        this->mOutputHistory[c][outputStart] = out;
+-      this->mOutputs[c][s] = out;
++        this->mOutputHistory[outputStart] = out;
++      this->mOutputs[s] = out;
+     }
+   }
+   this->mInputStart = inputStart;
+@@ -70,24 +71,21 @@ DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const s
+   return this->_GetPointers();
+ }
+ 
+-void recursive_linear_filter::Base::_PrepareBuffers(const size_t numChannels, const size_t numFrames)
++void recursive_linear_filter::Base::_PrepareBuffers(const size_t numFrames)
+ {
+   // Check for new channel count *before* parent class ensures they match!
+-  const bool newChannels = this->_GetNumChannels() != numChannels;
++  const bool newChannels = this->_GetNumFrames() == 0;
+   // Parent implementation takes care of mOutputs and mOutputPointers
+-  this->dsp::DSP::_PrepareBuffers(numChannels, numFrames);
++  this->dsp::DSP::_PrepareBuffers(numFrames);
+   if (newChannels)
+   {
+-    this->mInputHistory.resize(numChannels);
+-    this->mOutputHistory.resize(numChannels);
+     const size_t inputDegree = this->_GetInputDegree();
+     const size_t outputDegree = this->_GetOutputDegree();
+-    for (auto c = 0; c < numChannels; c++)
+     {
+-      this->mInputHistory[c].resize(inputDegree);
+-      this->mOutputHistory[c].resize(outputDegree);
+-      std::fill(this->mInputHistory[c].begin(), this->mInputHistory[c].end(), 0.0);
+-      std::fill(this->mOutputHistory[c].begin(), this->mOutputHistory[c].end(), 0.0);
++      this->mInputHistory.resize(inputDegree);
++      this->mOutputHistory.resize(outputDegree);
++      std::fill(this->mInputHistory.begin(), this->mInputHistory.end(), 0.0);
++      std::fill(this->mOutputHistory.begin(), this->mOutputHistory.end(), 0.0);
+     }
+   }
+ }
+diff --git a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.h b/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.h
+index 737d297..afacae1 100644
+--- a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.h
++++ b/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.h
+@@ -22,14 +22,15 @@ class Base : public dsp::DSP
+ {
+ public:
+   Base(const size_t inputDegree, const size_t outputDegree);
+-  DSP_SAMPLE** Process(DSP_SAMPLE** inputs, const size_t numChannels, const size_t numFrames) override;
++  DSP_SAMPLE* Process(DSP_SAMPLE* inputs, const size_t numFrames) override;
++
++  // Additionally prepares mInputHistory and mOutputHistory.
++  void _PrepareBuffers(const size_t numFrames) override;
+ 
+ protected:
+   // Methods
+   size_t _GetInputDegree() const { return this->mInputCoefficients.size(); };
+   size_t _GetOutputDegree() const { return this->mOutputCoefficients.size(); };
+-  // Additionally prepares mInputHistory and mOutputHistory.
+-  void _PrepareBuffers(const size_t numChannels, const size_t numFrames) override;
+ 
+   // Coefficients for the DSP filter
+   // [0] is for the current sample
+@@ -43,8 +44,8 @@ protected:
+   // First index is channel
+   // Second index, [0] is the current input/output, [1] is the previous, [2] is
+   // before that, etc.
+-  std::vector<std::vector<DSP_SAMPLE>> mInputHistory;
+-  std::vector<std::vector<DSP_SAMPLE>> mOutputHistory;
++  std::vector<DSP_SAMPLE> mInputHistory;
++  std::vector<DSP_SAMPLE> mOutputHistory;
+   // Indices for history.
+   // Designates which index is currently "0". Use modulus to wrap around.
+   long mInputStart;
+diff --git a/deps/NeuralAmpModelerCore/dsp/dsp.cpp b/deps/NeuralAmpModelerCore/dsp/dsp.cpp
+index 6fc7bdd..6e4787e 100644
+--- a/deps/NeuralAmpModelerCore/dsp/dsp.cpp
++++ b/deps/NeuralAmpModelerCore/dsp/dsp.cpp
+@@ -13,68 +13,25 @@
+ // Implementation of Version 2 interface
+ 
+ dsp::DSP::DSP()
+-: mOutputPointers(nullptr)
+-, mOutputPointersSize(0)
+ {
+ }
+ 
+ dsp::DSP::~DSP()
+ {
+-  this->_DeallocateOutputPointers();
+ };
+ 
+-void dsp::DSP::_AllocateOutputPointers(const size_t numChannels)
++DSP_SAMPLE* dsp::DSP::_GetPointers()
+ {
+-  if (this->mOutputPointers != nullptr)
+-    throw std::runtime_error("Tried to re-allocate over non-null mOutputPointers");
+-  this->mOutputPointers = new DSP_SAMPLE*[numChannels];
+-  if (this->mOutputPointers == nullptr)
+-    throw std::runtime_error("Failed to allocate pointer to output buffer!\n");
+-  this->mOutputPointersSize = numChannels;
++  return this->mOutputs.data();
+ }
+ 
+-void dsp::DSP::_DeallocateOutputPointers()
+-{
+-  if (this->mOutputPointers != nullptr)
+-  {
+-    delete[] this->mOutputPointers;
+-    this->mOutputPointers = nullptr;
+-  }
+-  if (this->mOutputPointers != nullptr)
+-    throw std::runtime_error("Failed to deallocate output pointer!");
+-  this->mOutputPointersSize = 0;
+-}
+-
+-DSP_SAMPLE** dsp::DSP::_GetPointers()
+-{
+-  for (auto c = 0; c < this->_GetNumChannels(); c++)
+-    this->mOutputPointers[c] = this->mOutputs[c].data();
+-  return this->mOutputPointers;
+-}
+-
+-void dsp::DSP::_PrepareBuffers(const size_t numChannels, const size_t numFrames)
++void dsp::DSP::_PrepareBuffers(const size_t numFrames)
+ {
+   const size_t oldFrames = this->_GetNumFrames();
+-  const size_t oldChannels = this->_GetNumChannels();
++  const bool resizeFrames = oldFrames != numFrames;
+ 
+-  const bool resizeChannels = oldChannels != numChannels;
+-  const bool resizeFrames = resizeChannels || (oldFrames != numFrames);
+-  if (resizeChannels)
+-  {
+-    this->mOutputs.resize(numChannels);
+-    this->_ResizePointers(numChannels);
+-  }
+   if (resizeFrames)
+-    for (auto c = 0; c < numChannels; c++)
+-      this->mOutputs[c].resize(numFrames);
+-}
+-
+-void dsp::DSP::_ResizePointers(const size_t numChannels)
+-{
+-  if (this->mOutputPointersSize == numChannels)
+-    return;
+-  this->_DeallocateOutputPointers();
+-  this->_AllocateOutputPointers(numChannels);
++    this->mOutputs.resize(numFrames);
+ }
+ 
+ dsp::History::History()
+diff --git a/deps/NeuralAmpModelerCore/dsp/dsp.h b/deps/NeuralAmpModelerCore/dsp/dsp.h
+index faf06af..1cb8224 100644
+--- a/deps/NeuralAmpModelerCore/dsp/dsp.h
++++ b/deps/NeuralAmpModelerCore/dsp/dsp.h
+@@ -32,7 +32,7 @@ public:
+   // The output shall be a pointer-to-pointers of matching size.
+   // This object instance will own the data referenced by the pointers and be
+   // responsible for its allocation and deallocation.
+-  virtual DSP_SAMPLE** Process(DSP_SAMPLE** inputs, const size_t numChannels, const size_t numFrames) = 0;
++  virtual DSP_SAMPLE* Process(DSP_SAMPLE* inputs, const size_t numFrames) = 0;
+   // Update the parameters of the DSP object according to the provided params.
+   // Not declaring a pure virtual bc there's no concrete definition that can
+   // use Params.
+@@ -42,34 +42,20 @@ public:
+ protected:
+   // Methods
+ 
+-  // Allocate mOutputPointers.
+-  // Assumes it's already null (Use _DeallocateOutputPointers()).
+-  void _AllocateOutputPointers(const size_t numChannels);
+-  // Ensure mOutputPointers is freed.
+-  void _DeallocateOutputPointers();
+-
+-  size_t _GetNumChannels() const { return this->mOutputs.size(); };
+-  size_t _GetNumFrames() const { return this->_GetNumChannels() > 0 ? this->mOutputs[0].size() : 0; }
++  size_t _GetNumFrames() const { return this->mOutputs.size(); }
+   // Return a pointer-to-pointers for the DSP's output buffers (all channels)
+   // Assumes that ._PrepareBuffers()  was called recently enough.
+-  DSP_SAMPLE** _GetPointers();
++  DSP_SAMPLE* _GetPointers();
+   // Resize mOutputs to (numChannels, numFrames) and ensure that the raw
+   // pointers are also keeping up.
+-  virtual void _PrepareBuffers(const size_t numChannels, const size_t numFrames);
+-  // Resize the pointer-to-pointers for the vector-of-vectors.
+-  void _ResizePointers(const size_t numChannels);
++  virtual void _PrepareBuffers(const size_t numFrames);
+ 
+   // Attributes
+ 
+   // The output array into which the DSP module's calculations will be written.
+   // Pointers to this member's data will be returned by .Process(), and std
+   // Will ensure proper allocation.
+-  std::vector<std::vector<DSP_SAMPLE>> mOutputs;
+-  // A pointer to pointers of which copies will be given out as the output of
+-  // .Process(). This object will ensure proper allocation and deallocation of
+-  // the first level; The second level points to .data() from mOutputs.
+-  DSP_SAMPLE** mOutputPointers;
+-  size_t mOutputPointersSize;
++  std::vector<DSP_SAMPLE> mOutputs;
+ };
+ 
+ // A class where a longer buffer of history is needed to correctly calculate
+diff --git a/src/BufferedDSP.hpp b/src/BufferedDSP.hpp
+new file mode 100644
+index 0000000..ce5df3c
+--- /dev/null
++++ b/src/BufferedDSP.hpp
+@@ -0,0 +1,211 @@
++/*
++ * Buffered DSP
++ * Copyright (C) 2022-2023 Filipe Coelho <falktx@falktx.com>
++ * SPDX-License-Identifier: ISC
++ */
++
++#pragma once
++
++#include "NAM/dsp.h"
++
++#include <atomic>
++#include <pthread.h>
++#include <semaphore.h>
++#include <unistd.h>
++
++#if defined(__SSE2_MATH__)
++# include <xmmintrin.h>
++#endif
++
++class BufferedDSP
++{
++    std::unordered_map<std::string, double>& namParams;
++    DSP* activedsp = nullptr;
++    float* bufferedInput = nullptr;
++    float* bufferedOutput = nullptr;
++    uint32_t bufferSize = 0;
++    sem_t semBgProcStart = {};
++    sem_t semBgProcFinished = {};
++    std::atomic<bool> active{ false };
++
++    pthread_mutex_t mutexI, mutexO;
++    pthread_t thread = {};
++    volatile bool running = false;
++
++public:
++    BufferedDSP(std::unordered_map<std::string, double>& namParams_)
++        : namParams(namParams_)
++    {
++         sem_init(&semBgProcStart, 0, 0);
++         sem_init(&semBgProcFinished, 0, 0);
++
++         pthread_mutexattr_t attr;
++         pthread_mutexattr_init(&attr);
++         pthread_mutexattr_setprotocol(&attr, PTHREAD_PRIO_INHERIT);
++         pthread_mutex_init(&mutexI, &attr);
++         pthread_mutex_init(&mutexO, &attr);
++         pthread_mutexattr_destroy(&attr);
++    }
++
++    ~BufferedDSP()
++    {
++        stop();
++
++        pthread_mutex_destroy(&mutexI);
++        pthread_mutex_destroy(&mutexO);
++        sem_destroy(&semBgProcStart);
++        sem_destroy(&semBgProcFinished);
++        delete[] bufferedInput;
++        delete[] bufferedOutput;
++    }
++
++    void setBufferSize(const uint32_t newBufferSize)
++    {
++        if (bufferSize == newBufferSize)
++            return;
++
++        const bool wasRunning = running;
++
++        if (wasRunning)
++            stop();
++
++        bufferSize = newBufferSize;
++
++        delete[] bufferedInput;
++        delete[] bufferedOutput;
++
++        bufferedInput = new float[newBufferSize];
++        bufferedOutput = new float[newBufferSize];
++        std::memset(bufferedOutput, 0, sizeof(float)*newBufferSize);
++
++        if (wasRunning)
++            start();
++    }
++
++    void start()
++    {
++        running = true;
++
++        struct sched_param sched_param = {};
++        sched_param.sched_priority = 80;
++
++       #ifdef __MOD_DEVICES__
++        int rtprio;
++        const char* const srtprio = std::getenv("MOD_PLUGIN_THREAD_PRIORITY");
++        if (srtprio != nullptr && (rtprio = std::atoi(srtprio)) > 0)
++            sched_param.sched_priority = rtprio - 1;
++       #endif
++
++        pthread_attr_t attr;
++        pthread_attr_init(&attr);
++        pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
++        pthread_attr_setinheritsched(&attr, PTHREAD_EXPLICIT_SCHED);
++        pthread_attr_setschedpolicy(&attr, SCHED_FIFO);
++        pthread_attr_setschedparam(&attr, &sched_param);
++
++        if (pthread_create(&thread, &attr, _run, this) != 0)
++        {
++            pthread_attr_destroy(&attr);
++            pthread_attr_init(&attr);
++            pthread_create(&thread, &attr, _run, this);
++        }
++
++        pthread_attr_destroy(&attr);
++    }
++
++    void stop()
++    {
++        if (!running) return; running = false;
++        sem_post(&semBgProcStart);
++        pthread_join(thread, nullptr);
++        thread = {};
++    }
++
++    void setDSP(DSP* const dsp)
++    {
++        activedsp = dsp;
++
++        while (active.load())
++            usleep(1000);
++    }
++
++    void process(float* const output, const uint32_t len)
++    {
++        if (len > bufferSize)
++            return;
++
++        sem_wait(&semBgProcFinished);
++
++        pthread_mutex_lock(&mutexI);
++        std::memcpy(bufferedInput, output, sizeof(float)*len);
++        pthread_mutex_unlock(&mutexI);
++
++        pthread_mutex_lock(&mutexO);
++        std::memcpy(output, bufferedOutput, sizeof(float)*len);
++        pthread_mutex_unlock(&mutexO);
++
++        sem_post(&semBgProcStart);
++    }
++
++    static void* _run(void* const arg)
++    {
++        static_cast<BufferedDSP*>(arg)->run();
++        return nullptr;
++    }
++
++    void run()
++    {
++        if (bufferSize == 0)
++            return;
++
++        float* tmp = new float[bufferSize];
++        std::memset(tmp, 0, sizeof(float)*bufferSize);
++
++        // disable denormals and enable flush to zero
++        {
++           #if defined(__SSE2_MATH__)
++            _mm_setcsr(_mm_getcsr() | 0x8040);
++           #elif defined(__aarch64__)
++            uint64_t flags;
++            __asm__ __volatile__("mrs %0, fpcr" : "=r" (flags));
++            __asm__ __volatile__("msr fpcr, %0" :: "r" (flags | 0x1000000));
++           #elif defined(__arm__) && !defined(__SOFTFP__)
++            uint32_t flags;
++            __asm__ __volatile__("vmrs %0, fpscr" : "=r" (flags));
++            __asm__ __volatile__("vmsr fpscr, %0" :: "r" (flags | 0x1000000));
++           #endif
++        }
++
++        // sem_post(&semBgProcFinished);
++
++        while (running)
++        {
++            sem_post(&semBgProcFinished);
++            sem_wait(&semBgProcStart);
++
++            if (!running)
++                break;
++
++            pthread_mutex_lock(&mutexI);
++            std::memcpy(tmp, bufferedInput, sizeof(float)*bufferSize);
++            pthread_mutex_unlock(&mutexI);
++
++            active.store(true);
++
++            if (DSP* const dsp = activedsp)
++            {
++                dsp->process(tmp, bufferSize, namParams);
++                // dsp->process(&tmp, &tmp, 1, bufferSize, 1.0, 1.0, namParams);
++                dsp->finalize_(bufferSize);
++            }
++
++            active.store(false);
++
++            pthread_mutex_lock(&mutexO);
++            std::memcpy(bufferedOutput, tmp, sizeof(float)*bufferSize);
++            pthread_mutex_unlock(&mutexO);
++        }
++
++        delete[] tmp;
++    }
++};
+diff --git a/src/nam_plugin.cpp b/src/nam_plugin.cpp
+index b9274b3..6473523 100644
+--- a/src/nam_plugin.cpp
++++ b/src/nam_plugin.cpp
+@@ -10,6 +10,7 @@
+ 
+ namespace NAM {
+ 	Plugin::Plugin()
++		: bufferedDSP(mNAMParams)
+ 	{
+ 		// prevent allocations on the audio thread
+ 		currentModelPath.reserve(MAX_FILE_NAME+1);
+@@ -17,6 +18,7 @@ namespace NAM {
+ 
+ 	Plugin::~Plugin()
+ 	{
++		bufferedDSP.stop();
+ 		delete currentModel;
+ 	}
+ 
+@@ -76,8 +78,17 @@ namespace NAM {
+ 		uris.model_Path = map->map(map->handle, MODEL_URI);
+ 
+ 		if (options != nullptr)
++		{
+ 			options_set(this, options);
+ 
++			if (maxBufferSize != 0)
++			{
++				bufferedDSP.setBufferSize(maxBufferSize);
++				bufferedDSP.start();
++				mHighPass._PrepareBuffers(maxBufferSize);
++			}
++		}
++
+ 		return true;
+ 	}
+ 
+@@ -122,8 +133,13 @@ namespace NAM {
+ 							float* buffer = new float[numSamples];
+ 
+ 							std::unordered_map<std::string, double> params = {};
+-							model->process(&buffer, &buffer, 1, numSamples, 1.0, 1.0, params);
+-							model->finalize_(numSamples);
++							for (int32_t i=0; i<4096; i += numSamples)
++							{
++								std::memset(buffer, 0, sizeof(float)*numSamples);
++								model->process(buffer, numSamples, params);
++								// model->process(&buffer, &buffer, 1, numSamples, 1.0, 1.0, params);
++								model->finalize_(numSamples);
++							}
+ 
+ 							delete[] buffer;
+ 						}
+@@ -180,6 +196,8 @@ namespace NAM {
+ 		nam->currentModelPath = msg->path;
+ 		assert(nam->currentModelPath.capacity() >= MAX_FILE_NAME + 1);
+ 
++		nam->bufferedDSP.setDSP(msg->model);
++
+ 		// send reply
+ 		nam->schedule->schedule_work(nam->schedule->handle, sizeof(reply), &reply);
+ 
+@@ -226,60 +244,75 @@ namespace NAM {
+ 			}
+ 		}
+ 
++		float lvl;
++
+ 		// convert input level from db
+ 		float desiredInputLevel = powf(10, *(ports.input_level) * 0.05f);
+ 
+ 		if (fabs(desiredInputLevel - inputLevel) > SMOOTH_EPSILON)
+ 		{
++			lvl = inputLevel;
+ 			for (unsigned int i = 0; i < n_samples; i++)
+ 			{
+ 				// do very basic smoothing
+-				inputLevel = (.99f * inputLevel) + (.01f * desiredInputLevel);
++				lvl = (.99f * lvl) + (.01f * desiredInputLevel);
+ 
+-				ports.audio_out[i] = ports.audio_in[i] * inputLevel;
++				ports.audio_out[i] = ports.audio_in[i] * lvl;
+ 			}
++			inputLevel = lvl;
+ 		}
+ 		else
+ 		{
+-			inputLevel = desiredInputLevel;
++			lvl = inputLevel = desiredInputLevel;
+ 
+ 			for (unsigned int i = 0; i < n_samples; i++)
+ 			{
+-				ports.audio_out[i] = ports.audio_in[i] * inputLevel;
++				ports.audio_out[i] = ports.audio_in[i] * lvl;
+ 			}
+ 		}
+ 
+-		float** outputPtrs = &ports.audio_out;
++		float* outputs = ports.audio_out;
+ 
+ 		if (currentModel != nullptr)
+ 		{
+-			currentModel->process(&ports.audio_out, &ports.audio_out, 1, n_samples, 1.0, 1.0, mNAMParams);
+-			currentModel->finalize_(n_samples);
++			if (*ports.buffered > 0.5f)
++			{
++				bufferedDSP.process(outputs, n_samples);
++			}
++			else
++			{
++				currentModel->process(outputs, n_samples, mNAMParams);
++				// currentModel->process(&outputs, &outputs, 1, n_samples, 1.0, 1.0, mNAMParams);
++				currentModel->finalize_(n_samples);
++			}
+ 
+ 			// Apply a high pass filter at 5Hz to eliminate any DC offset
+-			outputPtrs = mHighPass.Process(outputPtrs, 1, n_samples);
++			outputs = mHighPass.Process(outputs, n_samples);
++			// outputs = *mHighPass.Process(&outputs, 1, n_samples);
+ 		}
+ 
+ 		// convert output level from db
+-		float desiredOutputLevel = powf(10, *(ports.output_level) * 0.05f);
++		const float desiredOutputLevel = powf(10, *(ports.output_level) * 0.05f);
+ 
+ 		if (fabs(desiredOutputLevel - outputLevel) > SMOOTH_EPSILON)
+ 		{
++			lvl = outputLevel;
+ 			for (unsigned int i = 0; i < n_samples; i++)
+ 			{
+ 				// do very basic smoothing
+-				outputLevel = (.99f * outputLevel) + (.01f * desiredOutputLevel);
++				lvl = (.99f * lvl) + (.01f * desiredOutputLevel);
+ 
+-				ports.audio_out[i] = outputPtrs[0][i] * outputLevel;
++				ports.audio_out[i] = outputs[i] * outputLevel;
+ 			}
++			outputLevel = lvl;
+ 		}
+ 		else
+ 		{
+-			outputLevel = desiredOutputLevel;
++			lvl = outputLevel = desiredOutputLevel;
+ 
+ 			for (unsigned int i = 0; i < n_samples; i++)
+ 			{
+-				ports.audio_out[i] = outputPtrs[0][i] * outputLevel;
++				ports.audio_out[i] = outputs[i] * lvl;
+ 			}
+ 		}
+ 	}
+@@ -299,6 +332,7 @@ namespace NAM {
+ 			if (options[i].key == nam->uris.bufSize_maxBlockLength && options[i].type == nam->uris.atom_Int)
+ 			{
+ 				nam->maxBufferSize = *(const int32_t*)options[i].value;
++				nam->bufferedDSP.setBufferSize(nam->maxBufferSize);
+ 				break;
+ 			}
+ 		}
+diff --git a/src/nam_plugin.h b/src/nam_plugin.h
+index c1b386c..78df7d1 100644
+--- a/src/nam_plugin.h
++++ b/src/nam_plugin.h
+@@ -24,6 +24,8 @@
+ #include <NAM/dsp.h>
+ #include <dsp/RecursiveLinearFilter.h>
+ 
++#include "BufferedDSP.hpp"
++
+ #define PlUGIN_URI "http://github.com/mikeoliphant/neural-amp-modeler-lv2"
+ #define MODEL_URI PlUGIN_URI "#model"
+ 
+@@ -61,6 +63,7 @@ namespace NAM {
+ 			float* audio_out;
+ 			float* input_level;
+ 			float* output_level;
++			const float* buffered;
+ 		};
+ 
+ 		Ports ports = {};
+@@ -71,6 +74,7 @@ namespace NAM {
+ 		LV2_Log_Logger logger = {};
+ 		LV2_Worker_Schedule* schedule = nullptr;
+ 
++		BufferedDSP bufferedDSP;
+ 		::DSP* currentModel = nullptr;
+ 		std::string currentModelPath;
+ 		recursive_linear_filter::HighPass mHighPass;
