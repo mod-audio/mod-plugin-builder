@@ -39,6 +39,10 @@ RUN if test "$(dpkg-architecture -qDEB_TARGET_ARCH)" = "arm64"; then \
         rm premake_3.7-1_amd64.deb; \
     fi
 
+# misc stuff
+RUN locale-gen en_US.UTF-8
+RUN echo "source /etc/bash_completion" >> /root/.bashrc
+
 # rust support
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --no-modify-path --profile minimal
 RUN if test "$platform" = "modduo" || test "$platform" = "modduo-new" || test "$platform" = "modduo-static"; then \
@@ -51,27 +55,14 @@ RUN if test "$platform" = "modduo" || test "$platform" = "modduo-new" || test "$
         ~/.cargo/bin/rustup target add x86_64-unknown-linux-gnu; \
     fi
 
-# misc stuff
-RUN locale-gen en_US.UTF-8
-RUN echo "source /etc/bash_completion" >> $HOME/.bashrc
-
-# user configurations
-ENV USER builder
-ENV HOME /home/$USER
-
 # mod-plugin-builder settings
 ENV MPB_GIT_URL https://github.com/moddevices/mod-plugin-builder
 
-# create user
-RUN useradd -d $HOME -m -G sudo $USER
-# set user to sudoers (no password required)
-RUN echo "$USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/99-$USER && chmod 0440 /etc/sudoers.d/99-$USER
-
-# switch user
-USER $USER
+# ct-ng settings
+ENV CT_ALLOW_BUILD_AS_ROOT_SURE y
 
 # checkout mod-build-system
-WORKDIR $HOME
+WORKDIR /root
 RUN git clone $MPB_GIT_URL
 WORKDIR mod-plugin-builder
 RUN ./bootstrap.sh $platform $target && ./.clean-install.sh $platform
