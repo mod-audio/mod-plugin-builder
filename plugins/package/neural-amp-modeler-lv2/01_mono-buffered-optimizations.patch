@@ -1,13 +1,9 @@
-Submodule deps/NeuralAmpModelerCore contains modified content
 diff --git a/deps/NeuralAmpModelerCore/NAM/convnet.cpp b/deps/NeuralAmpModelerCore/NAM/convnet.cpp
-index 20b2af9..de5c81c 100644
+index 20b2af9..6d55303 100644
 --- a/deps/NeuralAmpModelerCore/NAM/convnet.cpp
 +++ b/deps/NeuralAmpModelerCore/NAM/convnet.cpp
-@@ -113,15 +113,13 @@ convnet::ConvNet::ConvNet(const double loudness, const int channels, const std::
-   this->_head = _Head(channels, it);
-   if (it != params.end())
-     throw std::runtime_error("Didn't touch all the params when initializing wavenet");
--  this->_reset_anti_pop_();
+@@ -116,12 +116,11 @@ convnet::ConvNet::ConvNet(const double loudness, const int channels, const std::
+   this->_reset_anti_pop_();
  }
  
 -void convnet::ConvNet::_process_core_()
@@ -21,18 +17,19 @@ index 20b2af9..de5c81c 100644
    const long i_end = i_start + num_frames;
    // TODO one unnecessary copy :/ #speed
    for (auto i = i_start; i < i_end; i++)
-@@ -132,9 +130,7 @@ void convnet::ConvNet::_process_core_()
+@@ -132,9 +131,9 @@ void convnet::ConvNet::_process_core_()
    this->_head.process_(this->_block_vals[this->_blocks.size()], this->_head_output, i_start, i_end);
    // Copy to required output array (TODO tighten this up)
    for (int s = 0; s < num_frames; s++)
 -    this->_core_dsp_output[s] = this->_head_output(s);
--  // Apply anti-pop
--  this->_anti_pop_();
 +    outputs[s] = this->_head_output(s);
+   // Apply anti-pop
+-  this->_anti_pop_();
++  this->_anti_pop_(outputs, num_frames);
  }
  
  void convnet::ConvNet::_verify_params(const int channels, const std::vector<int>& dilations, const bool batchnorm,
-@@ -143,9 +139,9 @@ void convnet::ConvNet::_verify_params(const int channels, const std::vector<int>
+@@ -143,9 +142,9 @@ void convnet::ConvNet::_verify_params(const int channels, const std::vector<int>
    // TODO
  }
  
@@ -44,39 +41,32 @@ index 20b2af9..de5c81c 100644
    const size_t buffer_size = this->_input_buffer.size();
    this->_block_vals[0].resize(1, buffer_size);
    for (size_t i = 1; i < this->_block_vals.size(); i++)
-@@ -171,27 +167,3 @@ void convnet::ConvNet::_rewind_buffers_()
-   // Now we can do the rest of the rewind
+@@ -172,17 +171,17 @@ void convnet::ConvNet::_rewind_buffers_()
    this->Buffer::_rewind_buffers_();
  }
--
+ 
 -void convnet::ConvNet::_anti_pop_()
--{
--  if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
--    return;
--  const float slope = 1.0f / float(this->_anti_pop_ramp);
++void convnet::ConvNet::_anti_pop_(NAM_SAMPLE* outputs, const int num_frames)
+ {
+   if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
+     return;
+   const float slope = 1.0f / float(this->_anti_pop_ramp);
 -  for (size_t i = 0; i < this->_core_dsp_output.size(); i++)
--  {
--    if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
--      break;
--    const float gain = std::max(slope * float(this->_anti_pop_countdown), float(0.0));
++  for (int i = 0; i < num_frames; i++)
+   {
+     if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
+       break;
+     const float gain = std::max(slope * float(this->_anti_pop_countdown), float(0.0));
 -    this->_core_dsp_output[i] *= gain;
--    this->_anti_pop_countdown++;
--  }
--}
--
--void convnet::ConvNet::_reset_anti_pop_()
--{
--  // You need the "real" receptive field, not the buffers.
--  long receptive_field = 1;
--  for (size_t i = 0; i < this->_blocks.size(); i++)
--    receptive_field += this->_blocks[i].conv.get_dilation();
--  this->_anti_pop_countdown = -receptive_field;
--}
++    outputs[i] *= gain;
+     this->_anti_pop_countdown++;
+   }
+ }
 diff --git a/deps/NeuralAmpModelerCore/NAM/convnet.h b/deps/NeuralAmpModelerCore/NAM/convnet.h
-index baad344..436a713 100644
+index baad344..793d705 100644
 --- a/deps/NeuralAmpModelerCore/NAM/convnet.h
 +++ b/deps/NeuralAmpModelerCore/NAM/convnet.h
-@@ -77,18 +77,9 @@ protected:
+@@ -77,10 +77,10 @@ protected:
    _Head _head;
    void _verify_params(const int channels, const std::vector<int>& dilations, const bool batchnorm,
                        const size_t actual_params);
@@ -85,16 +75,17 @@ index baad344..436a713 100644
    void _rewind_buffers_() override;
  
 -  void _process_core_() override;
--
--  // The net starts with random parameters inside; we need to wait for a full
--  // receptive field to pass through before we can count on the output being
--  // ok. This implements a gentle "ramp-up" so that there's no "pop" at the
--  // start.
--  long _anti_pop_countdown;
--  const long _anti_pop_ramp = 100;
--  void _anti_pop_();
--  void _reset_anti_pop_();
 +  void _process_core_(NAM_SAMPLE* outputs, const int num_frames) override;
+ 
+   // The net starts with random parameters inside; we need to wait for a full
+   // receptive field to pass through before we can count on the output being
+@@ -88,7 +88,7 @@ protected:
+   // start.
+   long _anti_pop_countdown;
+   const long _anti_pop_ramp = 100;
+-  void _anti_pop_();
++  void _anti_pop_(NAM_SAMPLE* outputs, const int num_frames);
+   void _reset_anti_pop_();
  };
  }; // namespace convnet
 diff --git a/deps/NeuralAmpModelerCore/NAM/dsp.cpp b/deps/NeuralAmpModelerCore/NAM/dsp.cpp
@@ -311,18 +302,19 @@ index e855f64..a4e30a8 100644
  
    float _process_sample(const float x);
 diff --git a/deps/NeuralAmpModelerCore/NAM/wavenet.cpp b/deps/NeuralAmpModelerCore/NAM/wavenet.cpp
-index af754d5..00455c1 100644
+index fced659..fe5ff91 100644
 --- a/deps/NeuralAmpModelerCore/NAM/wavenet.cpp
 +++ b/deps/NeuralAmpModelerCore/NAM/wavenet.cpp
-@@ -259,7 +259,6 @@ wavenet::WaveNet::WaveNet(const double loudness, const std::vector<wavenet::Laye
+@@ -272,7 +272,7 @@ wavenet::WaveNet::WaveNet(const double loudness, const std::vector<wavenet::Laye
+   // pre-warm the model over the size of the receptive field
+   for (long i = 0; i < receptive_field; i++)
+   {
+-    this->process(&sample_ptr, &sample_ptr, 1, 1, 1.0, 1.0, param_dict);
++    this->process(sample_ptr, 1, param_dict);
+     this->finalize_(1);
+     sample = 0;
    }
-   this->_head_output.resize(1, 0); // Mono output!
-   this->set_params_(params);
--  this->_reset_anti_pop_();
- }
- 
- void wavenet::WaveNet::finalize_(const int num_frames)
-@@ -309,9 +308,8 @@ void wavenet::WaveNet::_prepare_for_frames_(const long num_frames)
+@@ -325,9 +325,8 @@ void wavenet::WaveNet::_prepare_for_frames_(const long num_frames)
      this->_layer_arrays[i].prepare_for_frames_(num_frames);
  }
  
@@ -333,7 +325,7 @@ index af754d5..00455c1 100644
    this->_set_num_frames_(num_frames);
    this->_prepare_for_frames_(num_frames);
  
-@@ -324,7 +322,7 @@ void wavenet::WaveNet::_process_core_()
+@@ -335,7 +334,7 @@ void wavenet::WaveNet::_process_core_()
    // Clumsy...
    for (int j = 0; j < num_frames; j++)
    {
@@ -342,56 +334,23 @@ index af754d5..00455c1 100644
      if (this->_stale_params) // Column-major assignment; good for Eigen. Let the
                               // compiler optimize this.
        for (size_t i = 0; i < this->_param_names.size(); i++)
-@@ -351,13 +349,13 @@ void wavenet::WaveNet::_process_core_()
+@@ -360,10 +359,7 @@ void wavenet::WaveNet::_process_core_()
+   const long final_head_array = this->_head_arrays.size() - 1;
+   assert(this->_head_arrays[final_head_array].rows() == 1);
    for (int s = 0; s < num_frames; s++)
-   {
-     float out = this->_head_scale * this->_head_arrays[final_head_array](0, s);
-+#ifndef __MOD_DEVICES__
-     // This is the NaN check that we could fix with anti-popping the input
-     if (isnan(out))
-       out = 0.0;
+-  {
+-    float out = this->_head_scale * this->_head_arrays[final_head_array](0, s);
 -    this->_core_dsp_output[s] = out;
-+#endif
-+    outputs[s] = out;
-   }
--  // Apply anti-pop
--  this->_anti_pop_();
+-  }
++    outputs[s] = this->_head_scale * this->_head_arrays[final_head_array](0, s);
  }
  
  void wavenet::WaveNet::_set_num_frames_(const long num_frames)
-@@ -377,27 +375,3 @@ void wavenet::WaveNet::_set_num_frames_(const long num_frames)
-   // this->_head.set_num_frames_(num_frames);
-   this->_num_frames = num_frames;
- }
--
--void wavenet::WaveNet::_anti_pop_()
--{
--  if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
--    return;
--  const float slope = 1.0f / float(this->_anti_pop_ramp);
--  for (size_t i = 0; i < this->_core_dsp_output.size(); i++)
--  {
--    if (this->_anti_pop_countdown >= this->_anti_pop_ramp)
--      break;
--    const float gain = std::max(slope * float(this->_anti_pop_countdown), 0.0f);
--    this->_core_dsp_output[i] *= gain;
--    this->_anti_pop_countdown++;
--  }
--}
--
--void wavenet::WaveNet::_reset_anti_pop_()
--{
--  // You need the "real" receptive field, not the buffers.
--  long receptive_field = 1;
--  for (size_t i = 0; i < this->_layer_arrays.size(); i++)
--    receptive_field += this->_layer_arrays[i].get_receptive_field();
--  this->_anti_pop_countdown = -receptive_field;
--}
 diff --git a/deps/NeuralAmpModelerCore/NAM/wavenet.h b/deps/NeuralAmpModelerCore/NAM/wavenet.h
-index ee7ebc0..b1806dc 100644
+index c49966f..b1806dc 100644
 --- a/deps/NeuralAmpModelerCore/NAM/wavenet.h
 +++ b/deps/NeuralAmpModelerCore/NAM/wavenet.h
-@@ -203,18 +203,9 @@ private:
+@@ -203,7 +203,7 @@ private:
    void _init_parametric_(nlohmann::json& parametric);
    void _prepare_for_frames_(const long num_frames);
    // Reminder: From ._input_post_gain to ._core_dsp_output
@@ -400,35 +359,24 @@ index ee7ebc0..b1806dc 100644
  
    // Ensure that all buffer arrays are the right size for this num_frames
    void _set_num_frames_(const long num_frames);
--
--  // The net starts with random parameters inside; we need to wait for a full
--  // receptive field to pass through before we can count on the output being
--  // ok. This implements a gentle "ramp-up" so that there's no "pop" at the
--  // start.
--  long _anti_pop_countdown;
--  const long _anti_pop_ramp = 4000;
--  void _anti_pop_();
--  void _reset_anti_pop_();
- };
- }; // namespace wavenet
 diff --git a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp b/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp
-index 7eb69b8..91e9246 100644
+index 7eb69b8..908d034 100644
 --- a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp
 +++ b/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.cpp
-@@ -22,10 +22,10 @@ mOutputStart(outputDegree)
+@@ -22,10 +22,9 @@ mOutputStart(outputDegree)
    this->mOutputCoefficients.resize(outputDegree);
  }
  
 -DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const size_t numChannels,
-+DSP_SAMPLE* recursive_linear_filter::Base::Process(DSP_SAMPLE* inputs,
-                                                     const size_t numFrames)
+-                                                    const size_t numFrames)
++DSP_SAMPLE* recursive_linear_filter::Base::Process(DSP_SAMPLE* inputs, const size_t numFrames)
  {
 -  this->_PrepareBuffers(numChannels, numFrames);
 +  this->_PrepareBuffers(numFrames);
    long inputStart = 0;
    long outputStart = 0;
    // Degree = longest history
-@@ -35,34 +35,35 @@ DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const s
+@@ -35,34 +34,33 @@ DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const s
    //  0,2,3,... are fine.
    const size_t inputDegree = this->_GetInputDegree();
    const size_t outputDegree = this->_GetOutputDegree();
@@ -459,11 +407,9 @@ index 7eb69b8..91e9246 100644
 -        out += this->mOutputCoefficients[i] * this->mOutputHistory[c][(outputStart + i) % outputDegree];
 +      for (size_t i = 1; i < outputDegree; i++)
 +        out += this->mOutputCoefficients[i] * this->mOutputHistory[(outputStart + i) % outputDegree];
-+#ifndef __MOD_DEVICES__
        // Prevent a NaN from jamming the filter!
        if (std::isnan(out))
          out = 0.0;
-+#endif
        // Store the output!
        if (outputDegree >= 1)
 -        this->mOutputHistory[c][outputStart] = out;
@@ -473,7 +419,7 @@ index 7eb69b8..91e9246 100644
      }
    }
    this->mInputStart = inputStart;
-@@ -70,24 +71,21 @@ DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const s
+@@ -70,25 +68,20 @@ DSP_SAMPLE** recursive_linear_filter::Base::Process(DSP_SAMPLE** inputs, const s
    return this->_GetPointers();
  }
  
@@ -493,18 +439,19 @@ index 7eb69b8..91e9246 100644
      const size_t inputDegree = this->_GetInputDegree();
      const size_t outputDegree = this->_GetOutputDegree();
 -    for (auto c = 0; c < numChannels; c++)
-     {
+-    {
 -      this->mInputHistory[c].resize(inputDegree);
 -      this->mOutputHistory[c].resize(outputDegree);
 -      std::fill(this->mInputHistory[c].begin(), this->mInputHistory[c].end(), 0.0);
 -      std::fill(this->mOutputHistory[c].begin(), this->mOutputHistory[c].end(), 0.0);
-+      this->mInputHistory.resize(inputDegree);
-+      this->mOutputHistory.resize(outputDegree);
-+      std::fill(this->mInputHistory.begin(), this->mInputHistory.end(), 0.0);
-+      std::fill(this->mOutputHistory.begin(), this->mOutputHistory.end(), 0.0);
-     }
+-    }
++    this->mInputHistory.resize(inputDegree);
++    this->mOutputHistory.resize(outputDegree);
++    std::fill(this->mInputHistory.begin(), this->mInputHistory.end(), 0.0);
++    std::fill(this->mOutputHistory.begin(), this->mOutputHistory.end(), 0.0);
    }
  }
+ 
 diff --git a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.h b/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.h
 index 737d297..afacae1 100644
 --- a/deps/NeuralAmpModelerCore/dsp/RecursiveLinearFilter.h
@@ -540,10 +487,10 @@ index 737d297..afacae1 100644
    // Designates which index is currently "0". Use modulus to wrap around.
    long mInputStart;
 diff --git a/deps/NeuralAmpModelerCore/dsp/dsp.cpp b/deps/NeuralAmpModelerCore/dsp/dsp.cpp
-index 6fc7bdd..6e4787e 100644
+index 6fc7bdd..7b0b831 100644
 --- a/deps/NeuralAmpModelerCore/dsp/dsp.cpp
 +++ b/deps/NeuralAmpModelerCore/dsp/dsp.cpp
-@@ -13,68 +13,25 @@
+@@ -13,68 +13,24 @@
  // Implementation of Version 2 interface
  
  dsp::DSP::DSP()
@@ -593,8 +540,7 @@ index 6fc7bdd..6e4787e 100644
  {
    const size_t oldFrames = this->_GetNumFrames();
 -  const size_t oldChannels = this->_GetNumChannels();
-+  const bool resizeFrames = oldFrames != numFrames;
- 
+-
 -  const bool resizeChannels = oldChannels != numChannels;
 -  const bool resizeFrames = resizeChannels || (oldFrames != numFrames);
 -  if (resizeChannels)
@@ -602,6 +548,7 @@ index 6fc7bdd..6e4787e 100644
 -    this->mOutputs.resize(numChannels);
 -    this->_ResizePointers(numChannels);
 -  }
++  const bool resizeFrames = oldFrames != numFrames;
    if (resizeFrames)
 -    for (auto c = 0; c < numChannels; c++)
 -      this->mOutputs[c].resize(numFrames);
@@ -671,7 +618,7 @@ index faf06af..1cb8224 100644
  // A class where a longer buffer of history is needed to correctly calculate
 diff --git a/src/BufferedDSP.hpp b/src/BufferedDSP.hpp
 new file mode 100644
-index 0000000..ce5df3c
+index 0000000..aba1377
 --- /dev/null
 +++ b/src/BufferedDSP.hpp
 @@ -0,0 +1,211 @@
@@ -764,7 +711,7 @@ index 0000000..ce5df3c
 +        running = true;
 +
 +        struct sched_param sched_param = {};
-+        sched_param.sched_priority = 80;
++        sched_param.sched_priority = 40;
 +
 +       #ifdef __MOD_DEVICES__
 +        int rtprio;
@@ -792,7 +739,10 @@ index 0000000..ce5df3c
 +
 +    void stop()
 +    {
-+        if (!running) return; running = false;
++        if (!running)
++            return;
++
++        running = false;
 +        sem_post(&semBgProcStart);
 +        pthread_join(thread, nullptr);
 +        thread = {};
@@ -853,8 +803,6 @@ index 0000000..ce5df3c
 +           #endif
 +        }
 +
-+        // sem_post(&semBgProcFinished);
-+
 +        while (running)
 +        {
 +            sem_post(&semBgProcFinished);
@@ -872,7 +820,6 @@ index 0000000..ce5df3c
 +            if (DSP* const dsp = activedsp)
 +            {
 +                dsp->process(tmp, bufferSize, namParams);
-+                // dsp->process(&tmp, &tmp, 1, bufferSize, 1.0, 1.0, namParams);
 +                dsp->finalize_(bufferSize);
 +            }
 +
@@ -887,7 +834,7 @@ index 0000000..ce5df3c
 +    }
 +};
 diff --git a/src/nam_plugin.cpp b/src/nam_plugin.cpp
-index b9274b3..6473523 100644
+index 1c6143b..7771577 100644
 --- a/src/nam_plugin.cpp
 +++ b/src/nam_plugin.cpp
 @@ -10,6 +10,7 @@
@@ -906,7 +853,7 @@ index b9274b3..6473523 100644
  		delete currentModel;
  	}
  
-@@ -76,8 +78,17 @@ namespace NAM {
+@@ -76,8 +78,16 @@ namespace NAM {
  		uris.model_Path = map->map(map->handle, MODEL_URI);
  
  		if (options != nullptr)
@@ -915,7 +862,6 @@ index b9274b3..6473523 100644
  
 +			if (maxBufferSize != 0)
 +			{
-+				bufferedDSP.setBufferSize(maxBufferSize);
 +				bufferedDSP.start();
 +				mHighPass._PrepareBuffers(maxBufferSize);
 +			}
@@ -924,63 +870,24 @@ index b9274b3..6473523 100644
  		return true;
  	}
  
-@@ -122,8 +133,13 @@ namespace NAM {
- 							float* buffer = new float[numSamples];
+@@ -123,7 +133,7 @@ namespace NAM {
+ 							memset(buffer, 0, numSamples * sizeof(float));
  
  							std::unordered_map<std::string, double> params = {};
 -							model->process(&buffer, &buffer, 1, numSamples, 1.0, 1.0, params);
--							model->finalize_(numSamples);
-+							for (int32_t i=0; i<4096; i += numSamples)
-+							{
-+								std::memset(buffer, 0, sizeof(float)*numSamples);
-+								model->process(buffer, numSamples, params);
-+								// model->process(&buffer, &buffer, 1, numSamples, 1.0, 1.0, params);
-+								model->finalize_(numSamples);
-+							}
++							model->process(buffer, numSamples, params);
+ 							model->finalize_(numSamples);
  
  							delete[] buffer;
- 						}
-@@ -180,6 +196,8 @@ namespace NAM {
- 		nam->currentModelPath = msg->path;
- 		assert(nam->currentModelPath.capacity() >= MAX_FILE_NAME + 1);
+@@ -131,6 +141,7 @@ namespace NAM {
+ 					}
  
-+		nam->bufferedDSP.setDSP(msg->model);
-+
- 		// send reply
- 		nam->schedule->schedule_work(nam->schedule->handle, sizeof(reply), &reply);
+ 					response.model = model;
++					nam->bufferedDSP.setDSP(model);
  
-@@ -226,60 +244,75 @@ namespace NAM {
- 			}
- 		}
- 
-+		float lvl;
-+
- 		// convert input level from db
- 		float desiredInputLevel = powf(10, *(ports.input_level) * 0.05f);
- 
- 		if (fabs(desiredInputLevel - inputLevel) > SMOOTH_EPSILON)
- 		{
-+			lvl = inputLevel;
- 			for (unsigned int i = 0; i < n_samples; i++)
- 			{
- 				// do very basic smoothing
--				inputLevel = (.99f * inputLevel) + (.01f * desiredInputLevel);
-+				lvl = (.99f * lvl) + (.01f * desiredInputLevel);
- 
--				ports.audio_out[i] = ports.audio_in[i] * inputLevel;
-+				ports.audio_out[i] = ports.audio_in[i] * lvl;
- 			}
-+			inputLevel = lvl;
- 		}
- 		else
- 		{
--			inputLevel = desiredInputLevel;
-+			lvl = inputLevel = desiredInputLevel;
- 
- 			for (unsigned int i = 0; i < n_samples; i++)
- 			{
--				ports.audio_out[i] = ports.audio_in[i] * inputLevel;
-+				ports.audio_out[i] = ports.audio_in[i] * lvl;
+ 					memcpy(response.path, msg->path, pathlen);
+ 				}
+@@ -254,15 +265,22 @@ namespace NAM {
  			}
  		}
  
@@ -998,47 +905,34 @@ index b9274b3..6473523 100644
 +			else
 +			{
 +				currentModel->process(outputs, n_samples, mNAMParams);
-+				// currentModel->process(&outputs, &outputs, 1, n_samples, 1.0, 1.0, mNAMParams);
 +				currentModel->finalize_(n_samples);
 +			}
  
  			// Apply a high pass filter at 5Hz to eliminate any DC offset
 -			outputPtrs = mHighPass.Process(outputPtrs, 1, n_samples);
 +			outputs = mHighPass.Process(outputs, n_samples);
-+			// outputs = *mHighPass.Process(&outputs, 1, n_samples);
  		}
  
  		// convert output level from db
--		float desiredOutputLevel = powf(10, *(ports.output_level) * 0.05f);
-+		const float desiredOutputLevel = powf(10, *(ports.output_level) * 0.05f);
- 
- 		if (fabs(desiredOutputLevel - outputLevel) > SMOOTH_EPSILON)
- 		{
-+			lvl = outputLevel;
- 			for (unsigned int i = 0; i < n_samples; i++)
- 			{
+@@ -276,7 +294,7 @@ namespace NAM {
  				// do very basic smoothing
--				outputLevel = (.99f * outputLevel) + (.01f * desiredOutputLevel);
-+				lvl = (.99f * lvl) + (.01f * desiredOutputLevel);
+ 				level = (.99f * level) + (.01f * desiredOutputLevel);
  
 -				ports.audio_out[i] = outputPtrs[0][i] * outputLevel;
 +				ports.audio_out[i] = outputs[i] * outputLevel;
  			}
-+			outputLevel = lvl;
+ 			outputLevel = level;
  		}
- 		else
- 		{
--			outputLevel = desiredOutputLevel;
-+			lvl = outputLevel = desiredOutputLevel;
+@@ -286,7 +304,7 @@ namespace NAM {
  
  			for (unsigned int i = 0; i < n_samples; i++)
  			{
--				ports.audio_out[i] = outputPtrs[0][i] * outputLevel;
-+				ports.audio_out[i] = outputs[i] * lvl;
+-				ports.audio_out[i] = outputPtrs[0][i] * level;
++				ports.audio_out[i] = outputs[i] * level;
  			}
  		}
  	}
-@@ -299,6 +332,7 @@ namespace NAM {
+@@ -306,6 +324,7 @@ namespace NAM {
  			if (options[i].key == nam->uris.bufSize_maxBlockLength && options[i].type == nam->uris.atom_Int)
  			{
  				nam->maxBufferSize = *(const int32_t*)options[i].value;

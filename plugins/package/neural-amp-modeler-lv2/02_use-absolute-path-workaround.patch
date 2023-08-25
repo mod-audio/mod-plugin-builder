@@ -1,0 +1,32 @@
+diff --git a/src/nam_plugin.cpp b/src/nam_plugin.cpp
+index 6473523..80b5251 100644
+--- a/src/nam_plugin.cpp
++++ b/src/nam_plugin.cpp
+@@ -361,25 +361,10 @@ namespace NAM {
+ 			return LV2_STATE_ERR_NO_FEATURE;
+ 		}
+ 
+-		// Map absolute sample path to an abstract state path
+-		char* apath = map_path->abstract_path(map_path->handle, nam->currentModelPath.c_str());
+-
+-		store(handle, nam->uris.model_Path, apath, strlen(apath) + 1, nam->uris.atom_Path,
++		// FIXME dont use absolute paths, mod-host has a bug :(
++		store(handle, nam->uris.model_Path, nam->currentModelPath.c_str(), nam->currentModelPath.size() + 1, nam->uris.atom_Path,
+ 			LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+ 
+-		LV2_State_Free_Path* free_path = (LV2_State_Free_Path *)lv2_features_data(features, LV2_STATE__freePath);
+-
+-		if (free_path != nullptr)
+-		{
+-			free_path->free_path(free_path->handle, apath);
+-		}
+-		else
+-		{
+-#ifndef _WIN32	// Can't free host-allocated memory on plugin side under Windows
+-			free(apath);
+-#endif
+-		}
+-
+ 		return LV2_STATE_SUCCESS;
+ 	}
+ 

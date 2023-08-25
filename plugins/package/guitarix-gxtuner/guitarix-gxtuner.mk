@@ -4,7 +4,7 @@
 #
 ######################################
 
-GUITARIX_GXTUNER_VERSION = d707948ced2d3ad5faca22a941db6b821fd205c5
+GUITARIX_GXTUNER_VERSION = 056c2577c0e77367a09cd1ef18e219056920c1d8
 GUITARIX_GXTUNER_SITE = $(call github,brummer10,guitarix,$(GUITARIX_GXTUNER_VERSION))
 GUITARIX_GXTUNER_DEPENDENCIES = boost eigen ffmpeg fftw-single glibmm libsndfile host-python host-intltool
 GUITARIX_GXTUNER_BUNDLES = gxtuner.lv2
