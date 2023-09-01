@@ -36,6 +36,7 @@ define GUITARIX_GXTUNER_INSTALL_TARGET_CMDS
 	(cd $(@D)/trunk; $(GUITARIX_GXTUNER_TARGET_WAF) install --destdir=$(TARGET_DIR)/guitarix)
 
 	# move out gxtuner
+	rm -rf $(TARGET_DIR)/usr/lib/lv2/gxtuner.lv2
 	mv $(TARGET_DIR)/guitarix/usr/lib/lv2/gxtuner.lv2 $(TARGET_DIR)/usr/lib/lv2/
 
 	# delete everything else
