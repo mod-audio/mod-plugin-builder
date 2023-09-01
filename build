@@ -188,7 +188,7 @@ function try_copy_plugin_bundles
 #######################################################################################################################
 # copy the requested plugin projects
 
-if [[ "${PACKAGE}" != "linux" ]] && [[ "${PACKAGE}" != "menuconfig" ]]; then
+if [[ "${PACKAGE}" != "linux" ]] && [[ "${PACKAGE}" != "menuconfig" ]] && [[ -z "${MPB_SKIP_PLUGIN_COPY}" ]]; then
   mkdir -p ${WORKDIR}/${PLATFORM}/plugins
 
   try_copy_plugin_bundles ${BR2_TARGET}/usr/lib/lv2
