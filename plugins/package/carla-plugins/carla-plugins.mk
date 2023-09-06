@@ -4,7 +4,7 @@
 #
 ######################################
 
-CARLA_PLUGINS_VERSION = bdb9b076f4c2abd28a67b9b4f165d4742dc941c1
+CARLA_PLUGINS_VERSION = a627caf17f141009602a76e99cbfc93f5b7d1455
 CARLA_PLUGINS_SITE = $(call github,falkTX,Carla,$(CARLA_PLUGINS_VERSION))
 CARLA_PLUGINS_DEPENDENCIES = libsndfile
 CARLA_PLUGINS_BUNDLES = carla-files.lv2
