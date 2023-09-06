@@ -618,10 +618,10 @@ index faf06af..1cb8224 100644
  // A class where a longer buffer of history is needed to correctly calculate
 diff --git a/src/BufferedDSP.hpp b/src/BufferedDSP.hpp
 new file mode 100644
-index 0000000..aba1377
+index 0000000..f01c06b
 --- /dev/null
 +++ b/src/BufferedDSP.hpp
-@@ -0,0 +1,211 @@
+@@ -0,0 +1,212 @@
 +/*
 + * Buffered DSP
 + * Copyright (C) 2022-2023 Filipe Coelho <falktx@falktx.com>
@@ -742,6 +742,7 @@ index 0000000..aba1377
 +        if (!running)
 +            return;
 +
++        activedsp = nullptr;
 +        running = false;
 +        sem_post(&semBgProcStart);
 +        pthread_join(thread, nullptr);
@@ -834,7 +835,7 @@ index 0000000..aba1377
 +    }
 +};
 diff --git a/src/nam_plugin.cpp b/src/nam_plugin.cpp
-index 1c6143b..7771577 100644
+index 1c6143b..1af181e 100644
 --- a/src/nam_plugin.cpp
 +++ b/src/nam_plugin.cpp
 @@ -10,6 +10,7 @@
@@ -879,15 +880,23 @@ index 1c6143b..7771577 100644
  							model->finalize_(numSamples);
  
  							delete[] buffer;
-@@ -131,6 +141,7 @@ namespace NAM {
+@@ -131,7 +141,6 @@ namespace NAM {
  					}
  
  					response.model = model;
-+					nam->bufferedDSP.setDSP(model);
- 
+-
  					memcpy(response.path, msg->path, pathlen);
  				}
-@@ -254,15 +265,22 @@ namespace NAM {
+ 				catch (const std::exception&)
+@@ -177,6 +186,7 @@ namespace NAM {
+ 		LV2FreeModelMsg reply = { kWorkTypeFree, nam->currentModel };
+ 
+ 		// swap current model with new one
++		nam->bufferedDSP.setDSP(msg->model);
+ 		nam->currentModel = msg->model;
+ 		nam->currentModelPath = msg->path;
+ 		assert(nam->currentModelPath.capacity() >= MAX_FILE_NAME + 1);
+@@ -254,15 +264,22 @@ namespace NAM {
  			}
  		}
  
@@ -914,7 +923,7 @@ index 1c6143b..7771577 100644
  		}
  
  		// convert output level from db
-@@ -276,7 +294,7 @@ namespace NAM {
+@@ -276,7 +293,7 @@ namespace NAM {
  				// do very basic smoothing
  				level = (.99f * level) + (.01f * desiredOutputLevel);
  
@@ -923,7 +932,7 @@ index 1c6143b..7771577 100644
  			}
  			outputLevel = level;
  		}
-@@ -286,7 +304,7 @@ namespace NAM {
+@@ -286,7 +303,7 @@ namespace NAM {
  
  			for (unsigned int i = 0; i < n_samples; i++)
  			{
@@ -932,7 +941,7 @@ index 1c6143b..7771577 100644
  			}
  		}
  	}
-@@ -306,6 +324,7 @@ namespace NAM {
+@@ -306,6 +323,7 @@ namespace NAM {
  			if (options[i].key == nam->uris.bufSize_maxBlockLength && options[i].type == nam->uris.atom_Int)
  			{
  				nam->maxBufferSize = *(const int32_t*)options[i].value;
