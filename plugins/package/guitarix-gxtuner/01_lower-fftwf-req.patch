@@ -1,0 +1,13 @@
+diff --git a/trunk/wscript b/trunk/wscript
+index 9a4bc1c..b0f03f2 100644
+--- a/trunk/wscript
++++ b/trunk/wscript
+@@ -341,7 +341,7 @@ def configure(conf):
+     # needed libraries
+     conf.check_cfg(package='sndfile', args=conf.env['OS_SNDFILE_CFGFLAGS'], uselib_store='SNDFILE', mandatory=1)
+     conf.check(header_name='fftw3.h', mandatory=1)
+-    conf.check_cfg(package='fftw3f', args=['--cflags','--libs','fftw3f >= 3.3.8'], uselib_store='FFTW3', mandatory=1)
++    conf.check_cfg(package='fftw3f', args=['--cflags','--libs','fftw3f >= 3.3.5'], uselib_store='FFTW3', mandatory=1)
+ 
+     if opt.standalone or opt.new_ladspa:
+         try:
