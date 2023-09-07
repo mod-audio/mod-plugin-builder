@@ -92,12 +92,12 @@ case "${TOOLCHAIN_PLATFORM}" in
     "modduo-static"|"modduox-static"|"moddwarf")
         CT_NG_VERSION=crosstool-ng-1.24.0
         ;;
-    # TODO: update to 1.25 setup
-    "raspberrypi4")
-        CT_NG_VERSION=crosstool-ng-1.24.0
-        ;;
     # new targets: ct-ng 1.25 with gcc 9 + glibc 2.27
-    "modduo-new"|"modduox-new"|"moddwarf-new"|"x86_64")
+    "modduo-new"|"modduox-new"|"moddwarf-new"|"raspberrypi4")
+        CT_NG_VERSION=crosstool-ng-1.25.0
+        ;;
+    # desktop target: ct-ng 1.25 with gcc 9 + glibc 2.34
+    "x86_64")
         CT_NG_VERSION=crosstool-ng-1.25.0
         ;;
     # fallback
