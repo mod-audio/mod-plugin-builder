@@ -26,7 +26,7 @@ source .common
 #######################################################################################################################
 # download and extract crosstool-ng
 
-if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
+if [ -n "${CT_NG_VERSION}" ] && [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
   if [ ! -f ${DOWNLOAD_DIR}/${CT_NG_FILE} ]; then
     wget ${CT_NG_LINK}/${CT_NG_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_FILE}
   fi
@@ -58,6 +58,8 @@ fi
 #######################################################################################################################
 # build crosstool-ng
 
+if [ -n "${CT_NG_VERSION}" ]; then
+
 cd ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}
 
 if [ ! -f .config ]; then
@@ -71,7 +73,6 @@ if [ ! -f .config ]; then
 fi
 
 if [ ! -f .stamp_configured ]; then
-  # ./bootstrap
   ./configure --enable-local
   touch .stamp_configured
 fi
@@ -118,6 +119,8 @@ if [ ! -f .stamp_built2 ]; then
   sed -i -e 's/.PHONY: $(PHONY)/.PHONY: build $(PHONY)/' ct-ng
   ./ct-ng build
   touch .stamp_built2
+fi
+
 fi
 
 #######################################################################################################################

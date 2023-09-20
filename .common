@@ -93,12 +93,16 @@ case "${TOOLCHAIN_PLATFORM}" in
         CT_NG_VERSION=crosstool-ng-1.24.0
         ;;
     # new targets: ct-ng 1.25 with gcc 9 + glibc 2.27
-    "modduo-new"|"modduox-new"|"moddwarf-new"|"raspberrypi4")
+    "modduo-new"|"modduox-new"|"moddwarf-new"|"raspberrypi4"|"win64")
         CT_NG_VERSION=crosstool-ng-1.25.0
         ;;
     # desktop target: ct-ng 1.25 with gcc 9 + glibc 2.34
     "x86_64")
         CT_NG_VERSION=crosstool-ng-1.25.0
+        ;;
+    # no ct-ng for these targets
+    "macOS")
+        CT_NG_VERSION=
         ;;
     # fallback
     *)
