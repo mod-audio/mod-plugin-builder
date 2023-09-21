@@ -12,8 +12,11 @@ AIDADSP_LV2_BUNDLES = rt-neural-generic.lv2
 # custom optimization flags
 AIDADSP_LV2_TARGET_OPT  = $(filter-out -funsafe-loop-optimizations,$(subst ",,$(BR2_TARGET_OPTIMIZATION)))
 AIDADSP_LV2_TARGET_OPT += -fno-unsafe-loop-optimizations
-AIDADSP_LV2_TARGET_OPT += -fno-strict-aliasing -flto -ffat-lto-objects
 AIDADSP_LV2_TARGET_OPT += -fPIC
+
+ifndef BR2_SKIP_LTO
+AIDADSP_LV2_TARGET_OPT += -fno-strict-aliasing -flto -ffat-lto-objects
+endif
 
 # pass options into cmake
 AIDADSP_LV2_CONF_OPTS = -DPREFIX="/usr/lib/lv2"

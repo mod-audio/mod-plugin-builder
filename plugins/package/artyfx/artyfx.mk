@@ -26,7 +26,7 @@ define ARTYFX_POST_INSTALL_TARGET_TTLFILES
 
 	# bitta split bundle
 	install -d $(TARGET_DIR)/usr/lib/lv2/artyfx-bitta.lv2
-	cp $(TARGET_DIR)/usr/lib/lv2/artyfx.lv2/*.so $(TARGET_DIR)/usr/lib/lv2/artyfx-bitta.lv2/
+	cp $(TARGET_DIR)/usr/lib/lv2/artyfx.lv2/*.* $(TARGET_DIR)/usr/lib/lv2/artyfx-bitta.lv2/
 	cp -rL $($(PKG)_PKGDIR)/artyfx-bitta.lv2/* $(TARGET_DIR)/usr/lib/lv2/artyfx-bitta.lv2/
 endef
 
