@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_MDA_LV2_VERSION = 8d92c1f9ba8097b85430e7b57238ca0dfd2f37e9
+MOD_MDA_LV2_VERSION = b2df88cb28540856b7ec7d0210809efd7ca6bcd7
 MOD_MDA_LV2_SITE = $(call github,moddevices,mda-lv2,$(MOD_MDA_LV2_VERSION))
 MOD_MDA_LV2_BUNDLES = mod-mda-Ambience.lv2 mod-mda-BeatBox.lv2 mod-mda-Degrade.lv2 mod-mda-Detune.lv2 mod-mda-DubDelay.lv2 mod-mda-DX10.lv2 mod-mda-EPiano.lv2 mod-mda-JX10.lv2 mod-mda-Leslie.lv2 mod-mda-Overdrive.lv2 mod-mda-Piano.lv2 mod-mda-RePsycho.lv2 mod-mda-RingMod.lv2 mod-mda-RoundPan.lv2 mod-mda-Shepard.lv2 mod-mda-SubSynth.lv2 mod-mda-ThruZero.lv2 mod-mda-Vocoder.lv2
 

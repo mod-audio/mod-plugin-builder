@@ -12,7 +12,7 @@ FOMP_BUNDLES = fomp.lv2
 FOMP_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf
 
 define FOMP_CONFIGURE_CMDS
-	(cd $(@D); $(FOMP_TARGET_WAF) configure --prefix=/usr)
+	(cd $(@D); $(FOMP_TARGET_WAF) configure --prefix=/usr --lv2dir=/usr/lib/lv2)
 endef
 
 define FOMP_BUILD_CMDS

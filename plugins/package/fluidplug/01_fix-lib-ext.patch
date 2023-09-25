@@ -1,0 +1,376 @@
+diff --git a/Makefile b/Makefile
+index 0d014c4..9664c65 100644
+--- a/Makefile
++++ b/Makefile
+@@ -14,7 +14,7 @@ PREFIX  = /usr
+ all: build
+ 
+ clean:
+-	rm -f *.lv2/*.so exporter
++	rm -f *.lv2/*$(LIB_EXT) exporter
+ 
+ distclean: clean
+ 	rm -f *.lv2/README
+@@ -51,151 +51,151 @@ install:
+ 
+ 	install -m 644 \
+ 		AirFont320.lv2/*.sf2 \
+-		AirFont320.lv2/*.so \
++		AirFont320.lv2/*$(LIB_EXT) \
+ 		AirFont320.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/AirFont320.lv2
+ 
+ 	install -m 644 \
+ 		AVL_Drumkits_Perc.lv2/*.sf2 \
+-		AVL_Drumkits_Perc.lv2/*.so \
++		AVL_Drumkits_Perc.lv2/*$(LIB_EXT) \
+ 		AVL_Drumkits_Perc.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/AVL_Drumkits_Perc.lv2
+ 
+ 	install -m 644 \
+ 		Black_Pearl_4A.lv2/*.sf2 \
+-		Black_Pearl_4A.lv2/*.so \
++		Black_Pearl_4A.lv2/*$(LIB_EXT) \
+ 		Black_Pearl_4A.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/Black_Pearl_4A.lv2
+ 
+ 	install -m 644 \
+ 		Black_Pearl_4B.lv2/*.sf2 \
+-		Black_Pearl_4B.lv2/*.so \
++		Black_Pearl_4B.lv2/*$(LIB_EXT) \
+ 		Black_Pearl_4B.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/Black_Pearl_4B.lv2
+ 
+ 	install -m 644 \
+ 		Black_Pearl_5.lv2/*.sf2 \
+-		Black_Pearl_5.lv2/*.so \
++		Black_Pearl_5.lv2/*$(LIB_EXT) \
+ 		Black_Pearl_5.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/Black_Pearl_5.lv2
+ 
+ 	install -m 644 \
+ 		Red_Zeppelin_4.lv2/*.sf2 \
+-		Red_Zeppelin_4.lv2/*.so \
++		Red_Zeppelin_4.lv2/*$(LIB_EXT) \
+ 		Red_Zeppelin_4.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/Red_Zeppelin_4.lv2
+ 
+ 	install -m 644 \
+ 		Red_Zeppelin_5.lv2/*.sf2 \
+-		Red_Zeppelin_5.lv2/*.so \
++		Red_Zeppelin_5.lv2/*$(LIB_EXT) \
+ 		Red_Zeppelin_5.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/Red_Zeppelin_5.lv2
+ 
+ 	install -m 644 \
+ 		FluidGM.lv2/*.sf2 \
+-		FluidGM.lv2/*.so \
++		FluidGM.lv2/*$(LIB_EXT) \
+ 		FluidGM.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidGM.lv2
+ 
+ 	install -m 644 \
+ 		FluidBass.lv2/*.sf2 \
+-		FluidBass.lv2/*.so \
++		FluidBass.lv2/*$(LIB_EXT) \
+ 		FluidBass.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidBass.lv2
+ 
+ 	install -m 644 \
+ 		FluidBrass.lv2/*.sf2 \
+-		FluidBrass.lv2/*.so \
++		FluidBrass.lv2/*$(LIB_EXT) \
+ 		FluidBrass.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidBrass.lv2
+ 
+ 	install -m 644 \
+ 		FluidChromPerc.lv2/*.sf2 \
+-		FluidChromPerc.lv2/*.so \
++		FluidChromPerc.lv2/*$(LIB_EXT) \
+ 		FluidChromPerc.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidChromPerc.lv2
+ 
+ 	install -m 644 \
+ 		FluidDrums.lv2/*.sf2 \
+-		FluidDrums.lv2/*.so \
++		FluidDrums.lv2/*$(LIB_EXT) \
+ 		FluidDrums.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidDrums.lv2
+ 
+ 	install -m 644 \
+ 		FluidEnsemble.lv2/*.sf2 \
+-		FluidEnsemble.lv2/*.so \
++		FluidEnsemble.lv2/*$(LIB_EXT) \
+ 		FluidEnsemble.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidEnsemble.lv2
+ 
+ 	install -m 644 \
+ 		FluidEthnic.lv2/*.sf2 \
+-		FluidEthnic.lv2/*.so \
++		FluidEthnic.lv2/*$(LIB_EXT) \
+ 		FluidEthnic.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidEthnic.lv2
+ 
+ 	install -m 644 \
+ 		FluidGuitars.lv2/*.sf2 \
+-		FluidGuitars.lv2/*.so \
++		FluidGuitars.lv2/*$(LIB_EXT) \
+ 		FluidGuitars.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidGuitars.lv2
+ 
+ 	install -m 644 \
+ 		FluidOrgans.lv2/*.sf2 \
+-		FluidOrgans.lv2/*.so \
++		FluidOrgans.lv2/*$(LIB_EXT) \
+ 		FluidOrgans.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidOrgans.lv2
+ 
+ 	install -m 644 \
+ 		FluidPercussion.lv2/*.sf2 \
+-		FluidPercussion.lv2/*.so \
++		FluidPercussion.lv2/*$(LIB_EXT) \
+ 		FluidPercussion.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidPercussion.lv2
+ 
+ 	install -m 644 \
+ 		FluidPianos.lv2/*.sf2 \
+-		FluidPianos.lv2/*.so \
++		FluidPianos.lv2/*$(LIB_EXT) \
+ 		FluidPianos.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidPianos.lv2
+ 
+ 	install -m 644 \
+ 		FluidPipes.lv2/*.sf2 \
+-		FluidPipes.lv2/*.so \
++		FluidPipes.lv2/*$(LIB_EXT) \
+ 		FluidPipes.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidPipes.lv2
+ 
+ 	install -m 644 \
+ 		FluidReeds.lv2/*.sf2 \
+-		FluidReeds.lv2/*.so \
++		FluidReeds.lv2/*$(LIB_EXT) \
+ 		FluidReeds.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidReeds.lv2
+ 
+ 	install -m 644 \
+ 		FluidSoundFX.lv2/*.sf2 \
+-		FluidSoundFX.lv2/*.so \
++		FluidSoundFX.lv2/*$(LIB_EXT) \
+ 		FluidSoundFX.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidSoundFX.lv2
+ 
+ 	install -m 644 \
+ 		FluidStrings.lv2/*.sf2 \
+-		FluidStrings.lv2/*.so \
++		FluidStrings.lv2/*$(LIB_EXT) \
+ 		FluidStrings.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidStrings.lv2
+ 
+ 	install -m 644 \
+ 		FluidSynthFX.lv2/*.sf2 \
+-		FluidSynthFX.lv2/*.so \
++		FluidSynthFX.lv2/*$(LIB_EXT) \
+ 		FluidSynthFX.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidSynthFX.lv2
+ 
+ 	install -m 644 \
+ 		FluidSynthLeads.lv2/*.sf2 \
+-		FluidSynthLeads.lv2/*.so \
++		FluidSynthLeads.lv2/*$(LIB_EXT) \
+ 		FluidSynthLeads.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidSynthLeads.lv2
+ 
+ 	install -m 644 \
+ 		FluidSynthPads.lv2/*.sf2 \
+-		FluidSynthPads.lv2/*.so \
++		FluidSynthPads.lv2/*$(LIB_EXT) \
+ 		FluidSynthPads.lv2/*.ttl \
+ 		$(DESTDIR)$(PREFIX)/lib/lv2/FluidSynthPads.lv2
+ 
+@@ -286,151 +286,151 @@ download: \
+ 
+ AirFont320: \
+ 	AirFont320.lv2/FluidPlug.sf2 \
+-	AirFont320.lv2/FluidPlug.so \
++	AirFont320.lv2/FluidPlug$(LIB_EXT) \
+ 	AirFont320.lv2/FluidPlug.ttl \
+ 	AirFont320.lv2/manifest.ttl
+ 
+ AVL_Drumkits_Perc: \
+ 	AVL_Drumkits_Perc.lv2/FluidPlug.sf2 \
+-	AVL_Drumkits_Perc.lv2/FluidPlug.so \
++	AVL_Drumkits_Perc.lv2/FluidPlug$(LIB_EXT) \
+ 	AVL_Drumkits_Perc.lv2/FluidPlug.ttl \
+ 	AVL_Drumkits_Perc.lv2/manifest.ttl
+ 
+ Black_Pearl_4A: \
+ 	Black_Pearl_4A.lv2/FluidPlug.sf2 \
+-	Black_Pearl_4A.lv2/FluidPlug.so \
++	Black_Pearl_4A.lv2/FluidPlug$(LIB_EXT) \
+ 	Black_Pearl_4A.lv2/FluidPlug.ttl \
+ 	Black_Pearl_4A.lv2/manifest.ttl
+ 
+ Black_Pearl_4B: \
+ 	Black_Pearl_4B.lv2/FluidPlug.sf2 \
+-	Black_Pearl_4B.lv2/FluidPlug.so \
++	Black_Pearl_4B.lv2/FluidPlug$(LIB_EXT) \
+ 	Black_Pearl_4B.lv2/FluidPlug.ttl \
+ 	Black_Pearl_4B.lv2/manifest.ttl
+ 
+ Black_Pearl_5: \
+ 	Black_Pearl_5.lv2/FluidPlug.sf2 \
+-	Black_Pearl_5.lv2/FluidPlug.so \
++	Black_Pearl_5.lv2/FluidPlug$(LIB_EXT) \
+ 	Black_Pearl_5.lv2/FluidPlug.ttl \
+ 	Black_Pearl_5.lv2/manifest.ttl
+ 
+ Red_Zeppelin_4: \
+ 	Red_Zeppelin_4.lv2/FluidPlug.sf2 \
+-	Red_Zeppelin_4.lv2/FluidPlug.so \
++	Red_Zeppelin_4.lv2/FluidPlug$(LIB_EXT) \
+ 	Red_Zeppelin_4.lv2/FluidPlug.ttl \
+ 	Red_Zeppelin_4.lv2/manifest.ttl
+ 
+ Red_Zeppelin_5: \
+ 	Red_Zeppelin_5.lv2/FluidPlug.sf2 \
+-	Red_Zeppelin_5.lv2/FluidPlug.so \
++	Red_Zeppelin_5.lv2/FluidPlug$(LIB_EXT) \
+ 	Red_Zeppelin_5.lv2/FluidPlug.ttl \
+ 	Red_Zeppelin_5.lv2/manifest.ttl
+ 
+ FluidGM: \
+ 	FluidGM.lv2/FluidPlug.sf2 \
+-	FluidGM.lv2/FluidPlug.so \
++	FluidGM.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidGM.lv2/FluidPlug.ttl \
+ 	FluidGM.lv2/manifest.ttl
+ 
+ FluidBass: \
+ 	FluidBass.lv2/FluidPlug.sf2 \
+-	FluidBass.lv2/FluidPlug.so \
++	FluidBass.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidBass.lv2/FluidPlug.ttl \
+ 	FluidBass.lv2/manifest.ttl
+ 
+ FluidBrass: \
+ 	FluidBrass.lv2/FluidPlug.sf2 \
+-	FluidBrass.lv2/FluidPlug.so \
++	FluidBrass.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidBrass.lv2/FluidPlug.ttl \
+ 	FluidBrass.lv2/manifest.ttl
+ 
+ FluidChromPerc: \
+ 	FluidChromPerc.lv2/FluidPlug.sf2 \
+-	FluidChromPerc.lv2/FluidPlug.so \
++	FluidChromPerc.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidChromPerc.lv2/FluidPlug.ttl \
+ 	FluidChromPerc.lv2/manifest.ttl
+ 
+ FluidDrums: \
+ 	FluidDrums.lv2/FluidPlug.sf2 \
+-	FluidDrums.lv2/FluidPlug.so \
++	FluidDrums.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidDrums.lv2/FluidPlug.ttl \
+ 	FluidDrums.lv2/manifest.ttl
+ 
+ FluidEnsemble: \
+ 	FluidEnsemble.lv2/FluidPlug.sf2 \
+-	FluidEnsemble.lv2/FluidPlug.so \
++	FluidEnsemble.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidEnsemble.lv2/FluidPlug.ttl \
+ 	FluidEnsemble.lv2/manifest.ttl
+ 
+ FluidEthnic: \
+ 	FluidEthnic.lv2/FluidPlug.sf2 \
+-	FluidEthnic.lv2/FluidPlug.so \
++	FluidEthnic.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidEthnic.lv2/FluidPlug.ttl \
+ 	FluidEthnic.lv2/manifest.ttl
+ 
+ FluidGuitars: \
+ 	FluidGuitars.lv2/FluidPlug.sf2 \
+-	FluidGuitars.lv2/FluidPlug.so \
++	FluidGuitars.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidGuitars.lv2/FluidPlug.ttl \
+ 	FluidGuitars.lv2/manifest.ttl
+ 
+ FluidOrgans: \
+ 	FluidOrgans.lv2/FluidPlug.sf2 \
+-	FluidOrgans.lv2/FluidPlug.so \
++	FluidOrgans.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidOrgans.lv2/FluidPlug.ttl \
+ 	FluidOrgans.lv2/manifest.ttl
+ 
+ FluidPercussion: \
+ 	FluidPercussion.lv2/FluidPlug.sf2 \
+-	FluidPercussion.lv2/FluidPlug.so \
++	FluidPercussion.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidPercussion.lv2/FluidPlug.ttl \
+ 	FluidPercussion.lv2/manifest.ttl
+ 
+ FluidPianos: \
+ 	FluidPianos.lv2/FluidPlug.sf2 \
+-	FluidPianos.lv2/FluidPlug.so \
++	FluidPianos.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidPianos.lv2/FluidPlug.ttl \
+ 	FluidPianos.lv2/manifest.ttl
+ 
+ FluidPipes: \
+ 	FluidPipes.lv2/FluidPlug.sf2 \
+-	FluidPipes.lv2/FluidPlug.so \
++	FluidPipes.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidPipes.lv2/FluidPlug.ttl \
+ 	FluidPipes.lv2/manifest.ttl
+ 
+ FluidReeds: \
+ 	FluidReeds.lv2/FluidPlug.sf2 \
+-	FluidReeds.lv2/FluidPlug.so \
++	FluidReeds.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidReeds.lv2/FluidPlug.ttl \
+ 	FluidReeds.lv2/manifest.ttl
+ 
+ FluidSoundFX: \
+ 	FluidSoundFX.lv2/FluidPlug.sf2 \
+-	FluidSoundFX.lv2/FluidPlug.so \
++	FluidSoundFX.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidSoundFX.lv2/FluidPlug.ttl \
+ 	FluidSoundFX.lv2/manifest.ttl
+ 
+ FluidStrings: \
+ 	FluidStrings.lv2/FluidPlug.sf2 \
+-	FluidStrings.lv2/FluidPlug.so \
++	FluidStrings.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidStrings.lv2/FluidPlug.ttl \
+ 	FluidStrings.lv2/manifest.ttl
+ 
+ FluidSynthFX: \
+ 	FluidSynthFX.lv2/FluidPlug.sf2 \
+-	FluidSynthFX.lv2/FluidPlug.so \
++	FluidSynthFX.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidSynthFX.lv2/FluidPlug.ttl \
+ 	FluidSynthFX.lv2/manifest.ttl
+ 
+ FluidSynthLeads: \
+ 	FluidSynthLeads.lv2/FluidPlug.sf2 \
+-	FluidSynthLeads.lv2/FluidPlug.so \
++	FluidSynthLeads.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidSynthLeads.lv2/FluidPlug.ttl \
+ 	FluidSynthLeads.lv2/manifest.ttl
+ 
+ FluidSynthPads: \
+ 	FluidSynthPads.lv2/FluidPlug.sf2 \
+-	FluidSynthPads.lv2/FluidPlug.so \
++	FluidSynthPads.lv2/FluidPlug$(LIB_EXT) \
+ 	FluidSynthPads.lv2/FluidPlug.ttl \
+ 	FluidSynthPads.lv2/manifest.ttl
+ 
+@@ -662,7 +662,7 @@ FluidSynthPads.lv2/FluidPlug.sf2:
+ 
+ # ---------------------------------------------------------------------------------------------------------------------
+ 
+-%.lv2/FluidPlug.so: source/FluidPlug.c
++%.lv2/FluidPlug$(LIB_EXT): source/FluidPlug.c
+ 	$(CC) $< -DFLUIDPLUG_LABEL=\"$*\" $(BUILD_C_FLAGS) $(FLUIDSYNTH_FLAGS) $(LINK_FLAGS) $(FLUIDSYNTH_LIBS) $(SHARED) -o $@
+ 
+ %.lv2/FluidPlug.ttl:
