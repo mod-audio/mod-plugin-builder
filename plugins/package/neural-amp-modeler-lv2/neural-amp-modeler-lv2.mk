@@ -12,7 +12,11 @@ NEURAL_AMP_MODELER_LV2_BUNDLES = neural_amp_modeler.lv2
 # custom optimization flags
 NEURAL_AMP_MODELER_LV2_TARGET_OPT  = $(subst ",,$(BR2_TARGET_OPTIMIZATION))
 NEURAL_AMP_MODELER_LV2_TARGET_OPT += -fsingle-precision-constant
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -pthread
+
+ifndef BR2_SKIP_LTO
 NEURAL_AMP_MODELER_LV2_TARGET_OPT += -flto -ffat-lto-objects
+endif
 
 # pass options into cmake
 NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(NEURAL_AMP_MODELER_LV2_TARGET_OPT)"
