@@ -4,7 +4,9 @@ MINOR_VERSION = $(word 2, $(subst ., ,$(VERSION)))
 MICRO_VERSION = $(word 3, $(subst ., ,$(VERSION)))
 
 CFLAGS += -I. -Iprops.lv2 -fPIC -Wall -Wextra -std=gnu11 -D_GNU_SOURCE -fvisibility=hidden -DNOTES_VERSION="$(VERSION)"
+ifneq ($(MACOS),true)
 LDFLAGS += -Wl,--no-undefined
+endif
 
 ifeq ($(MACOS),true)
 SOEXT = dylib
