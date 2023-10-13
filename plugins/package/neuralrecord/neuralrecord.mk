@@ -7,6 +7,7 @@
 NEURALRECORD_VERSION = 92d50ec48554256e25b0b5918d3699fabae14f56
 NEURALRECORD_SITE = https://github.com/brummer10/neuralrecord.git
 NEURALRECORD_SITE_METHOD = git
+NEURALRECORD_DEPENDENCIES = libsndfile
 NEURALRECORD_BUNDLES = neuralrecord.lv2
 
 # needed for submodules support
