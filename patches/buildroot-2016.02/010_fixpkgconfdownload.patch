@@ -7,8 +7,15 @@ diff --git a/package/pkgconf/pkgconf.mk b//package/pkgconf/pkgconf.mk
  PKGCONF_VERSION = 0.9.12
 -PKGCONF_SITE = https://github.com/pkgconf/pkgconf/releases/download/pkgconf-$(PKGCONF_VERSION)
 -PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
-+PKGCONF_SITE = https://github.com/pkgconf/pkgconf/releases/tag/pkgconf-$(PKGCONF_VERSION).tar.gz
++PKGCONF_SITE = https://github.com/pkgconf/pkgconf/archive/refs/tags
 +PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.gz
  PKGCONF_LICENSE = pkgconf license
  PKGCONF_LICENSE_FILES = COPYING
- 
+
+diff --git a/package/pkgconf/pkgconf.hash b/package/pkgconf/pkgconf.hash
+--- a/package/pkgconf/pkgconf.hash	2016-03-01 21:47:30.000000000 +0100
++++ b/package/pkgconf/pkgconf.hash	2023-10-15 19:47:46.588514459 +0200
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	7ec8b516e655e247f4ba976837cee808134785819ab8f538f652fe919cc6c09f	pkgconf-0.9.12.tar.bz2
++sha256  d31a19e22908e5bf277454261222da0640115844f7a62672dbe9e92061d547c5    pkgconf-pkgconf-0.9.12.tar.gz
