@@ -139,6 +139,7 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/007_static-toolchain.patch
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/008_cortex-a72.patch
   patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/009_updated-toolchain-2022.patch
+  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/010_fixpkgconfdownload.patch
 fi
 
 #######################################################################################################################
