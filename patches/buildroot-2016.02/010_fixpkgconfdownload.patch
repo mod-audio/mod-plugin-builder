@@ -18,4 +18,4 @@ diff --git a/package/pkgconf/pkgconf.hash b/package/pkgconf/pkgconf.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256	7ec8b516e655e247f4ba976837cee808134785819ab8f538f652fe919cc6c09f	pkgconf-0.9.12.tar.bz2
-+sha256  d31a19e22908e5bf277454261222da0640115844f7a62672dbe9e92061d547c5    pkgconf-pkgconf-0.9.12.tar.gz
++sha256  d31a19e22908e5bf277454261222da0640115844f7a62672dbe9e92061d547c5    pkgconf-0.9.12.tar.gz
