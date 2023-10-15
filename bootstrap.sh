@@ -180,6 +180,8 @@ fi
 #######################################################################################################################
 # initial first build
 
+autoreconf "${BUILD_DIR}/host-pkgconf-0.9.12"
+
 ${BR2_MAKE} ${BR2_PLATFORM}_defconfig
 
 if [ "${BUILDTARGET}" = "kernel" ]; then
