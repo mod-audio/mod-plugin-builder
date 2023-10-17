@@ -1,14 +1,13 @@
 diff --git a/package/pkgconf/pkgconf.mk b//package/pkgconf/pkgconf.mk
---- a/package/pkgconf/pkgconf.mk	2023-10-15 18:11:09.328899291 +0200
-+++ b/package/pkgconf/pkgconf.mk	2023-10-15 18:10:54.627797360 +0200
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
 @@ -5,8 +5,8 @@
  ################################################################################
  
  PKGCONF_VERSION = 0.9.12
 -PKGCONF_SITE = https://github.com/pkgconf/pkgconf/releases/download/pkgconf-$(PKGCONF_VERSION)
--PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
 +PKGCONF_SITE = https://distfiles.ariadne.space/pkgconf
-+PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.gz
+ PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.bz2
  PKGCONF_LICENSE = pkgconf license
  PKGCONF_LICENSE_FILES = COPYING
  
