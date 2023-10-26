@@ -12,7 +12,7 @@ index 400ead8..e8f62fd 100644
  @prefix patch:   <http://lv2plug.in/ns/ext/patch#> .
 @@ -29,6 +30,7 @@ midnam:update a lv2:Feature .
  
- <@LV2PLUGIN_URI@:sfzfile>
+ <@LV2_PLUGIN_URI@:sfzfile>
    a lv2:Parameter ;
 +  mod:fileTypes "sfz" ;
    rdfs:label "SFZ file",

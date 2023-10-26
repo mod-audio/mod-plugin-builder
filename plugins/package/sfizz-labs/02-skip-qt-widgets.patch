@@ -1,12 +1,12 @@
-diff --git a/cmake/SfizzDeps.cmake b/cmake/SfizzDeps.cmake
+diff --git a/library/cmake/SfizzDeps.cmake b/library/cmake/SfizzDeps.cmake
 index fbf5f8e0..5f95eafb 100644
---- a/cmake/SfizzDeps.cmake
-+++ b/cmake/SfizzDeps.cmake
+--- a/library/cmake/SfizzDeps.cmake
++++ b/library/cmake/SfizzDeps.cmake
 @@ -231,9 +231,6 @@ if(JACK_FOUND)
      link_directories(${JACK_LIBRARY_DIRS})
  endif()
  
--# The Qt library
+-# The Qt library (CaptureEG devtool)
 -find_package(Qt5 COMPONENTS Widgets)
 -
  # The fmidi library
