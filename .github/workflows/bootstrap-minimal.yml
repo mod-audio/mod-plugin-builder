@@ -1,0 +1,138 @@
+name: bootstrap-minimal
+
+on: [push, pull_request]
+
+env:
+  CT_ALLOW_BUILD_AS_ROOT_SURE: 1
+  DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  debian_12:
+    strategy:
+      matrix:
+        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, raspberrypi4, x86_64]
+    runs-on: ubuntu-latest
+    container:
+      image: debian:12
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/mod-workdir/download
+          key: download-debian_12-${{ matrix.platform }}
+      - name: Install dependencies
+        run: |
+          apt-get update -qq && apt-get install -yqq \
+            acl bc curl cvs git mercurial rsync subversion wget \
+            bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
+            automake binutils build-essential cpio libtool libncurses-dev pkg-config python-is-python3 libtool-bin
+      - name: Bootstrap
+        run: |
+          sed -i 's/CT_LOG_PROGRESS_BAR=y/CT_LOG_PROGRESS_BAR=n/' toolchain/*.config
+          ./bootstrap.sh ${{ matrix.platform }} minimal
+
+  debian_11:
+    strategy:
+      matrix:
+        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, raspberrypi4, x86_64]
+    runs-on: ubuntu-latest
+    container:
+      image: debian:11
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/mod-workdir/download
+          key: download-debian_11-${{ matrix.platform }}
+      - name: Install dependencies
+        run: |
+          apt-get update -qq && apt-get install -yqq \
+            acl bc curl cvs git mercurial rsync subversion wget \
+            bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
+            automake binutils build-essential cpio libtool libncurses-dev pkg-config python-is-python3 libtool-bin
+      - name: Bootstrap
+        run: |
+          sed -i 's/CT_LOG_PROGRESS_BAR=y/CT_LOG_PROGRESS_BAR=n/' toolchain/*.config
+          ./bootstrap.sh ${{ matrix.platform }} minimal
+
+  ubuntu_23_10:
+    strategy:
+      matrix:
+        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, raspberrypi4, x86_64]
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:23.10
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/mod-workdir/download
+          key: download-ubuntu_23_10-${{ matrix.platform }}
+      - name: Install dependencies
+        run: |
+          apt-get update -qq && apt-get install -yqq \
+            acl bc curl cvs git mercurial rsync subversion wget \
+            bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
+            automake binutils build-essential cpio libtool libncurses-dev pkg-config python-is-python3 libtool-bin
+      - name: Bootstrap
+        run: |
+          sed -i 's/CT_LOG_PROGRESS_BAR=y/CT_LOG_PROGRESS_BAR=n/' toolchain/*.config
+          ./bootstrap.sh ${{ matrix.platform }} minimal
+
+  ubuntu_22_04:
+    strategy:
+      matrix:
+        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, raspberrypi4, x86_64]
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/mod-workdir/download
+          key: download-ubuntu_22_04-${{ matrix.platform }}
+      - name: Install dependencies
+        run: |
+          apt-get update -qq && apt-get install -yqq \
+            acl bc curl cvs git mercurial rsync subversion wget \
+            bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
+            automake binutils build-essential cpio libtool libncurses-dev pkg-config python-is-python3 libtool-bin
+      - name: Bootstrap
+        run: |
+          sed -i 's/CT_LOG_PROGRESS_BAR=y/CT_LOG_PROGRESS_BAR=n/' toolchain/*.config
+          ./bootstrap.sh ${{ matrix.platform }} minimal
+
+  ubuntu_20_04:
+    strategy:
+      matrix:
+        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, raspberrypi4, x86_64]
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/mod-workdir/download
+          key: download-ubuntu_20_04-${{ matrix.platform }}
+      - name: Install dependencies
+        run: |
+          apt-get update -qq && apt-get install -yqq \
+            acl bc curl cvs git mercurial rsync subversion wget \
+            bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
+            automake binutils build-essential cpio libtool libncurses-dev pkg-config python-is-python3 libtool-bin
+      - name: Bootstrap
+        run: |
+          sed -i 's/CT_LOG_PROGRESS_BAR=y/CT_LOG_PROGRESS_BAR=n/' toolchain/*.config
+          ./bootstrap.sh ${{ matrix.platform }} minimal
