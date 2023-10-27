@@ -978,3 +978,118 @@ index c1b386c..78df7d1 100644
  		::DSP* currentModel = nullptr;
  		std::string currentModelPath;
  		recursive_linear_filter::HighPass mHighPass;
+diff --git a/src/BufferedDSP.hpp b/src/BufferedDSP.hpp
+index f01c06b..6881d14 100644
+--- a/src/BufferedDSP.hpp
++++ b/src/BufferedDSP.hpp
+@@ -10,9 +10,15 @@
+ 
+ #include <atomic>
+ #include <pthread.h>
+-#include <semaphore.h>
+ #include <unistd.h>
+ 
++#ifdef __APPLE__
++# include <mach/mach.h>
++# include <mach/semaphore.h>
++#else
++# include <semaphore.h>
++#endif
++
+ #if defined(__SSE2_MATH__)
+ # include <xmmintrin.h>
+ #endif
+@@ -24,8 +30,14 @@ class BufferedDSP
+     float* bufferedInput = nullptr;
+     float* bufferedOutput = nullptr;
+     uint32_t bufferSize = 0;
++   #ifdef __APPLE__
++    mach_port_t semBgTask = {};
++    semaphore_t semBgProcStart = {};
++    semaphore_t semBgProcFinished = {};
++   #else
+     sem_t semBgProcStart = {};
+     sem_t semBgProcFinished = {};
++   #endif
+     std::atomic<bool> active{ false };
+ 
+     pthread_mutex_t mutexI, mutexO;
+@@ -36,8 +48,14 @@ public:
+     BufferedDSP(std::unordered_map<std::string, double>& namParams_)
+         : namParams(namParams_)
+     {
++        #ifdef __APPLE__
++         semBgTask = mach_task_self();
++         semaphore_create(semBgTask, &semBgProcStart, SYNC_POLICY_FIFO, 0);
++         semaphore_create(semBgTask, &semBgProcFinished, SYNC_POLICY_FIFO, 0);
++        #else
+          sem_init(&semBgProcStart, 0, 0);
+          sem_init(&semBgProcFinished, 0, 0);
++        #endif
+ 
+          pthread_mutexattr_t attr;
+          pthread_mutexattr_init(&attr);
+@@ -53,8 +71,13 @@ public:
+ 
+         pthread_mutex_destroy(&mutexI);
+         pthread_mutex_destroy(&mutexO);
++       #ifdef __APPLE__
++        semaphore_destroy(semBgTask, semBgProcStart);
++        semaphore_destroy(semBgTask, semBgProcFinished);
++       #else
+         sem_destroy(&semBgProcStart);
+         sem_destroy(&semBgProcFinished);
++       #endif
+         delete[] bufferedInput;
+         delete[] bufferedOutput;
+     }
+@@ -120,7 +143,11 @@ public:
+ 
+         activedsp = nullptr;
+         running = false;
++       #ifdef __APPLE__
++        semaphore_signal(semBgProcStart);
++       #else
+         sem_post(&semBgProcStart);
++       #endif
+         pthread_join(thread, nullptr);
+         thread = {};
+     }
+@@ -138,7 +165,11 @@ public:
+         if (len > bufferSize)
+             return;
+ 
++       #ifdef __APPLE__
++        semaphore_wait(semBgProcFinished);
++       #else
+         sem_wait(&semBgProcFinished);
++       #endif
+ 
+         pthread_mutex_lock(&mutexI);
+         std::memcpy(bufferedInput, output, sizeof(float)*len);
+@@ -148,7 +179,11 @@ public:
+         std::memcpy(output, bufferedOutput, sizeof(float)*len);
+         pthread_mutex_unlock(&mutexO);
+ 
++       #ifdef __APPLE__
++        semaphore_signal(semBgProcStart);
++       #else
+         sem_post(&semBgProcStart);
++       #endif
+     }
+ 
+     static void* _run(void* const arg)
+@@ -182,8 +217,13 @@ public:
+ 
+         while (running)
+         {
++           #ifdef __APPLE__
++            semaphore_signal(semBgProcFinished);
++            semaphore_wait(semBgProcStart);
++           #else
+             sem_post(&semBgProcFinished);
+             sem_wait(&semBgProcStart);
++           #endif
+ 
+             if (!running)
+                 break;
