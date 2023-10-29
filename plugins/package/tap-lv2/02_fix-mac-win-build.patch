@@ -1,17 +1,18 @@
 diff --git a/Makefile.mk b/Makefile.mk
-index a6b54c3..a283e52 100644
+index a6b54c3..afa7db4 100644
 --- a/Makefile.mk
 +++ b/Makefile.mk
-@@ -3,8 +3,16 @@
+@@ -3,8 +3,17 @@
  CC ?= gcc
  
  # flags
 -CFLAGS += -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fstrength-reduce -Wall -Werror -fPIC -DPIC -I../utils
 -LDFLAGS += -shared -Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--strip-all -lm -lrt
-+CFLAGS += -O3 -std=gnu99 -funroll-loops -ffast-math -fomit-frame-pointer -fstrength-reduce -Wall -Werror -fPIC -DPIC -I../utils
++CFLAGS += -O3 -std=gnu99 -funroll-loops -ffast-math -fomit-frame-pointer -Wall -Werror -fPIC -DPIC -I../utils
 +LDFLAGS += -shared -lm
 +
 +ifneq ($(MACOS),true)
++CFLAGS += -fstrength-reduce
 +LDFLAGS += -Wl,-O1,--as-needed,--no-undefined,--strip-all
 +endif
 +
