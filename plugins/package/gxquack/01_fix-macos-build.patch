@@ -1,0 +1,18 @@
+diff --git a/plugin/gx_quack.cpp b/plugin/gx_quack.cpp
+index f416239..c68aac9 100644
+--- a/plugin/gx_quack.cpp
++++ b/plugin/gx_quack.cpp
+@@ -26,8 +26,13 @@
+ 
+ ///////////////////////// MACRO SUPPORT ////////////////////////////////
+ 
++#ifndef __APPLE__
+ #define __rt_func __attribute__((section(".rt.text")))
+ #define __rt_data __attribute__((section(".rt.data")))
++#else
++#define __rt_func
++#define __rt_data
++#endif
+ 
+ ///////////////////////// FAUST SUPPORT ////////////////////////////////
+ 

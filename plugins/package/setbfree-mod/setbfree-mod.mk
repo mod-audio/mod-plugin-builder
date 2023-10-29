@@ -19,8 +19,8 @@ define SETBFREE_MOD_INSTALL_TARGET_CMDS
 	$(SETBFREE_MOD_TARGET_MAKE) install DESTDIR=$(TARGET_DIR)
 
 	install -d $(TARGET_DIR)/usr/lib/lv2/b_whirl_mod
+	cp $(TARGET_DIR)/usr/lib/lv2/b_whirl/*.* $(TARGET_DIR)/usr/lib/lv2/b_whirl_mod/
 	cp -rL $($(PKG)_PKGDIR)/b_whirl_mod/* $(TARGET_DIR)/usr/lib/lv2/b_whirl_mod/
-	cp $(TARGET_DIR)/usr/lib/lv2/b_whirl/*.so $(TARGET_DIR)/usr/lib/lv2/b_whirl_mod/
 endef
 
 $(eval $(generic-package))

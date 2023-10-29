@@ -27,8 +27,8 @@ index 3bfcf9c..f33a527 100644
  #include <math.h>
  #include <lv2.h>
  #include <string.h>
-+#ifdef _WIN64
-+#define MAXLONG UINT32_MAX
++#if defined(__APPLE__) || defined(_WIN32)
++#define MAXLONG (sizeof(long)-1U)
 +#else
 +#include <values.h>
 +#endif
@@ -64,8 +64,8 @@ index 6798a04..27ee190 100644
  #include <math.h>
  #include <lv2.h>
  #include <string.h>
-+#ifdef _WIN64
-+#define MAXLONG UINT32_MAX
++#if defined(__APPLE__) || defined(_WIN32)
++#define MAXLONG (sizeof(long)-1U)
 +#else
 +#include <values.h>
 +#endif

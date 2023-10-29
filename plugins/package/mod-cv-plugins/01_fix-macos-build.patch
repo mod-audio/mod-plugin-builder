@@ -1,0 +1,14 @@
+diff --git a/source/mod-logic-operators/Makefile b/source/mod-logic-operators/Makefile
+index 73645f2..21bb552 100644
+--- a/source/mod-logic-operators/Makefile
++++ b/source/mod-logic-operators/Makefile
+@@ -25,9 +25,6 @@ ifneq ($(CROSS_COMPILING),true)
+ gen: plugins dpf/utils/lv2_ttl_generator
+ 	#@$(CURDIR)/dpf/utils/generate-ttl.sh
+ 	cp -r plugins/logic-operators/lv2-data/* bin/logic-operators.lv2/
+-ifeq ($(MACOS),true)
+-	@$(CURDIR)/dpf/utils/generate-vst-bundles.sh
+-endif
+ 
+ dpf/utils/lv2_ttl_generator:
+ 	$(MAKE) -C dpf/utils/lv2-ttl-generator

@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index 4afe655..9cd20b5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -33,9 +33,6 @@ gen: plugins dpf/utils/lv2_ttl_generator
+ 	#@$(CURDIR)/dpf/utils/generate-ttl.sh
+ 	cp plugins/$(MIXER_MONO)/lv2-data/* bin/$(MIXER_MONO).lv2/
+ 	cp plugins/$(MIXER_STEREO)/lv2-data/* bin/$(MIXER_STEREO).lv2/
+-ifeq ($(MACOS),true)
+-	@$(CURDIR)/dpf/utils/generate-vst-bundles.sh
+-endif
+ 
+ dpf/utils/lv2_ttl_generator:
+ 	$(MAKE) -C dpf/utils/lv2-ttl-generator

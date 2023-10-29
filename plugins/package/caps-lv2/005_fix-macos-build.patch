@@ -1,0 +1,1442 @@
+diff --git a/Makefile.single b/Makefile.single
+index 5343035..a19dea8 100644
+--- a/Makefile.single
++++ b/Makefile.single
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = __SOURCES__
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MD $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/dsp/v4f.h b/dsp/v4f.h
+index ac3e1cc..6f8a0fa 100644
+--- a/dsp/v4f.h
++++ b/dsp/v4f.h
+@@ -88,6 +88,14 @@ v4f_t v4f_map (v4f_t x)
+ #define v4f_pi ((v4f_t) {M_PI, M_PI, M_PI, M_PI})
+ #define v4f_2pi ((v4f_t) {2*M_PI, 2*M_PI, 2*M_PI, 2*M_PI})
+ 
++#ifdef __APPLE__
++inline float _cosf(float v) { return __builtin_cosf(v); }
++inline float _sinf(float v) { return __builtin_sinf(v); }
++#else
++#define _cosf __builtin_cosf
++#define _sinf __builtin_sinf
++#endif
++
+ template <int N>
+ class V4fArray
+ {
+@@ -150,10 +158,10 @@ class Sin4f
+ 			{
+ 				v4f_t *y = data();
+ 				v4f_t w = -v4f_pi * f;
+-				y[0] = v4f_map<__builtin_sinf> (w);
+-				y[1] = v4f_map<__builtin_sinf> (v4f_2 * w);
++				y[0] = v4f_map<_sinf> (w);
++				y[1] = v4f_map<_sinf> (v4f_2 * w);
+ 				/* b in above scalar implementation is y[2] in the flat data */
+-				y[2] = v4f_2 * v4f_map<__builtin_cosf> (w); /* b */
++				y[2] = v4f_2 * v4f_map<_cosf> (w); /* b */
+ 				z = 0;
+ 			}
+ 
+diff --git a/dsp/v4f_IIR2.h b/dsp/v4f_IIR2.h
+index fd7d96b..01536e4 100644
+--- a/dsp/v4f_IIR2.h
++++ b/dsp/v4f_IIR2.h
+@@ -47,8 +47,8 @@ class RBJv4
+ 			{
+ 				v4f_t w = v4f_2pi * f;
+ 
+-				sin = v4f_map<__builtin_sinf> (w);
+-				cos = v4f_map<__builtin_cosf> (w);
++				sin = v4f_map<_sinf> (w);
++				cos = v4f_map<_cosf> (w);
+ 
+ 				alpha = sin / (v4f_2 * Q);
+ 			}
+@@ -551,9 +551,9 @@ class Resonator4fBank
+ 			{
+ 				v4f_t * a = state + i*Item;
+ 				f *= v4f_2pi;
+-				a[0] = v4f_map<__builtin_sinf> (f);
++				a[0] = v4f_map<_sinf> (f);
+ 				a[0] *= gain;
+-				a[5] = v4f_map<__builtin_cosf> (f);
++				a[5] = v4f_map<_cosf> (f);
+ 				set_r (i, r);
+ 			}
+ 		void set_r (int i, v4f_t r)
+diff --git a/make_single_plugins.py b/make_single_plugins.py
+index e35b587..ea39da9 100755
+--- a/make_single_plugins.py
++++ b/make_single_plugins.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ import os, sys, glob
+ 
+diff --git a/plugins/mod-caps-AmpVTS.lv2/Makefile b/plugins/mod-caps-AmpVTS.lv2/Makefile
+index 4341637..d3d4105 100644
+--- a/plugins/mod-caps-AmpVTS.lv2/Makefile
++++ b/plugins/mod-caps-AmpVTS.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Amp.cc ../../ToneStack.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-AutoFilter.lv2/Makefile b/plugins/mod-caps-AutoFilter.lv2/Makefile
+index f76d778..f98e953 100644
+--- a/plugins/mod-caps-AutoFilter.lv2/Makefile
++++ b/plugins/mod-caps-AutoFilter.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../AutoFilter.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-CEO.lv2/Makefile b/plugins/mod-caps-CEO.lv2/Makefile
+index 3e578fb..a0dcd05 100644
+--- a/plugins/mod-caps-CEO.lv2/Makefile
++++ b/plugins/mod-caps-CEO.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Click.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-CabinetIII.lv2/Makefile b/plugins/mod-caps-CabinetIII.lv2/Makefile
+index 4cae8da..df3de8f 100644
+--- a/plugins/mod-caps-CabinetIII.lv2/Makefile
++++ b/plugins/mod-caps-CabinetIII.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../CabIII.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-CabinetIV.lv2/Makefile b/plugins/mod-caps-CabinetIV.lv2/Makefile
+index 696fd63..e49be66 100644
+--- a/plugins/mod-caps-CabinetIV.lv2/Makefile
++++ b/plugins/mod-caps-CabinetIV.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../CabIV.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-ChorusI.lv2/Makefile b/plugins/mod-caps-ChorusI.lv2/Makefile
+index ff61ee5..9696efe 100644
+--- a/plugins/mod-caps-ChorusI.lv2/Makefile
++++ b/plugins/mod-caps-ChorusI.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Chorus.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Click.lv2/Makefile b/plugins/mod-caps-Click.lv2/Makefile
+index 09fca5e..72cd847 100644
+--- a/plugins/mod-caps-Click.lv2/Makefile
++++ b/plugins/mod-caps-Click.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Click.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Compress.lv2/Makefile b/plugins/mod-caps-Compress.lv2/Makefile
+index 63d2eb1..e0f4920 100644
+--- a/plugins/mod-caps-Compress.lv2/Makefile
++++ b/plugins/mod-caps-Compress.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Compress.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-CompressX2.lv2/Makefile b/plugins/mod-caps-CompressX2.lv2/Makefile
+index ffe80ae..89a52ec 100644
+--- a/plugins/mod-caps-CompressX2.lv2/Makefile
++++ b/plugins/mod-caps-CompressX2.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Compress.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Eq10.lv2/Makefile b/plugins/mod-caps-Eq10.lv2/Makefile
+index a6c8f70..e542688 100644
+--- a/plugins/mod-caps-Eq10.lv2/Makefile
++++ b/plugins/mod-caps-Eq10.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Eq.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Eq10X2.lv2/Makefile b/plugins/mod-caps-Eq10X2.lv2/Makefile
+index bd9a50a..77f22aa 100644
+--- a/plugins/mod-caps-Eq10X2.lv2/Makefile
++++ b/plugins/mod-caps-Eq10X2.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Eq.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Eq4p.lv2/Makefile b/plugins/mod-caps-Eq4p.lv2/Makefile
+index 930ae9b..4f5f3e3 100644
+--- a/plugins/mod-caps-Eq4p.lv2/Makefile
++++ b/plugins/mod-caps-Eq4p.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Eq.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-EqFA4p.lv2/Makefile b/plugins/mod-caps-EqFA4p.lv2/Makefile
+index 788c213..38c0535 100644
+--- a/plugins/mod-caps-EqFA4p.lv2/Makefile
++++ b/plugins/mod-caps-EqFA4p.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Eq.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Fractal.lv2/Makefile b/plugins/mod-caps-Fractal.lv2/Makefile
+index 39a00ac..c05391e 100644
+--- a/plugins/mod-caps-Fractal.lv2/Makefile
++++ b/plugins/mod-caps-Fractal.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Fractals.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Narrower.lv2/Makefile b/plugins/mod-caps-Narrower.lv2/Makefile
+index a46e15b..885be07 100644
+--- a/plugins/mod-caps-Narrower.lv2/Makefile
++++ b/plugins/mod-caps-Narrower.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Pan.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Noisegate.lv2/Makefile b/plugins/mod-caps-Noisegate.lv2/Makefile
+index a07c456..a71b3a6 100644
+--- a/plugins/mod-caps-Noisegate.lv2/Makefile
++++ b/plugins/mod-caps-Noisegate.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Noisegate.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-PhaserII.lv2/Makefile b/plugins/mod-caps-PhaserII.lv2/Makefile
+index 45c9c64..5131258 100644
+--- a/plugins/mod-caps-PhaserII.lv2/Makefile
++++ b/plugins/mod-caps-PhaserII.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Phaser.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Plate.lv2/Makefile b/plugins/mod-caps-Plate.lv2/Makefile
+index ddfc50e..21fc9ee 100644
+--- a/plugins/mod-caps-Plate.lv2/Makefile
++++ b/plugins/mod-caps-Plate.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Reverb.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-PlateX2.lv2/Makefile b/plugins/mod-caps-PlateX2.lv2/Makefile
+index f1d6f71..df2741e 100644
+--- a/plugins/mod-caps-PlateX2.lv2/Makefile
++++ b/plugins/mod-caps-PlateX2.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Reverb.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Saturate.lv2/Makefile b/plugins/mod-caps-Saturate.lv2/Makefile
+index 4491443..42feeed 100644
+--- a/plugins/mod-caps-Saturate.lv2/Makefile
++++ b/plugins/mod-caps-Saturate.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Saturate.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Scape.lv2/Makefile b/plugins/mod-caps-Scape.lv2/Makefile
+index a659302..27e6d56 100644
+--- a/plugins/mod-caps-Scape.lv2/Makefile
++++ b/plugins/mod-caps-Scape.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Scape.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Sin.lv2/Makefile b/plugins/mod-caps-Sin.lv2/Makefile
+index d6e3a8c..800025b 100644
+--- a/plugins/mod-caps-Sin.lv2/Makefile
++++ b/plugins/mod-caps-Sin.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Sin.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Spice.lv2/Makefile b/plugins/mod-caps-Spice.lv2/Makefile
+index 85bdc59..dad9935 100644
+--- a/plugins/mod-caps-Spice.lv2/Makefile
++++ b/plugins/mod-caps-Spice.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Saturate.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-SpiceX2.lv2/Makefile b/plugins/mod-caps-SpiceX2.lv2/Makefile
+index 0a67989..7311440 100644
+--- a/plugins/mod-caps-SpiceX2.lv2/Makefile
++++ b/plugins/mod-caps-SpiceX2.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Saturate.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-ToneStack.lv2/Makefile b/plugins/mod-caps-ToneStack.lv2/Makefile
+index dfde69f..0c3404a 100644
+--- a/plugins/mod-caps-ToneStack.lv2/Makefile
++++ b/plugins/mod-caps-ToneStack.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../ToneStack.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-White.lv2/Makefile b/plugins/mod-caps-White.lv2/Makefile
+index a4634e7..82133de 100644
+--- a/plugins/mod-caps-White.lv2/Makefile
++++ b/plugins/mod-caps-White.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../White.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
+diff --git a/plugins/mod-caps-Wider.lv2/Makefile b/plugins/mod-caps-Wider.lv2/Makefile
+index 991f4f6..9e8427c 100644
+--- a/plugins/mod-caps-Wider.lv2/Makefile
++++ b/plugins/mod-caps-Wider.lv2/Makefile
+@@ -11,11 +11,16 @@ OPTS = -g -DDEBUG
+ else
+ # OPTS = -O2 -Wall -fPIC -DPIC
+ OPTS = -O3 -ffast-math -funroll-loops -Wall -fPIC -DPIC
++ifneq ($(MACOS),true)
+ LDFLAGS += -Wl,--strip-all
+ endif
++endif
+ 
+ CXXFLAGS += $(OPTS) -I../..
+-LDFLAGS += -shared -Wl,--no-undefined
++LDFLAGS += -shared
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ SOURCES = ../../Pan.cc ../../dsp/polynomials.cc interface.cc
+ OBJECTS = $(SOURCES:.cc=.o)
+@@ -30,7 +35,7 @@ endif
+ 
+ # targets following -------------------------------------------------------------
+ 
+-all: .depend $(PLUG).so
++all: $(PLUG).so
+ 
+ $(PLUG).so: $(OBJECTS)
+ 	$(CXX) $(OBJECTS) $(LDFLAGS) -o $@
+@@ -38,7 +43,7 @@ $(PLUG).so: $(OBJECTS)
+ .cc.s:
+ 	$(CXX) $< $(CXXFLAGS) -S
+ 
+-.cc.o: .depend
++.cc.o:
+ 	$(CXX) $< $(CXXFLAGS) -o $@ -c
+ 
+ install: all
+@@ -51,8 +56,3 @@ uninstall:
+ 
+ clean:
+ 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
+-
+-.depend: $(SOURCES)
+-	$(CXX) -MM $(CXXFLAGS) $(SOURCES) > .depend
+-
+--include .depend
