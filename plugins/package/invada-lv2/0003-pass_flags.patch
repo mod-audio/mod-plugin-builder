@@ -13,7 +13,7 @@ index 47b98bd..1a8e77d 100644
 +CC		?=	gcc
 +LD		?=	gcc
 +CFLAGS		+=	-I. -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
-+LDFLAGS		+=	-shared -Llibrary -lc -lm  -linv_common -fPIC -DPIC
++LDFLAGS		+=	-shared -Llibrary -lm  -linv_common -fPIC -DPIC
  
  PLUGINS		=	inv_compressor.so \
                          inv_delay.so \
@@ -45,7 +45,7 @@ index 3a9ceb4..85e7f9c 100644
 -CFLAGS		=	-I. `pkg-config --cflags cairo gtk+-2.0` -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
 -LDFLAGS		=	-shared -Lwidgets -L../plugin/library -lc -lm -linv_widgets -linv_common `pkg-config --libs cairo gtk+-2.0` -fPIC -DPIC
 +CFLAGS		+=	-I. `pkg-config --cflags cairo gtk+-2.0` -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
-+LDFLAGS		+=	-shared -Lwidgets -L../plugin/library -lc -lm -linv_widgets -linv_common `pkg-config --libs cairo gtk+-2.0` -fPIC -DPIC
++LDFLAGS		+=	-shared -Lwidgets -L../plugin/library -lm -linv_widgets -linv_common `pkg-config --libs cairo gtk+-2.0` -fPIC -DPIC
  
  
  GUIS		=	inv_compressor_gui.so \

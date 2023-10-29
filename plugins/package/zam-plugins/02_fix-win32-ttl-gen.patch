@@ -1,0 +1,12 @@
+diff --git a/dpf/utils/generate-ttl.sh b/dpf/utils/generate-ttl.sh
+index dc7de63..543a3bd 100755
+--- a/dpf/utils/generate-ttl.sh
++++ b/dpf/utils/generate-ttl.sh
+@@ -28,6 +28,6 @@ FOLDERS=`find . -type d -name \*.lv2`
+ for i in $FOLDERS; do
+   cd $i
+   FILE=`ls *.$EXT | sort | head -n 1`
+-  $GEN ./$FILE
++  $EXE_WRAPPER $GEN ./$FILE
+   cd ..
+ done

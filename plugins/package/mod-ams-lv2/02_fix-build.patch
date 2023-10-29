@@ -1,0 +1,11 @@
+diff --git a/src/lfo2_freq.cpp b/src/lfo2_freq.cpp
+index 7111507..fb39bc9 100644
+--- a/src/lfo2_freq.cpp
++++ b/src/lfo2_freq.cpp
+@@ -1,5 +1,6 @@
+ #include <lvtk-1/lvtk/plugin.hpp>
+ #include <iostream>
++#include <ctime>
+ 
+ #include "lfo2_freq.hpp"
+ #include "lfo2_freq_ttl.hpp"

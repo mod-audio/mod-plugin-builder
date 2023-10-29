@@ -1,0 +1,13 @@
+diff --git a/b_whirl/Makefile b/b_whirl/Makefile
+index ba2c075..21e02e7 100644
+--- a/b_whirl/Makefile
++++ b/b_whirl/Makefile
+@@ -76,7 +76,7 @@ GUI_DEPS = gui/b_whirl.c
+ $(LV2NAME)$(LIB_EXT): $(DSP_SRC) $(DSP_DEPS) Makefile
+ 	$(CC) $(CPPFLAGS) $(CFLAGS) \
+ 		-o $(LV2NAME)$(LIB_EXT) lv2.c whirl.o eqcomp.o \
+-		-shared $(LV2LDFLAGS) $(LDFLAGS)
++		-shared $(LV2LDFLAGS) $(LOADLIBES) $(LDFLAGS)
+ 
+ JACKCFLAGS=$(CFLAGS) $(GLUICFLAGS) $(LIC_CFLAGS) -Wno-unused-function
+ JACKCFLAGS+=`pkg-config --cflags jack lv2 pango pangocairo $(PKG_GL_LIBS)`

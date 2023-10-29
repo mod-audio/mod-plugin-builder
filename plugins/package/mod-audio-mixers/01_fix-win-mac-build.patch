@@ -1,0 +1,25 @@
+diff --git a/Makefile b/Makefile
+index 715cc27..4afe655 100644
+--- a/Makefile
++++ b/Makefile
+@@ -28,7 +28,7 @@ plugins:
+ 	$(MAKE) all -C plugins/$(MIXER_MONO)
+ 	$(MAKE) all -C plugins/$(MIXER_STEREO)
+ 
+-ifneq ($(CROSS_COMPILING),true)
++ifneq ($(CROSS_COMPILING_DONT_CARE),true)
+ gen: plugins dpf/utils/lv2_ttl_generator
+ 	#@$(CURDIR)/dpf/utils/generate-ttl.sh
+ 	cp plugins/$(MIXER_MONO)/lv2-data/* bin/$(MIXER_MONO).lv2/
+@@ -48,9 +48,9 @@ install:
+ 	install -d $(DESTDIR)$(libdir)/lv2/$(MIXER_MONO).lv2
+ 	install -d $(DESTDIR)$(libdir)/lv2/$(MIXER_STEREO).lv2
+ 
+-	install -m 644 bin/$(MIXER_MONO).lv2/*.so  $(DESTDIR)$(libdir)/lv2/$(MIXER_MONO).lv2/
++	install -m 644 bin/$(MIXER_MONO).lv2/*$(LIB_EXT) $(DESTDIR)$(libdir)/lv2/$(MIXER_MONO).lv2/
+ 	install -m 644 bin/$(MIXER_MONO).lv2/*.ttl $(DESTDIR)$(libdir)/lv2/$(MIXER_MONO).lv2/
+-	install -m 644 bin/$(MIXER_STEREO).lv2/*.so  $(DESTDIR)$(libdir)/lv2/$(MIXER_STEREO).lv2/
++	install -m 644 bin/$(MIXER_STEREO).lv2/*$(LIB_EXT) $(DESTDIR)$(libdir)/lv2/$(MIXER_STEREO).lv2/
+ 	install -m 644 bin/$(MIXER_STEREO).lv2/*.ttl $(DESTDIR)$(libdir)/lv2/$(MIXER_STEREO).lv2/
+ 
+ 

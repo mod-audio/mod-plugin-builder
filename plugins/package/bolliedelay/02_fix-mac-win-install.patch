@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 05988f0..d5273a4 100644
+--- a/Makefile
++++ b/Makefile
+@@ -57,7 +57,7 @@ install: build
+ 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/bolliedelay.lv2
+ 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/bolliedelay.lv2/modgui
+ 
+-	install -m 644 $(BUILDDIR)/*.so  $(DESTDIR)$(PREFIX)/lib/lv2/bolliedelay.lv2/
++	install -m 644 $(BUILDDIR)/*$(LIB_EXT) $(DESTDIR)$(PREFIX)/lib/lv2/bolliedelay.lv2/
+ 	install -m 644 $(BUILDDIR)/*.ttl $(DESTDIR)$(PREFIX)/lib/lv2/bolliedelay.lv2/
+ 	cp -rv $(BUILDDIR)/modgui/* $(DESTDIR)$(PREFIX)/lib/lv2/bolliedelay.lv2/modgui/
+ 

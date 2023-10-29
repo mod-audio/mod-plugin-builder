@@ -1,0 +1,74 @@
+diff --git a/sooperlooper-2x2/Makefile b/sooperlooper-2x2/Makefile
+index 9307b79..5ed734a 100644
+--- a/sooperlooper-2x2/Makefile
++++ b/sooperlooper-2x2/Makefile
+@@ -18,7 +18,10 @@ CXX ?= g++
+ 
+ # flags
+ CXXFLAGS += -I. -O3 -Wall -fPIC -DPIC -c -DSAMPLE_MEMORY=$(SAMPLE_MEMORY)
+-LDFLAGS += -shared -lm -Wl,--no-undefined
++LDFLAGS += -shared -lm
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ # remove command
+ RM = rm -f
+diff --git a/sooperlooper-2x2/src/sooperlooper.cpp b/sooperlooper-2x2/src/sooperlooper.cpp
+index 3bfcf9c..f33a527 100644
+--- a/sooperlooper-2x2/src/sooperlooper.cpp
++++ b/sooperlooper-2x2/src/sooperlooper.cpp
+@@ -30,11 +30,15 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <values.h>
+ #include <string.h>
+ #include <math.h>
+ #include <lv2.h>
+ #include <string.h>
++#ifdef _WIN64
++#define MAXLONG UINT32_MAX
++#else
++#include <values.h>
++#endif
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/sooperlooper-2x2"
+ 
+diff --git a/sooperlooper/Makefile b/sooperlooper/Makefile
+index b87e43a..e339e05 100644
+--- a/sooperlooper/Makefile
++++ b/sooperlooper/Makefile
+@@ -18,7 +18,10 @@ CXX ?= g++
+ 
+ # flags
+ CXXFLAGS += -I. -O3 -Wall -fPIC -DPIC -c -DSAMPLE_MEMORY=$(SAMPLE_MEMORY)
+-LDFLAGS += -shared -lm -Wl,--no-undefined
++LDFLAGS += -shared -lm
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,--no-undefined
++endif
+ 
+ # remove command
+ RM = rm -f
+diff --git a/sooperlooper/src/sooperlooper.cpp b/sooperlooper/src/sooperlooper.cpp
+index 6798a04..27ee190 100644
+--- a/sooperlooper/src/sooperlooper.cpp
++++ b/sooperlooper/src/sooperlooper.cpp
+@@ -30,11 +30,15 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+-#include <values.h>
+ #include <string.h>
+ #include <math.h>
+ #include <lv2.h>
+ #include <string.h>
++#ifdef _WIN64
++#define MAXLONG UINT32_MAX
++#else
++#include <values.h>
++#endif
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/sooperlooper"
+ 

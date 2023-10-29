@@ -1,0 +1,76 @@
+diff --git a/basics.h b/basics.h
+index 7b1d10d..e954952 100644
+--- a/basics.h
++++ b/basics.h
+@@ -38,6 +38,7 @@
+ #define _ISOC99_SOURCE 1
+ #define _ISOC9X_SOURCE 1
+ 
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+ 
+@@ -49,14 +50,14 @@
+ 
+ #include "ladspa.h"
+ 
+-typedef __int8_t			int8;
+-typedef __uint8_t			uint8;
+-typedef __int16_t			int16;
+-typedef __uint16_t		uint16;
+-typedef __int32_t			int32;
+-typedef __uint32_t		uint32;
+-typedef __int64_t			int64;
+-typedef __uint64_t		uint64;
++typedef int8_t			int8;
++typedef uint8_t			uint8;
++typedef int16_t			int16;
++typedef uint16_t		uint16;
++typedef int32_t			int32;
++typedef uint32_t		uint32;
++typedef int64_t			int64;
++typedef uint64_t		uint64;
+ 
+ #define MIN_GAIN 1e-6 /* -120 dB */
+ /* smallest non-denormal 32 bit IEEE float is 1.18e-38 */
+@@ -124,7 +125,11 @@ T clamp (T value, T lower, T upper)
+ 	return value;
+ }
+ 
++#ifdef _WIN32
++static inline float frandom() { return (float) rand() / (float) RAND_MAX; }
++#else
+ static inline float frandom() { return (float) random() / (float) RAND_MAX; }
++#endif
+ 
+ /* NB: also true if 0  */
+ inline bool 
+diff --git a/dsp/util.h b/dsp/util.h
+index 50c6cb6..73cf527 100644
+--- a/dsp/util.h
++++ b/dsp/util.h
+@@ -28,6 +28,8 @@
+ #ifndef DSP_UTIL_H
+ #define DSP_UTIL_H
+ 
++#include <stdint.h>
++
+ namespace DSP {
+ 
+ inline float pow2 (float x) { return x * x; }
+diff --git a/dsp/v4f_IIR2.h b/dsp/v4f_IIR2.h
+index ebd1234..fd7d96b 100644
+--- a/dsp/v4f_IIR2.h
++++ b/dsp/v4f_IIR2.h
+@@ -32,8 +32,10 @@
+ 
+ namespace DSP {
+ 
+-#ifdef __APPLE__
++#if defined(__APPLE__)
+ inline float exp10f(float f) {return __exp10f(f);}
++#elif defined(_WIN32)
++inline float exp10f(float f) {return __builtin_exp10f(f);}
+ #endif
+ 
+ class RBJv4

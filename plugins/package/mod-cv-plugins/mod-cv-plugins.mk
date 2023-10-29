@@ -6,6 +6,7 @@
 
 MOD_CV_PLUGINS_VERSION = 5b175482a32094f39eb46d569ffbc718b157a0ee
 MOD_CV_PLUGINS_SITE = https://github.com/moddevices/mod-cv-plugins.git
+MOD_CV_PLUGINS_SITE_METHOD = git
 MOD_CV_PLUGINS_DEPENDENCIES =
 MOD_CV_PLUGINS_BUNDLES = logic-operators.lv2 mod-audio-to-cv.lv2 mod-button-to-cv.lv2 mod-cv-abs.lv2 mod-cv-attenuverter.lv2 mod-cv-clock.lv2 mod-cv-control.lv2 mod-cv-gate.lv2 mod-cv-meter.lv2 mod-cv-parameter-modulation.lv2 mod-cv-random.lv2 mod-cv-range.lv2 mod-cv-round.lv2 mod-cv-slew.lv2 mod-cv-switch1.lv2 mod-cv-switch2.lv2 mod-cv-switch3.lv2 mod-cv-switch4.lv2 mod-midi-to-cv-mono.lv2 mod-midi-to-cv-poly.lv2
 # unused:
