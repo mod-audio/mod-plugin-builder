@@ -4,12 +4,12 @@
 #
 ######################################
 
-FOMP_VERSION = 4511cfc6641bb9b4b08d63f3cd7d16911bce8372
+FOMP_VERSION = 6547441f898cc55923878022960c79f33959c7b3
 FOMP_SITE = http://git.drobilla.net/fomp.lv2.git
 FOMP_SITE_METHOD = git
 FOMP_BUNDLES = fomp.lv2
 
-FOMP_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf
+FOMP_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python3 ./waf
 
 define FOMP_CONFIGURE_CMDS
 	(cd $(@D); $(FOMP_TARGET_WAF) configure --prefix=/usr --lv2dir=/usr/lib/lv2)

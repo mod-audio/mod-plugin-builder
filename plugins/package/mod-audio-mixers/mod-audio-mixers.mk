@@ -5,20 +5,14 @@
 ######################################
 
 MOD_AUDIO_MIXERS_VERSION = 80367aa5a2ddacb19dbd85ca14123ed48fdbac6c
-MOD_AUDIO_MIXERS_SITE = $(call github,moddevices,mod-audio-mixer-lv2,$(MOD_AUDIO_MIXERS_VERSION))
+MOD_AUDIO_MIXERS_SITE = https://github.com/moddevices/mod-audio-mixer-lv2.git
+MOD_AUDIO_MIXERS_SITE_METHOD = git
 MOD_AUDIO_MIXERS_BUNDLES = mod-mixer.lv2 mod-mixer-stereo.lv2
 
 MOD_AUDIO_MIXERS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
 
-# needed for git submodules
-define MOD_AUDIO_MIXERS_EXTRACT_CMDS
-	rm -rf $(@D)
-	git clone --recursive https://github.com/moddevices/mod-audio-mixer-lv2.git $(@D)
-	(cd $(@D) && \
-		git reset --hard $(MOD_AUDIO_MIXERS_VERSION) && \
-		git submodule update)
-	touch $(@D)/.stamp_downloaded
-endef
+# needed for submodules support
+MOD_AUDIO_MIXERS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define MOD_AUDIO_MIXERS_BUILD_CMDS
 	$(MOD_AUDIO_MIXERS_TARGET_MAKE)

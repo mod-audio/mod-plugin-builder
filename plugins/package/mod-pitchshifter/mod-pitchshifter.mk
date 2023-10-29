@@ -26,7 +26,11 @@ else ifdef BR2_cortex_a72
 MOD_PITCHSHIFTER_WISDOM_FILE = harmonizer.wisdom.raspberrypi4
 endif
 
-ifeq ($(BR2_arm)$(BR2_aarch64)$(BR2_x86_64),y)
+ifeq ($(BR2_PAWPAW),y)
+define MOD_PITCHSHIFTER_PREBUILD_STEP
+	touch $(@D)/Shared_files/harmonizer.wisdom
+endef
+else ifeq ($(BR2_arm)$(BR2_aarch64)$(BR2_x86_64),y)
 define MOD_PITCHSHIFTER_PREBUILD_STEP
 	cp $($(PKG)_PKGDIR)/$(MOD_PITCHSHIFTER_WISDOM_FILE) $(@D)/Shared_files/harmonizer.wisdom
 endef

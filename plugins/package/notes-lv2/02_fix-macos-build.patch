@@ -1,0 +1,15 @@
+diff --git a/notes.c b/notes.c
+index 6af3c4d..bf190ff 100644
+--- a/notes.c
++++ b/notes.c
+@@ -27,6 +27,10 @@
+ #include <pthread.h>
+ #include <inttypes.h>
+ 
++#ifdef __APPLE__
++#include <libgen.h>
++#endif
++
+ #include <notes.h>
+ #include <props.h>
+ 
