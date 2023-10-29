@@ -1,0 +1,13 @@
+diff --git a/src/ringbuf.h b/src/ringbuf.h
+index 7f660ff..ed466c2 100644
+--- a/src/ringbuf.h
++++ b/src/ringbuf.h
+@@ -20,7 +20,7 @@
+ #include <stdlib.h>
+ #include <sys/types.h>
+ 
+-#if defined __ATOMIC_SEQ_CST
++#if defined __ATOMIC_SEQ_CST && ! defined __APPLE__
+ 
+ #define _atomic_int_get(P)    __atomic_load_4 (&(P), __ATOMIC_SEQ_CST)
+ #define _atomic_int_set(P, V) __atomic_store_4 (&(P), (V), __ATOMIC_SEQ_CST)
