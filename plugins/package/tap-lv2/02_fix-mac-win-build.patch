@@ -1,0 +1,36 @@
+diff --git a/Makefile.mk b/Makefile.mk
+index a6b54c3..a283e52 100644
+--- a/Makefile.mk
++++ b/Makefile.mk
+@@ -3,8 +3,16 @@
+ CC ?= gcc
+ 
+ # flags
+-CFLAGS += -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fstrength-reduce -Wall -Werror -fPIC -DPIC -I../utils
+-LDFLAGS += -shared -Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--strip-all -lm -lrt
++CFLAGS += -O3 -std=gnu99 -funroll-loops -ffast-math -fomit-frame-pointer -fstrength-reduce -Wall -Werror -fPIC -DPIC -I../utils
++LDFLAGS += -shared -lm
++
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,-O1,--as-needed,--no-undefined,--strip-all
++endif
++
++ifneq ($(MACOS)$(WINDOWS),true)
++LDFLAGS += -lrt
++endif
+ 
+ ifneq ($(NOOPT),true)
+ CFLAGS += -mtune=generic -msse -msse2 -mfpmath=sse
+diff --git a/dynamics/tap_dynamics.c b/dynamics/tap_dynamics.c
+index 85ee18a..7f18ff3 100644
+--- a/dynamics/tap_dynamics.c
++++ b/dynamics/tap_dynamics.c
+@@ -267,7 +267,7 @@ rms_env_process(rms_env *r, const rms_t x) {
+ 
+ 
+ 
+-inline
++static inline
+ float
+ get_table_gain(int mode, float level) {
+ 

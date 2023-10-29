@@ -10,17 +10,10 @@ LV2_EXAMPLES_SITE_METHOD = git
 LV2_EXAMPLES_DEPENDENCIES = host-python
 LV2_EXAMPLES_BUNDLES = eg-metro.lv2 eg-sampler.lv2
 
-LV2_EXAMPLES_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python ./waf
+LV2_EXAMPLES_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python3 ./waf
 
-# needed for git submodules
-define LV2_EXAMPLES_EXTRACT_CMDS
-	rm -rf $(@D)
-	git clone --recursive $(LV2_EXAMPLES_SITE) $(@D)
-	(cd $(@D) && \
-		git reset --hard $(LV2_EXAMPLES_VERSION) && \
-		git submodule update)
-	touch $(@D)/.stamp_downloaded
-endef
+# needed for submodules support
+LV2_EXAMPLES_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define LV2_EXAMPLES_CONFIGURE_CMDS
 	(cd $(@D); $(LV2_EXAMPLES_TARGET_WAF) configure --prefix=/usr)
