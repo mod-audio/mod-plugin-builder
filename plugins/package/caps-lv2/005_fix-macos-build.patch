@@ -38,15 +38,6 @@ index 5343035..a19dea8 100644
  	$(CXX) $< $(CXXFLAGS) -o $@ -c
  
  install: all
-@@ -51,8 +56,3 @@ uninstall:
- 
- clean:
- 	rm -f $(OBJECTS) $(PLUG).so *.s .depend
--
--.depend: $(SOURCES)
--	$(CXX) -MD $(CXXFLAGS) $(SOURCES) > .depend
--
---include .depend
 diff --git a/dsp/v4f.h b/dsp/v4f.h
 index ac3e1cc..6f8a0fa 100644
 --- a/dsp/v4f.h
