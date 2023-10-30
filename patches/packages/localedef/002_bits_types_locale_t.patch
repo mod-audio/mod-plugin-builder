@@ -1,5 +1,5 @@
---- a/glibc/locale/locale.h	2023-10-23 23:21:09.629352607 +0200
-+++ b/glibc/locale/locale.h	2023-10-23 23:20:54.853093115 +0200
+--- a/eglibc/locale/locale.h	2023-10-23 23:21:09.629352607 +0200
++++ b/eglibc/locale/locale.h	2023-10-23 23:20:54.853093115 +0200
 @@ -144,6 +144,7 @@
  
  /* Get locale datatype definition.  */
