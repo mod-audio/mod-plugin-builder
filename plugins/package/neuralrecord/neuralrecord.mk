@@ -4,8 +4,8 @@
 #
 ######################################
 
-NEURALRECORD_VERSION = 62ae7c6b4d677d085289edd6061c862415abdb74
-NEURALRECORD_SITE = https://github.com/falkTX/neuralrecord.git
+NEURALRECORD_VERSION = 79cc2dc1bc8bb260cdbf4f5c2a989d960cc64fac
+NEURALRECORD_SITE = https://github.com/brummer10/neuralrecord.git
 NEURALRECORD_SITE_METHOD = git
 NEURALRECORD_DEPENDENCIES = libsndfile
 NEURALRECORD_BUNDLES = neuralrecord.lv2
