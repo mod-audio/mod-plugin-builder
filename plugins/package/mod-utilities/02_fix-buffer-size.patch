@@ -1,0 +1,91 @@
+diff --git a/CrossOver2/src/CrossOver2.cpp b/CrossOver2/src/CrossOver2.cpp
+index 57ab1c2..7cc22ec 100644
+--- a/CrossOver2/src/CrossOver2.cpp
++++ b/CrossOver2/src/CrossOver2.cpp
+@@ -8,7 +8,7 @@
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/CrossOver2"
+-#define TAMANHO_DO_BUFFER 1024
++#define TAMANHO_DO_BUFFER 8192 /* FIXME use options interface */
+ enum {IN, OUT_1, OUT_2, FREQ, GAIN_1, GAIN_2, ORDER, PLUGIN_PORT_COUNT};
+ 
+ /**********************************************************************************************************************************************************/
+diff --git a/CrossOver3/src/CrossOver3.cpp b/CrossOver3/src/CrossOver3.cpp
+index de045be..5f3aa67 100644
+--- a/CrossOver3/src/CrossOver3.cpp
++++ b/CrossOver3/src/CrossOver3.cpp
+@@ -8,7 +8,7 @@
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/CrossOver3"
+-#define TAMANHO_DO_BUFFER 1024
++#define TAMANHO_DO_BUFFER 8192 /* FIXME use options interface */
+ enum {IN, OUT_1, OUT_2, OUT_3, FREQ_1, FREQ_2, GAIN_1, GAIN_2, GAIN_3, ORDER, PLUGIN_PORT_COUNT};
+ 
+ /**********************************************************************************************************************************************************/
+diff --git a/Gain/src/Gain.cpp b/Gain/src/Gain.cpp
+index a629600..abf3171 100644
+--- a/Gain/src/Gain.cpp
++++ b/Gain/src/Gain.cpp
+@@ -7,7 +7,7 @@
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/Gain"
+-#define TAMANHO_DO_BUFFER 1024
++#define TAMANHO_DO_BUFFER 8192 /* FIXME use options interface */
+ enum {IN, OUT_1, GAIN, PLUGIN_PORT_COUNT};
+ 
+ /**********************************************************************************************************************************************************/
+diff --git a/Gain2x2/src/Gain2x2.cpp b/Gain2x2/src/Gain2x2.cpp
+index e490043..ecf5cce 100644
+--- a/Gain2x2/src/Gain2x2.cpp
++++ b/Gain2x2/src/Gain2x2.cpp
+@@ -7,7 +7,7 @@
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/Gain2x2"
+-#define TAMANHO_DO_BUFFER 1024
++#define TAMANHO_DO_BUFFER 8192 /* FIXME use options interface */
+ enum {IN_1, IN_2, OUT_1, OUT_2, GAIN, PLUGIN_PORT_COUNT};
+ 
+ /**********************************************************************************************************************************************************/
+diff --git a/HighPassFilter/src/HighPassFilter.cpp b/HighPassFilter/src/HighPassFilter.cpp
+index 99398c5..9515999 100644
+--- a/HighPassFilter/src/HighPassFilter.cpp
++++ b/HighPassFilter/src/HighPassFilter.cpp
+@@ -8,7 +8,7 @@
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/HighPassFilter"
+-#define TAMANHO_DO_BUFFER 1024
++#define TAMANHO_DO_BUFFER 8192 /* FIXME use options interface */
+ enum {IN, OUT_1, FREQ, ORDER, PLUGIN_PORT_COUNT};
+ 
+ /**********************************************************************************************************************************************************/
+diff --git a/LowPassFilter/src/LowPassFilter.cpp b/LowPassFilter/src/LowPassFilter.cpp
+index ba7f14b..e4e22bb 100644
+--- a/LowPassFilter/src/LowPassFilter.cpp
++++ b/LowPassFilter/src/LowPassFilter.cpp
+@@ -8,7 +8,7 @@
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/LowPassFilter"
+-#define TAMANHO_DO_BUFFER 1024
++#define TAMANHO_DO_BUFFER 8192 /* FIXME use options interface */
+ enum {IN, OUT_1, FREQ, ORDER, PLUGIN_PORT_COUNT};
+ 
+ /**********************************************************************************************************************************************************/
+diff --git a/BandPassFilter/src/BandPassFilter.cpp b/BandPassFilter/src/BandPassFilter.cpp
+index 8b71d95..b1c0c8f 100644
+--- a/BandPassFilter/src/BandPassFilter.cpp
++++ b/BandPassFilter/src/BandPassFilter.cpp
+@@ -8,7 +8,7 @@
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/BandPassFilter"
+-#define TAMANHO_DO_BUFFER 1024
++#define TAMANHO_DO_BUFFER 8192 /* FIXME use options interface */
+ enum {IN, OUT_1, FREQ, Q, ORDER, PLUGIN_PORT_COUNT};
+ 
+ /**********************************************************************************************************************************************************/
