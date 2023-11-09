@@ -4,14 +4,14 @@ BR2_OPTIMIZE_3=y
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
 BR2_TOOLCHAIN_EXTERNAL_PATH="$(TOOLCHAIN_PATH)"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="aarch64-modaudio-linux-gnu"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="aarch64-modaudio.generic-linux-gnu"
 BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
 BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_15=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 # BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_GENERATE_LOCALE="en_US.UTF-8"
-BR2_TARGET_OPTIMIZATION="-march=armv8-a -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_AARCH64 -Wl,-O1,--as-needed,--strip-all"
+BR2_TARGET_OPTIMIZATION="-march=armv8-a -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_GENERIC_AARCH64 -Wl,-O1,--as-needed,--strip-all"
 BR2_TARGET_LDFLAGS="-Wl,-O1,--as-needed,--strip-all"
 BR2_TARGET_GENERIC_HOSTNAME=""
 BR2_TARGET_GENERIC_ISSUE=""
