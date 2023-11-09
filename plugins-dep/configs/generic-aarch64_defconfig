@@ -1,17 +1,17 @@
 BR2_aarch64=y
-BR2_cortex_a72=y
 BR2_DL_DIR="$(DOWNLOAD_PATH)"
 BR2_OPTIMIZE_3=y
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
 BR2_TOOLCHAIN_EXTERNAL_PATH="$(TOOLCHAIN_PATH)"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="aarch64-modaudio.a72-linux-gnu"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="aarch64-modaudio-linux-gnu"
 BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_15=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+# BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_GENERATE_LOCALE="en_US.UTF-8"
-BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a72 -mtune=cortex-a72 -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -ftree-vectorize -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_RASPBERRYPI4 -Wl,-O1,--as-needed,--strip-all"
+BR2_TARGET_OPTIMIZATION="-march=armv8-a -ffast-math -fno-finite-math-only -fomit-frame-pointer -fprefetch-loop-arrays -funroll-loops -funsafe-loop-optimizations -D__MOD_DEVICES__ -D_MOD_DEVICE_AARCH64 -Wl,-O1,--as-needed,--strip-all"
 BR2_TARGET_LDFLAGS="-Wl,-O1,--as-needed,--strip-all"
 BR2_TARGET_GENERIC_HOSTNAME=""
 BR2_TARGET_GENERIC_ISSUE=""
@@ -67,7 +67,6 @@ BR2_PACKAGE_UTIL_LINUX_LIBMOUNT=y
 # BR2_TARGET_ROOTFS_TAR is not set
 BR2_PACKAGE_DPF=y
 BR2_PACKAGE_FLUIDSYNTH=y
-BR2_PACKAGE_JUCE6=y
 BR2_PACKAGE_KXSTUDIO_LV2_EXTENSIONS=y
 BR2_PACKAGE_LIBGIG=y
 BR2_PACKAGE_LIBPD=y

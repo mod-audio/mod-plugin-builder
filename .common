@@ -43,21 +43,21 @@ fi
 # check for debug builds
 
 if [[ "${PLATFORM}" == *"-debug" ]]; then
-    TOOLCHAIN_PLATFORM="$(echo ${PLATFORM} | sed 's/-debug//')"
+  TOOLCHAIN_PLATFORM="$(echo ${PLATFORM} | sed 's/-debug//')"
 else
-    TOOLCHAIN_PLATFORM="${PLATFORM}"
+  TOOLCHAIN_PLATFORM="${PLATFORM}"
 fi
 
 #######################################################################################################################
 # check for kernel builds
 
 if [[ "${PLATFORM}" == *"-kernel" ]]; then
-    BR2_BUILD_CONFIG="kernel"
-    BR2_PLATFORM="$(echo ${PLATFORM} | sed 's/-kernel//' | sed 's/-new//')"
-    TOOLCHAIN_PLATFORM="$(echo ${PLATFORM} | sed 's/-kernel//' | sed 's/-new//')-new"
+  BR2_BUILD_CONFIG="kernel"
+  BR2_PLATFORM="$(echo ${PLATFORM} | sed 's/-kernel//' | sed 's/-new//')"
+  TOOLCHAIN_PLATFORM="$(echo ${PLATFORM} | sed 's/-kernel//' | sed 's/-new//')-new"
 else
-    BR2_BUILD_CONFIG="plugins-dep"
-    BR2_PLATFORM="${TOOLCHAIN_PLATFORM}"
+  BR2_BUILD_CONFIG="plugins-dep"
+  BR2_PLATFORM="${TOOLCHAIN_PLATFORM}"
 fi
 
 #######################################################################################################################
@@ -73,9 +73,9 @@ fi
 # macOS support through homebrew
 
 if [ -d "/opt/homebrew/opt/binutils/bin" ]; then
-    export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include -I/opt/homebrew/opt/gettext/include"
-    export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib -L/opt/homebrew/opt/gettext/lib"
-    export PATH="/opt/homebrew/opt/binutils/bin:${PATH}"
+  export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include -I/opt/homebrew/opt/gettext/include"
+  export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib -L/opt/homebrew/opt/gettext/lib"
+  export PATH="/opt/homebrew/opt/binutils/bin:${PATH}"
 fi
 
 #######################################################################################################################
@@ -84,26 +84,26 @@ fi
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
 
 case "${TOOLCHAIN_PLATFORM}" in
-    # old targets: ct-ng 1.22 with gcc 4.9 + glibc 2.21
-    "modduo"|"modduox")
-        CT_NG_VERSION=crosstool-ng-1.22.0
-        ;;
-    # intermediate targets: ct-ng 1.24 with gcc 7.5 + glibc 2.27 on dwarf, 2.21 on duo/duox (static)
-    "modduo-static"|"modduox-static"|"moddwarf")
-        CT_NG_VERSION=crosstool-ng-1.24.0
-        ;;
-    # new targets: ct-ng 1.25 with gcc 9 + glibc 2.27
-    "modduo-new"|"modduox-new"|"moddwarf-new"|"raspberrypi4")
-        CT_NG_VERSION=crosstool-ng-1.25.0
-        ;;
-    # desktop target: ct-ng 1.25 with gcc 9 + glibc 2.34
-    "x86_64")
-        CT_NG_VERSION=crosstool-ng-1.25.0
-        ;;
-    # fallback
-    *)
-        CT_NG_VERSION=crosstool-ng-1.24.0
-        ;;
+  # old targets: ct-ng 1.22 with gcc 4.9 + glibc 2.21
+  "modduo"|"modduox")
+    CT_NG_VERSION=crosstool-ng-1.22.0
+    ;;
+  # intermediate targets: ct-ng 1.24 with gcc 7.5 + glibc 2.27 on dwarf or glibc 2.21 on duo/duox (static)
+  "modduo-static"|"modduox-static"|"moddwarf")
+    CT_NG_VERSION=crosstool-ng-1.24.0
+    ;;
+  # new targets: ct-ng 1.25 with gcc 9 + glibc 2.27
+  "modduo-new"|"modduox-new"|"moddwarf-new")
+    CT_NG_VERSION=crosstool-ng-1.25.0
+    ;;
+  # generic targets: ct-ng 1.25 with gcc 9 + glibc 2.34
+  "generic-aarch64"|"generic-x86_64")
+    CT_NG_VERSION=crosstool-ng-1.25.0
+    ;;
+  # fallback
+  *)
+    CT_NG_VERSION=crosstool-ng-1.24.0
+    ;;
 esac
 
 CT_NG_FILE=${CT_NG_VERSION}.tar.bz2

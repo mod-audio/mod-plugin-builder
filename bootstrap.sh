@@ -176,7 +176,7 @@ done
 #######################################################################################################################
 # fix missing shared libs
 
-if [ "${TOOLCHAIN_PLATFORM}" = "x86_64" ] && [ ! -e "${BR2_TARGET}/usr/lib/libmvec.so.1" ]; then
+if [ "${TOOLCHAIN_PLATFORM}" = "generic-x86_64" ] && [ ! -e "${BR2_TARGET}/usr/lib/libmvec.so.1" ]; then
   mkdir -p "${BR2_TARGET}/usr/lib"
   cp "${TOOLCHAIN_DIR}/x86_64-modaudio-linux-gnu/sysroot/lib/libmvec.so.1" "${BR2_TARGET}/usr/lib/libmvec.so.1"
 fi
@@ -198,10 +198,10 @@ elif [ "${BUILDTARGET}" = "minimal" ]; then
   ${BR2_MAKE} kxstudio-lv2-extensions
   ${BR2_MAKE} mod-lv2-extensions
   ${BR2_MAKE} mod-plugin-builder
-  if [ "${TOOLCHAIN_PLATFORM}" = "x86_64" ]; then
+  if [ "${TOOLCHAIN_PLATFORM}" = "generic-x86_64" ]; then
     ${BR2_MAKE} carla-backend
     ${BR2_MAKE} valgrind
-  else
+  elif [ "${TOOLCHAIN_PLATFORM}" != "generic-aarch64" ]; then
     ${BR2_MAKE} libmodla
   fi
 elif [ "${BUILDTARGET}" = "juce" ]; then
