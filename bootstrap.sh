@@ -178,7 +178,7 @@ done
 
 if [ "${TOOLCHAIN_PLATFORM}" = "generic-x86_64" ] && [ ! -e "${BR2_TARGET}/usr/lib/libmvec.so.1" ]; then
   mkdir -p "${BR2_TARGET}/usr/lib"
-  cp "${TOOLCHAIN_DIR}/x86_64-modaudio-linux-gnu/sysroot/lib/libmvec.so.1" "${BR2_TARGET}/usr/lib/libmvec.so.1"
+  cp "${TOOLCHAIN_DIR}/x86_64-modaudio.generic-linux-gnu/sysroot/lib/libmvec.so.1" "${BR2_TARGET}/usr/lib/libmvec.so.1"
 fi
 
 #######################################################################################################################
