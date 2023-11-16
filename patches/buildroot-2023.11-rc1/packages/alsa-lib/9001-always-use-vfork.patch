@@ -1,0 +1,22 @@
+diff --git a/src/pcm/pcm_direct.c b/src/pcm/pcm_direct.c
+index 18f56bc..be791d3 100644
+--- a/src/pcm/pcm_direct.c
++++ b/src/pcm/pcm_direct.c
+@@ -442,7 +442,7 @@ int snd_pcm_direct_server_create(snd_pcm_direct_t *dmix)
+ 		return ret;
+ 	}
+ 
+-#ifdef HAVE_FORK
++#if 0
+ 	ret = fork();
+ #else
+ 	ret = vfork();
+@@ -451,7 +451,7 @@ int snd_pcm_direct_server_create(snd_pcm_direct_t *dmix)
+ 		close(dmix->server_fd);
+ 		return ret;
+ 	} else if (ret == 0) {
+-#ifdef HAVE_FORK
++#if 0
+ 		ret = fork();
+ #else
+ 		ret = vfork();

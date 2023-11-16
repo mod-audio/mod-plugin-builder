@@ -79,44 +79,60 @@ if [ -d "/opt/homebrew/opt/binutils/bin" ]; then
 fi
 
 #######################################################################################################################
-# crosstool-ng variables
-
-CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
+# define buildroot and toolchain version per platform
 
 case "${TOOLCHAIN_PLATFORM}" in
   # old targets: ct-ng 1.22 with gcc 4.9 + glibc 2.21
   "modduo"|"modduox")
+    BUILDROOT_TAR_EXT=bz2
+    BUILDROOT_VERSION=buildroot-2016.02
     CT_NG_VERSION=crosstool-ng-1.22.0
-    ;;
+  ;;
   # intermediate targets: ct-ng 1.24 with gcc 7.5 + glibc 2.27 on dwarf or glibc 2.21 on duo/duox (static)
   "modduo-static"|"modduox-static"|"moddwarf")
+    BUILDROOT_TAR_EXT=bz2
+    BUILDROOT_VERSION=buildroot-2016.02
     CT_NG_VERSION=crosstool-ng-1.24.0
-    ;;
+  ;;
   # new targets: ct-ng 1.25 with gcc 9 + glibc 2.27
   "modduo-new"|"modduox-new"|"moddwarf-new")
+    BUILDROOT_VERSION=buildroot-2016.02
     CT_NG_VERSION=crosstool-ng-1.25.0
-    ;;
+  ;;
   # generic targets: ct-ng 1.25 with gcc 9 + glibc 2.34
   "generic-aarch64"|"generic-x86_64")
+    BUILDROOT_VERSION=buildroot-2023.11-rc1
     CT_NG_VERSION=crosstool-ng-1.25.0
-    ;;
+  ;;
   # fallback
   *)
+    BUILDROOT_TAR_EXT=bz2
+    BUILDROOT_VERSION=buildroot-2016.02
     CT_NG_VERSION=crosstool-ng-1.24.0
-    ;;
+  ;;
 esac
 
+#######################################################################################################################
+# crosstool-ng variables
+
+CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
 CT_NG_FILE=${CT_NG_VERSION}.tar.bz2
 
 #######################################################################################################################
 # buildroot variables
 
+if [ "${BUILDROOT_VERSION}" = "buildroot-2016.02" ]; then
+  BUILDROOT_TAR_EXT=bz2
+else
+  BUILDROOT_TAR_EXT=xz
+fi
+
 BUILDROOT_LINK=http://buildroot.uclibc.org/downloads/
-BUILDROOT_VERSION=buildroot-2016.02
-BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.bz2
+BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.${BUILDROOT_TAR_EXT}
 
 SOURCE_DIR=$("${readlink}" -f $(dirname ${0}))
-BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${SOURCE_DIR}/${BR2_BUILD_CONFIG} BR2_PLATFORM=${BR2_PLATFORM}"
+BR2_EXTERNAL=${SOURCE_DIR}/${BR2_BUILD_CONFIG}
+BR2_MAKE="make O=${WORKDIR}/${PLATFORM} BR2_EXTERNAL=${BR2_EXTERNAL} BR2_EXTERNAL_PLUGINS_DEP=${BR2_EXTERNAL} BR2_PLATFORM=${BR2_PLATFORM}"
 BR2_TARGET=${WORKDIR}/${PLATFORM}/target
 
 #######################################################################################################################

@@ -1,0 +1,2 @@
+This custom package exists because the original is outdated.
+Can be dropped once we update buildroot, leaving only the patch.

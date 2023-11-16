@@ -1,0 +1,5 @@
+This custom package exists because the original does not support host builds.
+Can be dropped if buildroot one ends up supporting host builds.
+
+We also disable IPv6, regardless of upstream status.
+buildroot disables IPv6 too, but only because it is known to be broken.

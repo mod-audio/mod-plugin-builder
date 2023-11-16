@@ -1,4 +1,4 @@
 config BR2_PACKAGE_SORD
 	bool "sord"
-	select BR2_PACKAGE_PCRE
+	select BR2_PACKAGE_PCRE if BR2_VERSION_2016_02
 	select BR2_PACKAGE_SERD

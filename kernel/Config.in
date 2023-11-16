@@ -1,0 +1,7 @@
+config BR2_VERSION_2016_02
+    bool
+  	default y if BR2_VERSION = "2016.02"
+
+config BR2_EXTERNAL_KERNEL
+    string
+    option env="BR2_EXTERNAL_KERNEL"

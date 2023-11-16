@@ -98,12 +98,22 @@ if [[ "${PACKAGE}" != *"-dirclean" ]] && [[ "${PACKAGE}" != "linux" ]] && [[ "${
 fi
 
 #######################################################################################################################
+# custom skeleton with merged /usr mode
+
+if [ "${BUILDROOT_VERSION}" = "buildroot-2016.02" ]; then
+  mkdir -p /tmp/skeleton/usr/bin
+  mkdir -p /tmp/skeleton/usr/lib
+  mkdir -p /tmp/skeleton/usr/sbin
+  ln -sf usr/bin /tmp/skeleton/
+  ln -sf usr/lib /tmp/skeleton/
+  ln -sf usr/sbin /tmp/skeleton/
+fi
+
+#######################################################################################################################
 # buildroot setup
 
 export DOWNLOAD_PATH=${DOWNLOAD_DIR}
 export TOOLCHAIN_PATH=${TOOLCHAIN_DIR}
-
-mkdir -p /tmp/skeleton
 
 #######################################################################################################################
 # now building...

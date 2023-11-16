@@ -34,29 +34,33 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
   mkdir -p ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}
   tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
 
-  if [ "${CT_NG_VERSION}" = "crosstool-ng-1.22.0" ]; then
-    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_bash5-compat.patch
-    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_binutils-2.26.patch
-    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/003_linaro-2017.01.patch
+  case "${CT_NG_VERSION}" in
+    "crosstool-ng-1.22.0")
+      patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_bash5-compat.patch
+      patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_binutils-2.26.patch
+      patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/003_linaro-2017.01.patch
 
-    mkdir -p ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/linaro-4.9-2017.01
+      mkdir -p ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/linaro-4.9-2017.01
 
-    cp -r ${SOURCE_DIR}/patches/${CT_NG_VERSION}/bin-utils-2.26    ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/2.26
-    cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-4.9.3/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/4.9.3/
-    cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-linaro-4.9-2017.01/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/linaro-4.9-2017.01/
+      cp -r ${SOURCE_DIR}/patches/${CT_NG_VERSION}/bin-utils-2.26    ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/2.26
+      cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-4.9.3/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/4.9.3/
+      cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-linaro-4.9-2017.01/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/linaro-4.9-2017.01/
+    ;;
 
-  elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.24.0" ]; then
-    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_linaro-2019.12.patch
-    patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_linaro-gcc7-selects.patch
+    "crosstool-ng-1.24.0")
+      patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_linaro-2019.12.patch
+      patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_linaro-gcc7-selects.patch
+    ;;
 
-  elif [ "${CT_NG_VERSION}" = "crosstool-ng-1.25.0" ]; then
-    cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
-    cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.35/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.35/
+    "crosstool-ng-1.25.0")
+      cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
+      cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.35/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.35/
 
-    if [ "${TOOLCHAIN_PLATFORM}" == "moddwarf-new" ]; then
-      cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27-dwarf/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
-    fi
-  fi
+      if [ "${TOOLCHAIN_PLATFORM}" == "moddwarf-new" ]; then
+        cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27-dwarf/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
+      fi
+    ;;
+  esac
 fi
 
 #######################################################################################################################
@@ -125,7 +129,7 @@ if [ ! -f .stamp_built2 ]; then
 fi
 
 #######################################################################################################################
-# download and extract buildroot
+# download, extract and patch buildroot
 
 if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
   if [ ! -f ${DOWNLOAD_DIR}/${BUILDROOT_FILE} ]; then
@@ -134,16 +138,44 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
 
   tar xf ${DOWNLOAD_DIR}/${BUILDROOT_FILE} -C ${BUILD_DIR}
 
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/001_aarch64-and-cortex-a53.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/002_cortex-a35.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/003_gcc-7.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/004_fix-linux-host-flags.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/005_linux-needs-host-openssl.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/006_linux-fix-hostcc.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/007_static-toolchain.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/008_cortex-a72.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/009_updated-toolchain-2022.patch
-  patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/buildroot-2016.02/010_fixpkgconfdownload.patch
+  case "${BUILDROOT_VERSION}" in
+    "buildroot-2016.02")
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/001_aarch64-and-cortex-a53.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/002_cortex-a35.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/003_gcc-7.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/004_fix-linux-host-flags.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/005_linux-needs-host-openssl.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/006_linux-fix-hostcc.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/007_static-toolchain.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/008_cortex-a72.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/009_updated-toolchain-2022.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/010_fixpkgconfdownload.patch
+    ;;
+
+    "buildroot-2023.11-rc1")
+    ;;
+  esac
+fi
+
+for dir in `ls ${SOURCE_DIR}/global-packages/${BUILDROOT_VERSION}`; do
+  rm -rf ${BUILD_DIR}/${BUILDROOT_VERSION}/package/${dir}
+  cp -r ${SOURCE_DIR}/global-packages/${BUILDROOT_VERSION}/${dir} ${BUILD_DIR}/${BUILDROOT_VERSION}/package/${dir}/
+done
+
+for dir in `ls ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/packages`; do
+  cp ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/packages/${dir}/*.patch ${BUILD_DIR}/${BUILDROOT_VERSION}/package/${dir}/
+done
+
+#######################################################################################################################
+# custom skeleton with merged /usr mode
+
+if [ "${BUILDROOT_VERSION}" = "buildroot-2016.02" ]; then
+  mkdir -p /tmp/skeleton/usr/bin
+  mkdir -p /tmp/skeleton/usr/lib
+  mkdir -p /tmp/skeleton/usr/sbin
+  ln -sf usr/bin /tmp/skeleton/
+  ln -sf usr/lib /tmp/skeleton/
+  ln -sf usr/sbin /tmp/skeleton/
 fi
 
 #######################################################################################################################
@@ -152,26 +184,7 @@ fi
 export DOWNLOAD_PATH=${DOWNLOAD_DIR}
 export TOOLCHAIN_PATH=${TOOLCHAIN_DIR}
 
-mkdir -p /tmp/skeleton/usr/bin
-mkdir -p /tmp/skeleton/usr/lib
-mkdir -p /tmp/skeleton/usr/sbin
-ln -sf usr/bin  /tmp/skeleton/
-ln -sf usr/lib  /tmp/skeleton/
-ln -sf usr/sbin /tmp/skeleton/
-
 cd ${BUILD_DIR}/${BUILDROOT_VERSION}
-
-#######################################################################################################################
-# patching buildroot packages
-
-for dir in `ls ${SOURCE_DIR}/global-packages`; do
-  rm -rf package/${dir}
-  cp -r ${SOURCE_DIR}/global-packages/${dir} package/${dir}
-done
-
-for dir in `ls ${SOURCE_DIR}/patches/packages`; do
-  cp ${SOURCE_DIR}/patches/packages/${dir}/*.patch package/${dir}/
-done
 
 #######################################################################################################################
 # fix missing shared libs
@@ -191,13 +204,13 @@ if [ "${BUILDTARGET}" = "kernel" ]; then
   ${BR2_MAKE} host-pkgconf
   ${BR2_MAKE} host-openssl
 elif [ "${BUILDTARGET}" = "minimal" ]; then
-  ${BR2_MAKE} fftw-double
+  ${BR2_MAKE} carla-plugins
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} liblo
   ${BR2_MAKE} lv2
   ${BR2_MAKE} kxstudio-lv2-extensions
   ${BR2_MAKE} mod-lv2-extensions
-  ${BR2_MAKE} mod-plugin-builder
+  ${BR2_MAKE} alsa-utils
   if [ "${TOOLCHAIN_PLATFORM}" = "generic-x86_64" ]; then
     ${BR2_MAKE} carla-backend
     ${BR2_MAKE} valgrind

@@ -44,3 +44,7 @@ define MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 endef
 
 $(eval $(generic-package))
+
+# force flags for other packages here
+
+LV2_CONF_OPTS += -Dplugins=disabled
