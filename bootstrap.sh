@@ -204,7 +204,7 @@ if [ "${BUILDTARGET}" = "kernel" ]; then
   ${BR2_MAKE} host-pkgconf
   ${BR2_MAKE} host-openssl
 elif [ "${BUILDTARGET}" = "minimal" ]; then
-  ${BR2_MAKE} carla-plugins
+  ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} liblo
   ${BR2_MAKE} lv2

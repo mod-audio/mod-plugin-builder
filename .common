@@ -100,8 +100,13 @@ case "${TOOLCHAIN_PLATFORM}" in
     CT_NG_VERSION=crosstool-ng-1.25.0
   ;;
   # generic targets: ct-ng 1.25 with gcc 9 + glibc 2.34
-  "generic-aarch64"|"generic-x86_64")
+  "generic-aarch64")
     BUILDROOT_VERSION=buildroot-2023.11-rc1
+    CT_NG_VERSION=crosstool-ng-1.25.0
+  ;;
+  # TODO
+  "generic-x86_64")
+    BUILDROOT_VERSION=buildroot-2016.02
     CT_NG_VERSION=crosstool-ng-1.25.0
   ;;
   # fallback
