@@ -31,6 +31,10 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
     wget ${CT_NG_LINK}/${CT_NG_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_FILE}
   fi
 
+  if [ -n "${CT_NG_KERNEL_FILE}" ] && [ ! -f ${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE} ]; then
+    wget https://cdn.kernel.org/pub/linux/kernel/v6.x/${CT_NG_KERNEL_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE}
+  fi
+
   mkdir -p ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}
   tar xf ${DOWNLOAD_DIR}/${CT_NG_FILE} -C ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} --strip-components=1
 
@@ -72,6 +76,9 @@ if [ ! -f .config ]; then
   cp ${SOURCE_DIR}/toolchain/${TOOLCHAIN_PLATFORM}.config .config
   sed -i -e "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
   sed -i -e "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
+  if [ -n "${CT_NG_KERNEL_FILE}" ]; then
+    sed -i -e "s|CT_LINUX_CUSTOM_LOCATION=.*|CT_LINUX_CUSTOM_LOCATION=\"${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE}\"|" .config
+  fi
   # static toolchains not supported under macOS, see https://github.com/crosstool-ng/crosstool-ng/issues/396
   if [ -d "/opt/homebrew/opt/binutils/bin" ]; then
     sed -i -e "/CT_WANTS_STATIC_LINK/d" .config
