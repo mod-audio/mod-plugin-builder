@@ -1,0 +1,3 @@
+config BR2_PACKAGE_QT6HTTPSERVER
+	bool "qt6httpserver"
+	select BR2_PACKAGE_QT6WEBSOCKETS

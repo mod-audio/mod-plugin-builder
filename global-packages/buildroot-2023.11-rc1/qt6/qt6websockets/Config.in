@@ -1,0 +1,3 @@
+config BR2_PACKAGE_QT6WEBSOCKETS
+	bool "qt6websockets"
+# 	select BR2_PACKAGE_QT6QUICK
