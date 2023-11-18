@@ -20,11 +20,11 @@ QT6TOOLS_CONF_OPTS = \
 
 QT6TOOLS_CONF_OPTS += -DFEATURE_clang=OFF
 QT6TOOLS_CONF_OPTS += -DFEATURE_designer=OFF -DFEATURE_linguist=OFF
-HOST_QT6BASE_CONF_OPTS = -DFEATURE_designer=ON -DFEATURE_linguist=ON
+HOST_QT6TOOLS_CONF_OPTS = -DFEATURE_designer=ON -DFEATURE_linguist=ON
 
 QT6TOOLS_DEPENDENCIES = \
 	host-pkgconf \
-	host-qt6base \
+	host-qt6tools \
 	qt6declarative
 
 $(eval $(cmake-package))
