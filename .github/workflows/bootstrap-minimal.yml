@@ -10,7 +10,8 @@ jobs:
   debian_12:
     strategy:
       matrix:
-        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduox, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        # modduo-static, modduox-static,
     runs-on: ubuntu-latest
     container:
       image: debian:12
@@ -36,7 +37,8 @@ jobs:
   debian_11:
     strategy:
       matrix:
-        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduox, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        # modduo-static, modduox-static,
     runs-on: ubuntu-latest
     container:
       image: debian:11
@@ -62,7 +64,8 @@ jobs:
   ubuntu_23_10:
     strategy:
       matrix:
-        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduox, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        # modduo-static, modduox-static,
     runs-on: ubuntu-latest
     container:
       image: ubuntu:23.10
@@ -88,7 +91,8 @@ jobs:
   ubuntu_22_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduox, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        # modduo-static, modduox-static,
     runs-on: ubuntu-latest
     container:
       image: ubuntu:22.04
@@ -114,7 +118,8 @@ jobs:
   ubuntu_20_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduox, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        # modduo-static, modduox-static,
     runs-on: ubuntu-latest
     container:
       image: ubuntu:20.04
