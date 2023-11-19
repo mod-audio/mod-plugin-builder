@@ -22,10 +22,11 @@ QT6DECLARATIVE_CONF_OPTS += -DFEATURE_qml_profiler=ON
 
 QT6DECLARATIVE_DEPENDENCIES = \
 	host-pkgconf \
-	host-qt6base \
-	host-qt6shadertools \
 	host-qt6declarative \
 	qt6shadertools
+
+HOST_QT6DECLARATIVE_DEPENDENCIES = \
+	host-qt6shadertools
 
 $(eval $(cmake-package))
 $(eval $(host-cmake-package))

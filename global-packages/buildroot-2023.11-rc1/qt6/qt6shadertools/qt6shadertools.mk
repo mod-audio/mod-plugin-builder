@@ -20,9 +20,11 @@ QT6SHADERTOOLS_CONF_OPTS = \
 
 QT6SHADERTOOLS_DEPENDENCIES = \
 	host-pkgconf \
-	host-qt6base \
 	host-qt6shadertools \
 	qt6base
+
+HOST_QT6SHADERTOOLS_DEPENDENCIES = \
+	host-qt6base
 
 $(eval $(cmake-package))
 $(eval $(host-cmake-package))
