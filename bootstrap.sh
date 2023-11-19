@@ -171,6 +171,9 @@ done
 
 for dir in `ls ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/packages`; do
   cp ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/packages/${dir}/*.patch ${BUILD_DIR}/${BUILDROOT_VERSION}/package/${dir}/
+  for subdir in `ls ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/packages/${dir} | grep -v '.patch'`; do
+    cp ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/packages/${dir}/${subdir}/*.patch ${BUILD_DIR}/${BUILDROOT_VERSION}/package/${dir}/${subdir}/
+  done
 done
 
 #######################################################################################################################
