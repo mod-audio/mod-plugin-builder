@@ -24,6 +24,9 @@ HOST_QT6TOOLS_CONF_OPTS = -DFEATURE_designer=ON -DFEATURE_linguist=ON
 
 QT6TOOLS_DEPENDENCIES = \
 	host-pkgconf \
+	host-qt6base \
+	host-qt6shadertools \
+	host-qt6declarative \
 	host-qt6tools \
 	qt6declarative
 

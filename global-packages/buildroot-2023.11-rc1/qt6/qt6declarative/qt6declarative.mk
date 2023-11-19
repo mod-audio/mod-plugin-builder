@@ -22,6 +22,8 @@ QT6DECLARATIVE_CONF_OPTS += -DFEATURE_qml_profiler=ON
 
 QT6DECLARATIVE_DEPENDENCIES = \
 	host-pkgconf \
+	host-qt6base \
+	host-qt6shadertools \
 	host-qt6declarative \
 	qt6shadertools
 
