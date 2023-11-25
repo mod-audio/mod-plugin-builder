@@ -4,7 +4,7 @@
 #
 ######################################
 
-NEURALRECORD_VERSION = 79cc2dc1bc8bb260cdbf4f5c2a989d960cc64fac
+NEURALRECORD_VERSION = ce0b8739e6d0ff4c4b75d7ce5e418d86c117e0f8
 NEURALRECORD_SITE = https://github.com/brummer10/neuralrecord.git
 NEURALRECORD_SITE_METHOD = git
 NEURALRECORD_DEPENDENCIES = libsndfile
