@@ -2,7 +2,7 @@ diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config
 index d6cb238..87c78a1 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -79,6 +79,14 @@ choice
+@@ -79,6 +79,18 @@ choice
  		bool "Linux 4.4.x kernel headers"
  		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
  
@@ -14,10 +14,14 @@ index d6cb238..87c78a1 100644
 +		bool "Linux 5.16.x kernel headers"
 +		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
 +
++	config BR2_KERNEL_HEADERS_5_10
++		bool "Linux 5.10.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
++
  	config BR2_KERNEL_HEADERS_VERSION
  		bool "Manually specified Linux version"
  endchoice
-@@ -100,6 +108,14 @@ choice
+@@ -100,6 +108,18 @@ choice
  	  This is used to hide/show some packages that have strict
  	  requirements on the version of kernel headers.
  
@@ -29,27 +33,36 @@ index d6cb238..87c78a1 100644
 +	bool "5.15.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
 +
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
++	bool "5.10.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
++
  config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_4
  	bool "4.4.x"
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
-@@ -220,4 +236,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+@@ -220,4 +236,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
  	default "4.2.8"		if BR2_KERNEL_HEADERS_4_2
  	default "4.3.6"		if BR2_KERNEL_HEADERS_4_3
  	default "4.4.3"		if BR2_KERNEL_HEADERS_4_4
-+	default "5.15.23"	if BR2_KERNEL_HEADERS_5_15
-+	default "5.16.9"	if BR2_KERNEL_HEADERS_5_16
++	default "5.10.0"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.0"	if BR2_KERNEL_HEADERS_5_15
++	default "5.16.0"	if BR2_KERNEL_HEADERS_5_16
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
 index 43a090b..ee2869f 100644
 --- a/toolchain/toolchain-common.in
 +++ b/toolchain/toolchain-common.in
-@@ -233,10 +233,20 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+@@ -233,10 +233,25 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
  	bool
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
 +	bool
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
++
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
 +
 +config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
 +	bool
@@ -61,6 +74,7 @@ index 43a090b..ee2869f 100644
  	string
 +	default "5.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
 +	default "5.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
++	default "5.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
  	default "4.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
  	default "4.3"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
  	default "4.2"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_2
@@ -95,7 +109,7 @@ index e276fce..4b2beca 100644
  config BR2_TOOLCHAIN_EXTERNAL_GCC_7
  	bool "7.x"
  	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
-@@ -784,6 +788,14 @@ choice
+@@ -784,6 +788,18 @@ choice
  	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
  	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
@@ -106,6 +120,10 @@ index e276fce..4b2beca 100644
 +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_15
 +	bool "5.15.x"
 +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
++
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_10
++	bool "5.10.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
 +
  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4
  	bool "4.4.x"
