@@ -20,7 +20,6 @@ QT6WEBSOCKETS_CONF_OPTS = \
 
 QT6WEBSOCKETS_DEPENDENCIES = \
 	host-pkgconf \
-	qt6base
-# 	qt6quick
+	qt6declarative
 
 $(eval $(cmake-package))
