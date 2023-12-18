@@ -33,7 +33,7 @@ RUN apt-get install -qy multiarch-support:armhf qemu-user-static && \
     apt-get install -qy libfreetype6-dev libx11-dev libxcursor-dev libxinerama-dev libxrandr-dev pkg-config && \
     apt-get clean
 RUN wget http://archive.ubuntu.com/ubuntu/pool/universe/p/premake/premake_3.7-1_amd64.deb && \
-    dpkg -i premake_3.7-1_amd64.deb && \
+    dpkg -i --force-architecture --force-depends premake_3.7-1_amd64.deb && \
     rm premake_3.7-1_amd64.deb
 
 RUN locale-gen en_US.UTF-8
