@@ -10,7 +10,7 @@ index b46e4b5..9aeaf4e 100644
 -
 -# The subdirectory contains its own CMakeLists that creates BinaryData targets containing graphics and fonts
 -add_subdirectory (BinaryResources)
-+find_package (JUCE6 REQUIRED)
++find_package (JUCE-6.1.6 REQUIRED)
  
  # Adding JSON
  set (JSON_BuildTests OFF CACHE INTERNAL "")

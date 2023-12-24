@@ -12,10 +12,10 @@ index 782c732..9f29061 100644
 -        IMPORTED_LOCATION "@PACKAGE_JUCEAIDE_PATH@")
 +set(PACKAGE_PREFIX_DIR "@CMAKE_INSTALL_PREFIX@")
 +
-+if(NOT TARGET juceaide6)
-+    add_executable(juceaide6 IMPORTED)
-+    set_target_properties(juceaide6 PROPERTIES
-+        IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/bin/juceaide6")
++if(NOT TARGET juceaide61)
++    add_executable(juceaide61 IMPORTED)
++    set_target_properties(juceaide61 PROPERTIES
++        IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/bin/juceaide61")
  endif()
  
  check_required_components("@PROJECT_NAME@")
@@ -28,7 +28,7 @@ index 786fc3a..86af138 100644
      # resource compiler.
      add_custom_command(OUTPUT "${secret_au_plugindefines}"
 -        COMMAND juce::juceaide auplugindefines "${defs_file}" "${secret_au_plugindefines}"
-+        COMMAND juceaide6 auplugindefines "${defs_file}" "${secret_au_plugindefines}"
++        COMMAND juceaide61 auplugindefines "${defs_file}" "${secret_au_plugindefines}"
          DEPENDS "${defs_file}"
          VERBATIM)
  
@@ -37,7 +37,7 @@ index 786fc3a..86af138 100644
  
      add_custom_command(OUTPUT ${binary_file_names}
 -        COMMAND juce::juceaide binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
-+        COMMAND juceaide6 binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
++        COMMAND juceaide61 binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
              ${juce_binary_data_folder} "${input_file_list}"
          WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
          DEPENDS "${input_file_list}"
@@ -46,7 +46,7 @@ index 786fc3a..86af138 100644
  
      add_custom_command(OUTPUT "${juce_header}"
 -        COMMAND juce::juceaide header "${defs_file}" "${juce_header}" ${extra_args}
-+        COMMAND juceaide6 header "${defs_file}" "${juce_header}" ${extra_args}
++        COMMAND juceaide61 header "${defs_file}" "${juce_header}" ${extra_args}
          DEPENDS "${defs_file}"
          VERBATIM)
  endfunction()
@@ -56,25 +56,25 @@ index 786fc3a..86af138 100644
  function(_juce_execute_juceaide)
 -    if(NOT TARGET juce::juceaide)
 -        message(FATAL_ERROR "The juceaide target does not exist")
-+    if(NOT TARGET juceaide6)
-+        message(FATAL_ERROR "The juceaide6 target does not exist")
++    if(NOT TARGET juceaide61)
++        message(FATAL_ERROR "The juceaide61 target does not exist")
      endif()
  
 -    get_target_property(juceaide_location juce::juceaide IMPORTED_LOCATION)
-+    get_target_property(juceaide6_location juceaide6 IMPORTED_LOCATION)
++    get_target_property(juceaide61_location juceaide61 IMPORTED_LOCATION)
  
 -    if(NOT EXISTS "${juceaide_location}")
 -        message(FATAL_ERROR "juceaide was imported, but it doesn't exist!")
-+    if(NOT EXISTS "${juceaide6_location}")
-+        message(FATAL_ERROR "juceaide6 was imported, but it doesn't exist!")
++    if(NOT EXISTS "${juceaide61_location}")
++        message(FATAL_ERROR "juceaide61 was imported, but it doesn't exist!")
      endif()
  
 -    execute_process(COMMAND "${juceaide_location}" ${ARGN} RESULT_VARIABLE result_variable)
-+    execute_process(COMMAND "${juceaide6_location}" ${ARGN} RESULT_VARIABLE result_variable)
++    execute_process(COMMAND "${juceaide61_location}" ${ARGN} RESULT_VARIABLE result_variable)
  
      if(result_variable)
 -        message(FATAL_ERROR "Running juceaide failed")
-+        message(FATAL_ERROR "Running juceaide6 failed")
++        message(FATAL_ERROR "Running juceaide61 failed")
      endif()
  endfunction()
  
@@ -83,7 +83,7 @@ index 786fc3a..86af138 100644
  
      add_custom_command(OUTPUT "${this_output_pkginfo}"
 -        COMMAND juce::juceaide pkginfo "${juce_kind_string}" "${this_output_pkginfo}"
-+        COMMAND juceaide6 pkginfo "${juce_kind_string}" "${this_output_pkginfo}"
++        COMMAND juceaide61 pkginfo "${juce_kind_string}" "${this_output_pkginfo}"
          VERBATIM)
  
      set(output_folder "$<TARGET_BUNDLE_CONTENT_DIR:${dest_target}>")
@@ -92,7 +92,7 @@ index 786fc3a..86af138 100644
  
      add_custom_command(OUTPUT "${resource_rc_file}"
 -        COMMAND juce::juceaide rcfile "${input_info_file}" "${resource_rc_file}"
-+        COMMAND juceaide6 rcfile "${input_info_file}" "${resource_rc_file}"
++        COMMAND juceaide61 rcfile "${input_info_file}" "${resource_rc_file}"
          ${dependency}
          VERBATIM)
  

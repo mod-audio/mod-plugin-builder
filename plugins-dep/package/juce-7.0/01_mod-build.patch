@@ -1,0 +1,25 @@
+diff --git a/extras/Build/CMake/JUCEUtils.cmake b/extras/Build/CMake/JUCEUtils.cmake
+index e6f69ba..d775ab8 100644
+--- a/extras/Build/CMake/JUCEUtils.cmake
++++ b/extras/Build/CMake/JUCEUtils.cmake
+@@ -84,7 +84,7 @@ define_property(TARGET PROPERTY JUCE_COPY_PLUGIN_AFTER_BUILD INHERITED
+     FULL_DOCS "Whether or not plugins should be copied after building")
+ set_property(GLOBAL PROPERTY JUCE_COPY_PLUGIN_AFTER_BUILD FALSE)
+ 
+-if((CMAKE_SYSTEM_NAME STREQUAL "Linux") OR (CMAKE_SYSTEM_NAME MATCHES ".*BSD"))
++if((CMAKE_SYSTEM_NAME STREQUAL "LinuxIgnoredForMOD") OR (CMAKE_SYSTEM_NAME MATCHES ".*BSD"))
+     _juce_create_pkgconfig_target(JUCE_CURL_LINUX_DEPS libcurl)
+     _juce_create_pkgconfig_target(JUCE_BROWSER_LINUX_DEPS webkit2gtk-4.0 gtk+-x11-3.0)
+ endif()
+diff --git a/extras/Build/juceaide/CMakeLists.txt b/extras/Build/juceaide/CMakeLists.txt
+index 163f203..d775132 100644
+--- a/extras/Build/juceaide/CMakeLists.txt
++++ b/extras/Build/juceaide/CMakeLists.txt
+@@ -111,6 +111,7 @@ else()
+             "-DCMAKE_BUILD_TYPE=Debug"
+             "-DJUCE_BUILD_HELPER_TOOLS=ON"
+             "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}"
++            "-DCMAKE_TOOLCHAIN_FILE=$ENV{JUCE_TOOLCHAIN_FILE}"
+             ${extra_compiler_flag_arguments}
+         WORKING_DIRECTORY "${JUCE_SOURCE_DIR}"
+         OUTPUT_VARIABLE command_output

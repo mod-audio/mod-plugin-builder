@@ -18,7 +18,7 @@ index 29f4a75..99a9465 100644
 +++ b/modules/CMakeLists.txt
 @@ -1,9 +1,6 @@
 -add_subdirectory(JUCE)
-+find_package(JUCE6 REQUIRED)
++find_package(JUCE-6.1.6 REQUIRED)
  include(cmake/SubprojectVersion.cmake)
 -subproject_version(JUCE juce_version)
 -message(STATUS "VERSION for JUCE: ${juce_version}")

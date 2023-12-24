@@ -1,0 +1,84 @@
+diff --git a/extras/Build/CMake/JUCEConfig.cmake.in b/extras/Build/CMake/JUCEConfig.cmake.in
+index 6a96e24..500528d 100644
+--- a/extras/Build/CMake/JUCEConfig.cmake.in
++++ b/extras/Build/CMake/JUCEConfig.cmake.in
+@@ -22,10 +22,12 @@
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/LV2_HELPER.cmake")
+ 
+-if(NOT TARGET juce::juceaide)
+-    add_executable(juce::juceaide IMPORTED)
+-    set_target_properties(juce::juceaide PROPERTIES
+-        IMPORTED_LOCATION "@PACKAGE_JUCEAIDE_PATH@")
++set(PACKAGE_PREFIX_DIR "@CMAKE_INSTALL_PREFIX@")
++
++if(NOT TARGET juceaide70)
++    add_executable(juceaide70 IMPORTED)
++    set_target_properties(juceaide70 PROPERTIES
++        IMPORTED_LOCATION "${PACKAGE_PREFIX_DIR}/bin/juceaide70")
+ endif()
+ 
+ check_required_components("@PROJECT_NAME@")
+diff --git a/extras/Build/CMake/JUCEUtils.cmake b/extras/Build/CMake/JUCEUtils.cmake
+index d775ab8..a61b3f4 100644
+--- a/extras/Build/CMake/JUCEUtils.cmake
++++ b/extras/Build/CMake/JUCEUtils.cmake
+@@ -202,7 +202,7 @@ function(_juce_create_embedded_linux_subprocess_target output_target_name target
+         OUTPUT
+             ${binary_header_file}
+             ${binary_source_file}
+-        COMMAND juce::juceaide binarydata "LinuxSubprocessHelperBinaryData" "${binary_header_file}"
++        COMMAND juceaide70 binarydata "LinuxSubprocessHelperBinaryData" "${binary_header_file}"
+             ${juce_linux_subprocess_helper_binary_dir} "${juceaide_input_file}"
+         COMMAND
+             ${CMAKE_COMMAND} -E rename "${juce_linux_subprocess_helper_binary_dir}/BinaryData1.cpp" "${binary_source_file}"
+@@ -436,7 +436,7 @@ function(juce_add_binary_data target)
+     file(WRITE "${input_file_list}" "${newline_delimited_input}")
+ 
+     add_custom_command(OUTPUT ${binary_file_names}
+-        COMMAND juce::juceaide binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
++        COMMAND juceaide70 binarydata "${JUCE_ARG_NAMESPACE}" "${JUCE_ARG_HEADER_NAME}"
+             ${juce_binary_data_folder} "${input_file_list}"
+         WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+         DEPENDS "${input_file_list}" ${JUCE_ARG_SOURCES}
+@@ -520,7 +520,7 @@ function(juce_generate_juce_header target)
+     set(extra_args)
+ 
+     add_custom_command(OUTPUT "${juce_header}"
+-        COMMAND juce::juceaide header "${defs_file}" "${juce_header}" ${extra_args}
++        COMMAND juceaide70 header "${defs_file}" "${juce_header}" ${extra_args}
+         DEPENDS "${defs_file}"
+         VERBATIM)
+ endfunction()
+@@ -528,11 +528,11 @@ endfunction()
+ # ==================================================================================================
+ 
+ function(_juce_execute_juceaide)
+-    if(NOT TARGET juce::juceaide)
++    if(NOT TARGET juceaide70)
+         message(FATAL_ERROR "The juceaide target does not exist")
+     endif()
+ 
+-    get_target_property(juceaide_location juce::juceaide IMPORTED_LOCATION)
++    get_target_property(juceaide_location juceaide70 IMPORTED_LOCATION)
+ 
+     if(NOT EXISTS "${juceaide_location}")
+         message(FATAL_ERROR "juceaide was imported, but it doesn't exist!")
+@@ -681,7 +681,7 @@ function(_juce_configure_bundle source_target dest_target)
+         MACOSX_BUNDLE_INFO_PLIST "${this_output_plist}")
+ 
+     add_custom_command(OUTPUT "${this_output_pkginfo}"
+-        COMMAND juce::juceaide pkginfo "${juce_kind_string}" "${this_output_pkginfo}"
++        COMMAND juceaide70 pkginfo "${juce_kind_string}" "${this_output_pkginfo}"
+         VERBATIM)
+ 
+     set(output_folder "$<TARGET_BUNDLE_CONTENT_DIR:${dest_target}>")
+@@ -769,7 +769,7 @@ function(_juce_add_resources_rc source_target dest_target)
+         set(resource_rc_file "${juce_library_code}/${source_target}_resources.rc")
+ 
+         add_custom_command(OUTPUT "${resource_rc_file}"
+-            COMMAND juce::juceaide rcfile "${input_info_file}" "${resource_rc_file}"
++            COMMAND juceaide70 rcfile "${input_info_file}" "${resource_rc_file}"
+             ${dependency}
+             VERBATIM)
+ 
