@@ -55,3 +55,16 @@ index 29f4a75..99a9465 100644
      INTERFACE
          $<TARGET_PROPERTY:juce_plugin_modules,COMPILE_DEFINITIONS>
  )
+diff --git a/ChowCentaur/CMakeLists.txt b/ChowCentaur/CMakeLists.txt
+index 7fdd0aa..63dce0f 100644
+--- a/ChowCentaur/CMakeLists.txt
++++ b/ChowCentaur/CMakeLists.txt
+@@ -83,8 +83,6 @@ juce_add_binary_data(BinaryData SOURCES
+     ../GainStageTraining/models/centaur_100.json
+ )
+ 
+-target_precompile_headers(ChowCentaur PRIVATE pch.h)
+-
+ # Need to build BinaryData with -fPIC flag on Linux
+ set_target_properties(BinaryData PROPERTIES
+     POSITION_INDEPENDENT_CODE TRUE)
