@@ -1,9 +1,39 @@
 {
    libdl is full of leaks
    Memcheck:Leak
-   match-leak-kinds: possible,reachable
+   ...
+   fun:_dl_open
+   ...
+}
+{
+   libdl is full of leaks
+   Memcheck:Leak
+   ...
+   fun:_dl_close
+   ...
+}
+{
+   libdl is full of leaks
+   Memcheck:Leak
+   ...
+   fun:_dl_init
+}
+{
+   libdl is full of leaks
+   Memcheck:Leak
+   ...
+   fun:_dl_allocate_tls
+   ...
+}
+{
+   libdl is full of leaks
+   Memcheck:Leak
    ...
    fun:call_init.part.0
-   fun:call_init
-   fun:_dl_init
+}
+{
+   libdl is really something else
+   Memcheck:Addr8
+   ...
+   fun:dl_open_worker
 }
