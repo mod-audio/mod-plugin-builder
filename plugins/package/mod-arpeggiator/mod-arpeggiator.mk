@@ -15,6 +15,10 @@ MOD_ARPEGGIATOR_DEPENDENCIES =
 MOD_ARPEGGIATOR_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true HAVE_CAIRO=false HAVE_GL=false -C $(@D)
 
 define MOD_ARPEGGIATOR_BUILD_CMDS
+	# FIXME remove the use of this script, not needed
+	echo "#!/bin/sh" > $(@D)/dpf/utils/generate-vst-bundles.sh
+	echo "true" >> $(@D)/dpf/utils/generate-vst-bundles.sh
+	chmod +x $(@D)/dpf/utils/generate-vst-bundles.sh
 	$(MOD_ARPEGGIATOR_TARGET_MAKE)
 endef
 
