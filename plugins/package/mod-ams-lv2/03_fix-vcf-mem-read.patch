@@ -1,0 +1,13 @@
+diff --git a/src/vcf.cpp b/src/vcf.cpp
+index e439149..bca4bc5 100644
+--- a/src/vcf.cpp
++++ b/src/vcf.cpp
+@@ -33,7 +33,7 @@ void Vcf::initBuf()
+ 
+ void Vcf::run(uint32_t nframes)
+ {
+-	unsigned int l2;
++	unsigned int l2 = 0;
+ 	double t1, t2, fa, fb, q0, f, q, p_, iv_sin, iv_cos, iv_alpha, a0, a1, a2, b0, b1, b2;
+ 
+ 	if ( vcfTypeUsed != (int)(*p(p_vcfType)) ) {
