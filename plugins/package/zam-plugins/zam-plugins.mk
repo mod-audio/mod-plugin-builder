@@ -16,6 +16,10 @@ ZAM_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NO
 ZAM_PLUGINS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define ZAM_PLUGINS_BUILD_CMDS
+	(cd $(@D) && \
+		[ ! -e dpf/Makefile ] && \
+		git clone https://github.com/DISTRHO/DPF.git dpf --depth=1)
+
 	$(ZAM_PLUGINS_TARGET_MAKE)
 endef
 
