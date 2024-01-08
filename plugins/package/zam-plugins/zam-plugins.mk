@@ -13,12 +13,14 @@ ZAM_PLUGINS_CXXFLAGS = -std=gnu++11
 ZAM_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 
 # needed for submodules support
-ZAM_PLUGINS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
+# ZAM_PLUGINS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define ZAM_PLUGINS_BUILD_CMDS
 	(cd $(@D) && \
-		[ ! -e dpf/Makefile ] && \
-		git clone https://github.com/DISTRHO/DPF.git dpf --depth=1)
+		rm -rf dpf && \
+		git clone https://github.com/DISTRHO/DPF.git dpf && \
+		git -C dpf checkout f8cd00fc49ab0e91a136d109e5478946ae936956 && \
+		patch -p1 -i $($(PKG)_PKGDIR)/02_fix-win32-ttl-gen.patchx)
 
 	$(ZAM_PLUGINS_TARGET_MAKE)
 endef

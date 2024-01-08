@@ -13,12 +13,13 @@ SHIRO_PLUGINS_CXXFLAGS = -std=gnu++11
 SHIRO_PLUGINS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
 
 # needed for submodules support
-SHIRO_PLUGINS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
+# SHIRO_PLUGINS_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define SHIRO_PLUGINS_BUILD_CMDS
 	(cd $(@D) && \
-		[ ! -e dpf/Makefile ] && \
-		git clone https://github.com/DISTRHO/DPF.git dpf --depth=1)
+		rm -rf dpf && \
+		git clone https://github.com/DISTRHO/DPF.git dpf && \
+		git -C dpf checkout f8cd00fc49ab0e91a136d109e5478946ae936956)
 
 	$(SHIRO_PLUGINS_TARGET_MAKE)
 endef
