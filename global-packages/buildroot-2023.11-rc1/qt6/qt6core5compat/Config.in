@@ -1,6 +1,7 @@
 config BR2_PACKAGE_QT6CORE5COMPAT
 	bool "qt6core5compat"
 	select BR2_PACKAGE_QT6BASE_XML
+	select BR2_PACKAGE_QT6DECLARATIVE
 	help
 	  Qt is a cross-platform application and UI framework for
 	  developers using C++.

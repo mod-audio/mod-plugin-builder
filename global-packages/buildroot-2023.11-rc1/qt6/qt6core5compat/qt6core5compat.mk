@@ -34,6 +34,6 @@ QT6CORE5COMPAT_CONF_OPTS = \
 
 QT6CORE5COMPAT_DEPENDENCIES = \
 	host-pkgconf \
-	qt6base
+	qt6declarative
 
 $(eval $(cmake-package))
