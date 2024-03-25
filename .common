@@ -61,6 +61,14 @@ else
 fi
 
 #######################################################################################################################
+# check for generic builds
+
+if [[ "${PLATFORM}" == "generic-aarch64-"* ]]; then
+  TOOLCHAIN_PLATFORM="generic-aarch64"
+  BR2_PLATFORM="${PLATFORM}"
+fi
+
+#######################################################################################################################
 # check for readlink binary
 
 if [ -f "/opt/local/bin/greadlink" ]; then

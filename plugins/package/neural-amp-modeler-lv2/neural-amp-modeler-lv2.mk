@@ -7,6 +7,7 @@
 NEURAL_AMP_MODELER_LV2_VERSION = bae8b0a6275a42ebbfe9c9d957512419700dc797
 NEURAL_AMP_MODELER_LV2_SITE = https://github.com/mikeoliphant/neural-amp-modeler-lv2.git
 NEURAL_AMP_MODELER_LV2_SITE_METHOD = git
+NEURAL_AMP_MODELER_LV2_GIT_SUBMODULES = y
 NEURAL_AMP_MODELER_LV2_BUNDLES = neural_amp_modeler.lv2
 
 # custom optimization flags

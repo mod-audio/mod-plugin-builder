@@ -1,2 +1,3 @@
 config BR2_PACKAGE_KXSTUDIO_LV2_EXTENSIONS
 	bool kxstudio-lv2-extensions
+	select BR2_PACKAGE_LV2
