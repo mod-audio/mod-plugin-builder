@@ -109,7 +109,7 @@ case "${TOOLCHAIN_PLATFORM}" in
   ;;
   # generic targets: ct-ng 1.25 with gcc 9 + glibc 2.34
   "generic-aarch64")
-    BUILDROOT_VERSION=buildroot-2023.11-rc1
+    BUILDROOT_VERSION=buildroot-2023.11.3
     CT_NG_VERSION=crosstool-ng-1.25.0
   ;;
   # TODO

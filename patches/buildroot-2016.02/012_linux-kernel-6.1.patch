@@ -1,0 +1,61 @@
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 87c78a1..939c24f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -87,6 +87,10 @@ choice
+ 		bool "Linux 5.16.x kernel headers"
+ 		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+ 
++	config BR2_KERNEL_HEADERS_6_1
++		bool "Linux 6.1.x kernel headers"
++		select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++
+ 	config BR2_KERNEL_HEADERS_VERSION
+ 		bool "Manually specified Linux version"
+ endchoice
+@@ -108,6 +112,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1
++	bool "5.16.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16
+ 	bool "5.16.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index ee2869f..a1afb83 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -241,10 +241,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "6.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
+ 	default "5.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
+ 	default "5.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
+ 	default "4.4"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 4b2beca..f797c98 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -788,6 +788,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_1
++	bool "6.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_16
+ 	bool "5.16.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
