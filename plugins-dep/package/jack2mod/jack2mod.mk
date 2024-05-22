@@ -4,13 +4,19 @@
 #
 ################################################################################
 
-JACK2MOD_VERSION = 58194d90f4321e0a8a0fbc5708a637e13f77159a
+JACK2MOD_VERSION = 2ecce1fe4ec1965fc31f2487b97bcb680db5b191
 JACK2MOD_SITE = $(call github,jackaudio,jack2,$(JACK2MOD_VERSION))
 JACK2MOD_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
-JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib opus-custom host-python
+JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python3
 JACK2MOD_INSTALL_STAGING = YES
 
-JACK2MOD_WAF = $(HOST_DIR)/usr/bin/python ./waf
+ifeq ($(BR2_VERSION),2016.02)
+JACK2MOD_DEPENDENCIES += opus-custom
+else
+JACK2MOD_DEPENDENCIES += opus
+endif
+
+JACK2MOD_WAF = $(HOST_DIR)/usr/bin/python3 ./waf
 
 define JACK2MOD_CONFIGURE_CMDS
 	(cd $(@D); \
