@@ -1,0 +1,7 @@
+# From https://wpewebkit.org/releases/cog-0.19.1.tar.xz.sums
+md5  ec4566bd63ad570a9c7654ed79e46c3f  cog-0.19.1.tar.xz
+sha1  a226fedec99d2c92c2d8b6247ec57f4587c8041d  cog-0.19.1.tar.xz
+sha256  633760ba69e36e4fbc24757c927f46fa1fdb3c526d0a6ac6ab35a21d35ad57b3  cog-0.19.1.tar.xz
+
+# Hashes for license files:
+sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING

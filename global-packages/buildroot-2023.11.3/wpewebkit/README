@@ -1,0 +1,2 @@
+This custom package exists because we are using GCC 9 and starting with wpewebkit version 2.42 they require GCC 10.
+So we use the latest stable release that still supports GCC 9, which is older than the one provided by upstream buildroot.

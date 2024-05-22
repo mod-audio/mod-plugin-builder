@@ -1,0 +1,29 @@
+diff --git a/Source/WebCore/loader/MixedContentChecker.cpp b/Source/WebCore/loader/MixedContentChecker.cpp
+index 9b4c7fe..ac4733b 100644
+--- a/Source/WebCore/loader/MixedContentChecker.cpp
++++ b/Source/WebCore/loader/MixedContentChecker.cpp
+@@ -33,6 +33,8 @@
+ #include "ContentSecurityPolicy.h"
+ #include "Document.h"
+ #include "Frame.h"
++#include "FrameLoader.h"
++#include "FrameLoaderClient.h"
+ #include "SecurityOrigin.h"
+ 
+ namespace WebCore {
+diff --git a/Source/WebCore/platform/graphics/DecodingOptions.h b/Source/WebCore/platform/graphics/DecodingOptions.h
+index 36b105f..6a7ed1a 100644
+--- a/Source/WebCore/platform/graphics/DecodingOptions.h
++++ b/Source/WebCore/platform/graphics/DecodingOptions.h
+@@ -45,7 +45,10 @@ public:
+     {
+     }
+ 
+-    bool operator==(const DecodingOptions&) const = default;
++    bool operator==(const DecodingOptions& o) const
++    {
++        return m_decodingMode == o.m_decodingMode && m_sizeForDrawing == o.m_sizeForDrawing;
++    }
+ 
+     DecodingMode decodingMode() const { return m_decodingMode; }
+     bool isAuto() const { return m_decodingMode == DecodingMode::Auto; }
