@@ -217,9 +217,7 @@ if [ "${BUILDTARGET}" = "blackmirror" ]; then
   ${BR2_MAKE} lv2
   ${BR2_MAKE} kxstudio-lv2-extensions
   ${BR2_MAKE} mod-lv2-extensions
-  ${BR2_MAKE} qt6httpserver
-  ${BR2_MAKE} qt6svg
-  ${BR2_MAKE} qt6tools
+  ${BR2_MAKE} sdl2
 elif [ "${BUILDTARGET}" = "kernel" ]; then
   ${BR2_MAKE} host-kmod
   ${BR2_MAKE} host-pkgconf
