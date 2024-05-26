@@ -1,2 +1,5 @@
 This custom package exists because we are using GCC 9 and starting with wpewebkit version 2.42 they require GCC 10.
 So we use the latest stable release that still supports GCC 9, which is older than the one provided by upstream buildroot.
+
+Additionally we limit the number of jobs used for this build, as WebKit has quite big files which can lead to deadlock in some systems
+(too many cores and too little RAM, plus Linux out of memory handling being crap)

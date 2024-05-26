@@ -18,6 +18,9 @@ WPEWEBKIT_DEPENDENCIES = host-gperf host-python3 host-ruby host-unifdef \
 	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup3 libtasn1 \
 	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
 
+# limit build to 8 jobs
+WPEWEBKIT_BUILD_OPTS = -j$(shell [[ $(PARALLEL_JOBS) -le 8 ]] && echo $(PARALLEL_JOBS) || echo 8)
+
 WPEWEBKIT_CMAKE_BACKEND = ninja
 
 WPEWEBKIT_CONF_OPTS = \

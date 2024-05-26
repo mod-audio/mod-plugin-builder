@@ -12,9 +12,9 @@ endif
 
 # Not possible to directly refer to mesa3d variables, because of
 # first/second expansion trickery...
-MESA3D_HEADERS_VERSION = 24.0.8
-MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
-MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+MESA3D_HEADERS_VERSION = c1a4fcbb4a5e9ebe3ca89eb21fbf004893314554
+MESA3D_HEADERS_SITE = https://gitlab.freedesktop.org/mesa/mesa.git
+MESA3D_HEADERS_SITE_METHOD = git
 MESA3D_HEADERS_DL_SUBDIR = mesa3d
 MESA3D_HEADERS_LICENSE = MIT, SGI, Khronos
 MESA3D_HEADERS_LICENSE_FILES = docs/license.rst
