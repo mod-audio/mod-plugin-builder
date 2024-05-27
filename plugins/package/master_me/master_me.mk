@@ -4,13 +4,13 @@
 #
 ######################################
 
-MASTER_ME_VERSION = 95f13d6b0a805d3dc7ad5efa79d97a824e7c48cf
+MASTER_ME_VERSION = b0ae902052f4ba5dcf4b43daee1d8545b938edfc
 MASTER_ME_SITE = https://github.com/trummerschlunk/master_me.git
 MASTER_ME_SITE_METHOD = git
 MASTER_ME_GIT_SUBMODULES = y
 MASTER_ME_BUNDLES = master_me.lv2
 
-MASTER_ME_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true HAVE_DGL=false HAVE_OPENGL=false -C $(@D)
+MASTER_ME_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) BASE_OPTS="-O3 -ffinite-math-only -fsingle-precision-constant" HAVE_DGL=false HAVE_OPENGL=false -C $(@D)
 
 # needed for submodules support
 MASTER_ME_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES

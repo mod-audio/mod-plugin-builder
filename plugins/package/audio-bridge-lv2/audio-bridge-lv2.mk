@@ -4,7 +4,7 @@
 #
 ######################################
 
-AUDIO_BRIDGE_LV2_VERSION = fa480debc091111e8cbe85ef927ef619119d9492
+AUDIO_BRIDGE_LV2_VERSION = 1a9170e8417a9ac6d3a2edf708ea9384a61ffcb0
 AUDIO_BRIDGE_LV2_SITE = $(call github,falkTX,audio-bridge,$(AUDIO_BRIDGE_LV2_VERSION))
 AUDIO_BRIDGE_LV2_DEPENDENCIES = jack2mod
 AUDIO_BRIDGE_LV2_BUNDLES = audio-bridge.lv2
