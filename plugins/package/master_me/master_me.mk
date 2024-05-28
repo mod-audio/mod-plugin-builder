@@ -4,7 +4,7 @@
 #
 ######################################
 
-MASTER_ME_VERSION = b0ae902052f4ba5dcf4b43daee1d8545b938edfc
+MASTER_ME_VERSION = da3033e090372168dcda395103c84d4475491365
 MASTER_ME_SITE = https://github.com/trummerschlunk/master_me.git
 MASTER_ME_SITE_METHOD = git
 MASTER_ME_GIT_SUBMODULES = y
