@@ -20,7 +20,8 @@ define MASTER_ME_BUILD_CMDS
 endef
 
 define MASTER_ME_INSTALL_TARGET_CMDS
-	$(MASTER_ME_TARGET_MAKE) install PREFIX=/usr DESTDIR=$(TARGET_DIR)
+	install -d $(TARGET_DIR)/usr/lib/lv2/master_me.lv2
+	install -m 644 $(@D)/bin/master_me.lv2/*.* $(TARGET_DIR)/usr/lib/lv2/master_me.lv2
 	cp -rL $($(PKG)_PKGDIR)/master_me.lv2/* $(TARGET_DIR)/usr/lib/lv2/master_me.lv2/
 endef
 
