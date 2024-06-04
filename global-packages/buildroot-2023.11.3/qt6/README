@@ -1,0 +1,2 @@
+This custom package exists because the original is missing quite a lot of features.
+We want at least QML (qt6declarative) and qt6websockets, which the original does not provide.
