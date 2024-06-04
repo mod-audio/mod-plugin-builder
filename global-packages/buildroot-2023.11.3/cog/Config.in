@@ -50,6 +50,10 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
 	  with video drivers that support kernel mode-setting (KMS)
 	  via the DRM user-space API.
 
+config BR2_PACKAGE_COG_PLATFORM_X11
+	bool "X11 backend"
+	select BR2_PACKAGE_XLIB_LIBX11
+
 config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
 	bool "expose system D-Bus control interface"
 	help

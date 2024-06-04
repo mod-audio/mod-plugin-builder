@@ -38,6 +38,11 @@ COG_PLATFORMS_LIST += drm
 COG_DEPENDENCIES += libdrm libinput libgbm libegl udev
 endif
 
+ifeq ($(BR2_PACKAGE_COG_PLATFORM_X11),y)
+COG_PLATFORMS_LIST += x11
+COG_DEPENDENCIES += xlib_libX11
+endif
+
 ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
 COG_CONF_OPTS += -Dcog_dbus_control=system
 else
