@@ -1,0 +1,22 @@
+diff --git a/gcc/config/aarch64/arm_acle.h b/gcc/config/aarch64/arm_acle.h
+index 5614735..2089642 100644
+--- a/gcc/config/aarch64/arm_acle.h
++++ b/gcc/config/aarch64/arm_acle.h
+@@ -98,10 +98,6 @@ __rint64x (double __a)
+ 
+ #pragma GCC target ("+nothing+crc")
+ 
+-#ifdef __cplusplus
+-extern "C" {
+-#endif
+-
+ __extension__ static __inline uint32_t __attribute__ ((__always_inline__))
+ __crc32b (uint32_t __a, uint8_t __b)
+ {
+@@ -172,6 +168,4 @@ __rndrrs (uint64_t *__res)
+ }
+ #endif
+ 
+-#pragma GCC pop_options
+-
+ #endif

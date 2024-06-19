@@ -57,6 +57,7 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
     ;;
 
     "crosstool-ng-1.25.0")
+      cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-9.4.0/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/gcc/gcc-9.4.0/
       cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
       cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.34/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.34/
       cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.35/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.35/
