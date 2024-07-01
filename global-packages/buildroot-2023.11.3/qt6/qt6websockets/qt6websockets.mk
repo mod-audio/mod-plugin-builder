@@ -20,6 +20,10 @@ QT6WEBSOCKETS_CONF_OPTS = \
 
 QT6WEBSOCKETS_DEPENDENCIES = \
 	host-pkgconf \
-	qt6declarative
+	qt6base
+
+ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
+QT6WEBSOCKETS_DEPENDENCIES += qt6declarative
+endif
 
 $(eval $(cmake-package))
