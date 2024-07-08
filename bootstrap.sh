@@ -214,7 +214,9 @@ ${BR2_MAKE} ${BR2_PLATFORM}_defconfig
 
 if [ "${BUILDTARGET}" = "blackmirror" ]; then
   ${BR2_MAKE} host-cmake
-  ${BR2_MAKE} lv2
+  ${BR2_MAKE} libdrm
+  ${BR2_MAKE} libinput
+  ${BR2_MAKE} lilv
   ${BR2_MAKE} kxstudio-lv2-extensions
   ${BR2_MAKE} mod-lv2-extensions
   ${BR2_MAKE} sdl2
