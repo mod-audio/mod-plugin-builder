@@ -80,10 +80,10 @@ fi
 #######################################################################################################################
 # macOS support through homebrew
 
-if [ -d "/opt/homebrew/opt/binutils/bin" ]; then
-  export CPPFLAGS="-I/opt/homebrew/opt/ncurses/include -I/opt/homebrew/opt/gettext/include"
-  export LDFLAGS="-L/opt/homebrew/opt/ncurses/lib -L/opt/homebrew/opt/gettext/lib"
-  export PATH="/opt/homebrew/opt/binutils/bin:${PATH}"
+if [ -d "/usr/local/opt/ncurses/bin" ]; then
+  export CPPFLAGS="-I/usr/local/opt/ncurses/include -I/opt/homebrew/opt/gettext/include"
+  export LDFLAGS="-L/usr/local/opt/ncurses/lib -L/opt/homebrew/opt/gettext/lib"
+  export PATH="/usr/local/opt/ncurses/bin:${PATH}"
 fi
 
 #######################################################################################################################

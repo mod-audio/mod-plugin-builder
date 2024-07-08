@@ -82,13 +82,12 @@ if [ ! -f .config ]; then
     sed -i -e "s|CT_LINUX_CUSTOM_LOCATION=.*|CT_LINUX_CUSTOM_LOCATION=\"${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE}\"|" .config
   fi
   # static toolchains not supported under macOS, see https://github.com/crosstool-ng/crosstool-ng/issues/396
-  if [ -d "/opt/homebrew/opt/binutils/bin" ]; then
+  if [ -d "/usr/local/opt/binutils/bin" ]; then
     sed -i -e "/CT_WANTS_STATIC_LINK/d" .config
   fi
 fi
 
 if [ ! -f .stamp_configured ]; then
-  # ./bootstrap
   ./configure --enable-local
   touch .stamp_configured
 fi
