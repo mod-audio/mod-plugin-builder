@@ -4,10 +4,12 @@
 #
 ######################################
 
-CARDINAL_BIN_VERSION = 24.05
+CARDINAL_BIN_VERSION = 24.09
 CARDINAL_BIN_SITE_METHOD = local
 CARDINAL_BIN_SITE = $($(PKG)_PKGDIR)/
 CARDINAL_BIN_BUNDLES = Cardinal.lv2 CardinalFX.lv2 CardinalMini.lv2
+
+# MOD_BIN_COMPAT will be one of arm-a7 aarch64-a35 aarch64-a53
 
 define CARDINAL_BIN_INSTALL_TARGET_CMDS
 	tar xf $(@D)/binaries.tar.xz -C $(@D) \
