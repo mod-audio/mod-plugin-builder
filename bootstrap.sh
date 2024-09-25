@@ -214,6 +214,7 @@ ${BR2_MAKE} ${BR2_PLATFORM}_defconfig
 
 if [ "${BUILDTARGET}" = "blackmirror" ]; then
   ${BR2_MAKE} host-cmake
+  ${BR2_MAKE} dbus
   ${BR2_MAKE} libdrm
   ${BR2_MAKE} libinput
   ${BR2_MAKE} libserialport
