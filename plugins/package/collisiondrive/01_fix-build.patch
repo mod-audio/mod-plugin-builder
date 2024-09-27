@@ -1,0 +1,13 @@
+diff --git a/CollisionDrive/makefile b/CollisionDrive/makefile
+index 8120ab7..4a6bb3d 100644
+--- a/CollisionDrive/makefile
++++ b/CollisionDrive/makefile
+@@ -90,7 +90,7 @@
+ 	CXXFLAGS += -I. -I./dsp -I./dsp/zita-resampler-1.1.0 \
+ 	-I./dsp/zita-resampler-1.1.0/zita-resampler -fPIC -DPIC -O2 -Wall -funroll-loops \
+ 	-fomit-frame-pointer -fstrength-reduce -fstack-protector -fvisibility=hidden \
+-	-fdata-sections -Wl,--gc-sections -Wl,--exclude-libs,ALL
++	-fdata-sections -Wl,--gc-sections -Wl,--exclude-libs,ALL -std=gnu++11
+ 	CFLAGS := -O2 -D_FORTIFY_SOURCE=2 -Wall -fstack-protector -fvisibility=hidden \
+ 	-fdata-sections -Wl,--gc-sections -Wl,-z,relro,-z,now -Wl,--exclude-libs,ALL
+ 
