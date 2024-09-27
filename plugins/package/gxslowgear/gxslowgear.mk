@@ -12,6 +12,9 @@ ifdef BR2_cortex_a7
 GXSLOWGEAR_SSE_CFLAGS = -mfpu=vfpv3
 endif
 
+# FIXME remove this, workaround for build issue https://github.com/mod-audio/mod-plugin-builder/pull/178
+GXSLOWGEAR_SSE_CFLAGS += -std=gnu++11
+
 GXSLOWGEAR_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) SSE_CFLAGS="$(GXSLOWGEAR_SSE_CFLAGS)" -C $(@D)
 
 define GXSLOWGEAR_BUILD_CMDS
