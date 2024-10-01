@@ -4,22 +4,19 @@
 #
 ######################################
 
-DM_SD1_VERSION = 1da4f85c510e33726f5bfc8bc667fc796e6a256b
+DM_SD1_VERSION = d0ec787e7df19bc86c9e91b81a196ce7e009b0cb
 DM_SD1_SITE = https://github.com/davemollen/dm-SD1.git
 DM_SD1_SITE_METHOD = git
 DM_SD1_BUNDLES = dm-SD1.lv2
 
-# Nightly toolchain is needed to enable simd
-define DM_SD1_CONFIGURE_CMDS
-	~/.cargo/bin/rustup toolchain install nightly-2024-08-07
-	~/.cargo/bin/rustup default nightly-2024-08-07
-	~/.cargo/bin/rustup target add $(MOD_PLUGIN_BUILDER_RUST_TARGET)
-endef
-
 define DM_SD1_BUILD_CMDS
+	~/.cargo/bin/rustup default nightly
+
 	rm -f $(@D)/lv2/dm-SD1.lv2/libdm_sd1.so
 	(cd $(@D)/lv2 && \
 		~/.cargo/bin/cargo build $(MOD_PLUGIN_BUILDER_RUST_BUILD_FLAGS))
+
+	~/.cargo/bin/rustup default stable
 endef
 
 define DM_SD1_INSTALL_TARGET_CMDS

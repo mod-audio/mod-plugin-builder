@@ -4,14 +4,10 @@
 #
 ######################################
 
-DM_REVERSE_VERSION = 0aae680ebaa5e83f1ab59e3213f978240b0b84c6
+DM_REVERSE_VERSION = 79dcacf64124018eb42b08b7936578c68523262f
 DM_REVERSE_SITE = https://github.com/davemollen/dm-Reverse.git
 DM_REVERSE_SITE_METHOD = git
 DM_REVERSE_BUNDLES = dm-Reverse.lv2
-
-define DM_REVERSE_CONFIGURE_CMDS
-	~/.cargo/bin/rustup default stable
-endef
 
 define DM_REVERSE_BUILD_CMDS
 	rm -f $(@D)/lv2/dm-Reverse.lv2/libdm_reverse.so

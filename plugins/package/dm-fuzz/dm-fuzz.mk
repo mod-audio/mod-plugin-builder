@@ -4,22 +4,19 @@
 #
 ######################################
 
-DM_FUZZ_VERSION = c036949afb45575ce8d038fb69dc1e1b90f223db
+DM_FUZZ_VERSION = 6a4cf524d5b13043275e58def9400716984c78d8
 DM_FUZZ_SITE = https://github.com/davemollen/dm-Fuzz.git
 DM_FUZZ_SITE_METHOD = git
 DM_FUZZ_BUNDLES = dm-Fuzz.lv2
 
-# Nightly toolchain is needed to enable simd
-define DM_FUZZ_CONFIGURE_CMDS
-	~/.cargo/bin/rustup toolchain install nightly-2024-08-07
-	~/.cargo/bin/rustup default nightly-2024-08-07
-	~/.cargo/bin/rustup target add $(MOD_PLUGIN_BUILDER_RUST_TARGET)
-endef
-
 define DM_FUZZ_BUILD_CMDS
+	~/.cargo/bin/rustup default nightly
+
 	rm -f $(@D)/lv2/dm-Fuzz.lv2/libdm_fuzz.so
 	(cd $(@D)/lv2 && \
 		~/.cargo/bin/cargo build $(MOD_PLUGIN_BUILDER_RUST_BUILD_FLAGS))
+	
+	~/.cargo/bin/rustup default stable
 endef
 
 define DM_FUZZ_INSTALL_TARGET_CMDS

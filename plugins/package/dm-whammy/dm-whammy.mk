@@ -4,14 +4,10 @@
 #
 ######################################
 
-DM_WHAMMY_VERSION = 98bd11d78a4c6cf4bbbedda3c65f4071769cb199
+DM_WHAMMY_VERSION = 76fa750a16bf07a1ed6e551736a138bbabbe067c
 DM_WHAMMY_SITE = https://github.com/davemollen/dm-Whammy.git
 DM_WHAMMY_SITE_METHOD = git
 DM_WHAMMY_BUNDLES = dm-Whammy.lv2
-
-define DM_WHAMMY_CONFIGURE_CMDS
-	~/.cargo/bin/rustup default stable
-endef
 
 define DM_WHAMMY_BUILD_CMDS
 	rm -f $(@D)/lv2/dm-Whammy.lv2/libdm_whammy.so

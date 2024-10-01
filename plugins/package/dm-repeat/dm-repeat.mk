@@ -4,14 +4,10 @@
 #
 ######################################
 
-DM_REPEAT_VERSION = 9fa7a537e71c5b14945647ca70ddf888eebb9810
+DM_REPEAT_VERSION = d1b04d06337f6f1896ae0bb56498ff05b9889c12
 DM_REPEAT_SITE = https://github.com/davemollen/dm-Repeat.git
 DM_REPEAT_SITE_METHOD = git
 DM_REPEAT_BUNDLES = dm-Repeat.lv2
-
-define DM_REPEAT_CONFIGURE_CMDS
-	~/.cargo/bin/rustup default stable
-endef
 
 define DM_REPEAT_BUILD_CMDS
 	rm -f $(@D)/lv2/dm-Repeat.lv2/libdm_repeat.so

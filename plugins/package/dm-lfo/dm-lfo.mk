@@ -4,14 +4,10 @@
 #
 ######################################
 
-DM_LFO_VERSION = f9ed8f76f96e993a738f1df19dee42d65439e9be
+DM_LFO_VERSION = e78bf002aa720d30e5ee9c0794f67fb8f7faea32
 DM_LFO_SITE = https://github.com/davemollen/dm-LFO.git
 DM_LFO_SITE_METHOD = git
 DM_LFO_BUNDLES = dm-LFO.lv2
-
-define DM_LFO_CONFIGURE_CMDS
-	~/.cargo/bin/rustup default stable
-endef
 
 define DM_LFO_BUILD_CMDS
 	rm -f $(@D)/lv2/dm-LFO.lv2/libdm_lfo.so

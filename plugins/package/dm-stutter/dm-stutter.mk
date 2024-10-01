@@ -4,14 +4,10 @@
 #
 ######################################
 
-DM_STUTTER_VERSION = 994f85b86dc26ac5994c25174f82e382ace47252
+DM_STUTTER_VERSION = e352ade19bdb2b6b66e277fdc0879d4e1a341946
 DM_STUTTER_SITE = https://github.com/davemollen/dm-Stutter.git
 DM_STUTTER_SITE_METHOD = git
 DM_STUTTER_BUNDLES = dm-Stutter.lv2
-
-define DM_STUTTER_CONFIGURE_CMDS
-	~/.cargo/bin/rustup default stable
-endef
 
 define DM_STUTTER_BUILD_CMDS
 	rm -f $(@D)/lv2/dm-Stutter.lv2/libdm_stutter.so

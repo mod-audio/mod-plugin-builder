@@ -4,22 +4,19 @@
 #
 ######################################
 
-DM_REVERB_VERSION = bd549d8cefd4dd83b1844fcaa18b5610bdbe2146
+DM_REVERB_VERSION = ea156dd0f7cd497e073e6d0bde3604d1a5de31dd
 DM_REVERB_SITE = https://github.com/davemollen/dm-Reverb.git
 DM_REVERB_SITE_METHOD = git
 DM_REVERB_BUNDLES = dm-Reverb.lv2
 
-# Nightly toolchain is needed to enable simd
-define DM_REVERB_CONFIGURE_CMDS
-	~/.cargo/bin/rustup toolchain install nightly-2024-08-07
-	~/.cargo/bin/rustup default nightly-2024-08-07
-	~/.cargo/bin/rustup target add $(MOD_PLUGIN_BUILDER_RUST_TARGET)
-endef
-
 define DM_REVERB_BUILD_CMDS
+	~/.cargo/bin/rustup default nightly
+
 	rm -f $(@D)/lv2/dm-Reverb.lv2/libdm_reverb.so
 	(cd $(@D)/lv2 && \
 		~/.cargo/bin/cargo build $(MOD_PLUGIN_BUILDER_RUST_BUILD_FLAGS))
+
+	~/.cargo/bin/rustup default stable
 endef
 
 define DM_REVERB_INSTALL_TARGET_CMDS

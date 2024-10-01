@@ -4,22 +4,19 @@
 #
 ######################################
 
-DM_SHREDMASTER_VERSION = 9da4981139d610a43037dccd886c5ad6c1b2f6dc
+DM_SHREDMASTER_VERSION = d0009c4d236dfb3e9b6dd1fa3d9a80ecb7a0a4ed
 DM_SHREDMASTER_SITE = https://github.com/davemollen/dm-Shredmaster.git
 DM_SHREDMASTER_SITE_METHOD = git
 DM_SHREDMASTER_BUNDLES = dm-Shredmaster.lv2
 
-# Nightly toolchain is needed to enable simd
-define DM_SHREDMASTER_CONFIGURE_CMDS
-	~/.cargo/bin/rustup toolchain install nightly-2024-08-07
-	~/.cargo/bin/rustup default nightly-2024-08-07
-	~/.cargo/bin/rustup target add $(MOD_PLUGIN_BUILDER_RUST_TARGET)
-endef
-
 define DM_SHREDMASTER_BUILD_CMDS
+	~/.cargo/bin/rustup default nightly
+
 	rm -f $(@D)/lv2/dm-Shredmaster.lv2/libdm_shredmaster.so
 	(cd $(@D)/lv2 && \
 		~/.cargo/bin/cargo build $(MOD_PLUGIN_BUILDER_RUST_BUILD_FLAGS))
+
+	~/.cargo/bin/rustup default stable
 endef
 
 define DM_SHREDMASTER_INSTALL_TARGET_CMDS
