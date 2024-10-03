@@ -7,6 +7,7 @@ config BR2_EXTERNAL_PLUGINS_DEP
     option env="BR2_EXTERNAL_PLUGINS_DEP"
 
 source "$BR2_EXTERNAL_PLUGINS_DEP/package/carla-backend/Config.in"
+source "$BR2_EXTERNAL_PLUGINS_DEP/package/dpf/Config.in"
 source "$BR2_EXTERNAL_PLUGINS_DEP/package/hylia/Config.in"
 source "$BR2_EXTERNAL_PLUGINS_DEP/package/jack2mod/Config.in"
 source "$BR2_EXTERNAL_PLUGINS_DEP/package/juce-6.0/Config.in"

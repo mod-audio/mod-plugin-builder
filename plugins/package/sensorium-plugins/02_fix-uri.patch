@@ -1,0 +1,62 @@
+diff --git a/TheCloud.lv2/TheCloud_dsp.ttl b/TheCloud.lv2/TheCloud_dsp.ttl
+index 7d596ca..0a43702 100644
+--- a/TheCloud.lv2/TheCloud_dsp.ttl
++++ b/TheCloud.lv2/TheCloud_dsp.ttl
+@@ -13,7 +13,7 @@
+ @prefix spdx:  <http://spdx.org/rdf/terms#> .
+ @prefix unit:  <http://lv2plug.in/ns/extensions/units#> .
+ 
+-<urn:hvcc:TheCloud>
++<urn:sensorium-plugins:TheCloud>
+     a lv2:Plugin, mod:DelayPlugin, doap:Project ;
+ 
+     lv2:extensionData opts:interface ;
+diff --git a/TheCloud.lv2/manifest.ttl b/TheCloud.lv2/manifest.ttl
+index b0a955c..0676c6a 100644
+--- a/TheCloud.lv2/manifest.ttl
++++ b/TheCloud.lv2/manifest.ttl
+@@ -1,9 +1,9 @@
+ @prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ 
+-<urn:hvcc:TheCloud>
++<urn:sensorium-plugins:TheCloud>
+     a lv2:Plugin ;
+     lv2:binary <TheCloud_dsp.so> ;
+     rdfs:seeAlso <TheCloud_dsp.ttl> .
+ 
+-<urn:hvcc:TheCloud> rdfs:seeAlso <modgui.ttl> .
++<urn:sensorium-plugins:TheCloud> rdfs:seeAlso <modgui.ttl> .
+diff --git a/thecloud.json b/thecloud.json
+index 0e1588b..93da71a 100644
+--- a/thecloud.json
++++ b/thecloud.json
+@@ -4,7 +4,7 @@
+         "description": "Granular delay ported from Pure Data using hvcc",
+         "maker": "sensorium",
+         "homepage": "https://github.com/sensorium/sensorium-plugins",
+-        "plugin_uri": "lv2://sensorium-plugins/TheCloud",
++        "plugin_uri": "urn:sensorium-plugins:TheCloud",
+         "version": "0, 0, 1",
+         "license": "GPL3",
+         "midi_input": 1,
+diff --git a/TheCloud.lv2/modgui.ttl b/TheCloud.lv2/modgui.ttl
+index 3f5af65..60373bc 100644
+--- a/TheCloud.lv2/modgui.ttl
++++ b/TheCloud.lv2/modgui.ttl
+@@ -1,7 +1,7 @@
+ @prefix modgui: <http://moddevices.com/ns/modgui#> .
+ @prefix lv2:    <http://lv2plug.in/ns/lv2core#> .
+ 
+-<urn:hvcc:TheCloud>
++<urn:sensorium-plugins:TheCloud>
+     modgui:gui [
+         modgui:resourcesDirectory <modgui> ;
+         modgui:iconTemplate <modgui/icon-thecloud.html> ;
+@@ -9,4 +9,4 @@
+         modgui:screenshot <modgui/screenshot-thecloud.png> ;
+         modgui:thumbnail <modgui/thumbnail-thecloud.png> ;
+     
+-    ] .
+\ No newline at end of file
++    ] .
