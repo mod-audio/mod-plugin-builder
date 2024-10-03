@@ -54,6 +54,16 @@ RUN if test "$platform" = "modduo" || test "$platform" = "modduo-new" || test "$
     else \
         ~/.cargo/bin/rustup target add x86_64-unknown-linux-gnu; \
     fi
+RUN ~/.cargo/bin/rustup install nightly
+RUN if test "$platform" = "modduo" || test "$platform" = "modduo-new" || test "$platform" = "modduo-static"; then \
+        ~/.cargo/bin/rustup target add armv7-unknown-linux-gnueabihf --toolchain nightly; \
+    elif test "$platform" = "modduox" || test "$platform" = "modduox-new" || test "$platform" = "modduox-static"; then \
+        ~/.cargo/bin/rustup target add aarch64-unknown-linux-gnu --toolchain nightly; \
+    elif test "$platform" = "moddwarf" || test "$platform" = "moddwarf-new"; then \
+        ~/.cargo/bin/rustup target add aarch64-unknown-linux-gnu --toolchain nightly; \
+    else \
+        ~/.cargo/bin/rustup target add x86_64-unknown-linux-gnu --toolchain nightly; \
+    fi
 
 # mod-plugin-builder settings
 ENV MPB_GIT_URL https://github.com/moddevices/mod-plugin-builder
