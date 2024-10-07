@@ -4,29 +4,21 @@
 #
 ######################################
 
-SENSORIUM_PLUGINS_VERSION = 8880e2890658b5763c3f5bd0c436f48e0c468711
+SENSORIUM_PLUGINS_VERSION = ad290b19dc7df06400e5fe07cfc870f0af7efc56
 SENSORIUM_PLUGINS_SITE = https://github.com/sensorium/sensorium-plugins.git
 SENSORIUM_PLUGINS_SITE_METHOD = git
-SENSORIUM_PLUGINS_DEPENDENCIES = dpf
+SENSORIUM_PLUGINS_DEPENDENCIES = dpf hvcc
 SENSORIUM_PLUGINS_BUNDLES = TheCloud.lv2
-
-define SENSORIUM_PLUGINS_CONFIGURE_CMDS
-	# install hvcc
-	# --break-system-packages
-	pip3 install git+https://github.com/Wasted-Audio/hvcc.git \
-		--disable-pip-version-check \
-		--isolated \
-		--no-cache-dir
-endef
 
 define SENSORIUM_PLUGINS_BUILD_CMDS
 	# create dpf-based build project
-	hvcc $(@D)/Pd/TheCloud.pd -m $(@D)/thecloud.json -n "TheCloud" -g dpf -o $(@D)/build
+	$(STAGING_DIR)/usr/bin/hvcc $(@D)/Pd/TheCloud.pd -m $(@D)/thecloud.json -n "TheCloud" -g dpf -o $(@D)/build
 
 	# symlink dpf dep into build dir
 	ln -sf $(STAGING_DIR)/usr/src/dpf $(@D)/build
 
 	# build dpf project
+	rm -f TheCloud.lv2/TheCloud_dsp.so
 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)/build
 endef
 
