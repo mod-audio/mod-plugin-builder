@@ -4,7 +4,7 @@
 #
 ######################################
 
-DPF_VERSION = e045225a6c08d437d0bcf8400da9b0783291b4a9
+DPF_VERSION = 6b042628933f220a05571bde6a02fe0198a96b5d
 DPF_SITE = $(call github,DISTRHO,DPF,$(DPF_VERSION))
 DPF_INSTALL_STAGING = YES
 

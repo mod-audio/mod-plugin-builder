@@ -4,7 +4,7 @@
 #
 ######################################
 
-SENSORIUM_PLUGINS_VERSION = ad290b19dc7df06400e5fe07cfc870f0af7efc56
+SENSORIUM_PLUGINS_VERSION = 232e95a478937efcab02f5dc51e55045796134df
 SENSORIUM_PLUGINS_SITE = https://github.com/sensorium/sensorium-plugins.git
 SENSORIUM_PLUGINS_SITE_METHOD = git
 SENSORIUM_PLUGINS_DEPENDENCIES = dpf hvcc
