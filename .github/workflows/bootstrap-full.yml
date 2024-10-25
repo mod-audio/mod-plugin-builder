@@ -7,13 +7,13 @@ env:
   DEBIAN_FRONTEND: noninteractive
 
 jobs:
-  ubuntu_23_10:
+  ubuntu_24_04:
     strategy:
       matrix:
         platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:23.10
+      image: ubuntu:24.04
     steps:
       - uses: actions/checkout@v3
       - name: Set up cache
@@ -21,7 +21,7 @@ jobs:
         with:
           path: |
             ~/mod-workdir/download
-          key: download-ubuntu_23_10-${{ matrix.platform }}
+          key: download-ubuntu_24_04-${{ matrix.platform }}
       - name: Install dependencies
         run: |
           apt-get update -qq && apt-get install -yqq \
