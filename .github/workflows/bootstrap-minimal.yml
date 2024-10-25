@@ -5,19 +5,20 @@ on: [push, pull_request]
 env:
   CT_ALLOW_BUILD_AS_ROOT_SURE: 1
   DEBIAN_FRONTEND: noninteractive
+  FORCE_UNSAFE_CONFIGURE: 1
 
 jobs:
   debian_12:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
     runs-on: ubuntu-latest
     container:
       image: debian:12
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/mod-workdir/download
@@ -36,14 +37,14 @@ jobs:
   debian_11:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
     runs-on: ubuntu-latest
     container:
       image: debian:11
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/mod-workdir/download
@@ -59,21 +60,22 @@ jobs:
           sed -i 's/CT_LOG_PROGRESS_BAR=y/CT_LOG_PROGRESS_BAR=n/' toolchain/*.config
           ./bootstrap.sh ${{ matrix.platform }} minimal
 
-  ubuntu_23_10:
+  ubuntu_24_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        # platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
+        platform: [modduo-new, modduox-new, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:23.10
+      image: ubuntu:24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/mod-workdir/download
-          key: download-ubuntu_23_10-${{ matrix.platform }}
+          key: download-ubuntu_24_04-${{ matrix.platform }}
       - name: Install dependencies
         run: |
           apt-get update -qq && apt-get install -yqq \
@@ -88,14 +90,14 @@ jobs:
   ubuntu_22_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/mod-workdir/download
@@ -114,14 +116,14 @@ jobs:
   ubuntu_20_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/mod-workdir/download
