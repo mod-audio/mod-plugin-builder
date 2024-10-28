@@ -8,10 +8,10 @@ env:
   FORCE_UNSAFE_CONFIGURE: 1
 
 jobs:
-  ubuntu_24_04:
+  ubuntu_22_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-static, modduo-new, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-x86_64]
+        platform: [modduo, modduo-debug, modduo-new, modduo-new-debug, modduo-static, modduox, modduox-debug, modduox-static, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:22.04

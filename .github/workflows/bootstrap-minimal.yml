@@ -11,7 +11,7 @@ jobs:
   debian_12:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
+        platform: [modduo, modduo-debug, modduo-new, modduo-new-debug, modduo-static, modduox, modduox-debug, modduox-static, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: debian:12
@@ -37,7 +37,7 @@ jobs:
   debian_11:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
+        platform: [modduo, modduo-debug, modduo-new, modduo-new-debug, modduo-static, modduox, modduox-debug, modduox-static, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: debian:11
@@ -63,8 +63,8 @@ jobs:
   ubuntu_24_04:
     strategy:
       matrix:
-        # platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
-        platform: [modduo-new, modduox-new, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
+        # platform: [modduo, modduo-debug, modduo-new, modduo-new-debug, modduo-static, modduox, modduox-debug, modduox-static, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
+        platform: [modduo-new, modduo-new-debug, modduox-new, modduox-new-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:24.04
@@ -90,7 +90,7 @@ jobs:
   ubuntu_22_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
+        platform: [modduo, modduo-debug, modduo-new, modduo-new-debug, modduo-static, modduox, modduox-debug, modduox-static, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:22.04
@@ -116,7 +116,7 @@ jobs:
   ubuntu_20_04:
     strategy:
       matrix:
-        platform: [modduo, modduo-new, modduo-static, modduox, modduox-static, modduox-new, moddwarf, moddwarf-new, generic-aarch64, generic-aarch64-debug, generic-x86_64]
+        platform: [modduo, modduo-debug, modduo-new, modduo-new-debug, modduo-static, modduox, modduox-debug, modduox-static, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:20.04
