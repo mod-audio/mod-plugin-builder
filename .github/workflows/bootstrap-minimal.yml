@@ -63,8 +63,8 @@ jobs:
   ubuntu_24_04:
     strategy:
       matrix:
-        # platform: [modduo, modduo-debug, , modduox, modduox-debug, , ]
-        platform: [modduo-new, modduo-new-debug, modduo-static, modduox-new, modduox-new-debug, modduox-static, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
+        # platform: [modduo, modduo-debug, modduo-static, , modduox, modduox-debug, modduox-static, , ]
+        platform: [modduo-new, modduo-new-debug, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:24.04

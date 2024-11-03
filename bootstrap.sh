@@ -47,6 +47,7 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
       mkdir -p ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/linaro-4.9-2017.01
 
       cp -r ${SOURCE_DIR}/patches/${CT_NG_VERSION}/bin-utils-2.26    ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/binutils/2.26
+      cp -r ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.21        ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/glibc/2.21
       cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-4.9.3/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/4.9.3/
       cp    ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-linaro-4.9-2017.01/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/patches/gcc/linaro-4.9-2017.01/
     ;;
@@ -54,6 +55,8 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
     "crosstool-ng-1.24.0")
       patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_linaro-2019.12.patch
       patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/002_linaro-gcc7-selects.patch
+
+      cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
     ;;
 
     "crosstool-ng-1.25.0")
