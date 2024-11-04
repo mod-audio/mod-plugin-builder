@@ -63,8 +63,8 @@ jobs:
   ubuntu_24_04:
     strategy:
       matrix:
-        # platform: [modduo, modduo-debug, modduo-static, , modduox, modduox-debug, modduox-static, , ]
-        platform: [modduo-new, modduo-new-debug, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
+        # platform: [modduo, modduo-debug, , modduox, modduox-debug, , ]
+        platform: [modduo-static, modduo-new, modduo-new-debug, modduox-static, modduox-new, modduox-new-debug, moddwarf, moddwarf-debug, moddwarf-new, moddwarf-new-debug, generic-aarch64, generic-aarch64-debug, generic-x86_64, generic-x86_64-debug]
     runs-on: ubuntu-latest
     container:
       image: ubuntu:24.04
@@ -82,6 +82,12 @@ jobs:
             acl bc curl cvs git mercurial rsync subversion wget \
             bison bzip2 flex gawk gperf gzip help2man nano perl patch tar texinfo unzip \
             automake binutils build-essential cpio libtool libncurses-dev pkg-config python-is-python3 libtool-bin
+      - name: Workaround texinfo bug
+      # https://lists.gnu.org/archive/html/bug-texinfo/2024-05/msg00000.html
+        run: |
+          wget https://launchpad.net/~kxstudio-debian/+archive/ubuntu/testing/+files/texinfo-lib_7.1-3kxstudio2_amd64.deb
+          wget https://launchpad.net/~kxstudio-debian/+archive/ubuntu/testing/+files/texinfo_7.1-3kxstudio2_all.deb
+          dpkg -i *.deb
       - name: Bootstrap
         run: |
           sed -i 's/CT_LOG_PROGRESS_BAR=y/CT_LOG_PROGRESS_BAR=n/' toolchain/*.config
