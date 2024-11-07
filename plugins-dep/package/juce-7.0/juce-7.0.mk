@@ -4,7 +4,7 @@
 #
 ######################################
 
-JUCE_7_0_VERSION = c3099e733e90b8a2e7071698980abd70efb9a4e7
+JUCE_7_0_VERSION = 76a34204602b6a2a46b64bf3eb3ccb0e3c41b9f8
 JUCE_7_0_VERSION_PROJECT = JUCE-7.0.9
 JUCE_7_0_SITE = $(call github,DISTRHO,juce,$(JUCE_7_0_VERSION))
 JUCE_7_0_DEPENDENCIES = host-juce-7.0 freetype
@@ -41,9 +41,11 @@ define HOST_JUCE_7_0_POST_INSTALL_JUCEAIDE
 endef
 
 define JUCE_7_0_INSTALL_STAGING_CMDS
+	$(INSTALL) -d $(STAGING_DIR)/usr/bin/$(JUCE_7_0_VERSION_PROJECT)
 	$(INSTALL) -d $(STAGING_DIR)/usr/include
 	$(INSTALL) -d $(STAGING_DIR)/usr/lib/cmake
 	cp $(HOST_DIR)/usr/bin/juceaide70 $(STAGING_DIR)/usr/bin/
+	cp $(HOST_DIR)/usr/bin/$(JUCE_7_0_VERSION_PROJECT)/juce_lv2_helper $(STAGING_DIR)/usr/bin/$(JUCE_7_0_VERSION_PROJECT)/
 	cp -r $(HOST_DIR)/usr/include/$(JUCE_7_0_VERSION_PROJECT) $(STAGING_DIR)/usr/include/
 	cp -r $(HOST_DIR)/usr/lib/cmake/$(JUCE_7_0_VERSION_PROJECT) $(STAGING_DIR)/usr/lib/cmake/
 	ln -sf JUCEConfig.cmake $(STAGING_DIR)/usr/lib/cmake/$(JUCE_7_0_VERSION_PROJECT)/$(JUCE_7_0_VERSION_PROJECT)Config.cmake
