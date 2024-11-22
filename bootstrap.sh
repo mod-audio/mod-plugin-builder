@@ -249,6 +249,7 @@ elif [ "${BUILDTARGET}" = "juce" ]; then
   ${BR2_MAKE} juce-6.0
   ${BR2_MAKE} juce-6.1
   ${BR2_MAKE} juce-7.0
+  ${BR2_MAKE} juce-8.0
   ${BR2_MAKE} mod-plugin-builder
 elif [ "${BUILDTARGET}" = "dev" ]; then
   ${BR2_MAKE} host-python3

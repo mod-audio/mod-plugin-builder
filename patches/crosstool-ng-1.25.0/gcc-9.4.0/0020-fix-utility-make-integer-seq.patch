@@ -1,0 +1,13 @@
+diff --git a/libstdc++-v3/include/std/utility b/libstdc++-v3/include/std/utility
+index c687c1d..d651b92 100644
+--- a/libstdc++-v3/include/std/utility
++++ b/libstdc++-v3/include/std/utility
+@@ -293,7 +293,7 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
+ 
+ #ifdef __has_builtin
+ # if __has_builtin(__make_integer_seq)
+-#  define _GLIBCXX_USE_MAKE_INTEGER_SEQ 1
++#  define _GLIBCXX_USE_MAKE_INTEGER_SEQ 0
+ # endif
+ #endif
+ 

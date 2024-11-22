@@ -1,0 +1,13 @@
+diff --git a/modules/juce_core/native/juce_SharedCode_posix.h b/modules/juce_core/native/juce_SharedCode_posix.h
+index c53ef0f..1590662 100644
+--- a/modules/juce_core/native/juce_SharedCode_posix.h
++++ b/modules/juce_core/native/juce_SharedCode_posix.h
+@@ -40,7 +40,7 @@ CriticalSection::CriticalSection() noexcept
+     pthread_mutexattr_t atts;
+     pthread_mutexattr_init (&atts);
+     pthread_mutexattr_settype (&atts, PTHREAD_MUTEX_RECURSIVE);
+-   #if ! JUCE_ANDROID
++   #if ! JUCE_ANDROID && ! JUCE_ARM
+     pthread_mutexattr_setprotocol (&atts, PTHREAD_PRIO_INHERIT);
+    #endif
+     pthread_mutex_init (&lock, &atts);
