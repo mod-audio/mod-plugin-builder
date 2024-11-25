@@ -7,10 +7,10 @@
 JUCE_8_0_VERSION = 51d11a2be6d5c97ccf12b4e5e827006e19f0555a
 JUCE_8_0_VERSION_PROJECT = JUCE-8.0.4
 JUCE_8_0_SITE = $(call github,juce-framework,juce,$(JUCE_8_0_VERSION))
-JUCE_8_0_DEPENDENCIES = host-juce-8.0 freetype xlib_libX11
+JUCE_8_0_DEPENDENCIES = host-juce-8.0 fontconfig freetype xlib_libX11
 JUCE_8_0_INSTALL_STAGING = YES
 JUCE_8_0_TOOLCHAIN_FILE = $(STAGING_DIR)/usr/lib/cmake/$(JUCE_8_0_VERSION_PROJECT)/toolchainfile.cmake
-HOST_JUCE_8_0_DEPENDENCIES = host-cmake host-freetype host-xlib_libX11
+HOST_JUCE_8_0_DEPENDENCIES = host-cmake host-fontconfig host-freetype host-xlib_libX11
 
 # this custom configure follows the same rules as buildroot, with these exceptions:
 # - CMAKE_FIND_ROOT_PATH_MODE_PROGRAM="ONLY" (buildroot uses "NEVER")
