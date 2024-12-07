@@ -252,6 +252,7 @@ elif [ "${BUILDTARGET}" = "juce" ]; then
   ${BR2_MAKE} juce-8.0
   ${BR2_MAKE} mod-plugin-builder
 elif [ "${BUILDTARGET}" = "dev" ]; then
+  ${BR2_MAKE} host-openssl
   ${BR2_MAKE} host-python3
   # for cc-master
   ${BR2_MAKE} jansson
