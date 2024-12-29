@@ -4,7 +4,9 @@
 #
 ######################################
 
-ifdef BR2_cortex_a53
+ifeq ($(PABLITO),y)
+LIBMODLA_SOURCE_SUFFIX = pablito
+else ifdef BR2_cortex_a53
 LIBMODLA_SOURCE_SUFFIX = aarch64-a53
 else ifdef BR2_cortex_a35
 LIBMODLA_SOURCE_SUFFIX = aarch64-a35
@@ -12,13 +14,15 @@ else
 LIBMODLA_SOURCE_SUFFIX = arm-a7
 endif
 
-ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCC_9),y)
+ifeq ($(filter arm-% aarch64-%,$(LIBMODLA_SOURCE_SUFFIX)),)
+# nothing here
+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCC_9),y)
 LIBMODLA_SOURCE_EXTRA_SUFFIX = -gcc9
 else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
 LIBMODLA_SOURCE_EXTRA_SUFFIX = -gcc7
 endif
 
-LIBMODLA_VERSION = v1.2.3
+LIBMODLA_VERSION = v1.3.0
 LIBMODLA_SITE = https://download.mod.audio/shared
 LIBMODLA_SOURCE = libmodla-$(LIBMODLA_VERSION)-$(LIBMODLA_SOURCE_SUFFIX)$(LIBMODLA_SOURCE_EXTRA_SUFFIX).tar.gz
 LIBMODLA_INSTALL_STAGING = YES

@@ -220,6 +220,7 @@ if [ "${BUILDTARGET}" = "blackmirror" ]; then
   ${BR2_MAKE} dbus
   ${BR2_MAKE} libdrm
   ${BR2_MAKE} libinput
+  env PABLITO=y ${BR2_MAKE} libmodla
   ${BR2_MAKE} libserialport
   ${BR2_MAKE} lilv
   ${BR2_MAKE} kxstudio-lv2-extensions
