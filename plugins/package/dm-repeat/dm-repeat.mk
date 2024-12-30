@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_REPEAT_VERSION = d1b04d06337f6f1896ae0bb56498ff05b9889c12
+DM_REPEAT_VERSION = ebe7d6f1ea3e0412169e8356a153c7c0e4fb770d
 DM_REPEAT_SITE = https://github.com/davemollen/dm-Repeat.git
 DM_REPEAT_SITE_METHOD = git
 DM_REPEAT_BUNDLES = dm-Repeat.lv2
