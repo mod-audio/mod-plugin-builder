@@ -4,7 +4,7 @@
 #
 ######################################
 
-RATATOUILLE_VERSION = a48a8e1a84c0b9f451b2c44177bb8c4c796008ca
+RATATOUILLE_VERSION = 32d87ca068616cc0a65f857be73d86b57f6c6b6d
 RATATOUILLE_SITE = https://github.com/brummer10/Ratatouille.lv2.git
 RATATOUILLE_SITE_METHOD = git
 RATATOUILLE_DEPENDENCIES = libsndfile
