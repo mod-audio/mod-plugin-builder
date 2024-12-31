@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_TUBESCREAMER_VERSION = 6a2f3f0b0b8f3e867bd483875439b41ae31a6600
+DM_TUBESCREAMER_VERSION = 777e6f6129d35cafb2a2a79e277d177351565e7b
 DM_TUBESCREAMER_SITE = https://github.com/davemollen/dm-TubeScreamer.git
 DM_TUBESCREAMER_SITE_METHOD = git
 DM_TUBESCREAMER_BUNDLES = dm-TubeScreamer.lv2

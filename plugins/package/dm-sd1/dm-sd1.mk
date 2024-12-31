@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_SD1_VERSION = 1afa503f81a0b8f834e481dc2c4acb7726a0b4d5
+DM_SD1_VERSION = 385ae026891224fa4e815bc83c381c1e528cd216
 DM_SD1_SITE = https://github.com/davemollen/dm-SD1.git
 DM_SD1_SITE_METHOD = git
 DM_SD1_BUNDLES = dm-SD1.lv2

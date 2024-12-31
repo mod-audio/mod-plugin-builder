@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_SHREDMASTER_VERSION = 9e48c36ed75556c59535694284b7c6a620a79070
+DM_SHREDMASTER_VERSION = d9db3aa0f3924825e97f1434daa597040228d716
 DM_SHREDMASTER_SITE = https://github.com/davemollen/dm-Shredmaster.git
 DM_SHREDMASTER_SITE_METHOD = git
 DM_SHREDMASTER_BUNDLES = dm-Shredmaster.lv2

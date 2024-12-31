@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_RAT_VERSION = f465997d117e888819ef150de4d5f04c8df6343d
+DM_RAT_VERSION = 88be9879a94ade2a2012db185dc1572afe446c05
 DM_RAT_SITE = https://github.com/davemollen/dm-Rat.git
 DM_RAT_SITE_METHOD = git
 DM_RAT_BUNDLES = dm-Rat.lv2
