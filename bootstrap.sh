@@ -231,6 +231,7 @@ elif [ "${BUILDTARGET}" = "kernel" ]; then
   ${BR2_MAKE} host-pkgconf
   ${BR2_MAKE} host-openssl
 elif [ "${BUILDTARGET}" = "minimal" ]; then
+  ${BR2_MAKE} host-cmake
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
   ${BR2_MAKE} liblo
