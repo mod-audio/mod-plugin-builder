@@ -225,7 +225,7 @@ if [ "${BUILDTARGET}" = "blackmirror" ]; then
   ${BR2_MAKE} lilv
   ${BR2_MAKE} kxstudio-lv2-extensions
   ${BR2_MAKE} mod-lv2-extensions
-  ${BR2_MAKE} sdl2
+  ${BR2_MAKE} sqlite
 elif [ "${BUILDTARGET}" = "kernel" ]; then
   ${BR2_MAKE} host-kmod
   ${BR2_MAKE} host-pkgconf
