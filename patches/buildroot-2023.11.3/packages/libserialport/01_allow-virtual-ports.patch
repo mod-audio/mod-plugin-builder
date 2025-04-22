@@ -1,0 +1,69 @@
+diff --git a/linux.c b/linux.c
+index 9016489..916c810 100644
+--- a/linux.c
++++ b/linux.c
+@@ -44,13 +44,18 @@ SP_PRIV enum sp_return get_port_details(struct sp_port *port)
+ 		RETURN_ERROR(SP_ERR_ARG, "Device name not recognized");
+ 
+ 	snprintf(file_name, sizeof(file_name), "/sys/class/tty/%s", dev);
+-	if (lstat(file_name, &statbuf) == -1)
+-		RETURN_ERROR(SP_ERR_ARG, "Device not found");
+-	if (!S_ISLNK(statbuf.st_mode))
+-		snprintf(file_name, sizeof(file_name), "/sys/class/tty/%s/device", dev);
+-	count = readlink(file_name, file_name, sizeof(file_name));
+-	if (count <= 0 || count >= (int)(sizeof(file_name) - 1))
+-		RETURN_ERROR(SP_ERR_ARG, "Device not found");
++	if (lstat(file_name, &statbuf) >= 0)
++	{
++		if (!S_ISLNK(statbuf.st_mode))
++			snprintf(file_name, sizeof(file_name), "/sys/class/tty/%s/device", dev);
++		count = readlink(file_name, file_name, sizeof(file_name));
++		if (count <= 0 || count >= (int)(sizeof(file_name) - 1))
++			RETURN_ERROR(SP_ERR_ARG, "Device not found");
++	}
++	else
++	{
++		count = 0;
++	}
+ 	file_name[count] = 0;
+ 	if (strstr(file_name, "bluetooth"))
+ 		port->transport = SP_TRANSPORT_BLUETOOTH;
+diff --git a/serialport.c b/serialport.c
+index d271478..44ac11a 100644
+--- a/serialport.c
++++ b/serialport.c
+@@ -1625,6 +1625,7 @@ static enum sp_return get_config(struct sp_port *port, struct port_data *data,
+ 	struct sp_port_config *config)
+ {
+ 	unsigned int i;
++	int err_TIOCMGET = 0;
+ 
+ 	TRACE("%p, %p, %p", port, data, config);
+ 
+@@ -1731,7 +1732,10 @@ static enum sp_return get_config(struct sp_port *port, struct port_data *data,
+ 		RETURN_FAIL("tcgetattr() failed");
+ 
+ 	if (ioctl(port->fd, TIOCMGET, &data->controlbits) < 0)
+-		RETURN_FAIL("TIOCMGET ioctl failed");
++	{
++		err_TIOCMGET = 1;
++		data->controlbits = -1;
++	}
+ 
+ #ifdef USE_TERMIOX
+ 	int ret = get_flow(port->fd, data);
+@@ -1827,6 +1831,14 @@ static enum sp_return get_config(struct sp_port *port, struct port_data *data,
+ 	}
+ #endif
+ 
++	if (err_TIOCMGET)
++	{
++		config->rts = -1;
++		config->cts = -1;
++		config->dtr = -1;
++		config->dsr = -1;
++	}
++
+ 	RETURN_OK();
+ }
+ 
