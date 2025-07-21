@@ -4,7 +4,7 @@
 #
 ######################################
 
-ifeq ($(PABLITO),y)
+ifeq ($(BR2_PACKAGE_LIBMODLA_PABLITO),y)
 LIBMODLA_SOURCE_SUFFIX = pablito
 else ifdef BR2_cortex_a53
 LIBMODLA_SOURCE_SUFFIX = aarch64-a53
