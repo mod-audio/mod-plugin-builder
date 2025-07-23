@@ -24,7 +24,7 @@ source .common
 #######################################################################################################################
 # Build docker image first if needed
 
-if ! docker images | grep -q "mpbi_${PLATFORM}"; then
+if ! docker images | grep -q "^mpbi_${PLATFORM} "; then
   docker buildx build \
     --build-arg platform="${PLATFORM}" \
     --build-arg target=toolchain \
@@ -35,7 +35,7 @@ fi
 #######################################################################################################################
 # Now setup docker mountpoints (or run it if already exists)
 
-if docker ps -a | grep -q "mpb_${PLATFORM}"; then
+if docker ps -a | grep -q "^mpb_${PLATFORM} "; then
   docker start -i "mpb_${PLATFORM}"
 elif [ -n "${EXTRA_MOUNT_PATH}" ]; then
   docker run --name "mpb_${PLATFORM}" -ti \
