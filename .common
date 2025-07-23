@@ -63,7 +63,7 @@ fi
 #######################################################################################################################
 # check for generic builds
 
-if [[ "${PLATFORM}" == "generic-aarch64-"* ]] || [ "${PLATFORM}" = "darkglass-anagram" ]; then
+if [[ "${PLATFORM}" == "generic-aarch64-"* ]] || [[ "${PLATFORM}" = "darkglass-anagram"* ]]; then
   TOOLCHAIN_PLATFORM="generic-aarch64"
   BR2_PLATFORM="${PLATFORM}"
 fi
