@@ -4,7 +4,7 @@
 #
 ######################################
 
-FLUIDPLUG_VERSION = 38d7d0d5259c89199be3cf56768edf0d41bfd881
+FLUIDPLUG_VERSION = 1cf494cb3a5b1f7f2a95f872768a1eef141c3e0a
 FLUIDPLUG_SITE = $(call github,falkTX,FluidPlug,$(FLUIDPLUG_VERSION))
 FLUIDPLUG_DEPENDENCIES = fluidsynth host-p7zip-light
 FLUIDPLUG_BUNDLES = Black_Pearl_4A.lv2 Black_Pearl_4B.lv2 Black_Pearl_5.lv2 FluidBass.lv2 FluidBrass.lv2 FluidChromPerc.lv2 FluidDrums.lv2 FluidEnsemble.lv2 FluidEthnic.lv2 FluidGuitars.lv2 FluidOrgans.lv2 FluidPercussion.lv2 FluidPianos.lv2 FluidPipes.lv2 FluidReeds.lv2 FluidSoundFX.lv2 FluidStrings.lv2 FluidSynthFX.lv2 FluidSynthLeads.lv2 FluidSynthPads.lv2 Red_Zeppelin_4.lv2 Red_Zeppelin_5.lv2

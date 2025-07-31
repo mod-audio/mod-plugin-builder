@@ -878,12 +878,15 @@ diff --git a/plugins/dragonfly-early-reflections/Makefile b/plugins/dragonfly-ea
 index b30ea18..14d3a8a 100644
 --- a/plugins/dragonfly-early-reflections/Makefile
 +++ b/plugins/dragonfly-early-reflections/Makefile
-@@ -67,6 +67,9 @@ endif
+@@ -67,6 +67,12 @@ endif
  # TODO handle throw deprecation for freeverb
  BUILD_CXX_FLAGS += -Wno-deprecated
  
 +# custom MOD flags
-+BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -fno-builtin
++ifneq ($(MACOS),true)
++BUILD_CXX_FLAGS += -fsingle-precision-constant -ffat-lto-objects
++endif
 +
  # --------------------------------------------------------------
  # Link dependencies
@@ -936,12 +939,15 @@ diff --git a/plugins/dragonfly-hall-reverb/Makefile b/plugins/dragonfly-hall-rev
 index 91a3c13..04afeec 100644
 --- a/plugins/dragonfly-hall-reverb/Makefile
 +++ b/plugins/dragonfly-hall-reverb/Makefile
-@@ -68,6 +68,9 @@ endif
+@@ -68,6 +68,12 @@ endif
  # TODO handle throw deprecation for freeverb
  BUILD_CXX_FLAGS += -Wno-deprecated
  
 +# custom MOD flags
-+BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -fno-builtin
++ifneq ($(MACOS),true)
++BUILD_CXX_FLAGS += -fsingle-precision-constant -ffat-lto-objects
++endif
 +
  # --------------------------------------------------------------
  # Link dependencies
@@ -1006,12 +1012,15 @@ diff --git a/plugins/dragonfly-plate-reverb/Makefile b/plugins/dragonfly-plate-r
 index f5c88df..105a4f6 100644
 --- a/plugins/dragonfly-plate-reverb/Makefile
 +++ b/plugins/dragonfly-plate-reverb/Makefile
-@@ -71,6 +71,9 @@ BUILD_CXX_FLAGS += -Wno-unused-variable
+@@ -71,6 +71,12 @@ BUILD_CXX_FLAGS += -Wno-unused-variable
  # TODO handle throw deprecation for freeverb
  BUILD_CXX_FLAGS += -Wno-deprecated
  
 +# custom MOD flags
-+BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -fno-builtin
++ifneq ($(MACOS),true)
++BUILD_CXX_FLAGS += -fsingle-precision-constant -ffat-lto-objects
++endif
 +
  # --------------------------------------------------------------
  # Link dependencies
@@ -1089,12 +1098,15 @@ diff --git a/plugins/dragonfly-room-reverb/Makefile b/plugins/dragonfly-room-rev
 index db70159..7f2f273 100644
 --- a/plugins/dragonfly-room-reverb/Makefile
 +++ b/plugins/dragonfly-room-reverb/Makefile
-@@ -68,6 +68,9 @@ endif
+@@ -68,6 +68,12 @@ endif
  # TODO handle throw deprecation for freeverb
  BUILD_CXX_FLAGS += -Wno-deprecated
  
 +# custom MOD flags
-+BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -ffat-lto-objects -fno-builtin -fsingle-precision-constant
++BUILD_CXX_FLAGS += -DDISABLE_UNDENORMAL -fomit-frame-pointer -ftree-vectorize -flto -fno-builtin
++ifneq ($(MACOS),true)
++BUILD_CXX_FLAGS += -fsingle-precision-constant -ffat-lto-objects
++endif
 +
  # --------------------------------------------------------------
  # Link dependencies
