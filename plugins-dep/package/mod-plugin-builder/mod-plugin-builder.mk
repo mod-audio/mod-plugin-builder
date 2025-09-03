@@ -4,11 +4,11 @@
 #
 ######################################
 
-MOD_PLUGIN_BUILDER_VERSION = 1
+MOD_PLUGIN_BUILDER_VERSION = 2
 MOD_PLUGIN_BUILDER_SOURCE = .
 MOD_PLUGIN_BUILDER_SITE = .
 MOD_PLUGIN_BUILDER_SITE_METHOD = file
-MOD_PLUGIN_BUILDER_DEPENDENCIES = host-cmake
+MOD_PLUGIN_BUILDER_DEPENDENCIES = host-cmake host-mod-plugin-builder
 
 ifdef BR2_cortex_a7
 MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a7","-Ctarget-feature=+a7,+neonfp,+vfp4sp","-Clink-args=--sysroot=$(STAGING_DIR)"]
@@ -43,7 +43,16 @@ define MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 	fi
 endef
 
+define HOST_MOD_PLUGIN_BUILDER_EXTRACT_CMDS
+endef
+
+define HOST_MOD_PLUGIN_BUILDER_INSTALL_CMDS
+	$(INSTALL) -d $(HOST_DIR)/usr/share/mod-plugin-builder
+	$(INSTALL) -m 644 $($(PKG)_PKGDIR)/toolchainfile.cmake $(HOST_DIR)/usr/share/mod-plugin-builder/
+endef
+
 $(eval $(generic-package))
+$(eval $(host-generic-package))
 
 # force flags for other packages here
 
