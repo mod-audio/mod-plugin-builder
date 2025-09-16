@@ -1,0 +1,3 @@
+config BR2_PACKAGE_DARKGLASS_LV2_EXTENSIONS
+	bool darkglass-lv2-extensions
+	select BR2_PACKAGE_LV2
