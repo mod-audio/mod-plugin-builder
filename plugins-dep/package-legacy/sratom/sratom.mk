@@ -5,8 +5,7 @@
 ################################################################################
 
 SRATOM_VERSION = b9717ab942b38f023cee99b3c108514a651b2b51
-SRATOM_SITE = http://git.drobilla.net/sratom.git
-SRATOM_SITE_METHOD = git
+SRATOM_SITE = $(call github,drobilla,sratom,$(SRATOM_VERSION))
 SRATOM_DEPENDENCIES = lv2 sord
 SRATOM_INSTALL_STAGING = YES
 
