@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_REVERB_VERSION = 6d01e3cc8a3bfaf0e74d35783e5f328bdc6be6dc
+DM_REVERB_VERSION = 3ac9bba82f099cf517f55d8c0f84c8aaa12c8ed3
 DM_REVERB_SITE = https://github.com/davemollen/dm-Reverb.git
 DM_REVERB_SITE_METHOD = git
 DM_REVERB_BUNDLES = dm-Reverb.lv2

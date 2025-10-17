@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_SPACEECHO_VERSION = 2f2373601ec5480c234aa07ad8d4ca90debad3b2
+DM_SPACEECHO_VERSION = 28f07b2e99ab18639c413d61a206cbe1f94c60e0
 DM_SPACEECHO_SITE = https://github.com/davemollen/dm-SpaceEcho.git
 DM_SPACEECHO_SITE_METHOD = git
 DM_SPACEECHO_BUNDLES = dm-SpaceEcho.lv2

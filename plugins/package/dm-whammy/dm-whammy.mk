@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_WHAMMY_VERSION = 3d2047fb7cfcedb69de3bfcb6261af4e0ffef917
+DM_WHAMMY_VERSION = d8541ec399fe70c3ba26768d8ef88fd254e339d7
 DM_WHAMMY_SITE = https://github.com/davemollen/dm-Whammy.git
 DM_WHAMMY_SITE_METHOD = git
 DM_WHAMMY_BUNDLES = dm-Whammy.lv2

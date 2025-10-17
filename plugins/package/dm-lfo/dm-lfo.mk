@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_LFO_VERSION = 5c46f4c56a1d00c434c106e50faa0d96daaf741f
+DM_LFO_VERSION = 8dee13fd433d6ffc3037ebc303a7e3658aeb28d4
 DM_LFO_SITE = https://github.com/davemollen/dm-LFO.git
 DM_LFO_SITE_METHOD = git
 DM_LFO_BUNDLES = dm-LFO.lv2
