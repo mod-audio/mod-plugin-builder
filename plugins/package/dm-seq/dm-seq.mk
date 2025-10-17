@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_SEQ_VERSION = b755d55622c378709b817cf6afbaf30e4144e24e
+DM_SEQ_VERSION = 680b9cab50f7dc536a8cde109dceaae7f6a9f393
 DM_SEQ_SITE = https://github.com/davemollen/dm-Seq.git
 DM_SEQ_SITE_METHOD = git
 DM_SEQ_BUNDLES = dm-Seq.lv2
