@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_REVERSE_VERSION = fb11232fb08a6817752b7a0339fb5cd3002a2382
+DM_REVERSE_VERSION = 67b68d0c084da0f116bff6c230896af39c408faf
 DM_REVERSE_SITE = https://github.com/davemollen/dm-Reverse.git
 DM_REVERSE_SITE_METHOD = git
 DM_REVERSE_BUNDLES = dm-Reverse.lv2
