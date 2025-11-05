@@ -1,0 +1,2 @@
+This custom package exists for forcing/fixing compatibility with cmake4.
+We do this by adding `-DCMAKE_POLICY_VERSION_MINIMUM=3.5` to the cmake args.
