@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_VIBRATO_VERSION = 47b2454afe37cf7d85f079e911fcbec433fc0b8d
+DM_VIBRATO_VERSION = d7fe46e487e4ae86df6af4a39116e1e381ad1227
 DM_VIBRATO_SITE = https://github.com/davemollen/dm-Vibrato.git
 DM_VIBRATO_SITE_METHOD = git
 DM_VIBRATO_BUNDLES = dm-Vibrato.lv2
