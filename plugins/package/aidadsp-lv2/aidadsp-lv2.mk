@@ -28,4 +28,10 @@ AIDADSP_LV2_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="$(TARGET_LDFLAGS) $(AIDADS
 # needed for submodules support
 AIDADSP_LV2_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
+# FIXME path failure with some CMake versions, don't know why so let's workaround it
+define AIDADSP_LV2_FIX_INSTALL_TARGET
+	sed -i -e 's|CMakeFiles/CMakeRelink.dir/||' $(@D)/rt-neural-generic/cmake_install.cmake
+endef
+AIDADSP_LV2_PRE_INSTALL_TARGET_HOOKS += AIDADSP_LV2_FIX_INSTALL_TARGET
+
 $(eval $(cmake-package))
