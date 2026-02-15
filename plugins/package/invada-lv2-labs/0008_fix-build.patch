@@ -1,0 +1,13 @@
+diff --git a/plugin/Makefile b/plugin/Makefile
+index d13378f..92c6221 100644
+--- a/plugin/Makefile
++++ b/plugin/Makefile
+@@ -22,7 +22,7 @@
+ CC		?=	gcc
+ LD		?=	gcc
+ CFLAGS		+=	-I. -O3 -Wall -fomit-frame-pointer -fstrength-reduce -funroll-loops -ffast-math -c -fPIC -DPIC
+-LDFLAGS		+=	-shared -Llibrary -lm  -linv_common -fPIC -DPIC
++LDFLAGS		+=	-shared -Llibrary  -linv_common -lm -fPIC -DPIC
+ 
+ PLUGINS		=	inv_compressor.so \
+                         inv_delay.so \

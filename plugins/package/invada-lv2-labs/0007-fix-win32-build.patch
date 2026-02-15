@@ -1,0 +1,28 @@
+diff --git a/plugin/library/common.c b/plugin/library/common.c
+index ca00815..310ee9e 100644
+--- a/plugin/library/common.c
++++ b/plugin/library/common.c
+@@ -176,7 +176,11 @@ calculateSingleIReverbER(struct ERunit * er, float Width, float Length, float He
+ 	ERRelGainR        = (ERRelGain * (1 + (ERAngle/PI_ON_2)))/2;
+ 
+ 	er->Active=1;
++#ifdef _WIN32
++	er->rand=(double)rand()/RAND_MAX;
++#else
+ 	er->rand=drand48();
++#endif
+ 	er->DelayActual=ERRelDelayActual;
+ 	er->Reflections=Reflections;
+ 	er->AbsGain=fabs(ERRelGain);
+@@ -227,7 +231,11 @@ calculateIReverbER(struct ERunit *erarray, int erMax,
+ 	MaxGain=0.000000000001; /* this is used to scale up the reflections so that the loudest one has a gain of 1 (0db) */
+ 
+ 	/* seed the random sequence*/
++#ifdef _WIN32
++	srand(31415);
++#else
+ 	srand48(314159265);
++#endif
+   
+ 	// reflections from the left wall
+ 	// 0: S->Left->D
