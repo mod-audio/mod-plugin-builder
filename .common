@@ -135,7 +135,7 @@ else
   BUILDROOT_TAR_EXT=xz
 fi
 
-BUILDROOT_LINK=http://buildroot.uclibc.org/downloads/
+BUILDROOT_LINK=https://buildroot.org/downloads/
 BUILDROOT_FILE=${BUILDROOT_VERSION}.tar.${BUILDROOT_TAR_EXT}
 
 SOURCE_DIR="$(pwd)"
