@@ -24,6 +24,7 @@ source "$BR2_EXTERNAL_PLUGINS_DEP/package/p7zip-light/Config.in"
 source "$BR2_EXTERNAL_PLUGINS_DEP/package/python-pystache/Config.in"
 source "$BR2_EXTERNAL_PLUGINS_DEP/package/zita-convolver/Config.in"
 source "$BR2_EXTERNAL_PLUGINS_DEP/package/zita-resampler/Config.in"
+source "$BR2_EXTERNAL_PLUGINS_DEP/package/zix/Config.in"
 
 source "$BR2_EXTERNAL_PLUGINS_DEP/package-legacy/fluidsynth/Config.in"
 source "$BR2_EXTERNAL_PLUGINS_DEP/package-legacy/lilv/Config.in"

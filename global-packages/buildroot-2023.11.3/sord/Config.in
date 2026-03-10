@@ -1,0 +1,9 @@
+config BR2_PACKAGE_SORD
+	bool "sord"
+	select BR2_PACKAGE_SERD
+	select BR2_PACKAGE_ZIX
+	help
+	  Sord is a lightweight C library for storing RDF data in
+	  memory.
+
+	  https://drobilla.net/software/sord.html

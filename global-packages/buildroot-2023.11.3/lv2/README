@@ -1,0 +1,3 @@
+This custom package exists because we do not want the example LV2 plugins,
+which cannot be disabled in upstream buildroot.
+So we tweak the build to ensure they are always off.
