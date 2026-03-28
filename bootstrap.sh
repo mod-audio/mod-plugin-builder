@@ -60,6 +60,8 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
     ;;
 
     "crosstool-ng-1.25.0")
+      patch -d ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION} -p1 -i ${SOURCE_DIR}/patches/${CT_NG_VERSION}/001_fix-make4.4-build.patch
+
       cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/gcc-9.4.0/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/gcc/9.4.0/
       cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
       cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.34/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.34/
@@ -91,7 +93,7 @@ if [ ! -f .config ]; then
 fi
 
 if [ ! -f .stamp_configured ]; then
-  ./configure --enable-local
+  ./configure --enable-local ACLOCAL=aclocal AUTOMAKE=automake
   touch .stamp_configured
 fi
 
