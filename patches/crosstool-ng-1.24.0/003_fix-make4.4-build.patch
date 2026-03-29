@@ -1,0 +1,89 @@
+From a7835a0251e5acdb38d7cbf301457058266bcbca Mon Sep 17 00:00:00 2001
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sat, 15 Jul 2023 19:21:23 +1200
+Subject: [PATCH] provide a workaround for a glibc and GNU make incompatibility
+
+Versions of GNU make newer than 4.4 trigger a hang in versions of glibc
+older than 2.31. As distros update to the newer GNU make version we'll
+start seeing more and more reports of this hang. Fortunately we already
+carry GNU make as a comp tool so all we need to do is select the right
+version when needed.
+
+Fixes #1946, #1932, #1975
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ config/configure.in.in         | 3 +++
+ config/libc/glibc.in           | 9 +++++++++
+ configure.ac                   | 7 +++++++
+ packages/make/4.3/version.desc | 2 +-
+ packages/make/package.desc     | 1 +
+ 5 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/config/configure.in.in b/config/configure.in.in
+index 91093c2d70..459852a6bf 100644
+--- a/config/configure.in.in
++++ b/config/configure.in.in
+@@ -30,6 +30,9 @@ config CONFIGURE_has_make_3_81_or_newer
+ config CONFIGURE_has_make_4_0_or_newer
+     @KCONFIG_make_4_0_or_newer@
+ 
++config CONFIGURE_has_make_4_4_or_newer
++    @KCONFIG_make_4_4_or_newer@
++
+ config CONFIGURE_has_libtool_2_4_or_newer
+     @KCONFIG_libtool_2_4_or_newer@
+ 
+diff --git a/config/libc/glibc.in b/config/libc/glibc.in
+index c5de44ceb6..81261cdc46 100644
+--- a/config/libc/glibc.in
++++ b/config/libc/glibc.in
+@@ -64,6 +64,15 @@ config GLIBC_DEP_MAKE_4_0
+     select MAKE_REQUIRE_4_0_or_later
+     select MAKE_GNUMAKE_SYMLINK # Override old host make in .build/tools/bin
+ 
++# Glibc versions older than 2.31 have a bug that triggers with GNU make 4.4 or newer
++# where the build process hangs indefinitely
++config GLIBC_DEP_MAKE_4_2
++    def_bool y
++    depends on GLIBC_older_than_2_29 && CONFIGURE_has_make_4_4_or_newer
++    select COMP_TOOLS_MAKE
++    select MAKE_GNUMAKE_SYMLINK
++    select MAKE_V_4_2
++
+ config GLIBC_DEP_GCC
+     def_bool y
+     select GCC_REQUIRE_4_9_or_later if GLIBC_2_26_or_later
+diff --git a/configure.ac b/configure.ac
+index 4a33c9ac01..82021b4f05 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -210,6 +210,13 @@ CTNG_PROG_VERSION_REQ_ANY([MAKE],
+     [^GNU Make [4-9]\.],
+     [make_4_0_or_newer])
+ 
++CTNG_PROG_VERSION_REQ_ANY([MAKE],
++    [GNU make >= 4.4],
++    [make],
++    [gmake make],
++    [^GNU Make (4\.[4-9]|[5-9]\.)],
++    [make_4_4_or_newer])
++
+ # Check other companion tools that we may or may not build.
+ CTNG_PROG_VERSION_REQ_ANY([LIBTOOL],
+     [GNU libtool >= 2.4],
+diff --git a/packages/make/4.2.1/version.desc b/packages/make/4.2.1/version.desc
+index e69de29..e497b2f 100644
+--- a/packages/make/4.2.1/version.desc
++++ b/packages/make/4.2.1/version.desc
+@@ -0,0 +1 @@
++# Not obsolete. Needed for a workaround for older glibc versions
+diff --git a/packages/make/package.desc b/packages/make/package.desc
+index bd789ade95..657a674ae0 100644
+--- a/packages/make/package.desc
++++ b/packages/make/package.desc
+@@ -4,4 +4,4 @@ mirrors='$(CT_Mirrors GNU make)'
+ relevantpattern='*.*|.'
+ archive_formats='.tar.bz2 .tar.gz'
+ signature_format='packed/.sig'
+-milestones='4.0'
++milestones='4.0 4.2.1'
