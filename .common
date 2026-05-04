@@ -61,9 +61,12 @@ else
 fi
 
 #######################################################################################################################
-# check for generic builds
+# check for custom and generic builds
 
-if [[ "${PLATFORM}" == "generic-aarch64-"* ]] || [[ "${PLATFORM}" = "darkglass-anagram"* ]]; then
+if [[ "${PLATFORM}" = "darkglass-anagram-gcc15"* ]]; then
+  TOOLCHAIN_PLATFORM="darkglass-anagram-gcc15"
+  BR2_PLATFORM="${PLATFORM}"
+elif [[ "${PLATFORM}" == "generic-aarch64-"* ]] || [[ "${PLATFORM}" = "darkglass-anagram"* ]]; then
   TOOLCHAIN_PLATFORM="generic-aarch64"
   BR2_PLATFORM="${PLATFORM}"
 fi
@@ -111,6 +114,11 @@ case "${TOOLCHAIN_PLATFORM}" in
   "generic-aarch64"|"generic-x86_64")
     BUILDROOT_VERSION=buildroot-2023.11.3
     CT_NG_VERSION=crosstool-ng-1.25.0
+  ;;
+  # custom darkglass-anagram-gcc15 target: ct-ng 1.28 with gcc 15 + glibc 2.34
+  "darkglass-anagram-gcc15")
+    BUILDROOT_VERSION=buildroot-2023.11.3
+    CT_NG_VERSION=crosstool-ng-1.28.0
   ;;
   # fallback
   *)
