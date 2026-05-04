@@ -73,6 +73,10 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
         cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27-dwarf/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
       fi
     ;;
+
+    "crosstool-ng-1.28.0")
+      cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.34/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.34/
+    ;;
   esac
 fi
 
@@ -170,6 +174,7 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
     ;;
 
     "buildroot-2023.11.3")
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/001_gcc-15.patch
     ;;
   esac
 fi

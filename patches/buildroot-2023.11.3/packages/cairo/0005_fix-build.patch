@@ -1,0 +1,19 @@
+diff --git a/test/pdiff/pdiff.h b/test/pdiff/pdiff.h
+index 30fec06..715711c 100644
+--- a/test/pdiff/pdiff.h
++++ b/test/pdiff/pdiff.h
+@@ -19,13 +19,7 @@
+ 
+ #include <cairo.h>
+ 
+-typedef int bool;
+-#ifndef true
+-#define true 1
+-#endif
+-#ifndef false
+-#define false 0
+-#endif
++#include <stdbool.h>
+ 
+ /* Image comparison metric using Yee's method (and a cairo interface)
+  * References: A Perceptual Metric for Production Testing, Hector Yee, Journal of Graphics Tools 2004
