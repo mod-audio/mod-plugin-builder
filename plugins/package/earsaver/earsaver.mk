@@ -13,9 +13,18 @@ define EARSAVER_BUILD_CMDS
 	# fetch heavylib if not already present
 	test -f $(@D)/heavylib/hv.gt~.pd || \
 		git clone --depth=1 https://github.com/Wasted-Audio/heavylib.git $(@D)/heavylib
+	# force the generated DPF binary to use the same URI as the bundled TTL files
+	printf '%s\n' \
+		'{' \
+		'  "name": "EarSaver",' \
+		'  "dpf": {' \
+		'    "maker": "sensorium",' \
+		'    "plugin_uri": "urn:sensorium:EarSaver"' \
+		'  }' \
+		'}' > $(@D)/plugin.json
 	# create dpf-based build project
 	$(STAGING_DIR)/usr/bin/hvcc $(@D)/EarSaver.pd \
-		-n "EarSaver" -g dpf -o $(@D)/build \
+		-m $(@D)/plugin.json -n "EarSaver" -g dpf -o $(@D)/build \
 		-p $(@D)/heavylib
 	# symlink dpf dep into build dir
 	ln -sf $(STAGING_DIR)/usr/src/dpf $(@D)/build
