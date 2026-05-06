@@ -3,7 +3,7 @@
 # earsaver
 #
 ######################################
-EARSAVER_VERSION = 069a41ef25a83e7210a5f85c830611cc9730de27
+EARSAVER_VERSION = 6450904a76c3f56ea44fcb8a17affc74907f02b8
 EARSAVER_SITE = https://github.com/sensorium/earsaver-lv2.git
 EARSAVER_SITE_METHOD = git
 EARSAVER_DEPENDENCIES = dpf hvcc
