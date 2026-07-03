@@ -44,7 +44,16 @@ To begin simply run:<br/>
 ./bootstrap.sh <platform>
 ```
 
-Where `platform` is either modduo, modduox, moddwarf or x86_64.
+Where `platform` is either modduo-new, modduox-new, moddwarf-new or generic-x86_64.
+
+Plugins built with the `-new` platforms require MOD OS release 1.13.0 or later on the device
+(1.13.0 updated the base system toolchain to GCC 9, see the [release notes](https://wiki.mod.audio/wiki/Releases)).
+
+The legacy platforms (modduo, modduox, moddwarf and the -static variants) target devices running
+MOD OS releases older than 1.13.0. They are kept in this repository but are no longer built by CI:
+most of them use a Linaro GCC toolchain and releases.linaro.org is no longer online, so
+bootstrapping them requires the gcc-linaro source tarball to already be present in the
+download directory (`~/mod-workdir/download` by default).
 
 The script will build the toolchain (ct-ng) and buildroot.<br/>
 Depending on your machine it can take more than 1 hour.<br/>
@@ -62,7 +71,7 @@ To build a plugin, run:<br/>
 ./build <platform> <plugin-package>
 ```
 
-Where `platform` is either modduo, modduox, moddwarf or x86_64 and `plugin-package` is a folder inside the `plugins/package` directory.
+Where `platform` is either modduo-new, modduox-new, moddwarf-new or generic-x86_64 and `plugin-package` is a folder inside the `plugins/package` directory.
 
 If everything goes well, you will have the final plugin bundle in `~/mod-workdir/<platform>/plugins`.<br/>
 
