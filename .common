@@ -126,6 +126,21 @@ esac
 CT_NG_LINK=http://crosstool-ng.org/download/crosstool-ng/
 CT_NG_FILE=${CT_NG_VERSION}.tar.bz2
 
+# kernel.org no longer hosts release tarballs for EOL v3.x/v4.x kernels,
+# so download them as git tag snapshots and use them as custom kernel source
+CT_NG_KERNEL_LINK=https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/snapshot
+case "${TOOLCHAIN_PLATFORM}" in
+  "modduo-new")
+    CT_NG_KERNEL_FILE=linux-3.10.108.tar.gz
+  ;;
+  "modduox-new")
+    CT_NG_KERNEL_FILE=linux-4.1.49.tar.gz
+  ;;
+  "moddwarf-new")
+    CT_NG_KERNEL_FILE=linux-4.4.302.tar.gz
+  ;;
+esac
+
 #######################################################################################################################
 # buildroot variables
 

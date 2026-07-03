@@ -32,7 +32,7 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
   fi
 
   if [ -n "${CT_NG_KERNEL_FILE}" ] && [ ! -f ${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE} ]; then
-    wget https://cdn.kernel.org/pub/linux/kernel/v6.x/${CT_NG_KERNEL_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE}
+    wget ${CT_NG_KERNEL_LINK}/${CT_NG_KERNEL_FILE} -O ${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE}
   fi
 
   mkdir -p ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}
@@ -86,6 +86,8 @@ if [ ! -f .config ]; then
   sed -i -e "s|CT_LOCAL_TARBALLS_DIR=.*|CT_LOCAL_TARBALLS_DIR=\"${DOWNLOAD_DIR}\"|" .config
   sed -i -e "s|CT_PREFIX_DIR=.*|CT_PREFIX_DIR=\"${TOOLCHAIN_DIR}\"|" .config
   if [ -n "${CT_NG_KERNEL_FILE}" ]; then
+    sed -i -e "s|CT_LINUX_SRC_RELEASE=y|# CT_LINUX_SRC_RELEASE is not set|" .config
+    sed -i -e "s|# CT_LINUX_SRC_CUSTOM is not set|CT_LINUX_SRC_CUSTOM=y\nCT_LINUX_CUSTOM_LOCATION=\"${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE}\"|" .config
     sed -i -e "s|CT_LINUX_CUSTOM_LOCATION=.*|CT_LINUX_CUSTOM_LOCATION=\"${DOWNLOAD_DIR}/${CT_NG_KERNEL_FILE}\"|" .config
   fi
   # static toolchains not supported under macOS, see https://github.com/crosstool-ng/crosstool-ng/issues/396
