@@ -19,6 +19,9 @@ MOD_PLUGIN_BUILDER_RUST_TARGET = aarch64-unknown-linux-gnu
 else ifdef BR2_cortex_a76
 MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a76","-Ctarget-feature=+neon,+fp-armv8","-Clink-args=--sysroot=$(STAGING_DIR)"]
 MOD_PLUGIN_BUILDER_RUST_TARGET = aarch64-unknown-linux-gnu
+else ifdef BR2_cortex_a76_a55
+MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a76.cortex-a55","-Ctarget-feature=+neon,+fp-armv8","-Clink-args=--sysroot=$(STAGING_DIR)"]
+MOD_PLUGIN_BUILDER_RUST_TARGET = aarch64-unknown-linux-gnu
 else ifdef BR2_aarch64
 MOD_PLUGIN_BUILDER_RUST_FLAGS = ["-Ctarget-cpu=cortex-a53","-Ctarget-feature=+a53,+fix-cortex-a53-835769,+neon,+fp-armv8","-Clink-args=--sysroot=$(STAGING_DIR)"]
 MOD_PLUGIN_BUILDER_RUST_TARGET = aarch64-unknown-linux-gnu

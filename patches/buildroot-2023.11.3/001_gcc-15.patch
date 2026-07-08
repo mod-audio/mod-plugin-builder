@@ -1,0 +1,52 @@
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 34e0ae2..7f3a73b 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -263,6 +263,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_110934
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_111001
+ 	bool
+ 	default y if BR2_sh
++	default y if !BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 	depends on BR2_OPTIMIZE_1 || \
+ 		   BR2_OPTIMIZE_2 || \
+@@ -790,10 +791,20 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
+ 
++config BR2_TOOLCHAIN_GCC_AT_LEAST_14
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_15
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "15"	if BR2_TOOLCHAIN_GCC_AT_LEAST_15
++	default "14"	if BR2_TOOLCHAIN_GCC_AT_LEAST_14
+ 	default "13"	if BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 	default "12"	if BR2_TOOLCHAIN_GCC_AT_LEAST_12
+ 	default "11"	if BR2_TOOLCHAIN_GCC_AT_LEAST_11
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 5554d56..2e75305 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -46,6 +46,14 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_15
++	bool "15.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_14
++	bool "14.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_13
+ 	bool "13.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
