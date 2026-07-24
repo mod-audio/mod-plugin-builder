@@ -1,11 +1,90 @@
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -185,7 +185,7 @@ endif
- # Generic package build steps
- # INNER - True if we are being called from the generic package infrastructure
- # OUTER - True if we are being called from the generic package infrastructure from the outer build make process
--TOOLCHAIN_EXTERNAL_GCC_VERSIONS := 4.3 4.4 4.5 4.6 4.7 4.8 4.9 5 6 7 8 9
-+TOOLCHAIN_EXTERNAL_GCC_VERSIONS := 4.3 4.4 4.5 4.6 4.7 4.8 4.9 5 6 7 8 9 10 11 12 13 14 15
+
+diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
+index ee2869f..ffffffff 100644
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -327,10 +327,40 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_9
+	bool
+	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
  
- # Check external toolchain libc version
- TOOLCHAIN_EXTERNAL_LIBC_VERSIONS := glibc musl uclibc
++config BR2_TOOLCHAIN_GCC_AT_LEAST_10
++       bool
++       select BR2_TOOLCHAIN_GCC_AT_LEAST_9
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_11
++       bool
++       select BR2_TOOLCHAIN_GCC_AT_LEAST_10
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_12
++       bool
++       select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_13
++       bool
++       select BR2_TOOLCHAIN_GCC_AT_LEAST_12
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_14
++       bool
++       select BR2_TOOLCHAIN_GCC_AT_LEAST_13
++
++config BR2_TOOLCHAIN_GCC_AT_LEAST_15
++       bool
++       select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+	string
++    default "15" if BR2_TOOLCHAIN_GCC_AT_LEAST_15
++    default "14" if BR2_TOOLCHAIN_GCC_AT_LEAST_14
++    default "13" if BR2_TOOLCHAIN_GCC_AT_LEAST_13
++    default "12" if BR2_TOOLCHAIN_GCC_AT_LEAST_12
++    default "11" if BR2_TOOLCHAIN_GCC_AT_LEAST_11
++    default "10" if BR2_TOOLCHAIN_GCC_AT_LEAST_10
+	default "9" if BR2_TOOLCHAIN_GCC_AT_LEAST_9
+	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
+	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
+
+
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 4b2beca..ffffffff 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -725,6 +725,30 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+
++config BR2_TOOLCHAIN_EXTERNAL_GCC_15
++	bool "15.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_14
++	bool "14.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_13
++	bool "13.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_12
++	bool "12.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_12
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_11
++	bool "11.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_11
++
++config BR2_TOOLCHAIN_EXTERNAL_GCC_10
++	bool "10.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_9
+ 	bool "9.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 	bool "7.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+
+--
+2.39.2

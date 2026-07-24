@@ -1,0 +1,88 @@
+#####################################
+#
+# neural-amp-modeler-lv2
+#6668 tema Fix issues with floating point metadata with no decimal places not being parsed correctly
+#6669 remove eigen dont paralleleize y back with opti daisy
+#7777 remove eigen dont paralleleize y remove opti daisy loop invariants fexceptions DNAM_SAMPLE_FLOAT
+#7778 replace -funroll-loops con el q tenia en 6666 fno-unroll-loops. A ver si consigo d nuevo 33, 64
+#7779 probar d nuevo otis daisy excepto funroll-loops
+#8881  Use compile-time loop over convolution kernel. Lazy product seems to be faster for small matrices and when we're adding bias. f0f3b8a
+#8882 NAM from Chaos
+#8883 lv2 from mike
+#8884 lv2 from mike commit   20.05.2026  NOTA: A1 feather 63% best. Check A2
+#8885 lv2 from mike commit   21.05.2026  NOTA: A1 feather 65% (Commit 2c6526f)
+#8886 lv2 from mike commit   21.05.2026 sin -fno-unroll-loops  NOTA: A1 feather 67%
+#8887 der nuevo -fno-unroll-loops EIGEN CONF_OPT chatgpt O2 y
+#8888 f0f3b8a Wavenet.h Use compile-time loop over convolution kernel. Lazy product seems to be faster for small matrices and when we're adding bias. Still A1 feather 63%
+#8889 -fomit-frame-pointer -fno-unsafe-loop-optimizations, sin 02, o3 Still A1 feather 63% 
+#9000 lv2 from mike 23.05.26 with neural branch Avoid extra copy in FastMath tanh. Parece q A1 feather 64%... algo peor
+
+#####################################
+
+NEURAL_AMP_MODELER_LV2_VERSION = 9000
+NEURAL_AMP_MODELER_LV2_SITE = /home/fer/Documents/local_src/NAM/FromMike/neural-amp-modeler-lv2/
+NEURAL_AMP_MODELER_LV2_SITE_METHOD = local
+# NEURAL_AMP_MODELER_LV2_GIT_SUBMODULES = y
+NEURAL_AMP_MODELER_LV2_BUNDLES = neural_amp_modeler.lv2
+
+# custom optimization flags                        
+#NEURAL_AMP_MODELER_LV2_TARGET_OPT  = $(filter-out -funsafe-loop-optimizations,$(subst ",,$(BR2_TARGET_OPTIMIZATION)))
+NEURAL_AMP_MODELER_LV2_TARGET_OPT  = $(filter-out -funroll-loops,$(subst ",,$(BR2_TARGET_OPTIMIZATION)))
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -O3
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -fno-unroll-loops #-fno-unsafe-loop-optimizations  
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -ffast-math -ftree-vectorize -fmove-loop-invariants -fexceptions
+
+# custom optimization flags
+#NEURAL_AMP_MODELER_LV2_TARGET_OPT  = $(subst ",,$(BR2_TARGET_OPTIMIZATION))
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -fsingle-precision-constant
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -fomit-frame-pointer
+
+
+ifndef BR2_SKIP_LTO
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -flto -ffat-lto-objects
+endif
+
+# EIGEN
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -DEIGEN_DEFAULT_L1_CACHE_SIZE=32768
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -DEIGEN_DEFAULT_L2_CACHE_SIZE=262144
+NEURAL_AMP_MODELER_LV2_TARGET_OPT += -DEIGEN_DONT_PARALLELIZE=ON
+
+
+# pass options into cmake
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(NEURAL_AMP_MODELER_LV2_TARGET_OPT)"
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(NEURAL_AMP_MODELER_LV2_TARGET_OPT)"
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DCMAKE_SHARED_LINKER_FLAGS="$(TARGET_LDFLAGS) $(NEURAL_AMP_MODELER_LV2_TARGET_OPT)"
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DDISABLE_DENORMALS:BOOL=OFF 
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUILD_UTILS=OFF
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUILD_NAMCORE=ON
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUILD_RTNEURAL=OFF
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DWAVENET_FRAMES=128
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUFFER_PADDING=48
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DSMART_BYPASS_ENABLED=OFF
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUILD_INTERNAL_STATIC_WAVENET=ON 
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUILD_INTERNAL_STATIC_LSTM=OFF 
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUILD_STATIC_RTNEURAL=OFF 
+#NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DUSE_NATIVE_ARCH=ON
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DWAVENET_MATH=FastMath
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DLSTM_MATH=FastMath
+#NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_MAX_BUFFER_SIZE=128
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_ENABLE_A2_FAST=ON
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_USE_INLINE_GEMM=ON
+#NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_SAMPLE_FLOAT=ON
+#NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DWAVENET_MAX_NUM_FRAMES=128
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DDEFAULT_QUALITY_SCALE="0.5"
+
+
+
+
+# needed for submodules support
+#NEURAL_AMP_MODELER_LV2_PRE_DOWNLOAD_HOOKS += #MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
+
+define NEURAL_AMP_MODELER_LV2_INSTALL_TARGET_CMDS
+        install -d $(TARGET_DIR)/usr/lib/lv2/$(NEURAL_AMP_MODELER_LV2_BUNDLES)/modgui
+        install -m 644 $(@D)/$(NEURAL_AMP_MODELER_LV2_BUNDLES)/*.* $(TARGET_DIR)/usr/lib/lv2/$(NEURAL_AMP_MODELER_LV2_BUNDLES)/
+        #install -m 644 $($(PKG)_PKGDIR)/$(NEURAL_AMP_MODELER_LV2_BUNDLES)/*.* $(TARGET_DIR)/usr/lib/lv2/$(NEURAL_AMP_MODELER_LV2_BUNDLES)/
+        install -m 644 $(@D)/resources/modgui/*.* $(TARGET_DIR)/usr/lib/lv2/$(NEURAL_AMP_MODELER_LV2_BUNDLES)/modgui/
+endef
+
+$(eval $(cmake-package))

@@ -1,0 +1,23 @@
+1. solo con flags d NeuralAudio
+
+c4 45,9
+feather 66
+
+2. denormals y l1 l2 cache ==
+
+3. tema -fno-unroll-loops
+
+c4 47
+feather 63,5
+
+
+4. otros opts ==
+
+c4 47
+feather 63,5
+
+
+5. quitar fprefetch-loop-arrays -funsafe-loop-optimizations  add funsafe math opti
+
+c4 47
+feather 63,5

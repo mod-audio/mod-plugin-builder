@@ -1,0 +1,20 @@
+diff --git a/deps/NeuralAudio/NeuralAudio/CompositeModel.h b/deps/NeuralAudio/NeuralAudio/CompositeModel.h
+index 7a7ea96..ff06e19 100644
+--- a/deps/NeuralAudio/NeuralAudio/CompositeModel.h
++++ b/deps/NeuralAudio/NeuralAudio/CompositeModel.h
+@@ -181,7 +181,7 @@ namespace NeuralAudio
+ 			}
+ 
+ 		protected:
+-			std::atomic<float> currentQualityLevel = 1.0f;
++			std::atomic<float> currentQualityLevel = 0.0f;
+ 			std::vector<std::tuple<float, int>> qualityLevels;
+ 
+ 			int GetModelIndexFromQualityScale(float qualityScale)
+@@ -199,4 +199,4 @@ namespace NeuralAudio
+ 				return modelIndex;
+ 			}
+ 	};
+-}
+\ No newline at end of file
++}

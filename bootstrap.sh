@@ -249,11 +249,11 @@ elif [ "${BUILDTARGET}" = "minimal" ]; then
   ${BR2_MAKE} host-cmake
   ${BR2_MAKE} fftw-double
   ${BR2_MAKE} fftw-single
-  ${BR2_MAKE} liblo
+#   ${BR2_MAKE} liblo
   ${BR2_MAKE} lv2
   ${BR2_MAKE} kxstudio-lv2-extensions
   ${BR2_MAKE} mod-lv2-extensions
-  ${BR2_MAKE} alsa-utils
+#   ${BR2_MAKE} alsa-utils
   if [ "${TOOLCHAIN_PLATFORM}" = "generic-x86_64" ]; then
     ${BR2_MAKE} carla-backend
     ${BR2_MAKE} valgrind

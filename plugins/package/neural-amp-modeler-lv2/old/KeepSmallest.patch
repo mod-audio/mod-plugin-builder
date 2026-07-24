@@ -1,0 +1,80 @@
+diff --git a/deps/NeuralAudio/NeuralAudio/CompositeModel.h b/deps/NeuralAudio/NeuralAudio/CompositeModel.h
+index 7a7ea96..46cc130 100644
+--- a/deps/NeuralAudio/NeuralAudio/CompositeModel.h
++++ b/deps/NeuralAudio/NeuralAudio/CompositeModel.h
+@@ -2,6 +2,7 @@
+ 
+ #include <atomic>
+ #include <vector>
++#include <limits>
+ #include "NeuralModel.h"
+ #include "NeuralModelImpl.h"
+ 
+@@ -129,11 +130,58 @@ namespace NeuralAudio
+ 
+ 				nlohmann::json subModels = config.at("submodels");
+ 
++				// First pass: find the smallest model
++				NeuralModelImpl* smallestModel = nullptr;
++				float smallestScaleFactor = std::numeric_limits<float>::max();
++
+ 				for (auto& submodelJson : subModels)
+ 				{
+-					NeuralModelImpl* submodel = dynamic_cast<NeuralModelImpl*>(loader->CreateFromJson(submodelJson.at("model"), ".nam", false));
++					const float scaleFactor = submodelJson.at("max_value");
++
++					NeuralModelImpl* submodel =
++						dynamic_cast<NeuralModelImpl*>(loader->CreateFromJson(
++							submodelJson.at("model"), ".nam", false));
++
++					if (submodel == nullptr)
++						continue;
++
++					if (scaleFactor < smallestScaleFactor)
++					{
++						// Replace previous smallest
++						if (smallestModel != nullptr)
++							delete smallestModel;
+ 
+-					AddModel(submodelJson.at("max_value"), submodel);
++						smallestModel = submodel;
++						smallestScaleFactor = scaleFactor;
++					}
++					else
++					{
++						// We only keep the smallest model instance
++						delete submodel;
++					}
++				}
++
++				// Second pass: register all quality levels but map them to index 0
++				if (smallestModel != nullptr)
++				{
++					// Add the smallest model once
++					AddModel(smallestScaleFactor, smallestModel);
++
++					// Rebuild qualityLevels so every quality level maps to model index 0
++					qualityLevels.clear();
++
++					for (auto& submodelJson : subModels)
++					{
++						const float scaleFactor = submodelJson.at("max_value");
++						qualityLevels.emplace_back(scaleFactor, 0);
++					}
++
++					// Sort by scale factor
++					std::sort(qualityLevels.begin(), qualityLevels.end(),
++						[](const auto& a, const auto& b)
++						{
++							return std::get<0>(a) < std::get<0>(b);
++						});
+ 				}
+ 
+ 				// Don't call SetMaxAudioBufferSize because it has already been done by individual models
+@@ -199,4 +247,4 @@ namespace NeuralAudio
+ 				return modelIndex;
+ 			}
+ 	};
+-}
+\ No newline at end of file
++}

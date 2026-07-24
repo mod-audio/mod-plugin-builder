@@ -49,7 +49,7 @@ index d6cb238..87c78a1 100644
 +	default "5.16.0"	if BR2_KERNEL_HEADERS_5_16
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 diff --git a/toolchain/toolchain-common.in b/toolchain/toolchain-common.in
-index 43a090b..ee2869f 100644
+index 0d7f426..5a49839 100644
 --- a/toolchain/toolchain-common.in
 +++ b/toolchain/toolchain-common.in
 @@ -233,10 +233,25 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4

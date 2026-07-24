@@ -1,0 +1,21 @@
+diff --git a/src/nam_plugin.h b/src/nam_plugin.h
+index 9a8a9ca..afdd248 100644
+--- a/src/nam_plugin.h
++++ b/src/nam_plugin.h
+@@ -76,7 +76,7 @@ namespace NAM {
+ 		std::string currentModelPath;
+ 		float prevDCInput = 0;
+ 		float prevDCOutput = 0;
+-		float qualityScale = 1.0f;
++		float qualityScale = 0.0f;
+ 
+ 		Plugin();
+ 		~Plugin();
+@@ -126,6 +126,6 @@ namespace NAM {
+ 		int32_t maxBufferSize = 512;
+ 		float bypassThresholdLinear = 0;
+ 		uint32_t silentSamples = 0;
+-		bool smartBypassed = true;
++		bool smartBypassed = false;
+ 	};
+ }

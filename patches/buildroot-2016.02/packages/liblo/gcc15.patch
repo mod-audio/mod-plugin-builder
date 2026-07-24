@@ -1,0 +1,14 @@
+diff --git a/configure b/configure
+index cffd69e..9c02496 100755
+--- a/configure
++++ b/configure
+@@ -12676,7 +12676,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking how to print long long int" >&5
+ $as_echo_n "checking how to print long long int... " >&6; }
+ _CFLAGS="$CFLAGS"
+-CFLAGS="$_CFLAGS -Werror -Wall"
++CFLAGS="$_CFLAGS -Wall"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ #include <stdio.h>
+

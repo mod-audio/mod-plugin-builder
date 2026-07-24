@@ -1,14 +1,31 @@
-######################################
+#####################################
 #
 # neural-amp-modeler-lv2
-# NeuralAmpModelerCore checkout baf1bf8e6a83691804ed23bbc176483d3f20b661
-######################################
+#6668 tema Fix issues with floating point metadata with no decimal places not being parsed correctly
+#6669 remove eigen dont paralleleize y back with opti daisy
+#7777 remove eigen dont paralleleize y remove opti daisy loop invariants fexceptions DNAM_SAMPLE_FLOAT
+#7778 replace -funroll-loops con el q tenia en 6666 fno-unroll-loops. A ver si consigo d nuevo 33, 64
+#7779 probar d nuevo otis daisy excepto funroll-loops
+#8881  Use compile-time loop over convolution kernel. Lazy product seems to be faster for small matrices and when we're adding bias. f0f3b8a
+#8882 NAM from Chaos
+#8883 lv2 from mike
+#8884 lv2 from mike commit   20.05.2026  NOTA: A1 feather 63% best. Check A2
+#8885 lv2 from mike commit   21.05.2026  NOTA: A1 feather 65% (Commit 2c6526f)
+#8886 lv2 from mike commit   21.05.2026 sin -fno-unroll-loops  NOTA: A1 feather 67%
+#8887 der nuevo -fno-unroll-loops EIGEN CONF_OPT chatgpt O2 y
+#8888 f0f3b8a Wavenet.h Use compile-time loop over convolution kernel. Lazy product seems to be faster for small matrices and when we're adding bias. Still A1 feather 63%
+#8889 -fomit-frame-pointer -fno-unsafe-loop-optimizations, sin 02, o3 Still A1 feather 63% 
+#9000 lv2 from mike 23.05.26 with neural branch Avoid extra copy in FastMath tanh. Parece q A1 feather 64%... algo peor
+#9001 copilot optimizations DENORMALS ON y nueva linea OPT
+#9002 copilot optimization code lv2
+#9003 back to code, but keep flags
+#10000 latest all sources
+#####################################
 
-NEURAL_AMP_MODELER_LV2_VERSION = 3d0e1c26a4cfb7085b185811dd564f7ec7ec4991
-NEURAL_AMP_MODELER_LV2_SITE = https://github.com/mikeoliphant/neural-amp-modeler-lv2.git
-NEURAL_AMP_MODELER_LV2_SITE_METHOD = git
-NEURAL_AMP_MODELER_LV2_GIT_SUBMODULES = y
-
+NEURAL_AMP_MODELER_LV2_VERSION = 10000
+NEURAL_AMP_MODELER_LV2_SITE = /home/fer/Documents/local_src/NAM/LatestA1/neural-amp-modeler-lv2/
+NEURAL_AMP_MODELER_LV2_SITE_METHOD = local
+# NEURAL_AMP_MODELER_LV2_GIT_SUBMODULES = y
 NEURAL_AMP_MODELER_LV2_BUNDLES = neural_amp_modeler.lv2
 
 NEURAL_AMP_MODELER_LV2_FILTERED_FLAGS = -funroll-loops #-fprefetch-loop-arrays -funsafe-loop-optimizations 
@@ -54,12 +71,10 @@ NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_A2_RING_MODE=0
 NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_USE_INLINE_GEMM=ON
 NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DDEFAULT_QUALITY_SCALE="0.0"
 NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DDEFAULT_INPUT_DBU="12"
-#NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_SLIMMABLE_KEEP_SMALLEST_ONLY=ON
-NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DBUILD_STATIC_INTERNAL_NAMA2=OFF
-NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DMULTIFRAME_8X8_CONVOLUTION="4"
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_SLIMMABLE_KEEP_SMALLEST_ONLY=ON
 
 # needed for submodules support
-NEURAL_AMP_MODELER_LV2_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
+# NEURAL_AMP_MODELER_LV2_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
 define NEURAL_AMP_MODELER_LV2_INSTALL_TARGET_CMDS
 	install -d $(TARGET_DIR)/usr/lib/lv2/$(NEURAL_AMP_MODELER_LV2_BUNDLES)/modgui
