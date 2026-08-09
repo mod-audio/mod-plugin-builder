@@ -14,13 +14,13 @@ LILV_INSTALL_STAGING = YES
 
 LILV_CONF_OPTS += \
 	-Dbindings_cpp=disabled \
-	-Dbindings_py=disabled \
 	-Ddocs=disabled \
 	-Ddynmanifest=disabled \
 	-Dhtml=disabled \
 	-Dlint=false \
 	-Dsinglehtml=disabled \
-	-Dtests=disabled
+	-Dtests=disabled \
+	-Dbindings_py=enabled
 
 ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
 LILV_DEPENDENCIES += libsndfile
