@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_NAM_LOADER_VERSION = 92e9a9ab49ee58fa9534a127fbe0282e19879ff8
+MOD_NAM_LOADER_VERSION = 5356bbd7d20b46e07196fac09569a3df20eb7224
 # TEMPORARY local testing; restore the github URL before pushing this file
 MOD_NAM_LOADER_SITE = /home/gianfranco/MOD/Repos/mod-nam-loader
 #MOD_NAM_LOADER_SITE = https://github.com/mod-audio/mod-nam-loader.git
