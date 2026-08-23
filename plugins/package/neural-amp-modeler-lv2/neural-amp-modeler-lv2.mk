@@ -4,8 +4,10 @@
 #
 ######################################
 
-NEURAL_AMP_MODELER_LV2_VERSION = 9574e74a8eddcd54a5c65c5748e3ff226c7c4f55
-NEURAL_AMP_MODELER_LV2_SITE = https://github.com/mod-audio/neural-amp-modeler-lv2.git
+NEURAL_AMP_MODELER_LV2_VERSION = e0485a924d5ee78369271c932eee4967ff060001
+# TEMPORARY local testing; restore the github URL before pushing this file
+NEURAL_AMP_MODELER_LV2_SITE = /home/gianfranco/MOD/Repos/neural-amp-modeler-lv2
+#NEURAL_AMP_MODELER_LV2_SITE = https://github.com/mod-audio/neural-amp-modeler-lv2.git
 NEURAL_AMP_MODELER_LV2_SITE_METHOD = git
 NEURAL_AMP_MODELER_LV2_GIT_SUBMODULES = y
 NEURAL_AMP_MODELER_LV2_BUNDLES = neural_amp_modeler.lv2
@@ -50,6 +52,11 @@ NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DLSTM_MATH=FastMath
 NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_ENABLE_A2_FAST=ON
 NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DNAM_USE_INLINE_GEMM=ON
 NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DDEFAULT_QUALITY_SCALE="0.49"
+
+# multi-frame 8x8 convolution only pays off with modern gcc codegen
+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_15),y)
+NEURAL_AMP_MODELER_LV2_CONF_OPTS += -DENABLE_MULTIFRAME_8X8_CONVOLUTION=ON
+endif
 
 
 # needed for submodules support
