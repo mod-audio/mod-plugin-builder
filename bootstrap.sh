@@ -76,6 +76,11 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
 
     "crosstool-ng-1.28.0")
       cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.34/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.34/
+
+      if [ "${TOOLCHAIN_PLATFORM}" == "moddwarf-gcc15" ]; then
+        cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
+        cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27-dwarf/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
+      fi
     ;;
   esac
 fi

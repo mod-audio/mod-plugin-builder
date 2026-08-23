@@ -120,6 +120,11 @@ case "${TOOLCHAIN_PLATFORM}" in
     BUILDROOT_VERSION=buildroot-2023.11.3
     CT_NG_VERSION=crosstool-ng-1.28.0
   ;;
+  # custom moddwarf-gcc15 target: ct-ng 1.28 with gcc 15 + glibc 2.27
+  "moddwarf-gcc15")
+    BUILDROOT_VERSION=buildroot-2023.11.3
+    CT_NG_VERSION=crosstool-ng-1.28.0
+  ;;
   # fallback
   *)
     BUILDROOT_TAR_EXT=bz2
