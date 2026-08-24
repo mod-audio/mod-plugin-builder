@@ -4,9 +4,11 @@
 #
 ######################################
 
-MOD_NAM_LOADER_VERSION = 5356bbd7d20b46e07196fac09569a3df20eb7224
-# TEMPORARY local testing; restore the github URL before pushing this file
-MOD_NAM_LOADER_SITE = /home/gianfranco/MOD/Repos/mod-nam-loader
+MOD_NAM_LOADER_VERSION = 88eccbe1111a4918761357164269cd3caeb73c39
+# The repository is private, so an anonymous HTTPS clone cannot fetch it. Switch to the
+# https:// line below once mod-audio/mod-nam-loader is public - that is what CI and other
+# developers need; SSH only works for someone whose key already has access.
+MOD_NAM_LOADER_SITE = git@github.com:mod-audio/mod-nam-loader.git
 #MOD_NAM_LOADER_SITE = https://github.com/mod-audio/mod-nam-loader.git
 MOD_NAM_LOADER_SITE_METHOD = git
 MOD_NAM_LOADER_GIT_SUBMODULES = y
