@@ -5,9 +5,7 @@
 ######################################
 
 NEURAL_AMP_MODELER_LV2_VERSION = e0485a924d5ee78369271c932eee4967ff060001
-# TEMPORARY local testing; restore the github URL before pushing this file
-NEURAL_AMP_MODELER_LV2_SITE = /home/gianfranco/MOD/Repos/neural-amp-modeler-lv2
-#NEURAL_AMP_MODELER_LV2_SITE = https://github.com/mod-audio/neural-amp-modeler-lv2.git
+NEURAL_AMP_MODELER_LV2_SITE = https://github.com/mod-audio/neural-amp-modeler-lv2.git
 NEURAL_AMP_MODELER_LV2_SITE_METHOD = git
 NEURAL_AMP_MODELER_LV2_GIT_SUBMODULES = y
 NEURAL_AMP_MODELER_LV2_BUNDLES = neural_amp_modeler.lv2
