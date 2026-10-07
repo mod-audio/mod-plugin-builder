@@ -1,0 +1,86 @@
+diff -ru a/portal.lv2/portal-sink.ttl b/portal.lv2/portal-sink.ttl
+--- a/portal.lv2/portal-sink.ttl	2026-10-07 18:43:08
++++ b/portal.lv2/portal-sink.ttl	2026-10-07 18:43:16
+@@ -25,36 +25,11 @@
+                     <http://lv2plug.in/ns/ext/urid#map>;
+ 
+ rdfs:comment """
+-The Portal audio plugins allow you to magically send audio from one side of the processing chain into another.
+-This is the sink/entry/receiving side of the Portal.
++Think of it like a relay race. Normally, every plugin in your pedalboard runs one after another, on a single runner, on a single CPU core — each one has to finish before the next can start. If one plugin in that line is heavy, everyone behind it has to wait, and the whole chain can stumble (an “xrun,” heard as clicks or dropouts).
+ 
+-They can be used as a way to parallelize the audio processing by forcely splitting a single chain into 2.
++Portal hands the baton to a second runner. It comes as two plugins that always work as a pair: Portal Sink (the entry point, shown in yellow) takes the audio in, and Portal Source (the exit, shown in blue) hands it back out a moment later — but now running on its own, separate CPU core. The two halves of your pedalboard that used to compete for one core's attention can now run side by side.
+ 
+-Imagine the scenario of 4 plugins running in series (one after the other), where each plugin is given a letter:
+-
+-  A -> B -> C -> D
+-
+-Plugin D waits for C, which waits for B which waits for A, all a single line.
+-In audio processing each plugin runs consecutively one after the other, typically on a single CPU core.
+-From A to D, all plugins must be able to process audio within a certain time limit, otherwise xruns occur.
+-If one plugin in the chain is heavy, it will limit the amount of time and processing available to the others.
+-
+-Now imagine the scenario of 4 plugins running in parallel, using 2 series for simplicity:
+-
+-  A -> B
+-  C -> D
+-
+-There are only 2 dependency chains now, B waits for A and D waits for C.
+-This means the 2 series can run in parallel, each on its own CPU core.
+-In the audio processing side the time spent running all plugins is now up to half of the first example.
+-We can run as many series as there are cores in the system while keeping good performance.
+-
+-By splitting the processing chain in 2, the Portal audio plugins allow running the 2nd part of a chain in another CPU core.
+-Simply load both sink and source portal plugins and connect each to the appropriate plugins.
+-Note that only load 1 sink and 1 source can be loaded at a time.
+-
+-The side effect is 1 audio cycle of latency coming out of the source/exit/transmitter portal.
+-For some effects like delay and reverb this could be a worthy compromise.
++The toll for this trick is exactly one audio cycle of latency — about 2.6 ms at the standard 128-sample buffer size — coming out of the Source. For fast, percussive material right at the split point this can occasionally be felt, but for most chains, and especially anything feeding a reverb, delay, or ambient texture, it's inaudible.
+ """;
+ 
+ lv2:port
+diff -ru a/portal.lv2/portal-source.ttl b/portal.lv2/portal-source.ttl
+--- a/portal.lv2/portal-source.ttl	2026-10-07 18:43:08
++++ b/portal.lv2/portal-source.ttl	2026-10-07 18:43:16
+@@ -25,36 +25,11 @@
+                     <http://lv2plug.in/ns/ext/urid#map>;
+ 
+ rdfs:comment """
+-The Portal audio plugins allow you to magically send audio from one side of the processing chain into another.
+-This is the source/exit/transmitter side of the Portal.
++Think of it like a relay race. Normally, every plugin in your pedalboard runs one after another, on a single runner, on a single CPU core — each one has to finish before the next can start. If one plugin in that line is heavy, everyone behind it has to wait, and the whole chain can stumble (an “xrun,” heard as clicks or dropouts).
+ 
+-They can be used as a way to parallelize the audio processing by forcely splitting a single chain into 2.
++Portal hands the baton to a second runner. It comes as two plugins that always work as a pair: Portal Sink (the entry point, shown in yellow) takes the audio in, and Portal Source (the exit, shown in blue) hands it back out a moment later — but now running on its own, separate CPU core. The two halves of your pedalboard that used to compete for one core's attention can now run side by side.
+ 
+-Imagine the scenario of 4 plugins running in series (one after the other), where each plugin is given a letter:
+-
+-  A -> B -> C -> D
+-
+-Plugin D waits for C, which waits for B which waits for A, all a single line.
+-In audio processing each plugin runs consecutively one after the other, typically on a single CPU core.
+-From A to D, all plugins must be able to process audio within a certain time limit, otherwise xruns occur.
+-If one plugin in the chain is heavy, it will limit the amount of time and processing available to the others.
+-
+-Now imagine the scenario of 4 plugins running in parallel, using 2 series for simplicity:
+-
+-  A -> B
+-  C -> D
+-
+-There are only 2 dependency chains now, B waits for A and D waits for C.
+-This means the 2 series can run in parallel, each on its own CPU core.
+-In the audio processing side the time spent running all plugins is now up to half of the first example.
+-We can run as many series as there are cores in the system while keeping good performance.
+-
+-By splitting the processing chain in 2, the Portal audio plugins allow running the 2nd part of a chain in another CPU core.
+-Simply load both sink and source portal plugins and connect each to the appropriate plugins.
+-Note that only load 1 sink and 1 source can be loaded at a time.
+-
+-The side effect is 1 audio cycle of latency coming out of the source/exit/transmitter portal.
+-For some effects like delay and reverb this could be a worthy compromise.
++The toll for this trick is exactly one audio cycle of latency — about 2.6 ms at the standard 128-sample buffer size — coming out of the Source. For fast, percussive material right at the split point this can occasionally be felt, but for most chains, and especially anything feeding a reverb, delay, or ambient texture, it's inaudible.
+ """;
+ 
+ lv2:port
