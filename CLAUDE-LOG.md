@@ -24,3 +24,17 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
 - **MIDI Display** (`vallsv-midi-display`, recipe unchanged) built for all three platforms; installed
   via `/sdk/install` on João's Dwarf, Duo X and Duo; instantiated in mod-host on each and removed
   again; João confirmed it displays MIDI correctly.
+
+## 2026-10-07 — João (joao@mod.audio), MacBook (Apple Silicon) — Portal manual + description
+
+- Branch `joao/portal-docs`: `plugins/package/portal-lv2/` gets `documentation.pdf` (user manual,
+  exported from the Portal Google Doc) installed into `portal.lv2/modgui/` with a
+  `modgui:documentation` entry for Portal Sink and Source ("See documentation"), and
+  `01_manual-description.patch` replacing both plugins' `rdfs:comment` with the manual's
+  "What Portal Does" text. Upstream falkTX/portal-lv2 unchanged (`0c3599f`).
+- Built with the local Docker toolchains for moddwarf-new, modduox-new, modduo-new; TTL validated
+  with rapper. Installed via mod-ui `/sdk/install` (multipart field `package`, base64 tgz) on João's
+  Dwarf, Duo X and Duo: description shown, PDF served (md5 match), both plugins load/unload cleanly.
+- Dev publish attempted from this branch: rejected by pipeline-dev (`'project_id' was unexpected`),
+  see mod-plugin-publisher/CLAUDE-LOG.md and NOTES-FOR-GIANFRANCO.md. **The dev publish must be run
+  with this branch checked out**, since publish.py packages the local recipe folder.
