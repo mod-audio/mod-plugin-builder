@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_CV_CURVE_LABS_VERSION = 24276a07395fbf0704f5b82a3c8af9b3c1365e04
+MOD_CV_CURVE_LABS_VERSION = c4ae42ec05834cb149df31f9313f184587940821
 MOD_CV_CURVE_LABS_SITE = $(call github,Jesse-Hufstetler,mod-cv-curve,$(MOD_CV_CURVE_LABS_VERSION))
 MOD_CV_CURVE_LABS_BUNDLES = mod-cv-curve.lv2
 
