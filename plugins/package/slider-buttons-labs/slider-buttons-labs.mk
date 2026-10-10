@@ -4,7 +4,7 @@
 #
 ######################################
 
-SLIDER_BUTTONS_LABS_VERSION = c3b7d0e6f325602ad91def35dcef2a56b02bc390
+SLIDER_BUTTONS_LABS_VERSION = dcdd8846f2ebe9291052992a301a6a54d631feed
 SLIDER_BUTTONS_LABS_SITE = $(call github,Jesse-Hufstetler,slider-buttons,$(SLIDER_BUTTONS_LABS_VERSION))
 SLIDER_BUTTONS_LABS_BUNDLES = slider-buttons.lv2
 
