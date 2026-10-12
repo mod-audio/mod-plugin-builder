@@ -5,7 +5,7 @@
 ######################################
 
 HYLIA_VERSION = 3ec0754a701dceb80cd2ee9ee381e1567dcdb77a
-HYLIA_SITE = $(call github,falkTX,Hylia,$(HYLIA_VERSION))
+HYLIA_SITE = https://download.mod.audio/mirror
 HYLIA_INSTALL_STAGING = YES
 
 HYLIA_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true PREFIX=/usr -C $(@D)
