@@ -5,7 +5,7 @@
 ######################################
 
 MOD_STEP_SEQUENCER_VERSION = 4958b4201c3291f6a36cd0c4bc52d118c53c5144
-MOD_STEP_SEQUENCER_SITE = $(call github,moddevices,mod-step-sequencer-lv2,$(MOD_STEP_SEQUENCER_VERSION))
+MOD_STEP_SEQUENCER_SITE = $(call github,mod-audio,mod-step-sequencer-lv2,$(MOD_STEP_SEQUENCER_VERSION))
 MOD_STEP_SEQUENCER_BUNDLES = mod-step-sequencer.lv2
 
 # dependencies (list of other buildroot packages, separated by space)

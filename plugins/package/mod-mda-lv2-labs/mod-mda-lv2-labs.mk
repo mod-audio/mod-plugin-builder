@@ -5,7 +5,7 @@
 ######################################
 
 MOD_MDA_LV2_LABS_VERSION = 8d92c1f9ba8097b85430e7b57238ca0dfd2f37e9
-MOD_MDA_LV2_LABS_SITE = $(call github,moddevices,mda-lv2,$(MOD_MDA_LV2_LABS_VERSION))
+MOD_MDA_LV2_LABS_SITE = $(call github,mod-audio,mda-lv2,$(MOD_MDA_LV2_LABS_VERSION))
 MOD_MDA_LV2_LABS_BUNDLES = mod-mda-Bandisto.lv2 mod-mda-Combo.lv2 mod-mda-DeEss.lv2 mod-mda-Delay.lv2 mod-mda-Dither.lv2 mod-mda-Dynamics.lv2 mod-mda-Image.lv2 mod-mda-Limiter.lv2 mod-mda-Loudness.lv2 mod-mda-MultiBand.lv2 mod-mda-RezFilter.lv2 mod-mda-Splitter.lv2 mod-mda-Stereo.lv2 mod-mda-TalkBox.lv2 mod-mda-TestTone.lv2 mod-mda-Tracker.lv2 mod-mda-Transient.lv2 mod-mda-VocInput.lv2
 
 MOD_MDA_LV2_LABS_TARGET_WAF = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(HOST_DIR)/usr/bin/python2 ./waf

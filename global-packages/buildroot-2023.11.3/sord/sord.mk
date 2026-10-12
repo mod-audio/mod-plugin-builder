@@ -5,7 +5,7 @@
 ################################################################################
 
 SORD_VERSION = 0.16.22
-SORD_SITE = https://download.drobilla.net
+SORD_SITE = https://download.mod.audio/mirror
 SORD_SOURCE = sord-$(SORD_VERSION).tar.xz
 SORD_LICENSE = ISC
 SORD_LICENSE_FILES = COPYING

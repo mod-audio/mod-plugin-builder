@@ -5,7 +5,7 @@
 ################################################################################
 
 MXML_VERSION = 2.10
-MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/release-$(MXML_VERSION)
+MXML_SITE = https://download.mod.audio/mirror
 MXML_LICENSE = LGPLv2+ with exceptions
 MXML_LICENSE_FILES = COPYING
 MXML_INSTALL_STAGING = YES

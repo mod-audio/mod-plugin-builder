@@ -5,7 +5,7 @@
 ######################################
 
 CAPS_LV2_LABS_VERSION = efdef2601435cf4f36da4b8f7b0412fa404facb8
-CAPS_LV2_LABS_SITE = $(call github,moddevices,caps-lv2,$(CAPS_LV2_LABS_VERSION))
+CAPS_LV2_LABS_SITE = $(call github,mod-audio,caps-lv2,$(CAPS_LV2_LABS_VERSION))
 CAPS_LV2_LABS_BUNDLES = mod-caps-CabinetIII.lv2 mod-caps-ChorusI.lv2 mod-caps-Compress.lv2 mod-caps-CompressX2.lv2 mod-caps-Eq10.lv2 mod-caps-Eq10X2.lv2 mod-caps-Eq4p.lv2 mod-caps-EqFA4p.lv2 mod-caps-Fractal.lv2 mod-caps-Narrower.lv2 mod-caps-Noisegate.lv2 mod-caps-Saturate.lv2 mod-caps-Sin.lv2 mod-caps-ToneStack.lv2
 
 

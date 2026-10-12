@@ -6,7 +6,7 @@
 
 ifeq ($(BR2_cortex_a7),y)
 FFTW_VERSION = 3.3.5+
-FFTW_SITE = https://github.com/moddevices/fftw3-duo/releases/download/fftw-$(FFTW_VERSION)
+FFTW_SITE = https://github.com/mod-audio/fftw3-duo/releases/download/fftw-$(FFTW_VERSION)
 else
 FFTW_VERSION = 3.3.8
 FFTW_SITE = http://www.fftw.org

@@ -5,7 +5,7 @@
 ################################################################################
 
 JACK2MOD_VERSION = 2ecce1fe4ec1965fc31f2487b97bcb680db5b191
-JACK2MOD_SITE = $(call github,jackaudio,jack2,$(JACK2MOD_VERSION))
+JACK2MOD_SITE = https://download.mod.audio/mirror
 JACK2MOD_LICENSE = GPLv2+ (jack server), LGPLv2.1+ (jack library)
 JACK2MOD_DEPENDENCIES = libsamplerate libsndfile alsa-lib host-python3
 JACK2MOD_INSTALL_STAGING = YES

@@ -5,7 +5,7 @@
 ######################################
 
 GXSWITCHLESSWAH_VERSION = f712b18346faa678d551fb1f949ff752590ed114
-GXSWITCHLESSWAH_SITE = $(call github,moddevices,GxSwitchlessWah.lv2,$(GXSWITCHLESSWAH_VERSION))
+GXSWITCHLESSWAH_SITE = $(call github,mod-audio,GxSwitchlessWah.lv2,$(GXSWITCHLESSWAH_VERSION))
 GXSWITCHLESSWAH_BUNDLES = GxSwitchlessWah.lv2
 
 ifdef BR2_cortex_a7

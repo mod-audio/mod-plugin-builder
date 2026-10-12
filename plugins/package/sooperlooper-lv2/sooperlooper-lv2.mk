@@ -5,7 +5,7 @@
 ######################################
 
 SOOPERLOOPER_LV2_VERSION = d3e80029ce4f6ef62b3758e95c5b889cab1db740
-SOOPERLOOPER_LV2_SITE = $(call github,moddevices,sooperlooper-lv2-plugin,$(SOOPERLOOPER_LV2_VERSION))
+SOOPERLOOPER_LV2_SITE = $(call github,mod-audio,sooperlooper-lv2-plugin,$(SOOPERLOOPER_LV2_VERSION))
 SOOPERLOOPER_LV2_BUNDLES = sooperlooper.lv2 sooperlooper-2x2.lv2
 
 SOOPERLOOPER_LV2_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)

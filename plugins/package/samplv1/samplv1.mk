@@ -5,7 +5,7 @@
 ######################################
 
 SAMPLV1_VERSION = 432256fe3c8b2172e1e706be40ec27978887d457
-SAMPLV1_SITE = $(call github,moddevices,samplv1,$(SAMPLV1_VERSION))
+SAMPLV1_SITE = $(call github,mod-audio,samplv1,$(SAMPLV1_VERSION))
 SAMPLV1_BUNDLES = samplv1.lv2
 SAMPLV1_AUTORECONF = YES
 

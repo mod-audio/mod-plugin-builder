@@ -5,7 +5,7 @@
 ######################################
 
 MOD_MIDI_UTILITIES_LABS_VERSION = ffa812ca034d0f6e5c924c29f59f78569246d958
-MOD_MIDI_UTILITIES_LABS_SITE = $(call github,moddevices,mod-midi-utilities,$(MOD_MIDI_UTILITIES_LABS_VERSION))
+MOD_MIDI_UTILITIES_LABS_SITE = $(call github,mod-audio,mod-midi-utilities,$(MOD_MIDI_UTILITIES_LABS_VERSION))
 MOD_MIDI_UTILITIES_LABS_BUNDLES = peak-to-cc.lv2 midi-inv-switchbox.lv2 midi-switchbox.lv2 midi-switchbox3.lv2 midi-switchbox4.lv2
 
 MOD_MIDI_UTILITIES_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)

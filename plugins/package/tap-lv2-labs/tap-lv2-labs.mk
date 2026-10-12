@@ -5,7 +5,7 @@
 ######################################
 
 TAP_LV2_LABS_VERSION = de26a3c8c8c2227e6d7fba3dcb54ec5fe2def258
-TAP_LV2_LABS_SITE = $(call github,moddevices,tap-lv2,$(TAP_LV2_LABS_VERSION))
+TAP_LV2_LABS_SITE = $(call github,mod-audio,tap-lv2,$(TAP_LV2_LABS_VERSION))
 TAP_LV2_LABS_BUNDLES = tap-deesser.lv2 tap-limiter.lv2 tap-pitch.lv2 tap-rotspeak.lv2 tap-vibrato.lv2
 
 TAP_LV2_LABS_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)

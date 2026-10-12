@@ -5,7 +5,7 @@
 ################################################################################
 
 SRATOM_VERSION = 0.6.22
-SRATOM_SITE = https://download.drobilla.net
+SRATOM_SITE = https://download.mod.audio/mirror
 SRATOM_SOURCE = sratom-$(SRATOM_VERSION).tar.xz
 SRATOM_LICENSE = ISC
 SRATOM_LICENSE_FILES = COPYING

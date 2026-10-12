@@ -66,7 +66,7 @@ RUN if test "$platform" = "modduo" || test "$platform" = "modduo-new" || test "$
     fi
 
 # mod-plugin-builder settings
-ENV MPB_GIT_URL https://github.com/moddevices/mod-plugin-builder
+ENV MPB_GIT_URL https://github.com/mod-audio/mod-plugin-builder
 
 # ct-ng settings
 ENV CT_ALLOW_BUILD_AS_ROOT_SURE y

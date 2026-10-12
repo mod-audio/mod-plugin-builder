@@ -6,7 +6,7 @@
 
 LV2_VERSION = 1.18.4
 LV2_SOURCE = lv2-$(LV2_VERSION).tar.bz2
-LV2_SITE = https://lv2plug.in/spec
+LV2_SITE = https://download.mod.audio/mirror
 LV2_LICENSE = ISC License
 LV2_LICENSE_FILES = COPYING
 LV2_INSTALL_STAGING = YES

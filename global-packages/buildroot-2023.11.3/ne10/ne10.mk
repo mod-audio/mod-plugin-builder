@@ -5,7 +5,7 @@
 ################################################################################
 
 NE10_VERSION = 1.2.1
-NE10_SITE = $(call github,projectNe10,Ne10,v$(NE10_VERSION))
+NE10_SITE = $(call github,mod-audio,Ne10,v$(NE10_VERSION))
 NE10_LICENSE = BSD-3-Clause or Apache-2.0
 NE10_LICENSE_FILES = doc/LICENSE
 NE10_INSTALL_STAGING = YES

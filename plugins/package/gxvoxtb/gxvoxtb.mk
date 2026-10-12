@@ -5,7 +5,7 @@
 ######################################
 
 GXVOXTB_VERSION = 186d3e99ea42a95e9dae982aec106f5c46c82829
-GXVOXTB_SITE = $(call github,moddevices,gx_vobtb.lv2,$(GXVOXTB_VERSION))
+GXVOXTB_SITE = $(call github,mod-audio,gx_voxtb.lv2,$(GXVOXTB_VERSION))
 GXVOXTB_BUNDLES = gx_voxtb.lv2
 
 ifdef BR2_cortex_a7
