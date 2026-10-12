@@ -1,5 +1,5 @@
 FROM debian:bookworm
-LABEL maintainer="Filipe Coelho <falktx@mod.audio>"
+LABEL maintainer="MOD Audio <https://mod.audio>"
 ENV DEBIAN_FRONTEND noninteractive
 
 # platform argument must be provided, e.g. --build-arg platform=moddwarf-new
