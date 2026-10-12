@@ -5,7 +5,7 @@
 ################################################################################
 
 SERD_VERSION = 32f10751605e7124e415d38feb4d8176288c03ad
-SERD_SITE = $(call github,drobilla,serd,$(SERD_VERSION))
+SERD_SITE = $(call github,mod-audio,serd,$(SERD_VERSION))
 SERD_DEPENDENCIES = host-python
 SERD_INSTALL_STAGING = YES
 SERD_DEPENDENCIES = host-python

@@ -5,7 +5,7 @@
 ######################################
 
 LVTK_1_VERSION = c105fd5077b4f7d963ad543b9979b94b9b052551
-LVTK_1_SITE = $(call github,lvtk,lvtk,$(LVTK_1_VERSION))
+LVTK_1_SITE = $(call github,mod-audio,lvtk,$(LVTK_1_VERSION))
 LVTK_1_DEPENDENCIES = boost lv2 host-python
 LVTK_1_INSTALL_STAGING = YES
 
