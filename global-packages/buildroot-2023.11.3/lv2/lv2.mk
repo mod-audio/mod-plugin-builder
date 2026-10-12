@@ -5,7 +5,7 @@
 ################################################################################
 
 LV2_VERSION = 1.18.10
-LV2_SITE = https://lv2plug.in/spec
+LV2_SITE = https://download.mod.audio/mirror
 LV2_SOURCE = lv2-$(LV2_VERSION).tar.xz
 LV2_LICENSE = ISC
 LV2_LICENSE_FILES = COPYING
