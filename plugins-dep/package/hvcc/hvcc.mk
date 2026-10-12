@@ -5,7 +5,7 @@
 ######################################
 
 # taken from https://github.com/Wasted-Audio/hvcc/actions/runs/11177587501/artifacts/2015031571
-HVCC_SITE = https://falktx.berlin/data/mod
+HVCC_SITE = https://download.mod.audio/mirror
 HVCC_VERSION = 0.12.1
 HVCC_SOURCE = hvcc-$(HVCC_VERSION).tar.gz
 HVCC_INSTALL_STAGING = YES

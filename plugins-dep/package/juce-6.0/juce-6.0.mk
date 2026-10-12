@@ -6,7 +6,7 @@
 
 JUCE_6_0_VERSION = 10c7e4a091da05056665310ceee2820e1ee057e8
 JUCE_6_0_VERSION_PROJECT = JUCE-6.0.8
-JUCE_6_0_SITE = $(call github,DISTRHO,juce,$(JUCE_6_0_VERSION))
+JUCE_6_0_SITE = https://download.mod.audio/mirror
 JUCE_6_0_DEPENDENCIES = host-juce-6.0 freetype
 JUCE_6_0_INSTALL_STAGING = YES
 JUCE_6_0_TOOLCHAIN_FILE = $(STAGING_DIR)/usr/lib/cmake/$(JUCE_6_0_VERSION_PROJECT)/toolchainfile.cmake
