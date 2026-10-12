@@ -5,7 +5,7 @@
 ######################################
 
 GUITARIX_LABS_VERSION = 589dd79b2d7ad2b5e0db4c18c25279d6e94a1552
-GUITARIX_LABS_SITE = $(call github,moddevices,guitarix,$(GUITARIX_LABS_VERSION))
+GUITARIX_LABS_SITE = $(call github,mod-audio,guitarix,$(GUITARIX_LABS_VERSION))
 GUITARIX_LABS_DEPENDENCIES = boost eigen fftw-single glibmm libsndfile zita-convolver zita-resampler host-python host-intltool
 GUITARIX_LABS_BUNDLES = gx_barkgraphiceq.lv2 gx_chorus.lv2 gx_graphiceq.lv2 gx_livelooper.lv2 gx_mbcompressor.lv2 gx_mbdistortion.lv2 gx_mbecho.lv2 gx_mbreverb.lv2 gx_tremolo.lv2 gx_zita_rev1.lv2 gxautowah.lv2 gxechocat.lv2 gxtubedelay.lv2 gxtubetremelo.lv2 gxtubevibrato.lv2
 

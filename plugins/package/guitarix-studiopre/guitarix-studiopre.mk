@@ -5,7 +5,7 @@
 ######################################
 
 GUITARIX_STUDIOPRE_VERSION = 589dd79b2d7ad2b5e0db4c18c25279d6e94a1552
-GUITARIX_STUDIOPRE_SITE = $(call github,moddevices,guitarix,$(GUITARIX_STUDIOPRE_VERSION))
+GUITARIX_STUDIOPRE_SITE = $(call github,mod-audio,guitarix,$(GUITARIX_STUDIOPRE_VERSION))
 GUITARIX_STUDIOPRE_DEPENDENCIES = boost eigen fftw-single glibmm libsndfile zita-convolver zita-resampler host-python host-intltool
 GUITARIX_STUDIOPRE_BUNDLES = gx_studiopre.lv2 gx_studiopre_st.lv2
 

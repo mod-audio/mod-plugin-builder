@@ -5,7 +5,7 @@
 ######################################
 
 CAPS_LV2_VERSION = efdef2601435cf4f36da4b8f7b0412fa404facb8
-CAPS_LV2_SITE = $(call github,moddevices,caps-lv2,$(CAPS_LV2_VERSION))
+CAPS_LV2_SITE = $(call github,mod-audio,caps-lv2,$(CAPS_LV2_VERSION))
 CAPS_LV2_BUNDLES = mod-caps-AmpVTS.lv2 mod-caps-AutoFilter.lv2 mod-caps-CabinetIV.lv2 mod-caps-CEO.lv2 mod-caps-Click.lv2 mod-caps-PhaserII.lv2 mod-caps-Plate.lv2 mod-caps-PlateX2.lv2 mod-caps-Scape.lv2 mod-caps-Spice.lv2 mod-caps-SpiceX2.lv2 mod-caps-White.lv2 mod-caps-Wider.lv2
 
 

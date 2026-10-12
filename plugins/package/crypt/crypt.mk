@@ -5,7 +5,7 @@
 ######################################
 
 CRYPT_VERSION = 1e0a3fd633f16e98d3013d247ba94fde04c470ef
-CRYPT_SITE = https://github.com/moddevices/crypt/
+CRYPT_SITE = https://github.com/mod-audio/crypt/
 CRYPT_SITE_METHOD = git
 CRYPT_DEPENDENCIES = juce-6.1
 CRYPT_CONF_ENV = DESTDIR="$(TARGET_DIR)"

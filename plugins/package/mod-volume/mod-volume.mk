@@ -5,7 +5,7 @@
 ######################################
 
 MOD_VOLUME_VERSION = bc55d4f336b00a8766817f65121b9ec59d20f98d
-MOD_VOLUME_SITE = $(call github,moddevices,mod-volume-lv2,$(MOD_VOLUME_VERSION))
+MOD_VOLUME_SITE = $(call github,mod-audio,mod-volume-lv2,$(MOD_VOLUME_VERSION))
 MOD_VOLUME_BUNDLES = mod-volume.lv2 mod-volume-2x2.lv2
 
 # dependencies (list of other buildroot packages, separated by space)

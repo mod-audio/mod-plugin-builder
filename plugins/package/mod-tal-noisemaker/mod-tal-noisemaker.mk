@@ -5,7 +5,7 @@
 ######################################
 
 MOD_TAL_NOISEMAKER_VERSION = cb71b646f1908e0cdfd1ad4c1e23c6bf1357c25d
-MOD_TAL_NOISEMAKER_SITE = $(call github,moddevices,mod-tal-noisemaker,$(MOD_TAL_NOISEMAKER_VERSION))
+MOD_TAL_NOISEMAKER_SITE = $(call github,mod-audio,mod-tal-noisemaker,$(MOD_TAL_NOISEMAKER_VERSION))
 MOD_TAL_NOISEMAKER_BUNDLES = TAL-NoiseMaker-ME.lv2
 
 # dependencies (list of other buildroot packages, separated by space)

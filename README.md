@@ -119,5 +119,5 @@ VALGRIND=1 ./validate <platform> <plugin-package>
 
 ### Note about Camomile
 
-The Camomile integration is under testing phase. Check the [PR notes](https://github.com/moddevices/mod-plugin-builder/pull/28) for more details. 
+The Camomile integration is under testing phase. Check the [PR notes](https://github.com/mod-audio/mod-plugin-builder/pull/28) for more details. 
 

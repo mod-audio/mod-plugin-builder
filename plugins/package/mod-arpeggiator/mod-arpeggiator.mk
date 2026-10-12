@@ -5,7 +5,7 @@
 ######################################
 
 MOD_ARPEGGIATOR_VERSION = a7e7a37aa013048ad2016767b058642d162e9693
-MOD_ARPEGGIATOR_SITE = $(call github,moddevices,mod-arpeggiator-lv2,$(MOD_ARPEGGIATOR_VERSION))
+MOD_ARPEGGIATOR_SITE = $(call github,mod-audio,mod-arpeggiator-lv2,$(MOD_ARPEGGIATOR_VERSION))
 MOD_ARPEGGIATOR_BUNDLES = mod-arpeggiator.lv2
 
 # dependencies (list of other buildroot packages, separated by space)

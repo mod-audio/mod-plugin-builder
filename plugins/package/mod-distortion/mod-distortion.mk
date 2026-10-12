@@ -5,7 +5,7 @@
 ######################################
 
 MOD_DISTORTION_VERSION = e672d5feb9d631798e3d56eb96e8958c3d2c6821
-MOD_DISTORTION_SITE = $(call github,moddevices,mod-distortion,$(MOD_DISTORTION_VERSION))
+MOD_DISTORTION_SITE = $(call github,mod-audio,mod-distortion,$(MOD_DISTORTION_VERSION))
 MOD_DISTORTION_BUNDLES = mod-bigmuff.lv2 mod-ds1.lv2
 
 MOD_DISTORTION_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)

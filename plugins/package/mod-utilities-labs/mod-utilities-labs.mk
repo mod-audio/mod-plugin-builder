@@ -5,7 +5,7 @@
 ######################################
 
 MOD_UTILITIES_LABS_VERSION = 4a92aa81351c5c95fefa0505fafad5fbea494dd0
-MOD_UTILITIES_LABS_SITE = $(call github,moddevices,mod-utilities,$(MOD_UTILITIES_LABS_VERSION))
+MOD_UTILITIES_LABS_SITE = $(call github,mod-audio,mod-utilities,$(MOD_UTILITIES_LABS_VERSION))
 MOD_UTILITIES_LABS_DEPENDENCIES = alsa-lib
 MOD_UTILITIES_LABS_BUNDLES = mod-switchtrigger4.lv2 inverted-switchbox.lv2 stereoswitchbox.lv2 stereoswitchbox2.lv2
 
