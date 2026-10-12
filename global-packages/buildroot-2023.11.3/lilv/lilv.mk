@@ -5,7 +5,7 @@
 ################################################################################
 
 LILV_VERSION = 0.26.4
-LILV_SITE = https://download.drobilla.net
+LILV_SITE = https://download.mod.audio/mirror
 LILV_SOURCE = lilv-$(LILV_VERSION).tar.xz
 LILV_LICENSE = ISC
 LILV_LICENSE_FILES = COPYING
