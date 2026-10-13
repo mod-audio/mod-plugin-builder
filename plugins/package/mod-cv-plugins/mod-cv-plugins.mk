@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_CV_PLUGINS_VERSION = 5b175482a32094f39eb46d569ffbc718b157a0ee
+MOD_CV_PLUGINS_VERSION = 8a62355e65a3f723339abb60ccea0c5b4509fbe3
 MOD_CV_PLUGINS_SITE = https://github.com/mod-audio/mod-cv-plugins.git
 MOD_CV_PLUGINS_SITE_METHOD = git
 MOD_CV_PLUGINS_DEPENDENCIES =
