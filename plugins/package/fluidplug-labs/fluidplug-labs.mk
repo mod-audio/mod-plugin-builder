@@ -5,7 +5,7 @@
 ######################################
 
 FLUIDPLUG_LABS_VERSION = 1cf494cb3a5b1f7f2a95f872768a1eef141c3e0a
-FLUIDPLUG_LABS_SITE = $(call github,falkTX,FluidPlug,$(FLUIDPLUG_LABS_VERSION))
+FLUIDPLUG_LABS_SITE = $(call github,mod-audio,FluidPlug,$(FLUIDPLUG_LABS_VERSION))
 FLUIDPLUG_LABS_DEPENDENCIES = fluidsynth host-p7zip-light
 FLUIDPLUG_LABS_BUNDLES = AirFont320.lv2 AVL_Drumkits_Perc.lv2
 
