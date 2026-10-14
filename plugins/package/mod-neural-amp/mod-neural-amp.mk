@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_NEURAL_AMP_VERSION = 0dd7c8149a6cedf9904fddad259ee4d12998d030
+MOD_NEURAL_AMP_VERSION = 1c06549867fd9badbf80c1e9f3be10c6fb2c58ff
 MOD_NEURAL_AMP_SITE = https://github.com/mod-audio/mod-neural-amp.git
 MOD_NEURAL_AMP_SITE_METHOD = git
 MOD_NEURAL_AMP_BUNDLES = mod-neural-amp.lv2
