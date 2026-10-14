@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_STUTTER_VERSION = a2ce93bf9b36848c111c079a5e30382bc75f088c
+DM_STUTTER_VERSION = f965d9881e2d158472c5753061f66a1d96c10457
 DM_STUTTER_SITE = https://github.com/davemollen/dm-Stutter.git
 DM_STUTTER_SITE_METHOD = git
 DM_STUTTER_BUNDLES = dm-Stutter.lv2
