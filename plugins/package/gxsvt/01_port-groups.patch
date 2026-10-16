@@ -1,0 +1,106 @@
+Add LV2 port groups (MOD OS 1.14 settings panel) and bump lv2:microVersion by 2.
+
+diff -ruN a/MOD/gx_ampegsvt.ttl b/MOD/gx_ampegsvt.ttl
+--- a/MOD/gx_ampegsvt.ttl	2026-10-16 10:15:50.866846366 +0200
++++ b/MOD/gx_ampegsvt.ttl	2026-10-16 10:15:50.890846931 +0200
+@@ -1,3 +1,4 @@
++@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+ #
+ # Copyright (C) 2014 Guitarix project MOD project
+ # 
+@@ -49,7 +50,7 @@
+     lv2:optionalFeature lv2:hardRTCapable ;
+       
+     lv2:minorVersion 34;
+-    lv2:microVersion 0;
++    lv2:microVersion 2;
+ 
+     mod:brand "Guitarix" ;
+     mod:label "GxSVT" ;
+@@ -87,6 +88,7 @@
+             lv2:ControlPort ;
+         lv2:index 3 ;
+         lv2:symbol "BASS" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_tone> ;
+         lv2:name "BASS" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+@@ -96,6 +98,7 @@
+             lv2:ControlPort ;
+         lv2:index 4 ;
+         lv2:symbol "MIDDLE" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_tone> ;
+         lv2:name "MIDDLE" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+@@ -105,6 +108,7 @@
+             lv2:ControlPort ;
+         lv2:index 5 ;
+         lv2:symbol "TREBLE" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_tone> ;
+         lv2:name "TREBLE" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+@@ -114,6 +118,7 @@
+             lv2:ControlPort ;
+         lv2:index 6 ;
+         lv2:symbol "VOLUME" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_output> ;
+         lv2:name "VOLUME" ;
+         lv2:default 0.2 ;
+         lv2:minimum 0.0 ;
+@@ -123,6 +128,7 @@
+             lv2:ControlPort ;
+         lv2:index 7 ;
+         lv2:symbol "LOWSWITCH" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_switches> ;
+         lv2:name "LOWSWITCH" ;
+         lv2:default 1.0 ;
+         lv2:minimum 0.0 ;
+@@ -137,6 +143,7 @@
+             lv2:ControlPort ;
+         lv2:index 8 ;
+         lv2:symbol "MIDSWITCH" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_switches> ;
+         lv2:name "MIDSWITCH" ;
+         lv2:default 1.0 ;
+         lv2:minimum 0.0 ;
+@@ -151,6 +158,7 @@
+             lv2:ControlPort ;
+         lv2:index 9 ;
+         lv2:symbol "HIGHSWITCH" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_switches> ;
+         lv2:name "HIGHSWITCH" ;
+         lv2:default 0.0 ;
+         lv2:minimum 0.0 ;
+@@ -164,6 +172,7 @@
+             lv2:ControlPort ;
+         lv2:index 10 ;
+         lv2:symbol "CABSWITCH" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_output> ;
+         lv2:name "CABSWITCH" ;
+         lv2:default 0.0 ;
+         lv2:minimum 0.0 ;
+@@ -173,3 +182,22 @@
+         lv2:scalePoint [rdfs:label "OFF"; rdf:value 0];
+         lv2:scalePoint [rdfs:label "ON"; rdf:value 1];
+     ] .
++
++# Port groups (MOD OS 1.14 settings panel), added 2026-10
++<http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_tone>
++    a pg:InputGroup ;
++    lv2:symbol "tone" ;
++    lv2:name "Tone" ;
++    lv2:index 0 .
++
++<http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_switches>
++    a pg:InputGroup ;
++    lv2:symbol "switches" ;
++    lv2:name "Switches" ;
++    lv2:index 1 .
++
++<http://guitarix.sourceforge.net/plugins/gx_ampegsvt_#_ampegsvt__group_output>
++    a pg:InputGroup ;
++    lv2:symbol "output" ;
++    lv2:name "Output" ;
++    lv2:index 2 .

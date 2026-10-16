@@ -4,7 +4,7 @@
 #
 ######################################
 
-MOD_AUDIO_MIXERS_VERSION = 406ed41d3ec5aa5b3d5e93049d801be31f9e086c
+MOD_AUDIO_MIXERS_VERSION = f300fb48ac3b6d4f36d1f2231230c1860d4323cd
 MOD_AUDIO_MIXERS_SITE = https://github.com/mod-audio/mod-audio-mixer-lv2.git
 MOD_AUDIO_MIXERS_SITE_METHOD = git
 MOD_AUDIO_MIXERS_BUNDLES = mod-mixer.lv2 mod-mixer-stereo.lv2

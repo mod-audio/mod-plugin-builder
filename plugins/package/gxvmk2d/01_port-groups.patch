@@ -1,0 +1,126 @@
+Add LV2 port groups (MOD OS 1.14 settings panel) and bump lv2:microVersion by 2.
+
+diff -ruN a/MOD/gx_vmk2d.ttl b/MOD/gx_vmk2d.ttl
+--- a/MOD/gx_vmk2d.ttl	2026-10-16 10:15:50.938848060 +0200
++++ b/MOD/gx_vmk2d.ttl	2026-10-16 10:15:50.958848530 +0200
+@@ -1,3 +1,4 @@
++@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+ #
+ # Copyright (C) 2014 Guitarix project MOD project
+ # 
+@@ -49,7 +50,7 @@
+     lv2:optionalFeature lv2:hardRTCapable ;
+       
+     lv2:minorVersion 34;
+-    lv2:microVersion 0;
++    lv2:microVersion 2;
+ 
+     mod:brand "Guitarix" ;
+     mod:label "GxVMK2" ;
+@@ -85,6 +86,7 @@
+             lv2:ControlPort ;
+         lv2:index 2 ;
+         lv2:symbol "BASS" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_amp> ;
+         lv2:name "BASS" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+@@ -94,6 +96,7 @@
+             lv2:ControlPort ;
+         lv2:index 3 ;
+         lv2:symbol "DEPTH" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_vibrato> ;
+         lv2:name "DEPTH" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+@@ -103,6 +106,7 @@
+             lv2:ControlPort ;
+         lv2:index 4 ;
+         lv2:symbol "MRBSELECT" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_mrb> ;
+         lv2:name "MRBSELECT" ;
+         lv2:default 0.0 ;
+         lv2:minimum 0.0 ;
+@@ -118,6 +122,7 @@
+             lv2:ControlPort ;
+         lv2:index 5 ;
+         lv2:symbol "MRB" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_mrb> ;
+         lv2:name "MRB" ;
+         lv2:default 0.0 ;
+         lv2:minimum 0.0 ;
+@@ -132,6 +137,7 @@
+             lv2:ControlPort ;
+         lv2:index 6 ;
+         lv2:symbol "REVERBLEVEL" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_reverb> ;
+         lv2:name "REVERBLEVEL" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+@@ -141,6 +147,7 @@
+             lv2:ControlPort ;
+         lv2:index 7 ;
+         lv2:symbol "REVERB" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_reverb> ;
+         lv2:name "REVERB" ;
+         lv2:default 0.0 ;
+         lv2:minimum 0.0 ;
+@@ -155,6 +162,7 @@
+             lv2:ControlPort ;
+         lv2:index 8 ;
+         lv2:symbol "SPEED" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_vibrato> ;
+         lv2:name "SPEED" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.01 ;
+@@ -164,6 +172,7 @@
+             lv2:ControlPort ;
+         lv2:index 9 ;
+         lv2:symbol "TREBLE" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_amp> ;
+         lv2:name "TREBLE" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+@@ -173,6 +182,7 @@
+             lv2:ControlPort ;
+         lv2:index 10 ;
+         lv2:symbol "VIBE" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_vibrato> ;
+         lv2:name "VIBE" ;
+         lv2:default 0.0 ;
+         lv2:minimum 0.0 ;
+@@ -187,8 +197,34 @@
+             lv2:ControlPort ;
+         lv2:index 11 ;
+         lv2:symbol "VOLUME" ;
++        pg:group <http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_amp> ;
+         lv2:name "VOLUME" ;
+         lv2:default 0.5 ;
+         lv2:minimum 0.0 ;
+         lv2:maximum 1.0 ;
+     ] .
++
++# Port groups (MOD OS 1.14 settings panel), added 2026-10
++<http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_amp>
++    a pg:InputGroup ;
++    lv2:symbol "amp" ;
++    lv2:name "Amp" ;
++    lv2:index 0 .
++
++<http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_mrb>
++    a pg:InputGroup ;
++    lv2:symbol "mrb" ;
++    lv2:name "MRB" ;
++    lv2:index 1 .
++
++<http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_vibrato>
++    a pg:InputGroup ;
++    lv2:symbol "vibrato" ;
++    lv2:name "Vibrato" ;
++    lv2:index 2 .
++
++<http://guitarix.sourceforge.net/plugins/gx_vmk2d_#_vmk2d__group_reverb>
++    a pg:InputGroup ;
++    lv2:symbol "reverb" ;
++    lv2:name "Reverb" ;
++    lv2:index 3 .

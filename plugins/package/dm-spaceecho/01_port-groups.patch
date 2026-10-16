@@ -1,0 +1,206 @@
+Add LV2 port groups (MOD OS 1.14 settings panel) and bump lv2:microVersion by 2.
+
+diff -ruN a/lv2/dm-SpaceEcho.lv2/dm-SpaceEcho.ttl b/lv2/dm-SpaceEcho.lv2/dm-SpaceEcho.ttl
+--- a/lv2/dm-SpaceEcho.lv2/dm-SpaceEcho.ttl	2026-10-16 10:15:50.778844294 +0200
++++ b/lv2/dm-SpaceEcho.lv2/dm-SpaceEcho.ttl	2026-10-16 10:15:50.806844951 +0200
+@@ -1,3 +1,4 @@
++@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix doap:  <http://usefulinc.com/ns/doap#> .
+ @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@@ -22,10 +23,13 @@
+ A delay and reverb effect inspired by the Space Echo.
+ """ ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
++	lv2:minorVersion 0 ;
++    lv2:microVersion 2 ;
++    lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 0 ;
+ 		lv2:symbol "input" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Input" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -32.0 ;
+@@ -35,6 +39,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 1 ;
+ 		lv2:symbol "time_link" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Time Link" ;
+ 		lv2:portProperty lv2:integer, lv2:toggled;
+ 		lv2:default 1 ;
+@@ -44,6 +49,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 2 ;
+ 		lv2:symbol "time_left" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Time Left" ;
+ 		lv2:portProperty pprops:logarithmic, mod:tempoRelatedDynamicScalePoints ;
+ 		lv2:default 250.0 ;
+@@ -54,6 +60,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 3;
+ 		lv2:symbol "time_right" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Time Right" ;
+ 		lv2:portProperty pprops:logarithmic, mod:tempoRelatedDynamicScalePoints;
+ 		lv2:default 250.0 ;
+@@ -64,6 +71,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 4 ;
+ 		lv2:symbol "feedback" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Feedback" ;
+ 		lv2:default 50.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -73,6 +81,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 5 ;
+ 		lv2:symbol "hold" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Hold" ;
+ 		lv2:portProperty lv2:integer, lv2:toggled;
+ 		lv2:default 0 ;
+@@ -82,6 +91,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 6 ;
+ 		lv2:symbol "wow_and_flutter" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Wow & Flutter" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -91,6 +101,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 7 ;
+ 		lv2:symbol "channel_mode" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Channel Mode" ;
+ 		lv2:portProperty lv2:integer;
+ 		lv2:portProperty lv2:enumeration ;
+@@ -103,6 +114,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 8 ;
+ 		lv2:symbol "time_mode" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_echo> ;
+ 		lv2:name "Time Mode" ;
+ 		lv2:portProperty lv2:integer;
+ 		lv2:portProperty lv2:enumeration ;
+@@ -115,6 +127,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 9 ;
+ 		lv2:symbol "highpass_freq" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_filter> ;
+ 		lv2:name "Highpass Freq" ;
+ 		lv2:portProperty pprops:logarithmic ;
+ 		lv2:default 20.0 ;
+@@ -125,6 +138,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 10 ;
+ 		lv2:symbol "highpass_res" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_filter> ;
+ 		lv2:name "Highpass Res" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -134,6 +148,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 11 ;
+ 		lv2:symbol "lowpass_freq" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_filter> ;
+ 		lv2:name "Lowpass Freq" ;
+ 		lv2:portProperty pprops:logarithmic ;
+ 		lv2:default 20000.0 ;
+@@ -144,6 +159,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 12 ;
+ 		lv2:symbol "lowpass_res" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_filter> ;
+ 		lv2:name "Lowpass Res" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -153,6 +169,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 13 ;
+ 		lv2:symbol "reverb" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_reverb> ;
+ 		lv2:name "Reverb" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -162,6 +179,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 14 ;
+ 		lv2:symbol "decay" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_reverb> ;
+ 		lv2:name "Decay" ;
+ 		lv2:default 75.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -171,6 +189,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 15 ;
+ 		lv2:symbol "stereo" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_reverb> ;
+ 		lv2:name "Stereo" ;
+ 		lv2:default 100.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -180,6 +199,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 16 ;
+ 		lv2:symbol "duck" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_output> ;
+ 		lv2:name "Duck" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -189,6 +209,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 17 ;
+ 		lv2:symbol "output" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_output> ;
+ 		lv2:name "Output" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -70.0 ;
+@@ -198,6 +219,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 18 ;
+ 		lv2:symbol "mix" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_output> ;
+ 		lv2:name "Mix" ;
+ 		lv2:default 50.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -207,6 +229,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 19 ;
+ 		lv2:symbol "limiter" ;
++        pg:group <https://github.com/davemollen/dm-SpaceEcho#group_output> ;
+ 		lv2:name "Limiter" ;
+ 		lv2:portProperty lv2:integer, lv2:toggled;
+ 		lv2:default 0 ;
+@@ -233,3 +256,28 @@
+ 		lv2:symbol "out_right" ;
+ 		lv2:name "Out right"
+ 	] .
++
++# Port groups (MOD OS 1.14 settings panel), added 2026-10
++<https://github.com/davemollen/dm-SpaceEcho#group_echo>
++    a pg:InputGroup ;
++    lv2:symbol "echo" ;
++    lv2:name "Echo" ;
++    lv2:index 0 .
++
++<https://github.com/davemollen/dm-SpaceEcho#group_filter>
++    a pg:InputGroup ;
++    lv2:symbol "filter" ;
++    lv2:name "Filter" ;
++    lv2:index 1 .
++
++<https://github.com/davemollen/dm-SpaceEcho#group_reverb>
++    a pg:InputGroup ;
++    lv2:symbol "reverb" ;
++    lv2:name "Reverb" ;
++    lv2:index 2 .
++
++<https://github.com/davemollen/dm-SpaceEcho#group_output>
++    a pg:InputGroup ;
++    lv2:symbol "output" ;
++    lv2:name "Output" ;
++    lv2:index 3 .
