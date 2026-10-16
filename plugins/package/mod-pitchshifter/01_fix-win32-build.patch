@@ -1,0 +1,157 @@
+diff --git a/2Voices/src/2Voices.cpp b/2Voices/src/2Voices.cpp
+index e466cac..647e379 100644
+--- a/2Voices/src/2Voices.cpp
++++ b/2Voices/src/2Voices.cpp
+@@ -3,6 +3,8 @@
+ #include "PitchShifterClasses.h"
+ #include "GainClass.h"
+ 
++#undef IN
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/2Voices"
+@@ -203,4 +205,4 @@ void TwoVoices::cleanup(LV2_Handle instance)
+ const void* TwoVoices::extension_data(const char* uri)
+ {
+     return NULL;
+-}
+\ No newline at end of file
++}
+diff --git a/Capo/src/Capo.cpp b/Capo/src/Capo.cpp
+index 8116cc6..9cd8b2f 100644
+--- a/Capo/src/Capo.cpp
++++ b/Capo/src/Capo.cpp
+@@ -3,6 +3,9 @@
+ #include "PitchShifterClasses.h"
+ #include "GainClass.h"
+ 
++#undef IN
++#undef OUT
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/Capo"
+@@ -184,4 +187,4 @@ void Capo::cleanup(LV2_Handle instance)
+ const void* Capo::extension_data(const char* uri)
+ {
+     return NULL;
+-}
+\ No newline at end of file
++}
+diff --git a/Drop/src/Drop.cpp b/Drop/src/Drop.cpp
+index a8dbb7c..352287a 100644
+--- a/Drop/src/Drop.cpp
++++ b/Drop/src/Drop.cpp
+@@ -3,6 +3,9 @@
+ #include "PitchShifterClasses.h"
+ #include "GainClass.h"
+ 
++#undef IN
++#undef OUT
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/Drop"
+@@ -185,4 +188,4 @@ void Drop::cleanup(LV2_Handle instance)
+ const void* Drop::extension_data(const char* uri)
+ {
+     return NULL;
+-}
+\ No newline at end of file
++}
+diff --git a/Harmonizer/src/Harmonizer.cpp b/Harmonizer/src/Harmonizer.cpp
+index 8cbf270..f346ed6 100644
+--- a/Harmonizer/src/Harmonizer.cpp
++++ b/Harmonizer/src/Harmonizer.cpp
+@@ -5,6 +5,8 @@
+ #include "HarmonizerLib.h"
+ #include "GainClass.h"
+ 
++#undef IN
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/Harmonizer"
+@@ -210,4 +212,4 @@ void Harmonizer::cleanup(LV2_Handle instance)
+ const void* Harmonizer::extension_data(const char* uri)
+ {
+     return NULL;
+-}
+\ No newline at end of file
++}
+diff --git a/Harmonizer2/src/Harmonizer2.cpp b/Harmonizer2/src/Harmonizer2.cpp
+index 7ac19db..e990daf 100644
+--- a/Harmonizer2/src/Harmonizer2.cpp
++++ b/Harmonizer2/src/Harmonizer2.cpp
+@@ -5,6 +5,8 @@
+ #include "HarmonizerLib.h"
+ #include "GainClass.h"
+ 
++#undef IN
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/Harmonizer2"
+@@ -227,4 +229,4 @@ void Harmonizer2::cleanup(LV2_Handle instance)
+ const void* Harmonizer2::extension_data(const char* uri)
+ {
+     return NULL;
+-}
+\ No newline at end of file
++}
+diff --git a/HarmonizerCS/src/HarmonizerCS.cpp b/HarmonizerCS/src/HarmonizerCS.cpp
+index 4799142..a384c1a 100644
+--- a/HarmonizerCS/src/HarmonizerCS.cpp
++++ b/HarmonizerCS/src/HarmonizerCS.cpp
+@@ -5,6 +5,8 @@
+ #include "HarmonizerLib.h"
+ #include "GainClass.h"
+ 
++#undef IN
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/HarmonizerCS"
+@@ -219,4 +221,4 @@ void HarmonizerCS::cleanup(LV2_Handle instance)
+ const void* HarmonizerCS::extension_data(const char* uri)
+ {
+     return NULL;
+-}
+\ No newline at end of file
++}
+diff --git a/SuperCapo/src/SuperCapo.cpp b/SuperCapo/src/SuperCapo.cpp
+index 9482ab0..1f0f4d6 100644
+--- a/SuperCapo/src/SuperCapo.cpp
++++ b/SuperCapo/src/SuperCapo.cpp
+@@ -3,6 +3,9 @@
+ #include "PitchShifterClasses.h"
+ #include "GainClass.h"
+ 
++#undef IN
++#undef OUT
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/SuperCapo"
+diff --git a/SuperWhammy/src/SuperWhammy.cpp b/SuperWhammy/src/SuperWhammy.cpp
+index 6ad9cb4..021fcf3 100644
+--- a/SuperWhammy/src/SuperWhammy.cpp
++++ b/SuperWhammy/src/SuperWhammy.cpp
+@@ -3,6 +3,9 @@
+ #include "PitchShifterClasses.h"
+ #include "GainClass.h"
+ 
++#undef IN
++#undef OUT
++
+ /**********************************************************************************************************************************************************/
+ 
+ #define PLUGIN_URI "http://moddevices.com/plugins/mod-devel/SuperWhammy"
+@@ -201,4 +204,4 @@ void SuperWhammy::cleanup(LV2_Handle instance)
+ const void* SuperWhammy::extension_data(const char* uri)
+ {
+     return NULL;
+-}
+\ No newline at end of file
++}

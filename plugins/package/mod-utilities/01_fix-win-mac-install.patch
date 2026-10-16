@@ -1,0 +1,52 @@
+diff --git a/SwitchBox_1-2/Makefile b/SwitchBox_1-2/Makefile
+index 97b5ca0..6274c69 100644
+--- a/SwitchBox_1-2/Makefile
++++ b/SwitchBox_1-2/Makefile
+@@ -39,7 +39,7 @@ clean:
+ install: build
+ 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2
+ 
+-	install -m 644 $(NAME).lv2/*.so  $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
++	install -m 644 $(NAME).lv2/*$(LIB_EXT) $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 	install -m 644 $(NAME).lv2/*.ttl $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 
+ # --------------------------------------------------------------
+diff --git a/SwitchBox_1-2_st/Makefile b/SwitchBox_1-2_st/Makefile
+index 4ca3c29..36b35fb 100644
+--- a/SwitchBox_1-2_st/Makefile
++++ b/SwitchBox_1-2_st/Makefile
+@@ -39,7 +39,7 @@ clean:
+ install: build
+ 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2
+ 
+-	install -m 644 $(NAME).lv2/*.so  $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
++	install -m 644 $(NAME).lv2/*$(LIB_EXT) $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 	install -m 644 $(NAME).lv2/*.ttl $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 
+ # --------------------------------------------------------------
+diff --git a/SwitchBox_2-1/Makefile b/SwitchBox_2-1/Makefile
+index 655aeaa..47a0189 100644
+--- a/SwitchBox_2-1/Makefile
++++ b/SwitchBox_2-1/Makefile
+@@ -39,7 +39,7 @@ clean:
+ install: build
+ 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2
+ 
+-	install -m 644 $(NAME).lv2/*.so  $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
++	install -m 644 $(NAME).lv2/*$(LIB_EXT) $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 	install -m 644 $(NAME).lv2/*.ttl $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 
+ # --------------------------------------------------------------
+diff --git a/SwitchBox_2-1_st/Makefile b/SwitchBox_2-1_st/Makefile
+index a991ec2..f7c7ccf 100644
+--- a/SwitchBox_2-1_st/Makefile
++++ b/SwitchBox_2-1_st/Makefile
+@@ -39,7 +39,7 @@ clean:
+ install: build
+ 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2
+ 
+-	install -m 644 $(NAME).lv2/*.so  $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
++	install -m 644 $(NAME).lv2/*$(LIB_EXT) $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 	install -m 644 $(NAME).lv2/*.ttl $(DESTDIR)$(PREFIX)/lib/lv2/$(NAME).lv2/
+ 
+ # --------------------------------------------------------------

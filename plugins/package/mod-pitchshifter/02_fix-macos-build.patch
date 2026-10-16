@@ -1,0 +1,19 @@
+diff --git a/Makefile.mk b/Makefile.mk
+index edb804b..0e9d6d8 100644
+--- a/Makefile.mk
++++ b/Makefile.mk
+@@ -3,8 +3,12 @@
+ CXX ?= g++
+ 
+ # flags
+-CXXFLAGS += -O3 -ffast-math -Wall -fPIC -DPIC $(shell pkg-config --cflags fftw3f) -I. -I../Shared_files
+-LDFLAGS += -shared -Wl,-O1 -Wl,--as-needed -Wl,--no-undefined -Wl,--strip-all $(shell pkg-config --libs fftw3f) -larmadillo -lm
++CXXFLAGS += -O3 -ffast-math -Wall -fPIC -DPIC $(shell pkg-config --cflags fftw3f) -I. -I../Shared_files -std=gnu++11
++LDFLAGS += -shared $(shell pkg-config --libs fftw3f) -larmadillo -lm
++
++ifneq ($(MACOS),true)
++LDFLAGS += -Wl,-O1,--as-needed,--no-undefined,--strip-all
++endif
+ 
+ ifneq ($(NOOPT),true)
+ CXXFLAGS += -mtune=generic -msse -msse2 -mfpmath=sse
