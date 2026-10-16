@@ -1,0 +1,251 @@
+Add LV2 port groups (MOD OS 1.14 settings panel) and bump lv2:microVersion by 2.
+
+diff -ruN a/mod-ams.lv2/vcf.ttl b/mod-ams.lv2/vcf.ttl
+--- a/mod-ams.lv2/vcf.ttl	2026-10-16 10:15:50.598840054 +0200
++++ b/mod-ams.lv2/vcf.ttl	2026-10-16 10:16:17.319469334 +0200
+@@ -1,3 +1,4 @@
++@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix doap: 	<http://usefulinc.com/ns/doap#> .
+ @prefix foaf: 	<http://xmlns.com/foaf/0.1/> .
+ @prefix lv2: 	<http://lv2plug.in/ns/lv2core#> .
+@@ -18,7 +19,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 0;
++    lv2:microVersion 2;
+ 
+ rdfs:comment """
+ The AMS VCF module is a voltage controlled filter which offers a wide variety of filter types and flavours (multiple low-pass and band-pass flavours, as well as a high-pass and notch option). Additionally, it enables you to use other CV signals to modulate some of its features, such as frequency and resonance. 
+@@ -72,6 +73,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 5 ; 
+ 		lv2:symbol "vcfType" ;
++        pg:group <http://github.com/blablack/ams-lv2/vcf#group_filter> ;
+ 		lv2:name "VCF Type" ;
+ 		lv2:default 0;
+ 		lv2:minimum 0;
+@@ -107,6 +109,7 @@
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 6 ; 
+ 		lv2:symbol "inputGain" ;
++        pg:group <http://github.com/blablack/ams-lv2/vcf#group_filter> ;
+ 		lv2:name "Input Gain" ;
+ 		lv2:default 1 ;
+ 		lv2:minimum 0 ;
+@@ -115,6 +118,7 @@
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 7 ; 
+ 		lv2:symbol "freq" ;
++        pg:group <http://github.com/blablack/ams-lv2/vcf#group_filter> ;
+ 		lv2:name "Frequency" ;
+ 		lv2:default 5 ;
+ 		lv2:minimum 0 ;
+@@ -123,6 +127,7 @@
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 8 ; 
+ 		lv2:symbol "expFMGain" ;
++        pg:group <http://github.com/blablack/ams-lv2/vcf#group_modulation> ;
+ 		lv2:name "Exp. FM Gain" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+@@ -131,6 +136,7 @@
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 9 ; 
+ 		lv2:symbol "linFMGain" ;
++        pg:group <http://github.com/blablack/ams-lv2/vcf#group_modulation> ;
+ 		lv2:name "Lin. FM Gain" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+@@ -139,6 +145,7 @@
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 10 ; 
+ 		lv2:symbol "resonance" ;
++        pg:group <http://github.com/blablack/ams-lv2/vcf#group_filter> ;
+ 		lv2:name "Resonance" ;
+ 		lv2:default 0.8 ;
+ 		lv2:minimum 0.01 ;
+@@ -147,6 +154,7 @@
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 11 ; 
+ 		lv2:symbol "resonanceGain" ;
++        pg:group <http://github.com/blablack/ams-lv2/vcf#group_filter> ;
+ 		lv2:name "Resonance Gain" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+@@ -157,3 +165,16 @@
+ 		lv2:symbol "out" ;
+ 		lv2:name "Out" ;
+ 	] .
++
++# Port groups (MOD OS 1.14 settings panel), added 2026-10
++<http://github.com/blablack/ams-lv2/vcf#group_filter>
++    a pg:InputGroup ;
++    lv2:symbol "filter" ;
++    lv2:name "Filter" ;
++    lv2:index 0 .
++
++<http://github.com/blablack/ams-lv2/vcf#group_modulation>
++    a pg:InputGroup ;
++    lv2:symbol "modulation" ;
++    lv2:name "Modulation" ;
++    lv2:index 1 .
+diff -ruN a/mod-ams.lv2/vco3.ttl b/mod-ams.lv2/vco3.ttl
+--- a/mod-ams.lv2/vco3.ttl	2026-10-16 10:15:50.598840054 +0200
++++ b/mod-ams.lv2/vco3.ttl	2026-10-16 10:16:17.363470370 +0200
+@@ -13,21 +13,11 @@
+   a guiext:GtkUI ;
+   guiext:binary <vco3_gui.so> .
+ 
+-<http://github.com/blablack/ams-lv2/vco3#group_frequency>
+-    a param:OscillatorControls ;
+-    lv2:name "Frequency" ;
+-    lv2:symbol "grpFrequency" .
+-
+ <http://github.com/blablack/ams-lv2/vco3#group_pw_phase>
+     a param:OscillatorControls ;
+     lv2:name "Pulse Width - Phase" ;
+     lv2:symbol "grpPWPhase" .
+ 
+-<http://github.com/blablack/ams-lv2/vco3#group_modulation>
+-    a param:OscillatorControls ;
+-    lv2:name "Modulation" ;
+-    lv2:symbol "grpModulation" .
+-
+ <http://github.com/blablack/ams-lv2/vco3#group_input>
+     a param:OscillatorControls, pg:InputGroup ;
+     lv2:name "Input" ;
+@@ -40,7 +30,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 0;
++    lv2:microVersion 2;
+ 
+ rdfs:comment """
+ The AMS VCO3 is an oscillator module which can generate multiple waveforms (sine, square, triangle, sawtooth). Additionally, it features CV inputs that can be used for frequency and pulse-width modulation, as well as a Sync input which allows for various types of oscillator sync sounds. 
+@@ -101,6 +91,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 5 ; 
+ 		lv2:symbol "waveForm" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_shape> ;
+ 		lv2:name "Wave Form" ;
+ 		lv2:default 0;
+ 		lv2:minimum 0;
+@@ -133,88 +124,107 @@
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 6 ; 
+ 		lv2:symbol "octave" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_frequency> ;
+ 		lv2:name "Octave" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+ 		lv2:maximum 6 ;
+         lv2:portProperty lv2:integer ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupFrequency> ;
+ 	] ,	[
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 7 ; 
+ 		lv2:symbol "tune" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_frequency> ;
+ 		lv2:name "Tune" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum -1 ;
+ 		lv2:maximum 1 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupFrequency> ;
+ 	] , [
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 8 ; 
+ 		lv2:symbol "semitone" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_frequency> ;
+ 		lv2:name "Semitone" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+ 		lv2:maximum 12 ;
+         lv2:portProperty lv2:integer ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupFrequency> ;
+ 	] ,	[
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 9 ; 
+ 		lv2:symbol "pw0" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_shape> ;
+ 		lv2:name "PW0" ;
+ 		lv2:default 0.5 ;
+ 		lv2:minimum 0.1 ;
+ 		lv2:maximum 0.9 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+ 	] ,	[
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 10 ; 
+ 		lv2:symbol "pwGain" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_shape> ;
+ 		lv2:name "PW Gain" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+ 		lv2:maximum 1 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+ 	] ,	[
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 11 ; 
+ 		lv2:symbol "edge" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_shape> ;
+ 		lv2:name "Edge" ;
+ 		lv2:default 1 ;
+ 		lv2:minimum 1 ;
+ 		lv2:maximum 10 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+ 	] ,	[
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 12 ; 
+ 		lv2:symbol "phi0" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_shape> ;
+ 		lv2:name "Phi0" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+ 		lv2:maximum 6.283 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupPWPhase> ;
+ 	] ,	[
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 13 ; 
+ 		lv2:symbol "expFMGain" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_modulation> ;
+ 		lv2:name "Exp FM Gain" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+ 		lv2:maximum 10 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupModulation> ;
+ 	] ,	[
+ 	  	a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 14 ; 
+ 		lv2:symbol "linFMGain" ;
++        pg:group <http://github.com/blablack/ams-lv2/vco3#group_modulation> ;
+ 		lv2:name "Lin FM Gain" ;
+ 		lv2:default 0 ;
+ 		lv2:minimum 0 ;
+ 		lv2:maximum 10 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupModulation> ;
+ 	] ,	[
+ 		a lv2:AudioPort , lv2:OutputPort ;
+ 		lv2:index 15 ; 
+ 		lv2:symbol "out" ;
+ 		lv2:name "Out"
+ 	] .
++
++# Port groups (MOD OS 1.14 settings panel), added 2026-10
++<http://github.com/blablack/ams-lv2/vco3#group_frequency>
++    a pg:InputGroup ;
++    lv2:symbol "frequency" ;
++    lv2:name "Frequency" ;
++    lv2:index 0 .
++
++<http://github.com/blablack/ams-lv2/vco3#group_shape>
++    a pg:InputGroup ;
++    lv2:symbol "shape" ;
++    lv2:name "Shape" ;
++    lv2:index 1 .
++
++<http://github.com/blablack/ams-lv2/vco3#group_modulation>
++    a pg:InputGroup ;
++    lv2:symbol "modulation" ;
++    lv2:name "Modulation" ;
++    lv2:index 2 .

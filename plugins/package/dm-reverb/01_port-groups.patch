@@ -1,0 +1,126 @@
+Add LV2 port groups (MOD OS 1.14 settings panel) and bump lv2:microVersion by 2.
+
+diff -ruN a/lv2/dm-Reverb.lv2/dm-Reverb.ttl b/lv2/dm-Reverb.lv2/dm-Reverb.ttl
+--- a/lv2/dm-Reverb.lv2/dm-Reverb.ttl	2026-10-16 10:15:50.742843444 +0200
++++ b/lv2/dm-Reverb.lv2/dm-Reverb.ttl	2026-10-16 10:15:50.762843915 +0200
+@@ -1,3 +1,4 @@
++@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+  @prefix doap:  <http://usefulinc.com/ns/doap#> .
+ @prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+ @prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@@ -24,10 +25,13 @@
+ (*) 'Make Noise Erbe-Verb is a trademark or trade name of another manufacturer and was used merely to identify the product whose sound was reviewed in the creation of this product. All other trademarks are the property of their respective holders.'
+ """ ;
+ 	lv2:optionalFeature lv2:hardRTCapable ;
+-	lv2:port [
++	lv2:minorVersion 0 ;
++    lv2:microVersion 2 ;
++    lv2:port [
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 0 ;
+ 		lv2:symbol "size" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_space> ;
+ 		lv2:name "Size" ;
+ 		lv2:portProperty epp:logarithmic ;
+ 		lv2:default 80.0 ;
+@@ -37,6 +41,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 1 ;
+ 		lv2:symbol "predelay" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_space> ;
+ 		lv2:name "Predelay" ;
+ 		lv2:portProperty mod:tempoRelatedDynamicScalePoints ;
+ 		lv2:default 7.0 ;
+@@ -47,6 +52,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 2 ;
+ 		lv2:symbol "reverse" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_space> ;
+ 		lv2:name "Reverse" ;
+ 		lv2:portProperty lv2:integer, lv2:toggled;
+ 		lv2:default 0 ;
+@@ -56,6 +62,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 3 ;
+ 		lv2:symbol "speed" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_modulation> ;
+ 		lv2:name "Speed" ;
+ 		lv2:portProperty epp:logarithmic ;
+ 		lv2:default 2.0 ;
+@@ -66,6 +73,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 4 ;
+ 		lv2:symbol "depth" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_modulation> ;
+ 		lv2:name "Depth" ;
+ 		lv2:default -10.0 ;
+ 		lv2:minimum -100.0 ;
+@@ -75,6 +83,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 5;
+ 		lv2:symbol "absorb" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_tone> ;
+ 		lv2:name "Absorb" ;
+ 		lv2:default 50.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -84,6 +93,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 6 ;
+ 		lv2:symbol "decay" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_tone> ;
+ 		lv2:name "Decay" ;
+ 		lv2:default 90.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -93,6 +103,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 7 ;
+ 		lv2:symbol "tilt" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_tone> ;
+ 		lv2:name "Tilt" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -100.0 ;
+@@ -102,6 +113,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 8 ;
+ 		lv2:symbol "shimmer" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_mix> ;
+ 		lv2:name "Shimmer" ;
+ 		lv2:default 0.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -111,6 +123,7 @@
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 9 ;
+ 		lv2:symbol "mix" ;
++        pg:group <https://github.com/davemollen/dm-Reverb#group_mix> ;
+ 		lv2:name "Mix" ;
+ 		lv2:default 50.0 ;
+ 		lv2:minimum 0.0 ;
+@@ -137,3 +150,28 @@
+ 		lv2:symbol "out_right" ;
+ 		lv2:name "Out right"
+ 	] .
++
++# Port groups (MOD OS 1.14 settings panel), added 2026-10
++<https://github.com/davemollen/dm-Reverb#group_space>
++    a pg:InputGroup ;
++    lv2:symbol "space" ;
++    lv2:name "Space" ;
++    lv2:index 0 .
++
++<https://github.com/davemollen/dm-Reverb#group_modulation>
++    a pg:InputGroup ;
++    lv2:symbol "modulation" ;
++    lv2:name "Modulation" ;
++    lv2:index 1 .
++
++<https://github.com/davemollen/dm-Reverb#group_tone>
++    a pg:InputGroup ;
++    lv2:symbol "tone" ;
++    lv2:name "Tone" ;
++    lv2:index 2 .
++
++<https://github.com/davemollen/dm-Reverb#group_mix>
++    a pg:InputGroup ;
++    lv2:symbol "mix" ;
++    lv2:name "Mix" ;
++    lv2:index 3 .

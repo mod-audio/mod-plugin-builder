@@ -1,0 +1,573 @@
+Add LV2 port groups (MOD OS 1.14 settings panel) and bump lv2:microVersion by 2.
+
+diff -ruN a/data/TAL-NoiseMaker-ME.ttl b/data/TAL-NoiseMaker-ME.ttl
+--- a/data/TAL-NoiseMaker-ME.ttl	2026-10-16 10:15:50.974848909 +0200
++++ b/data/TAL-NoiseMaker-ME.ttl	2026-10-16 10:15:51.130852582 +0200
+@@ -1,3 +1,4 @@
++@prefix pg: <http://lv2plug.in/ns/ext/port-groups#> .
+ @prefix epp:   <http://lv2plug.in/ns/ext/port-props/#>.
+ @prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+ @prefix doap: <http://usefulinc.com/ns/doap#> .
+@@ -59,6 +60,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 4 ;
+         lv2:symbol "volume" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_master> ;
+         lv2:name "volume" ;
+         lv2:default 0.15 ;
+         lv2:minimum 0.0 ;
+@@ -71,7 +73,8 @@
+         lv2:maximum 10;
+         lv2:minimum 1;
+         lv2:name "filtertype";
+-        lv2:symbol "filtertype";
++        lv2:symbol "filtertype" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -120,6 +123,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 6 ;
+         lv2:symbol "cutoff" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter> ;
+         lv2:name "cutoff" ;
+         lv2:default 1.000000 ;
+         lv2:minimum 0.0 ;
+@@ -129,6 +133,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 7 ;
+         lv2:symbol "resonance" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter> ;
+         lv2:name "resonance" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -138,6 +143,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 8 ;
+         lv2:symbol "keyfollow" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter> ;
+         lv2:name "keyfollow" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -147,6 +153,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 9 ;
+         lv2:symbol "filtercontour" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter> ;
+         lv2:name "filtercontour" ;
+         lv2:default 0.500000 ;
+         lv2:minimum 0.0 ;
+@@ -156,6 +163,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 10 ;
+         lv2:symbol "filterattack" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter_env> ;
+         lv2:name "filterattack" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -165,6 +173,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 11 ;
+         lv2:symbol "filterdecay" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter_env> ;
+         lv2:name "filterdecay" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -174,6 +183,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 12 ;
+         lv2:symbol "filtersustain" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter_env> ;
+         lv2:name "filtersustain" ;
+         lv2:default 1.000000 ;
+         lv2:minimum 0.0 ;
+@@ -183,6 +193,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 13 ;
+         lv2:symbol "filterrelease" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter_env> ;
+         lv2:name "filterrelease" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -192,6 +203,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 14 ;
+         lv2:symbol "ampattack" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_amp_env> ;
+         lv2:name "ampattack" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -201,6 +213,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 15 ;
+         lv2:symbol "ampdecay" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_amp_env> ;
+         lv2:name "ampdecay" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -210,6 +223,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 16 ;
+         lv2:symbol "ampsustain" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_amp_env> ;
+         lv2:name "ampsustain" ;
+         lv2:default 1.000000 ;
+         lv2:minimum 0.0 ;
+@@ -219,6 +233,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 17 ;
+         lv2:symbol "amprelease" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_amp_env> ;
+         lv2:name "amprelease" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -228,6 +243,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 18 ;
+         lv2:symbol "osc1volume" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc1> ;
+         lv2:name "osc1volume" ;
+         lv2:default 0.800000 ;
+         lv2:minimum 0.0 ;
+@@ -237,6 +253,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 19 ;
+         lv2:symbol "osc2volume" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc2> ;
+         lv2:name "osc2volume" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -246,6 +263,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 20 ;
+         lv2:symbol "osc3volume" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc_common> ;
+         lv2:name "osc3volume" ;
+         lv2:default 0.800000 ;
+         lv2:minimum 0.0 ;
+@@ -255,6 +273,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 21 ;
+         lv2:symbol "oscmastertune" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc_common> ;
+         lv2:name "oscmastertune" ;
+         lv2:default 0.000000 ;
+         lv2:minimum -1.0 ;
+@@ -264,6 +283,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 22 ;
+         lv2:symbol "osc1tune" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc1> ;
+         lv2:name "osc1tune" ;
+         lv2:default -12 ;
+         lv2:minimum -24 ;
+@@ -274,6 +294,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 23 ;
+         lv2:symbol "osc2tune" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc2> ;
+         lv2:name "osc2tune" ;
+         lv2:default 0 ;
+         lv2:minimum -24 ;
+@@ -284,6 +305,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 24 ;
+         lv2:symbol "osc1finetune" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc1> ;
+         lv2:name "osc1finetune" ;
+         lv2:default 0.000000 ;
+         lv2:minimum -1.0 ;
+@@ -293,6 +315,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 25 ;
+         lv2:symbol "osc2finetune" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc2> ;
+         lv2:name "osc2finetune" ;
+         lv2:default 0.000000 ;
+         lv2:minimum -1.0 ;
+@@ -305,7 +328,8 @@
+         lv2:maximum 2;
+         lv2:minimum 0;
+         lv2:name "osc1waveform";
+-        lv2:symbol "osc1waveform";
++        lv2:symbol "osc1waveform" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc1>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -328,7 +352,8 @@
+         lv2:maximum 4;
+         lv2:minimum 0;
+         lv2:name "osc2waveform";
+-        lv2:symbol "osc2waveform";
++        lv2:symbol "osc2waveform" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc2>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -356,6 +381,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 28 ;
+         lv2:symbol "oscsync" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc_common> ;
+         lv2:name "oscsync" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -368,7 +394,8 @@
+         lv2:maximum 5;
+         lv2:minimum 0;
+         lv2:name "lfo1waveform";
+-        lv2:symbol "lfo1waveform";
++        lv2:symbol "lfo1waveform" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -403,7 +430,8 @@
+         lv2:maximum 5;
+         lv2:minimum 0;
+         lv2:name "lfo2waveform";
+-        lv2:symbol "lfo2waveform";
++        lv2:symbol "lfo2waveform" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -435,6 +463,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 31 ;
+         lv2:symbol "lfo1rate" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1> ;
+         lv2:name "lfo1rate" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -444,6 +473,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 32 ;
+         lv2:symbol "lfo2rate" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2> ;
+         lv2:name "lfo2rate" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -453,6 +483,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 33 ;
+         lv2:symbol "lfo1amount" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1> ;
+         lv2:name "lfo1amount" ;
+         lv2:default 0.500000 ;
+         lv2:minimum 0.0 ;
+@@ -462,6 +493,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 34 ;
+         lv2:symbol "lfo2amount" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2> ;
+         lv2:name "lfo2amount" ;
+         lv2:default 0.500000 ;
+         lv2:minimum 0.0 ;
+@@ -474,7 +506,8 @@
+         lv2:maximum 7;
+         lv2:minimum 0;
+         lv2:name "lfo1destination";
+-        lv2:symbol "lfo1destination";
++        lv2:symbol "lfo1destination" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -517,7 +550,8 @@
+         lv2:maximum 7;
+         lv2:minimum 0;
+         lv2:name "lfo2destination";
+-        lv2:symbol "lfo2destination";
++        lv2:symbol "lfo2destination" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -557,6 +591,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 37 ;
+         lv2:symbol "lfo1phase" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1> ;
+         lv2:name "lfo1phase" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -566,6 +601,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 38 ;
+         lv2:symbol "lfo2phase" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2> ;
+         lv2:name "lfo2phase" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -575,6 +611,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 39 ;
+         lv2:symbol "osc2fm" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc2> ;
+         lv2:name "osc2fm" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -584,6 +621,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 40 ;
+         lv2:symbol "osc2phase" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc2> ;
+         lv2:name "osc2phase" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -593,6 +631,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 41 ;
+         lv2:symbol "osc1pw" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc1> ;
+         lv2:name "osc1pw" ;
+         lv2:default 0.500000 ;
+         lv2:minimum 0.0 ;
+@@ -602,6 +641,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 42 ;
+         lv2:symbol "osc1phase" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc1> ;
+         lv2:name "osc1phase" ;
+         lv2:default 0.500000 ;
+         lv2:minimum 0.0 ;
+@@ -615,13 +655,15 @@
+         lv2:minimum -1;
+         lv2:maximum 2;
+         lv2:name "octave";
+-        lv2:symbol "octave";
++        lv2:symbol "octave" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc_common>;
+         lv2:portProperty lv2:integer;
+     ] ,
+     [
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 44 ;
+         lv2:symbol "freeadattack" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_free_env> ;
+         lv2:name "freeadattack" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -631,6 +673,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 45 ;
+         lv2:symbol "freeaddecay" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_free_env> ;
+         lv2:name "freeaddecay" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -640,6 +683,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 46 ;
+         lv2:symbol "freeadamount" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_free_env> ;
+         lv2:name "freeadamount" ;
+         lv2:default -1.000000 ;
+         lv2:minimum -1.0 ;
+@@ -649,6 +693,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 47 ;
+         lv2:symbol "freeaddestination" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_free_env> ;
+         lv2:name "freeaddestination" ;
+         lv2:default 1 ;
+         lv2:minimum 1 ;
+@@ -684,6 +729,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 48 ;
+         lv2:symbol "lfo1sync" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1> ;
+         lv2:name "lfo1sync" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -693,6 +739,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 49 ;
+         lv2:symbol "lfo1keytrigger" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1> ;
+         lv2:name "lfo1keytrigger" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -702,6 +749,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 50 ;
+         lv2:symbol "lfo2sync" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2> ;
+         lv2:name "lfo2sync" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -711,6 +759,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 51 ;
+         lv2:symbol "lfo2keytrigger" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2> ;
+         lv2:name "lfo2keytrigger" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -720,6 +769,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 52 ;
+         lv2:symbol "portamento" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_master> ;
+         lv2:name "portamento" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -732,7 +782,8 @@
+         lv2:maximum 2;
+         lv2:minimum 0;
+         lv2:name "portamentomode";
+-        lv2:symbol "portamentomode";
++        lv2:symbol "portamentomode" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_master>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -755,7 +806,8 @@
+         lv2:maximum 4;
+         lv2:minimum 1;
+         lv2:name "Voices";
+-        lv2:symbol "voices";
++        lv2:symbol "voices" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_master>;
+         lv2:portProperty lv2:enumeration, lv2:integer;
+         lv2:scalePoint
+         [
+@@ -779,6 +831,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 55 ;
+         lv2:symbol "velocityvolume" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_controllers> ;
+         lv2:name "velocityvolume" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -788,6 +841,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 56 ;
+         lv2:symbol "velocitycontour" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_controllers> ;
+         lv2:name "velocitycontour" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -797,6 +851,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 57 ;
+         lv2:symbol "velocitycutoff" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_controllers> ;
+         lv2:name "velocitycutoff" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -806,6 +861,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 58 ;
+         lv2:symbol "pitchwheelcutoff" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_controllers> ;
+         lv2:name "pitchwheelcutoff" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -815,6 +871,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 59 ;
+         lv2:symbol "pitchwheelpitch" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_controllers> ;
+         lv2:name "pitchwheelpitch" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -824,6 +881,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 60 ;
+         lv2:symbol "ringmodulation" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc_common> ;
+         lv2:name "ringmodulation" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -833,6 +891,7 @@
+         a lv2:InputPort, lv2:ControlPort ;
+         lv2:index 61 ;
+         lv2:symbol "oscbitcrusher" ;
++        pg:group <http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc_common> ;
+         lv2:name "oscbitcrusher" ;
+         lv2:default 0.000000 ;
+         lv2:minimum 0.0 ;
+@@ -840,7 +899,7 @@
+     ] ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 1;
++    lv2:microVersion 3;
+     doap:name "Noise Maker - ME";
+ 
+ rdfs:comment """
+@@ -863,3 +922,70 @@
+         foaf:homepage <http://moddevices.com>;
+         foaf:mbox <mailto:bram@moddevices.com>;
+     ].
++
++# Port groups (MOD OS 1.14 settings panel), added 2026-10
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc1>
++    a pg:InputGroup ;
++    lv2:symbol "osc1" ;
++    lv2:name "Osc 1" ;
++    lv2:index 0 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc2>
++    a pg:InputGroup ;
++    lv2:symbol "osc2" ;
++    lv2:name "Osc 2" ;
++    lv2:index 1 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_osc_common>
++    a pg:InputGroup ;
++    lv2:symbol "osc_common" ;
++    lv2:name "Osc Common" ;
++    lv2:index 2 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter>
++    a pg:InputGroup ;
++    lv2:symbol "filter" ;
++    lv2:name "Filter" ;
++    lv2:index 3 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_filter_env>
++    a pg:InputGroup ;
++    lv2:symbol "filter_env" ;
++    lv2:name "Filter Env" ;
++    lv2:index 4 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_amp_env>
++    a pg:InputGroup ;
++    lv2:symbol "amp_env" ;
++    lv2:name "Amp Env" ;
++    lv2:index 5 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo1>
++    a pg:InputGroup ;
++    lv2:symbol "lfo1" ;
++    lv2:name "LFO 1" ;
++    lv2:index 6 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_lfo2>
++    a pg:InputGroup ;
++    lv2:symbol "lfo2" ;
++    lv2:name "LFO 2" ;
++    lv2:index 7 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_free_env>
++    a pg:InputGroup ;
++    lv2:symbol "free_env" ;
++    lv2:name "Free AD Env" ;
++    lv2:index 8 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_controllers>
++    a pg:InputGroup ;
++    lv2:symbol "controllers" ;
++    lv2:name "Velocity/Wheel" ;
++    lv2:index 9 .
++
++<http://www.moddevices.com/plugins/mod_editions/tal-noisemaker#group_master>
++    a pg:InputGroup ;
++    lv2:symbol "master" ;
++    lv2:name "Master" ;
++    lv2:index 10 .
