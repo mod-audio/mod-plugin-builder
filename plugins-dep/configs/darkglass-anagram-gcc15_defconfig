@@ -11,8 +11,8 @@ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_TOOLCHAIN_EXTERNAL_FORTRAN=y
 BR2_TOOLCHAIN_EXTERNAL_OPENMP=y
-BR2_TARGET_OPTIMIZATION="-march=armv8.2-a -mcpu=cortex-a76.cortex-a55 -mtune=cortex-a76.cortex-a55 -ffast-math -fno-finite-math-only -fomit-frame-pointer -D__MOD_DEVICES__ -D_MOD_DEVICE_RK358x -D_DARKGLASS_DEVICE_PABLITO -static-libstdc++ -Wl,-O1,--as-needed,--strip-all"
-BR2_TARGET_LDFLAGS="-static-libstdc++ -Wl,-O1,--as-needed,--strip-all"
+BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a76.cortex-a55 -mtune=cortex-a76.cortex-a55 -ffast-math -fno-finite-math-only -fomit-frame-pointer -D__MOD_DEVICES__ -D_MOD_DEVICE_RK358x -D_DARKGLASS_DEVICE_PABLITO -Wl,-O1,--as-needed,--strip-all"
+BR2_TARGET_LDFLAGS="-Wl,-O1,--as-needed,--strip-all"
 BR2_DL_DIR="$(DOWNLOAD_PATH)"
 BR2_OPTIMIZE_3=y
 BR2_SSP_NONE=y
@@ -49,6 +49,7 @@ BR2_PACKAGE_OPUS=y
 BR2_PACKAGE_SQLITE=y
 BR2_PACKAGE_CAIRO=y
 BR2_PACKAGE_CAIRO_PNG=y
+BR2_PACKAGE_JPEG=y
 BR2_PACKAGE_LIBDRM=y
 BR2_PACKAGE_LIBINPUT=y
 BR2_PACKAGE_LIBSERIALPORT=y

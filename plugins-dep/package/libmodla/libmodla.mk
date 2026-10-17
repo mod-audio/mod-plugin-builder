@@ -14,7 +14,12 @@ else
 LIBMODLA_SOURCE_SUFFIX = arm-a7
 endif
 
-ifeq ($(filter arm-% aarch64-%,$(LIBMODLA_SOURCE_SUFFIX)),)
+ifeq ($(LIBMODLA_SOURCE_SUFFIX),pablito)
+# pablito default build is gcc 9; gcc 15 toolchains need the matching build
+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_15),y)
+LIBMODLA_SOURCE_EXTRA_SUFFIX = -gcc15
+endif
+else ifeq ($(filter arm-% aarch64-%,$(LIBMODLA_SOURCE_SUFFIX)),)
 # nothing here
 else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_GCC_9),y)
 LIBMODLA_SOURCE_EXTRA_SUFFIX = -gcc9
