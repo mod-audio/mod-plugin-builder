@@ -1,5 +1,5 @@
 BR2_aarch64=y
-BR2_cortex_a76=y
+BR2_cortex_a76_a55=y
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
 BR2_TOOLCHAIN_EXTERNAL_PATH="$(TOOLCHAIN_PATH)"
@@ -11,7 +11,7 @@ BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
 BR2_TOOLCHAIN_EXTERNAL_CXX=y
 BR2_TOOLCHAIN_EXTERNAL_FORTRAN=y
 BR2_TOOLCHAIN_EXTERNAL_OPENMP=y
-BR2_TARGET_OPTIMIZATION="-march=armv8.2-a -mcpu=cortex-a76 -mtune=cortex-a76 -ffast-math -fno-finite-math-only -fomit-frame-pointer -D__MOD_DEVICES__ -D_MOD_DEVICE_RK358x -D_DARKGLASS_DEVICE_PABLITO -Wl,-O1,--as-needed,--strip-all"
+BR2_TARGET_OPTIMIZATION="-mcpu=cortex-a76.cortex-a55 -mtune=cortex-a76.cortex-a55 -ffast-math -fno-finite-math-only -fomit-frame-pointer -D__MOD_DEVICES__ -D_MOD_DEVICE_RK358x -D_DARKGLASS_DEVICE_PABLITO -Wl,-O1,--as-needed,--strip-all"
 BR2_TARGET_LDFLAGS="-Wl,-O1,--as-needed,--strip-all"
 BR2_DL_DIR="$(DOWNLOAD_PATH)"
 BR2_OPTIMIZE_3=y
