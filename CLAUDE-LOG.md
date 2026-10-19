@@ -38,3 +38,19 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
 - Dev publish attempted from this branch: rejected by pipeline-dev (`'project_id' was unexpected`),
   see mod-plugin-publisher/CLAUDE-LOG.md and NOTES-FOR-GIANFRANCO.md. **The dev publish must be run
   with this branch checked out**, since publish.py packages the local recipe folder.
+
+## 2026-10-19 — João (joao@mod.audio), MacBook (Apple Silicon) — dm-TimeWarp v0.1.2 pin (PR #214)
+
+- Branch `joao/dm-timewarp-0.1.2` (`f9962c9`), **PR #214** to master: `DM_TIMEWARP_VERSION`
+  `fdbc753` (v0.1.0) → `16bc2259e0037aadf796461436e65d43bd8c8628` (Dave Mollen's latest, v0.1.2).
+  Upstream change is TTL only: LV2 port groups + `minorVersion 1` / `microVersion 2` (v0.1.0 declared
+  none, so devices couldn't see it as an update). Same 28 controls; manual unchanged.
+- Built with the local Docker toolchains for moddwarf-new, modduox-new, modduo-new, recipe identical
+  to the PR. Tested on João's Dwarf, Duo X, Duo (USB audio off): reports 1.2,
+  manual served (identical to Dave's PDF), sweep of all 28 controls + worst case (8 voices, density 8)
+  + bypass ×4 with **0 xruns**; DSP with TimeWarp at defaults 19.6% / 9.2% / 24.6%, worst case
+  29.6% / 12.0% / 48.1%; GUI renders. Dwarf: old "TimeWrap test" pedalboard restores 28/28 values and
+  4/4 cables.
+- Going to the **main store** (`stable: true`, João's call), but **not published**: still needs João's
+  sound check, factory presets, `pablito` out of `dm-timewarp.json` (Gianfranco) and the `project_id`
+  answer. See mod-publishing-ops `JOAO-NOTES.md` (dm-TimeWarp).
