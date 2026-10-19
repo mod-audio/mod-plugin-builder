@@ -4,7 +4,7 @@
 #
 ######################################
 
-DM_TIMEWARP_VERSION = fdbc753d91e5c82fc02af2c056cf65f542318351
+DM_TIMEWARP_VERSION = 16bc2259e0037aadf796461436e65d43bd8c8628
 DM_TIMEWARP_SITE = https://github.com/davemollen/dm-TimeWarp.git
 DM_TIMEWARP_SITE_METHOD = git
 DM_TIMEWARP_BUNDLES = dm-TimeWarp.lv2
