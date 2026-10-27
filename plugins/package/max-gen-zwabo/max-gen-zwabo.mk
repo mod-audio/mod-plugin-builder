@@ -12,7 +12,9 @@ MAX_GEN_ZWABO_BUNDLES = zwabo-cozmic.lv2 zwabo-mirrorz.lv2 zwabo-stuttter.lv2 zw
 # needed for submodules support
 MAX_GEN_ZWABO_PRE_DOWNLOAD_HOOKS += MOD_PLUGIN_BUILDER_DOWNLOAD_WITH_SUBMODULES
 
-MAX_GEN_ZWABO_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)
+# build at -O2 like the upstream Makefile: with buildroot's -O3, GCC vectorises genlib's buffer clear and adding
+# MIRRORZz (2x 7.2M-frame buffers) causes 5-7 xruns on the Dwarf; -O2 gives none, same DSP load
+MAX_GEN_ZWABO_TARGET_MAKE = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(TARGET_CFLAGS) -O2" CXXFLAGS="$(TARGET_CXXFLAGS) -O2" $(MAKE) NOOPT=true -C $(@D)
 
 define MAX_GEN_ZWABO_BUILD_CMDS
 	$(MAX_GEN_ZWABO_TARGET_MAKE)
