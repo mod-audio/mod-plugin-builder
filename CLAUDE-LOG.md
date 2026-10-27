@@ -66,3 +66,12 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   6 factory presets, stereo port group on the audio ports.
 - Going to the **main store** (`zwabo-mirrorz.lv2` `"stable": true`, publisher PR #5); other zwabo bundles stay beta.
   **Not built from this recipe and not published yet.**
+
+## 2026-10-27 — João (joao@mod.audio), MacBook (Apple Silicon) — max-gen-zwabo pin for MIRRORZz port groups (PR #216)
+
+- **PR #216** merged by João (`526f240`): `MAX_GEN_ZWABO_VERSION` `f005a97` → `32ca3299ac30c89f67af971d46de5d1563d17c89`
+  (merge of max-gen-plugins PR #8: MIRRORZz control port groups Reverse / Speed / Tone & Mix). TTL only.
+- Correction to the PR #215 entry above: at `f005a97` MIRRORZz had only its audio stereo group, no control groups,
+  so it did not yet meet the port-groups rule. It does at `32ca329`.
+- Dwarf: groups valid in mod-ui, settings panel checked by João and by headless screenshot, presets load, 0 xruns.
+  **Not built from this recipe and not published yet.**
