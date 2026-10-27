@@ -75,3 +75,21 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   so it did not yet meet the port-groups rule. It does at `32ca329`.
 - Dwarf: groups valid in mod-ui, settings panel checked by João and by headless screenshot, presets load, 0 xruns.
   **Not built from this recipe and not published yet.**
+
+## 2026-10-27 — João (joao@mod.audio), MacBook (Apple Silicon) — max-gen-zwabo at -O2 (PR #217)
+
+- Builder-recipe build of `526f240` gave **5–7 xruns each time MIRRORZz was added** to a board on the Dwarf
+  (v1.14.0.3366, 128 frames); wiring, running, presets, bypass and remove: 0. The direct source build had none.
+- Cause found: the recipe passes buildroot's `TARGET_CXXFLAGS`, which append `-O3` (`BR2_OPTIMIZE_3=y`) after DPF's
+  `-O2`. MIRRORZz allocates two 7.2M-frame stereo float buffers (~115 MB, `gen_exported.cpp:169,175`) and genlib
+  clears them with a byte loop (`genlib.cpp:96`). GCC 9.4 at -O3 vectorises it. Add tests, 6 runs each: -O3 5/6 with
+  xruns; -O3 without loop→memset 5/6; -O3 without vectorisation 0/6; -O2 0/6. Running DSP the same (~18% on the board).
+  The flags the toolchain wrapper injects (`-mcpu=cortex-a35`, `-D__MOD_DEVICES__`, …) are the same in both builds.
+- **PR #217** merged by João (`9442804`): `CFLAGS`/`CXXFLAGS` = buildroot's + `-O2` for all seven zwabo bundles.
+  Built through the recipe for moddwarf-new and modduox-new (compile ends in -O2). Dwarf: 0 xruns on 6 adds,
+  6 presets, bypass ×4.
+- modduo-new does not build in the local Apple Silicon Docker (`lv2_ttl_generator: Exec format error`); the unchanged
+  recipe fails the same way, so it is local, not this change.
+- `publish-plugin --check` passed (`zwabo-mirrorz.lv2` main store, other six beta; 8 warnings: no `updated_toolchain`,
+  no `image_required`). **Not published.** Open: the cloud recompiles on its own toolchain; which GCC it uses with
+  `updated_toolchain` unset is not known, so the store build must get the same add test after publishing.
