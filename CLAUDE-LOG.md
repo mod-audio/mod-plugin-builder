@@ -54,3 +54,15 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
 - Going to the **main store** (`stable: true`, João's call), but **not published**: still needs João's
   sound check, factory presets, `pablito` out of `dm-timewarp.json` (Gianfranco) and the `project_id`
   answer. See mod-publishing-ops `JOAO-NOTES.md` (dm-TimeWarp).
+
+## 2026-10-27 — João (joao@mod.audio), MacBook (Apple Silicon) — max-gen-zwabo pin for MIRRORZz (PR #215)
+
+- Branch `joao/zwabo-mirrorz-pin`, **PR #215** merged by João (`c4abcf8`): `MAX_GEN_ZWABO_VERSION`
+  `97047bc` → `f005a9724bc5230b15e61f8266c5939d5b139078` (merge of max-gen-plugins PR #7).
+- `f005a97` has the same tree as `bf31d80`, the MIRRORZz build tested on Dwarf, Duo X and Duo (2026-10-16), presets
+  on the Dwarf (2026-10-21). From `97047bc` to `f005a97` only MIRRORZz files and `CLAUDE-LOG.md` change, so the other
+  six zwabo bundles build as before.
+- MIRRORZz main-store requirements present at `f005a97`: PDF manual (`custom-ttl/zwabo-mirrorz/modgui.ttl:11`),
+  6 factory presets, stereo port group on the audio ports.
+- Going to the **main store** (`zwabo-mirrorz.lv2` `"stable": true`, publisher PR #5); other zwabo bundles stay beta.
+  **Not built from this recipe and not published yet.**
