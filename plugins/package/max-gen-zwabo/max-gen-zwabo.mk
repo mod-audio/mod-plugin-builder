@@ -4,7 +4,7 @@
 #
 ######################################
 
-MAX_GEN_ZWABO_VERSION = f005a9724bc5230b15e61f8266c5939d5b139078
+MAX_GEN_ZWABO_VERSION = 32ca3299ac30c89f67af971d46de5d1563d17c89
 MAX_GEN_ZWABO_SITE = https://github.com/mod-audio/max-gen-plugins.git
 MAX_GEN_ZWABO_SITE_METHOD = git
 MAX_GEN_ZWABO_BUNDLES = zwabo-cozmic.lv2 zwabo-mirrorz.lv2 zwabo-stuttter.lv2 zwabo-toggle_2in.lv2 zwabo-xfade1to2st.lv2 zwabo-zinvert_phase.lv2 zwabo-ztoggle4.lv2
