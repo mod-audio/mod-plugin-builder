@@ -5,7 +5,7 @@
 ######################################
 
 FOMP_LABS_VERSION = 4511cfc6641bb9b4b08d63f3cd7d16911bce8372
-FOMP_LABS_SITE = http://git.drobilla.net/fomp.lv2.git
+FOMP_LABS_SITE = https://gitlab.com/drobilla/fomp.lv2.git
 FOMP_LABS_SITE_METHOD = git
 FOMP_LABS_BUNDLES = fomp-labs.lv2
 

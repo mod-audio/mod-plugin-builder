@@ -5,7 +5,7 @@
 ######################################
 
 BLOP_LV2_LABS_VERSION = 44ff27dd355e850b9865fa50e3f32d8e24619006
-BLOP_LV2_LABS_SITE = http://git.drobilla.net/blop.lv2.git
+BLOP_LV2_LABS_SITE = https://gitlab.com/drobilla/blop.lv2.git
 BLOP_LV2_LABS_SITE_METHOD = git
 BLOP_LV2_LABS_BUNDLES = blop-labs.lv2
 

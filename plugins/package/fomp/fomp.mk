@@ -5,7 +5,7 @@
 ######################################
 
 FOMP_VERSION = 6547441f898cc55923878022960c79f33959c7b3
-FOMP_SITE = http://git.drobilla.net/fomp.lv2.git
+FOMP_SITE = https://gitlab.com/drobilla/fomp.lv2.git
 FOMP_SITE_METHOD = git
 FOMP_DEPENDENCIES = host-python3
 FOMP_BUNDLES = fomp.lv2

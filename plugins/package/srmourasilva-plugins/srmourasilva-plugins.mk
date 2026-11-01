@@ -3,7 +3,7 @@
 # SrMouraSilva Plugins
 #
 ######################################
-SRMOURASILVA_PLUGINS_VERSION = 1d37ffa
+SRMOURASILVA_PLUGINS_VERSION = 1d37ffa4e7e1f4272a58209dd040195b57b99cec
 
 SRMOURASILVA_PLUGINS_SITE_METHOD = git
 SRMOURASILVA_PLUGINS_SITE = https://github.com/SrMouraSilva/plugins-lv2.git
