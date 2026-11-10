@@ -1,0 +1,22 @@
+Drop the second "mod:" prefix (old portalmod modgui namespace): it overrode the MOD one, so hosts never saw mod:brand and mod:label. Bump lv2:microVersion.
+
+diff -ru a/MOD/gx_guvnor.ttl b/MOD/gx_guvnor.ttl
+--- a/MOD/gx_guvnor.ttl	2026-11-10 15:37:53.286941516 +0100
++++ b/MOD/gx_guvnor.ttl	2026-11-10 15:38:17.943548100 +0100
+@@ -25,7 +25,6 @@
+ @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+ @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+ @prefix guiext: <http://lv2plug.in/ns/extensions/ui#>.
+-@prefix mod: <http://portalmod.com/ns/modgui#>.
+ @prefix time: <http://lv2plug.in/ns/ext/time/#>.
+ @prefix units: <http://lv2plug.in/ns/extensions/units#> .
+ 
+@@ -50,7 +49,7 @@
+     lv2:optionalFeature lv2:hardRTCapable ;
+       
+     lv2:minorVersion 28;
+-    lv2:microVersion 3;
++    lv2:microVersion 4;
+ 
+     mod:brand "Guitarix" ;
+     mod:label "GxGuvnor" ;

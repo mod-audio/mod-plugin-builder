@@ -1,0 +1,19 @@
+State the licence (upstream LICENSE is GPL-3.0; the TTL had none) and bump lv2:microVersion.
+
+diff -ru a/MetalTone/MOD/MetalTone.ttl b/MetalTone/MOD/MetalTone.ttl
+--- a/MetalTone/MOD/MetalTone.ttl	2026-11-10 15:37:52.318917695 +0100
++++ b/MetalTone/MOD/MetalTone.ttl	2026-11-10 15:38:17.943548100 +0100
+@@ -25,11 +25,12 @@
+        lv2:DistortionPlugin ;
+    doap:maintainer <urn:name#me> ;
+    doap:name "MetalTone" ;
++   doap:license <http://opensource.org/licenses/GPL-3.0> ;
+    lv2:project <https://github.com/brummer10/MetalTone> ;
+    lv2:requiredFeature urid:map ;
+    lv2:optionalFeature lv2:hardRTCapable ;
+    lv2:minorVersion 1 ;
+-   lv2:microVersion 2 ;
++   lv2:microVersion 3 ;
+ 
+ rdfs:comment """
+ MetalTone is modeled after the renowned BOSS MT-2 Metal Zone(*), a high gain distortion pedal with an advanced EQ section.

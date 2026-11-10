@@ -1,0 +1,119 @@
+vco3: the CV input ports pointed at an undeclared group (groupInput); the group is group_input. Bump lv2:microVersion of the bundle's plugins.
+
+diff -ru a/mod-ams.lv2/env.ttl b/mod-ams.lv2/env.ttl
+--- a/mod-ams.lv2/env.ttl	2026-11-10 15:38:40.108093102 +0100
++++ b/mod-ams.lv2/env.ttl	2026-11-10 15:38:40.144093986 +0100
+@@ -18,7 +18,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 0;
++    lv2:microVersion 1;
+ 
+ rdfs:comment """
+ The AMS Env is a Control Voltage envelope module with added spice. It features extra parameters for hold and delay as well as a variable scale which scales the whole duration of the envelope.
+diff -ru a/mod-ams.lv2/lfo2_freq.ttl b/mod-ams.lv2/lfo2_freq.ttl
+--- a/mod-ams.lv2/lfo2_freq.ttl	2026-11-10 15:38:40.108093102 +0100
++++ b/mod-ams.lv2/lfo2_freq.ttl	2026-11-10 15:38:40.148094084 +0100
+@@ -19,7 +19,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 0;
++    lv2:microVersion 1;
+ 
+ rdfs:comment """
+ The AMS LFO2 module is a Control Voltage LFO which offers a variety of waveforms: sine, triangle, sawtooth up, sawtooth down, square and Sample & Hold. It also has an input that can be used to reset the phase of the LFO, and a control to set the phase-angle.
+diff -ru a/mod-ams.lv2/vcaexp.ttl b/mod-ams.lv2/vcaexp.ttl
+--- a/mod-ams.lv2/vcaexp.ttl	2026-11-10 15:38:40.136093789 +0100
++++ b/mod-ams.lv2/vcaexp.ttl	2026-11-10 15:38:40.148094084 +0100
+@@ -18,7 +18,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 0;
++    lv2:microVersion 1;
+ 
+ rdfs:comment """
+ The AMS VCA Exp module is an exponential Voltage Controlled Amplifier used for volume modulation. It allows you to, for instance, modulate the output of the AMS VCO3 using the control voltage signal of the AMS Env.
+diff -ru a/mod-ams.lv2/vcalin.ttl b/mod-ams.lv2/vcalin.ttl
+--- a/mod-ams.lv2/vcalin.ttl	2026-11-10 15:38:40.136093789 +0100
++++ b/mod-ams.lv2/vcalin.ttl	2026-11-10 15:38:40.148094084 +0100
+@@ -18,7 +18,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 0;
++    lv2:microVersion 1;
+ 
+ rdfs:comment """
+ The AMS VCA Lin module is a linear Voltage Controlled Amplifier used for volume modulation. It allows you to, for instance, modulate the output of the AMS VCO3 using the control voltage signal of the AMS Env.
+diff -ru a/mod-ams.lv2/vcf.ttl b/mod-ams.lv2/vcf.ttl
+--- a/mod-ams.lv2/vcf.ttl	2026-11-10 15:38:40.136093789 +0100
++++ b/mod-ams.lv2/vcf.ttl	2026-11-10 15:38:40.148094084 +0100
+@@ -19,7 +19,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 2;
++    lv2:microVersion 3;
+ 
+ rdfs:comment """
+ The AMS VCF module is a voltage controlled filter which offers a wide variety of filter types and flavours (multiple low-pass and band-pass flavours, as well as a high-pass and notch option). Additionally, it enables you to use other CV signals to modulate some of its features, such as frequency and resonance. 
+diff -ru a/mod-ams.lv2/vco3.ttl b/mod-ams.lv2/vco3.ttl
+--- a/mod-ams.lv2/vco3.ttl	2026-11-10 15:38:40.136093789 +0100
++++ b/mod-ams.lv2/vco3.ttl	2026-11-10 15:38:40.152094183 +0100
+@@ -30,7 +30,7 @@
+ 	doap:license <http://opensource.org/licenses/isc> ;
+ 
+     lv2:minorVersion 1;
+-    lv2:microVersion 2;
++    lv2:microVersion 3;
+ 
+ rdfs:comment """
+ The AMS VCO3 is an oscillator module which can generate multiple waveforms (sine, square, triangle, sawtooth). Additionally, it features CV inputs that can be used for frequency and pulse-width modulation, as well as a Sync input which allows for various types of oscillator sync sounds. 
+@@ -50,7 +50,7 @@
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -5.0 ;
+ 		lv2:maximum 5.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
++		pg:group <http://github.com/blablack/ams-lv2/vco3#group_input> ;
+ 	] ,	[
+ 		a lv2:CVPort, mod:CVPort, lv2:InputPort ;
+ 		lv2:index 1 ; 
+@@ -59,7 +59,7 @@
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -5.0 ;
+ 		lv2:maximum 5.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
++		pg:group <http://github.com/blablack/ams-lv2/vco3#group_input> ;
+ 	] ,	[
+ 		a lv2:CVPort, mod:CVPort, lv2:InputPort ;
+ 		lv2:index 2 ; 
+@@ -68,7 +68,7 @@
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -5.0 ;
+ 		lv2:maximum 5.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
++		pg:group <http://github.com/blablack/ams-lv2/vco3#group_input> ;
+ 	] ,	[
+ 		a lv2:CVPort, mod:CVPort, lv2:InputPort ;
+ 		lv2:index 3 ; 
+@@ -77,7 +77,7 @@
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -5.0 ;
+ 		lv2:maximum 5.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
++		pg:group <http://github.com/blablack/ams-lv2/vco3#group_input> ;
+ 	] ,	[
+ 		a lv2:CVPort, mod:CVPort, lv2:InputPort ;
+ 		lv2:index 4 ; 
+@@ -86,7 +86,7 @@
+ 		lv2:default 0.0 ;
+ 		lv2:minimum -5.0 ;
+ 		lv2:maximum 5.0 ;
+-		pg:group <http://github.com/blablack/ams-lv2/vco3#groupInput> ;
++		pg:group <http://github.com/blablack/ams-lv2/vco3#group_input> ;
+ 	] ,	[
+ 		a lv2:InputPort, lv2:ControlPort ;
+ 		lv2:index 5 ; 
