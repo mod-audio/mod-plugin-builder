@@ -1,0 +1,19 @@
+State the licence (upstream LICENSE is GPL-3.0; the TTL had none) and bump lv2:microVersion.
+
+diff -ru a/CollisionDrive/MOD/CollisionDrive.ttl b/CollisionDrive/MOD/CollisionDrive.ttl
+--- a/CollisionDrive/MOD/CollisionDrive.ttl	2026-11-10 15:37:52.778929014 +0100
++++ b/CollisionDrive/MOD/CollisionDrive.ttl	2026-11-10 15:38:17.943548100 +0100
+@@ -24,11 +24,12 @@
+        lv2:DistortionPlugin ;
+    doap:maintainer <urn:name#me> ;
+    doap:name "CollisionDrive" ;
++   doap:license <http://opensource.org/licenses/GPL-3.0> ;
+    lv2:project <https://github.com/brummer10/CollisionDrive> ;
+    lv2:requiredFeature urid:map ;
+    lv2:optionalFeature lv2:hardRTCapable ;
+    lv2:minorVersion 1 ;
+-   lv2:microVersion 3 ;
++   lv2:microVersion 4 ;
+ 
+ rdfs:comment """
+ CollisionDrive is modeled after the Horizon Devices Precision Drive(*), a modern overdrive pedal with a built-in noise gate.

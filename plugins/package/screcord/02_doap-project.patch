@@ -1,0 +1,44 @@
+Describe the two projects the plugins point to with lv2:project (a doap:Project each); bump lv2:microVersion.
+
+diff -ru a/screcord/MOD-MINI/sc_record_mini.ttl b/screcord/MOD-MINI/sc_record_mini.ttl
+--- a/screcord/MOD-MINI/sc_record_mini.ttl	2026-11-10 15:37:53.802954212 +0100
++++ b/screcord/MOD-MINI/sc_record_mini.ttl	2026-11-10 15:38:17.943548100 +0100
+@@ -40,7 +40,7 @@
+     lv2:extensionData state:interface ;
+ 
+     lv2:minorVersion 2;
+-    lv2:microVersion 2;
++    lv2:microVersion 3;
+ 
+ rdfs:comment """
+ Mono Recorder plugin with a minimalistic UI, save audio stream as wav or ogg files.
+@@ -124,7 +124,7 @@
+     lv2:optionalFeature lv2:hardRTCapable ;
+ 
+     lv2:minorVersion 2;
+-    lv2:microVersion 2;
++    lv2:microVersion 3;
+ 
+ rdfs:comment """
+ Stereo Reocrder plugin with a minimalistic UI, save audio stream as wav or ogg files.
+@@ -229,7 +229,7 @@
+     lv2:optionalFeature lv2:hardRTCapable ;
+ 
+     lv2:minorVersion 2;
+-    lv2:microVersion 2;
++    lv2:microVersion 3;
+ 
+ rdfs:comment """
+ Quad Reocrder plugin with a minimalistic UI, save audio stream as 4 channel wav or ogg files.
+@@ -344,3 +344,11 @@
+         lv2:symbol "in3" ;
+         lv2:name "In3" ;
+     ] .
++
++<https://github.com/brummer10/screcord.lv2>
++    a doap:Project ;
++    doap:name "screcord" .
++
++<https://github.com/brummer10/sc_record>
++    a doap:Project ;
++    doap:name "sc_record" .
