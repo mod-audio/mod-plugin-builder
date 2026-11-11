@@ -113,3 +113,28 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
     remove/add cycles. João: acceptable on the Duo.
   - Listen check on the Dwarf (João): good; the tracker sometimes jumps octaves, something for the author to improve.
 - Target: beta (`"stable": false`), project JSON in mod-plugin-publisher.
+
+## 2026-11-11 — João (joao@mod.audio), MacBook (Apple Silicon) — new recipe: hvcc-freezer (Freezer) — ON HOLD
+
+- New package `plugins/package/hvcc-freezer/hvcc-freezer.mk`: Freezer by Jacube (forum) / GitHub `Battery-not-included`
+  (maker field `J.Velcl@seznam.cz`, brand `BattNotIncluded`; same person per João), from `mod-audio/hvcc-plugins`
+  `plugins/BatteryNotIncluded-Freezer` (PR #1, merged 2024-10-03) + `custom-ttl/BatteryNotIncluded-Freezer`
+  (`8951053`, 2024-10-11), pinned to `8951053f960e5cfb780cacc38631037e1c6b83b7`. Licence ISC (repo `LICENSE`,
+  `plugin.json`). URI `urn:hvcc:Freezer`, bundle `Freezer.lv2`. Forum: https://forum.mod.audio/t/freezer-freeze-your-tone-forever/10848
+- Recipe follows `sensorium-plugins` (deps `dpf hvcc`, builds only Freezer, not the hvcc-plugins top Makefile), plus
+  `-DDISTRHO_PLUGIN_USES_CUSTOM_MODGUI=1`: with `"enable_modgui": true` the builder's DPF (`6b04262`) generates a
+  modgui and fails on `DISTRHO_UI_DEFAULT_WIDTH` (the DPF pinned by hvcc-plugins, `fc4ad61`, guarded it with
+  `DISTRHO_PLUGIN_HAS_EMBED_UI`). The modgui comes from `custom-ttl` anyway.
+- Local builds (Docker `mpbi_<platform>`, `~/mod-workdir-logs/build-freezer.sh`) OK for modduo-new, modduox-new,
+  moddwarf-new. Local-only workarounds, not in the recipe: the `hvcc` package is an x86_64 binary (replaced by hvcc
+  0.12.1 from PyPI in the arm64 container); the Duo's 32-bit ARM ttl generator run through `qemu-arm-static`.
+- Dwarf v1.14.0.3370, 128 frames (`~/mod-workdir-logs/test-freezer.sh`): 0 xruns in all steps, DSP ~16%, GUI OK.
+  **But João's listen check: big gain increase.** Cause: the repo's `plugin.pd` is an older Freezer with 7 parameters
+  (attack, decay, dry, freeze, mode, speed, wet; checked in the hvcc 0.12.1 output), while `custom-ttl/.../Freezer_dsp.ttl`
+  declares 12 controls and is byte-identical to the TTL in Jacube's May 14, 2024 build (with layers). Ports are
+  mismatched (e.g. the TTL "decay" knob, 0–2000, drives `dry`; "layers", 1–6, drives `wet`). The test only checked
+  CPU/xruns/GUI, not output level.
+- **On hold** until Jacube sends his current Pd patch (message drafted for João 2026-11-11); then a PR to hvcc-plugins,
+  a new pin here, rebuild, tests on all three units. Branch `joao/freezer` (local, not pushed).
+- Dwarf restored to Jacube's `hvcc-Freezer.lv2` (May 14, 2024, from his forum Drive link, copy in
+  `~/mod-workdir-logs/freezer-jacube-dl/`).
