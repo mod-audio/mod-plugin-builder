@@ -12,7 +12,7 @@ EARSAVER_BUNDLES = EarSaver.lv2
 define EARSAVER_BUILD_CMDS
 	# fetch heavylib if not already present
 	test -f $(@D)/heavylib/hv.gt~.pd || \
-		git clone --depth=1 https://github.com/Wasted-Audio/heavylib.git $(@D)/heavylib
+		git clone https://github.com/Wasted-Audio/heavylib.git -b 01c91ac $(@D)/heavylib
 	# force the generated DPF binary to use the same URI as the bundled TTL files
 	printf '%s\n' \
 		'{' \
@@ -29,7 +29,7 @@ define EARSAVER_BUILD_CMDS
 	# symlink dpf dep into build dir
 	ln -sf $(STAGING_DIR)/usr/src/dpf $(@D)/build
 	# build dpf project
-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true -C $(@D)/build
+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) NOOPT=true CROSS_COMPILING=true -C $(@D)/build
 endef
 
 define EARSAVER_INSTALL_TARGET_CMDS
