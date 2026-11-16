@@ -113,3 +113,21 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
     remove/add cycles. João: acceptable on the Duo.
   - Listen check on the Dwarf (João): good; the tracker sometimes jumps octaves, something for the author to improve.
 - Target: beta (`"stable": false`), project JSON in mod-plugin-publisher.
+
+## 2026-11-16 — João (joao@mod.audio), MacBook (Apple Silicon) — srmourasilva-plugins pin → 8317269 (Tetr4 switch 1.1, main store)
+
+- `plugins/package/srmourasilva-plugins/srmourasilva-plugins.mk`: pin `1d37ffa` → `8317269cc064493c6cf9b8c2e937153470f3d324`
+  (SrMouraSilva/plugins-lv2 `master`, 2026-11-13, merge of the author's PR #6 `feature/custom-label`, which took in
+  João's #7 manual + 4 factory presets + description, #8 labels after state restore, #9 HMI WidgetControl optional so
+  Tetr4 loads on the MOD Duo). Licence now Apache-2.0 (author's relicence in #6, sole contributor).
+- Against João's 2026-11-13 test commit `057f981` (fork jon281092), `8317269` changes for Tetr4 only
+  `lv2:minorVersion` 0 → 1 and removes the manual's source files (`docs/`, not installed); the author also made
+  Gossiper's HMI WidgetControl optional (same fix as #9) and bumped it to 1.1. Recipe otherwise unchanged.
+- Built locally (Docker, `mpbi_<platform>`) for moddwarf-new, modduox-new, modduo-new: all OK.
+- Device test of this commit (`~/mod-workdir-logs/test-tetr4.sh`), Dwarf v1.14.0.3370, 128 frames: documentation
+  served (PDF md5 = bundle), 4 factory presets load with the expected DIP grids and labels, preset switching by
+  selectors and combobox, bypass ×4, GUI renders (no broken images), 0 xruns throughout, DSP ~12%.
+  Duo X and Duo were tested on `057f981` on 2026-11-13 (same Tetr4 code), not on this commit.
+- mod-ui reports `stability: testing` for this build: its rule (`mod-ui utils/utils_lilv.cpp`, odd
+  `minorVersion` = testing) applied to the author's 1.1; the beta 1.0 showed `experimental`.
+- Target: `tetr4-switch.lv2` → main store (`"stable": true`); `gossiper.lv2` stays beta.
