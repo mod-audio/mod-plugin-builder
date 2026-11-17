@@ -138,3 +138,28 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   a new pin here, rebuild, tests on all three units. Branch `joao/freezer` (local, not pushed).
 - Dwarf restored to Jacube's `hvcc-Freezer.lv2` (May 14, 2024, from his forum Drive link, copy in
   `~/mod-workdir-logs/freezer-jacube-dl/`).
+
+## 2026-11-17 — João (joao@mod.audio), MacBook (Apple Silicon) — hvcc-freezer: Jacube's current patch, Dwarf test — still ON HOLD (licence)
+
+- Jacube confirmed (forum DM to João): @Jacube = maker `J.Velcl@seznam.cz` = brand `BattNotIncluded` = GitHub
+  `Battery-not-included`; left the maker name to MOD → João: show **"Jacube"**. ISC OK **not yet received** (João asking again).
+- Jacube's patch: `pd_mod.zip` from his Drive (https://drive.google.com/file/d/16UyAj1bPuXD2b4pq7kGkmfnf8yIjL2qR/view,
+  11-11), also holds Arcade and WOW (not looked at). `freezer/freezer29.pd` (2024-05-19): 12 `@hv_param`, names,
+  ranges and defaults equal to `custom-ttl/BatteryNotIncluded-Freezer/Freezer_dsp.ttl`; vanilla objects only; the
+  TTL and 9 modgui files in the zip are byte-identical to `hvcc-plugins` `8951053`.
+- `mod-audio/hvcc-plugins` branch `joao/freezer-current-patch`, commit `cdf532a` (**local only, not pushed** until the
+  ISC OK): `plugin.pd` ← `freezer29.pd`; maintainer `J.Velcl@seznam.cz` → `Jacube` in `plugin.json` and the TTL.
+- Local builds of `cdf532a` (scratch recipe with `SITE_METHOD = local`, `~/mod-workdir-logs/freezer-cdf532a/`): OK on
+  modduo-new, modduox-new, moddwarf-new. Parameter order in the `.so` = TTL ports 3–14.
+- Dwarf v1.14.0.3370, 128 frames, **new pedalboard** (only the default Gain2x2), `test-freezer.sh` on our build
+  (loaded `.so` md5 `81383d9a85dbffbd705f7470d3c91e19`): install, 12 controls, modgui, sweep, latch/moment freeze,
+  8 retriggers, 6 layers, worst case, bypass x4: **0 new xruns**, DSP ~12% → 17–19% (max 22%), GUI OK.
+  João by hand: freeze works with the plugin's freeze switch.
+- Not done: output-level comparison (new `test-freezer-level.sh`; our run had no input signal; it also held `freeze 1`
+  instead of tapping 1→0 like the GUI, which likely never triggers latch — my inference). João's gain-jump listen
+  check still to answer.
+- Test tooling fixes: `modws.py send` now waits for mod-ui's `loading_end` (before, parameter changes sent right after
+  connecting were lost — so the control steps of the 11-11 Freezer test, and other `test-*.sh` runs, may not have
+  applied); `require-empty-board.sh` guard; `test-freezer.sh` takes `OUT=<bundle dir>`.
+- Dwarf state: Jacube's `hvcc-Freezer.lv2` **uninstalled** (`/package/uninstall` needs the full path); our
+  `Freezer.lv2` (`cdf532a`) installed in its place (same URI). Freezer on João's new, unsaved board.
