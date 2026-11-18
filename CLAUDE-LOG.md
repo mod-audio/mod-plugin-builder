@@ -139,6 +139,24 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
 - Dwarf restored to Jacube's `hvcc-Freezer.lv2` (May 14, 2024, from his forum Drive link, copy in
   `~/mod-workdir-logs/freezer-jacube-dl/`).
 
+## 2026-11-16 — João (joao@mod.audio), MacBook (Apple Silicon) — srmourasilva-plugins pin → 8317269 (Tetr4 switch 1.1, main store)
+
+- `plugins/package/srmourasilva-plugins/srmourasilva-plugins.mk`: pin `1d37ffa` → `8317269cc064493c6cf9b8c2e937153470f3d324`
+  (SrMouraSilva/plugins-lv2 `master`, 2026-11-13, merge of the author's PR #6 `feature/custom-label`, which took in
+  João's #7 manual + 4 factory presets + description, #8 labels after state restore, #9 HMI WidgetControl optional so
+  Tetr4 loads on the MOD Duo). Licence now Apache-2.0 (author's relicence in #6, sole contributor).
+- Against João's 2026-11-13 test commit `057f981` (fork jon281092), `8317269` changes for Tetr4 only
+  `lv2:minorVersion` 0 → 1 and removes the manual's source files (`docs/`, not installed); the author also made
+  Gossiper's HMI WidgetControl optional (same fix as #9) and bumped it to 1.1. Recipe otherwise unchanged.
+- Built locally (Docker, `mpbi_<platform>`) for moddwarf-new, modduox-new, modduo-new: all OK.
+- Device test of this commit (`~/mod-workdir-logs/test-tetr4.sh`), Dwarf v1.14.0.3370, 128 frames: documentation
+  served (PDF md5 = bundle), 4 factory presets load with the expected DIP grids and labels, preset switching by
+  selectors and combobox, bypass ×4, GUI renders (no broken images), 0 xruns throughout, DSP ~12%.
+  Duo X and Duo were tested on `057f981` on 2026-11-13 (same Tetr4 code), not on this commit.
+- mod-ui reports `stability: testing` for this build: its rule (`mod-ui utils/utils_lilv.cpp`, odd
+  `minorVersion` = testing) applied to the author's 1.1; the beta 1.0 showed `experimental`.
+- Target: `tetr4-switch.lv2` → main store (`"stable": true`); `gossiper.lv2` stays beta.
+
 ## 2026-11-17 — João (joao@mod.audio), MacBook (Apple Silicon) — hvcc-freezer: Jacube's current patch, Dwarf test — still ON HOLD (licence)
 
 - Jacube confirmed (forum DM to João): @Jacube = maker `J.Velcl@seznam.cz` = brand `BattNotIncluded` = GitHub
@@ -163,3 +181,19 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   applied); `require-empty-board.sh` guard; `test-freezer.sh` takes `OUT=<bundle dir>`.
 - Dwarf state: Jacube's `hvcc-Freezer.lv2` **uninstalled** (`/package/uninstall` needs the full path); our
   `Freezer.lv2` (`cdf532a`) installed in its place (same URI). Freezer on João's new, unsaved board.
+
+## 2026-11-18 — João (joao@mod.audio), MacBook (Apple Silicon) — jtbasssynth pin → 2923878 (store description without brand)
+
+- `plugins/package/jtbasssynth/jtbasssynth.mk`: pin `268f847` → `2923878743c1d67a0e9878163aa1bc7c8e7ffeed`
+  (jtemple967/JTBassSynth, merge of João's PR #1, merged by the author 2026-11-18).
+- Against `268f847` this changes only `JTBassSynth.ttl` `rdfs:comment` (drops "modeled on MXR-style bass synth
+  pedals", now matching the author's README, `587c891`) and `README.md`. DSP code unchanged. `lv2:minorVersion 1`,
+  `lv2:microVersion 0` unchanged.
+- Target: stays beta (`"stable": false`).
+- Built locally (Docker, `mpbi_<platform>`) for moddwarf-new, modduox-new, modduo-new: all OK; each `JTBassSynth.so`
+  md5-identical to the previous local build, TTL carries the new description.
+- Device test, Dwarf v1.14.0.3370, default board (Gain2x2 only), 128 frames: store 1.0 uninstalled
+  (`/root/.lv2/JTBassSynth.lv2`), this build installed; new description shown by mod-ui; 10 controls, GUI complete;
+  sweep, 8 voices, worst case, bypass ×4: 0 xruns, DSP max 26.4% (board baseline ~20% before install). Parameter
+  values read back after the reset step, so control changes reached the plugin. Listen check (João): fine, octave
+  jumps seem better. Duo X and Duo not retested (binary identical to the 11-10 build tested there).
