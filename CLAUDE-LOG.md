@@ -206,3 +206,13 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
 - Listen check on the Dwarf (`cdf532a` build, default board): João: "everything sounds about right"; more testing
   from the community during beta.
 - Target: beta (`"stable": false`).
+- Local builds of `ef94a66` from this recipe (GitHub download; LOCAL ONLY workaround: hvcc 0.12.1 from PyPI, since
+  the builder's x86_64 hvcc can't run in the arm64 images; Duo ttl generator through qemu): OK on modduo-new,
+  modduox-new, moddwarf-new. Against the 11-17 `cdf532a` builds (same source tree): TTL/modgui identical, `.so` same
+  size and strings, 14 (Duo) / 92 (Duo X) / 38 (Dwarf) bytes differ; cause not established.
+- Device tests of the `ef94a66` builds (`test-freezer.sh`, default board with Gain2x2 only, 128 frames): install,
+  12 controls, modgui images, sweep, latch/moment freeze, 8 retriggers, 6 layers, worst case, bypass x4, GUI;
+  parameter values read back after reset.
+  - Duo v1.14.0.3364: **0 xruns**, DSP ~24% (baseline 12%), max 36.7% right after add, 25–31% after.
+  - Duo X v1.14.0.3364: **0 xruns**, DSP 10–12% (baseline 7.7%).
+  - No input signal in the automated test; João: automated result enough for beta on the Duo (11-18).
