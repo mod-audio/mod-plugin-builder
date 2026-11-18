@@ -114,6 +114,31 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   - Listen check on the Dwarf (João): good; the tracker sometimes jumps octaves, something for the author to improve.
 - Target: beta (`"stable": false`), project JSON in mod-plugin-publisher.
 
+## 2026-11-11 — João (joao@mod.audio), MacBook (Apple Silicon) — new recipe: hvcc-freezer (Freezer) — ON HOLD
+
+- New package `plugins/package/hvcc-freezer/hvcc-freezer.mk`: Freezer by Jacube (forum) / GitHub `Battery-not-included`
+  (maker field `J.Velcl@seznam.cz`, brand `BattNotIncluded`; same person per João), from `mod-audio/hvcc-plugins`
+  `plugins/BatteryNotIncluded-Freezer` (PR #1, merged 2024-10-03) + `custom-ttl/BatteryNotIncluded-Freezer`
+  (`8951053`, 2024-10-11), pinned to `8951053f960e5cfb780cacc38631037e1c6b83b7`. Licence ISC (repo `LICENSE`,
+  `plugin.json`). URI `urn:hvcc:Freezer`, bundle `Freezer.lv2`. Forum: https://forum.mod.audio/t/freezer-freeze-your-tone-forever/10848
+- Recipe follows `sensorium-plugins` (deps `dpf hvcc`, builds only Freezer, not the hvcc-plugins top Makefile), plus
+  `-DDISTRHO_PLUGIN_USES_CUSTOM_MODGUI=1`: with `"enable_modgui": true` the builder's DPF (`6b04262`) generates a
+  modgui and fails on `DISTRHO_UI_DEFAULT_WIDTH` (the DPF pinned by hvcc-plugins, `fc4ad61`, guarded it with
+  `DISTRHO_PLUGIN_HAS_EMBED_UI`). The modgui comes from `custom-ttl` anyway.
+- Local builds (Docker `mpbi_<platform>`, `~/mod-workdir-logs/build-freezer.sh`) OK for modduo-new, modduox-new,
+  moddwarf-new. Local-only workarounds, not in the recipe: the `hvcc` package is an x86_64 binary (replaced by hvcc
+  0.12.1 from PyPI in the arm64 container); the Duo's 32-bit ARM ttl generator run through `qemu-arm-static`.
+- Dwarf v1.14.0.3370, 128 frames (`~/mod-workdir-logs/test-freezer.sh`): 0 xruns in all steps, DSP ~16%, GUI OK.
+  **But João's listen check: big gain increase.** Cause: the repo's `plugin.pd` is an older Freezer with 7 parameters
+  (attack, decay, dry, freeze, mode, speed, wet; checked in the hvcc 0.12.1 output), while `custom-ttl/.../Freezer_dsp.ttl`
+  declares 12 controls and is byte-identical to the TTL in Jacube's May 14, 2024 build (with layers). Ports are
+  mismatched (e.g. the TTL "decay" knob, 0–2000, drives `dry`; "layers", 1–6, drives `wet`). The test only checked
+  CPU/xruns/GUI, not output level.
+- **On hold** until Jacube sends his current Pd patch (message drafted for João 2026-11-11); then a PR to hvcc-plugins,
+  a new pin here, rebuild, tests on all three units. Branch `joao/freezer` (local, not pushed).
+- Dwarf restored to Jacube's `hvcc-Freezer.lv2` (May 14, 2024, from his forum Drive link, copy in
+  `~/mod-workdir-logs/freezer-jacube-dl/`).
+
 ## 2026-11-16 — João (joao@mod.audio), MacBook (Apple Silicon) — srmourasilva-plugins pin → 8317269 (Tetr4 switch 1.1, main store)
 
 - `plugins/package/srmourasilva-plugins/srmourasilva-plugins.mk`: pin `1d37ffa` → `8317269cc064493c6cf9b8c2e937153470f3d324`
@@ -132,6 +157,31 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   `minorVersion` = testing) applied to the author's 1.1; the beta 1.0 showed `experimental`.
 - Target: `tetr4-switch.lv2` → main store (`"stable": true`); `gossiper.lv2` stays beta.
 
+## 2026-11-17 — João (joao@mod.audio), MacBook (Apple Silicon) — hvcc-freezer: Jacube's current patch, Dwarf test — still ON HOLD (licence)
+
+- Jacube confirmed (forum DM to João): @Jacube = maker `J.Velcl@seznam.cz` = brand `BattNotIncluded` = GitHub
+  `Battery-not-included`; left the maker name to MOD → João: show **"Jacube"**. ISC OK **not yet received** (João asking again).
+- Jacube's patch: `pd_mod.zip` from his Drive (https://drive.google.com/file/d/16UyAj1bPuXD2b4pq7kGkmfnf8yIjL2qR/view,
+  11-11), also holds Arcade and WOW (not looked at). `freezer/freezer29.pd` (2024-05-19): 12 `@hv_param`, names,
+  ranges and defaults equal to `custom-ttl/BatteryNotIncluded-Freezer/Freezer_dsp.ttl`; vanilla objects only; the
+  TTL and 9 modgui files in the zip are byte-identical to `hvcc-plugins` `8951053`.
+- `mod-audio/hvcc-plugins` branch `joao/freezer-current-patch`, commit `cdf532a` (**local only, not pushed** until the
+  ISC OK): `plugin.pd` ← `freezer29.pd`; maintainer `J.Velcl@seznam.cz` → `Jacube` in `plugin.json` and the TTL.
+- Local builds of `cdf532a` (scratch recipe with `SITE_METHOD = local`, `~/mod-workdir-logs/freezer-cdf532a/`): OK on
+  modduo-new, modduox-new, moddwarf-new. Parameter order in the `.so` = TTL ports 3–14.
+- Dwarf v1.14.0.3370, 128 frames, **new pedalboard** (only the default Gain2x2), `test-freezer.sh` on our build
+  (loaded `.so` md5 `81383d9a85dbffbd705f7470d3c91e19`): install, 12 controls, modgui, sweep, latch/moment freeze,
+  8 retriggers, 6 layers, worst case, bypass x4: **0 new xruns**, DSP ~12% → 17–19% (max 22%), GUI OK.
+  João by hand: freeze works with the plugin's freeze switch.
+- Not done: output-level comparison (new `test-freezer-level.sh`; our run had no input signal; it also held `freeze 1`
+  instead of tapping 1→0 like the GUI, which likely never triggers latch — my inference). João's gain-jump listen
+  check still to answer.
+- Test tooling fixes: `modws.py send` now waits for mod-ui's `loading_end` (before, parameter changes sent right after
+  connecting were lost — so the control steps of the 11-11 Freezer test, and other `test-*.sh` runs, may not have
+  applied); `require-empty-board.sh` guard; `test-freezer.sh` takes `OUT=<bundle dir>`.
+- Dwarf state: Jacube's `hvcc-Freezer.lv2` **uninstalled** (`/package/uninstall` needs the full path); our
+  `Freezer.lv2` (`cdf532a`) installed in its place (same URI). Freezer on João's new, unsaved board.
+
 ## 2026-11-18 — João (joao@mod.audio), MacBook (Apple Silicon) — jtbasssynth pin → 2923878 (store description without brand)
 
 - `plugins/package/jtbasssynth/jtbasssynth.mk`: pin `268f847` → `2923878743c1d67a0e9878163aa1bc7c8e7ffeed`
@@ -147,3 +197,22 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   sweep, 8 voices, worst case, bypass ×4: 0 xruns, DSP max 26.4% (board baseline ~20% before install). Parameter
   values read back after the reset step, so control changes reached the plugin. Listen check (João): fine, octave
   jumps seem better. Duo X and Duo not retested (binary identical to the 11-10 build tested there).
+
+## 2026-11-18 — João (joao@mod.audio), MacBook (Apple Silicon) — hvcc-freezer: pin ef94a66 (Jacube's current patch), off hold
+
+- Jacube OKed the ISC licence (João). João got write access to `mod-audio/hvcc-plugins` (Gianfranco); PR #2
+  (`cdf532a`) merged as `ef94a66406667e658d93034bbfcd9ec0de125bee`, tree identical to `cdf532a`.
+- `plugins/package/hvcc-freezer/hvcc-freezer.mk`: pin `8951053` → `ef94a66`. Branch `joao/freezer` merged with master.
+- Listen check on the Dwarf (`cdf532a` build, default board): João: "everything sounds about right"; more testing
+  from the community during beta.
+- Target: beta (`"stable": false`).
+- Local builds of `ef94a66` from this recipe (GitHub download; LOCAL ONLY workaround: hvcc 0.12.1 from PyPI, since
+  the builder's x86_64 hvcc can't run in the arm64 images; Duo ttl generator through qemu): OK on modduo-new,
+  modduox-new, moddwarf-new. Against the 11-17 `cdf532a` builds (same source tree): TTL/modgui identical, `.so` same
+  size and strings, 14 (Duo) / 92 (Duo X) / 38 (Dwarf) bytes differ; cause not established.
+- Device tests of the `ef94a66` builds (`test-freezer.sh`, default board with Gain2x2 only, 128 frames): install,
+  12 controls, modgui images, sweep, latch/moment freeze, 8 retriggers, 6 layers, worst case, bypass x4, GUI;
+  parameter values read back after reset.
+  - Duo v1.14.0.3364: **0 xruns**, DSP ~24% (baseline 12%), max 36.7% right after add, 25–31% after.
+  - Duo X v1.14.0.3364: **0 xruns**, DSP 10–12% (baseline 7.7%).
+  - No input signal in the automated test; João: automated result enough for beta on the Duo (11-18).
