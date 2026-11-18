@@ -4,7 +4,7 @@
 #
 ######################################
 
-HVCC_FREEZER_VERSION = 8951053f960e5cfb780cacc38631037e1c6b83b7
+HVCC_FREEZER_VERSION = ef94a66406667e658d93034bbfcd9ec0de125bee
 HVCC_FREEZER_SITE = $(call github,mod-audio,hvcc-plugins,$(HVCC_FREEZER_VERSION))
 HVCC_FREEZER_DEPENDENCIES = dpf hvcc
 HVCC_FREEZER_BUNDLES = Freezer.lv2

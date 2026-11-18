@@ -197,3 +197,12 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   sweep, 8 voices, worst case, bypass ×4: 0 xruns, DSP max 26.4% (board baseline ~20% before install). Parameter
   values read back after the reset step, so control changes reached the plugin. Listen check (João): fine, octave
   jumps seem better. Duo X and Duo not retested (binary identical to the 11-10 build tested there).
+
+## 2026-11-18 — João (joao@mod.audio), MacBook (Apple Silicon) — hvcc-freezer: pin ef94a66 (Jacube's current patch), off hold
+
+- Jacube OKed the ISC licence (João). João got write access to `mod-audio/hvcc-plugins` (Gianfranco); PR #2
+  (`cdf532a`) merged as `ef94a66406667e658d93034bbfcd9ec0de125bee`, tree identical to `cdf532a`.
+- `plugins/package/hvcc-freezer/hvcc-freezer.mk`: pin `8951053` → `ef94a66`. Branch `joao/freezer` merged with master.
+- Listen check on the Dwarf (`cdf532a` build, default board): João: "everything sounds about right"; more testing
+  from the community during beta.
+- Target: beta (`"stable": false`).
