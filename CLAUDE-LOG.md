@@ -140,3 +140,10 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   pedals", now matching the author's README, `587c891`) and `README.md`. DSP code unchanged. `lv2:minorVersion 1`,
   `lv2:microVersion 0` unchanged.
 - Target: stays beta (`"stable": false`).
+- Built locally (Docker, `mpbi_<platform>`) for moddwarf-new, modduox-new, modduo-new: all OK; each `JTBassSynth.so`
+  md5-identical to the previous local build, TTL carries the new description.
+- Device test, Dwarf v1.14.0.3370, default board (Gain2x2 only), 128 frames: store 1.0 uninstalled
+  (`/root/.lv2/JTBassSynth.lv2`), this build installed; new description shown by mod-ui; 10 controls, GUI complete;
+  sweep, 8 voices, worst case, bypass ×4: 0 xruns, DSP max 26.4% (board baseline ~20% before install). Parameter
+  values read back after the reset step, so control changes reached the plugin. Listen check (João): fine, octave
+  jumps seem better. Duo X and Duo not retested (binary identical to the 11-10 build tested there).
