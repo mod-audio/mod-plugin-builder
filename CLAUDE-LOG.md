@@ -131,3 +131,19 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
 - mod-ui reports `stability: testing` for this build: its rule (`mod-ui utils/utils_lilv.cpp`, odd
   `minorVersion` = testing) applied to the author's 1.1; the beta 1.0 showed `experimental`.
 - Target: `tetr4-switch.lv2` → main store (`"stable": true`); `gossiper.lv2` stays beta.
+
+## 2026-11-18 — João (joao@mod.audio), MacBook (Apple Silicon) — jtbasssynth pin → 2923878 (store description without brand)
+
+- `plugins/package/jtbasssynth/jtbasssynth.mk`: pin `268f847` → `2923878743c1d67a0e9878163aa1bc7c8e7ffeed`
+  (jtemple967/JTBassSynth, merge of João's PR #1, merged by the author 2026-11-18).
+- Against `268f847` this changes only `JTBassSynth.ttl` `rdfs:comment` (drops "modeled on MXR-style bass synth
+  pedals", now matching the author's README, `587c891`) and `README.md`. DSP code unchanged. `lv2:minorVersion 1`,
+  `lv2:microVersion 0` unchanged.
+- Target: stays beta (`"stable": false`).
+- Built locally (Docker, `mpbi_<platform>`) for moddwarf-new, modduox-new, modduo-new: all OK; each `JTBassSynth.so`
+  md5-identical to the previous local build, TTL carries the new description.
+- Device test, Dwarf v1.14.0.3370, default board (Gain2x2 only), 128 frames: store 1.0 uninstalled
+  (`/root/.lv2/JTBassSynth.lv2`), this build installed; new description shown by mod-ui; 10 controls, GUI complete;
+  sweep, 8 voices, worst case, bypass ×4: 0 xruns, DSP max 26.4% (board baseline ~20% before install). Parameter
+  values read back after the reset step, so control changes reached the plugin. Listen check (João): fine, octave
+  jumps seem better. Duo X and Duo not retested (binary identical to the 11-10 build tested there).
