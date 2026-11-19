@@ -216,3 +216,19 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   - Duo v1.14.0.3364: **0 xruns**, DSP ~24% (baseline 12%), max 36.7% right after add, 25–31% after.
   - Duo X v1.14.0.3364: **0 xruns**, DSP 10–12% (baseline 7.7%).
   - No input signal in the automated test; João: automated result enough for beta on the Duo (11-18).
+
+## 2026-11-19 — João (joao@mod.audio), MacBook (Apple Silicon) — nhe-taj-mahal + nhe-taj-mahal-stereo (Taj Mahal), new, beta
+
+- Two new packages, the author's own recipes (Niels Hunefeld / New Horizon Electronics, forum "Whythisreason",
+  https://github.com/Kiwooky/NHE-Taj-Mahal, MIT; DPF as a submodule), both pinned to `f87e733` (mono 1.0.3, LV2 2.3;
+  stereo 1.0.1, LV2 2.1). Replaces the 10-16 branch that pinned `d757708` (1.0.2), mono only.
+- Target: beta (`"stable": false`). Seven factory presets each; no documentation file; no port groups (soft for beta).
+- Known: the mono bundle also carries `nhe-taj-mahal_dsp.dylib` (124 KB, macOS build): the author's repo tracks `bin/`
+  and `make install` copies it. Not loaded (TTL points at the `.so`). Fix offered: Kiwooky/NHE-Taj-Mahal PR #3; move the
+  pin once it is merged.
+- Local builds (`~/mod-workdir-logs/build-taj.sh <pkg>`) OK on moddwarf-new, modduox-new, modduo-new.
+- Device tests (`test-taj.sh`, default board with Gain2x2 only, 128 frames, v1.14.0): install, 11 controls, modgui
+  images, sweep, worst case, bypass x4, 7 presets, headless GUI: **0 xruns** everywhere.
+  - Dwarf: mono +9% DSP (max 25.7%), stereo +8% (max 25.3%).
+  - Duo X: mono +4% (max 12.5%), stereo +4% (max 12.6%, settled lower).
+  - Duo: mono +13% (max 30.9%), stereo +12% (max 29.3%).
