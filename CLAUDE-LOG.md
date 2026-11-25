@@ -232,3 +232,14 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
   - Dwarf: mono +9% DSP (max 25.7%), stereo +8% (max 25.3%).
   - Duo X: mono +4% (max 12.5%), stereo +4% (max 12.6%, settled lower).
   - Duo: mono +13% (max 30.9%), stereo +12% (max 29.3%).
+
+## 2026-11-25 — João (joao@mod.audio), MacBook (Apple Silicon) — Freezer: licence + brand
+
+- `hvcc-freezer` pin `ef94a66` → `a78b8fe` (mod-audio/hvcc-plugins PR #3): `Freezer_dsp.ttl` gets
+  `doap:license <http://spdx.org/licenses/ISC.html>` (Jacube confirmed ISC by forum DM) and `mod:brand "Jacube"`
+  (was `BattNotIncluded`, over the verifier's 11 characters). Fixes the two verifier warnings Gianfranco reported 11-23.
+- Built locally (`~/mod-workdir-logs/build-freezer.sh`) for modduo-new, modduox-new, moddwarf-new: all OK, built TTLs
+  carry the licence and brand.
+- Dwarf (v1.14.0.3370, 128 frames) `test-freezer.sh`: unit shows brand "Jacube", 12 controls; DSP 12.3% baseline →
+  ~17–19% with Freezer, max 21.4%; 0 xruns through control sweep, latch/moment freeze, 6 layers, worst case, bypass;
+  GUI renders, 0 broken images. Duo and Duo X not re-tested (TTL-only change; DSP unchanged since `ef94a66`).
