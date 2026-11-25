@@ -243,3 +243,27 @@ Sessions 2026-09-30 → 2026-10-02. No changes to this repo's code; this entry r
 - Dwarf (v1.14.0.3370, 128 frames) `test-freezer.sh`: unit shows brand "Jacube", 12 controls; DSP 12.3% baseline →
   ~17–19% with Freezer, max 21.4%; 0 xruns through control sweep, latch/moment freeze, 6 layers, worst case, bypass;
   GUI renders, 0 broken images. Duo and Duo X not re-tested (TTL-only change; DSP unchanged since `ef94a66`).
+
+## 2026-11-25 — João (joao@mod.audio), MacBook (Apple Silicon) — srmourasilva-plugins pin → 212147e (Gossiper 1.21, main store)
+
+- `plugins/package/srmourasilva-plugins/srmourasilva-plugins.mk`: pin `8317269` → `212147eb5c07697f13d91c9f075f9e0867add08f`
+  (SrMouraSilva/plugins-lv2 `main`, the author's new default branch; last merge PR #16 `feature/gossiper-manual`,
+  2026-11-20). 149 commits: two new plugins (hept7 switch, kill switch, not in this recipe's bundles), MIDI and display
+  widgets, per-plugin recipes under `store/`. The upstream `install` target still builds and installs everything and
+  copies no `docs/`; recipe otherwise unchanged, bundles still `gossiper.lv2 tetr4-switch.lv2`.
+- Target: **`gossiper.lv2` → main store** (`"stable": true`), published alone (`--bundles gossiper.lv2`). Tetr4 also
+  moves on this pin (1.1 → 2.17: HTML manual instead of PDF, MIDI out, new GUI) but is **not** republished: João is
+  asking the author first.
+- Main-store requirements for Gossiper: documentation `modgui:documentation <modgui/manual.html>` (self-contained HTML,
+  3.7 MB, kept as HTML: João); 8 port groups; **factory presets waived by João (2026-11-25)**. Brand stays
+  `SrMouraSilva` (store shows "SrMouraSilv", as for Tetr4: João).
+- Built locally (`~/mod-workdir-logs/build-gossiper.sh`) for moddwarf-new, modduox-new, modduo-new: all OK.
+- `~/mod-workdir-logs/test-gossiper.sh` on local builds, 128 frames, default board (Gain2x2 only): documentation served
+  as `text/html` (md5 = bundle) and renders (45 embedded images; the one "broken" `<img>` has no `src`); footswitches
+  1-7, potentiometers 1-4, bypass x4: **0 xruns** on all three. DSP: Dwarf ~12-14% (baseline 11.7%), Duo X ~7%
+  (6.9%), Duo ~14% (12.0%). GUI renders, no broken images.
+- João by hand: Dwarf and Duo X: documentation opens, renamed footswitch label shown in the screen pop-up,
+  "Assign to notify" works. Duo: documentation opens, no pop-up (disabled on the Duo by the author, `753e1f8`),
+  Gossiper loads (the HMI fix); notify/CV "I guess yes" (João), not checked closely.
+- Tetr4 2.17 regression run on the Dwarf (`test-tetr4.sh`): 4 factory presets load with the right DIP grids and labels,
+  switching and bypass OK, 0 xruns. The Dwarf now has this local Tetr4 build installed instead of the store one.
