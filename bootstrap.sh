@@ -73,6 +73,14 @@ if [ ! -f ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/configure ]; then
         cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27-dwarf/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
       fi
     ;;
+
+    "crosstool-ng-1.27.0")
+      cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
+
+      if [ "${TOOLCHAIN_PLATFORM}" == "moddwarf-new" ]; then
+        cp ${SOURCE_DIR}/patches/${CT_NG_VERSION}/glibc-2.27-dwarf/*.patch ${TOOLCHAIN_BUILD_DIR}/${CT_NG_VERSION}/packages/glibc/2.27/
+      fi
+    ;;
   esac
 fi
 
@@ -167,6 +175,7 @@ if [ ! -d ${BUILD_DIR}/${BUILDROOT_VERSION} ]; then
       patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/010_fixpkgconfdownload.patch
       patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/011_fix-qt5-build.patch
       patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/012_linux-kernel-6.1.patch
+      patch -d ${BUILD_DIR}/${BUILDROOT_VERSION} -p1 -i ${SOURCE_DIR}/patches/${BUILDROOT_VERSION}/013_gcc-13.patch
     ;;
 
     "buildroot-2023.11.3")
