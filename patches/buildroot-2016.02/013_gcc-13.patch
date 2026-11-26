@@ -1,0 +1,34 @@
+--- a/toolchain/toolchain-common.in
++++ b/toolchain/toolchain-common.in
+@@ -323,6 +323,10 @@
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
++config BR2_TOOLCHAIN_GCC_AT_LEAST_13
++	bool
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
++
+ config BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	bool
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+@@ -331,6 +335,7 @@
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_GCC_AT_LEAST
+ 	string
++	default "13" if BR2_TOOLCHAIN_GCC_AT_LEAST_13
+ 	default "9" if BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -725,6 +725,10 @@
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_13
++	bool "13.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_9
+ 	bool "9.x"
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9

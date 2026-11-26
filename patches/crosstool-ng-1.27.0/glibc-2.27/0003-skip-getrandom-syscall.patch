@@ -1,0 +1,957 @@
+diff --git a/posix/unistd.h b/posix/unistd.h
+index 4d149f9..98bb9bd 100644
+--- a/posix/unistd.h
++++ b/posix/unistd.h
+@@ -1161,12 +1161,6 @@ extern int pthread_atfork (void (*__prepare) (void),
+ 			   void (*__child) (void)) __THROW;
+ #endif
+ 
+-#ifdef __USE_MISC
+-/* Write LENGTH bytes of randomness starting at BUFFER.  Return 0 on
+-   success or -1 on error.  */
+-int getentropy (void *__buffer, size_t __length) __wur;
+-#endif
+-
+ /* Define some macros helping to catch buffer overflows.  */
+ #if __USE_FORTIFY_LEVEL > 0 && defined __fortify_function
+ # include <bits/unistd.h>
+diff --git a/stdlib/Makefile b/stdlib/Makefile
+index 7c363a6..578f013 100644
+--- a/stdlib/Makefile
++++ b/stdlib/Makefile
+@@ -28,7 +28,7 @@ headers	:= stdlib.h bits/stdlib.h bits/stdlib-ldbl.h bits/stdlib-float.h      \
+ 	   errno.h sys/errno.h bits/errno.h				      \
+ 	   ucontext.h sys/ucontext.h					      \
+ 	   alloca.h fmtmsg.h						      \
+-	   bits/stdlib-bsearch.h sys/random.h bits/stdint-intn.h	      \
++	   bits/stdlib-bsearch.h bits/stdint-intn.h	      \
+ 	   bits/stdint-uintn.h
+ 
+ routines	:=							      \
+@@ -46,7 +46,7 @@ routines	:=							      \
+ 	srand48 seed48 lcong48						      \
+ 	drand48_r erand48_r lrand48_r nrand48_r mrand48_r jrand48_r	      \
+ 	srand48_r seed48_r lcong48_r					      \
+-	drand48-iter getrandom getentropy				      \
++	drand48-iter 				      \
+ 	strfromf strfromd strfroml					      \
+ 	strtol strtoul strtoll strtoull					      \
+ 	strtol_l strtoul_l strtoll_l strtoull_l				      \
+@@ -80,7 +80,7 @@ tests		:= tst-strtol tst-strtod testmb testrand testsort testdiv   \
+ 		   tst-strtol-locale tst-strtod-nan-locale tst-strfmon_l    \
+ 		   tst-quick_exit tst-thread-quick_exit tst-width	    \
+ 		   tst-width-stdint tst-strfrom tst-strfrom-locale	    \
+-		   tst-getrandom tst-atexit tst-at_quick_exit 		    \
++		   tst-atexit tst-at_quick_exit 		    \
+ 		   tst-cxa_atexit tst-on_exit test-atexit-race 		    \
+ 		   test-at_quick_exit-race test-cxa_atexit-race             \
+ 		   test-on_exit-race test-dlclose-exit-race 		    \
+diff --git a/stdlib/Versions b/stdlib/Versions
+index a2dfa32..f79b457 100644
+--- a/stdlib/Versions
++++ b/stdlib/Versions
+@@ -120,7 +120,6 @@ libc {
+   GLIBC_2.25 {
+     # s*
+     strfromd; strfromf; strfroml;
+-    getrandom; getentropy;
+   }
+ %ifdef FLOAT128_VERSION
+   FLOAT128_VERSION {
+diff --git a/stdlib/getentropy.c b/stdlib/getentropy.c
+deleted file mode 100644
+index b73efed..0000000
+--- a/stdlib/getentropy.c
++++ /dev/null
+@@ -1,31 +0,0 @@
+-/* Stub for getentropy.
+-   Copyright (C) 2016-2018 Free Software Foundation, Inc.
+-   This file is part of the GNU C Library.
+-
+-   The GNU C Library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Lesser General Public
+-   License as published by the Free Software Foundation; either
+-   version 2.1 of the License, or (at your option) any later version.
+-
+-   The GNU C Library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Lesser General Public License for more details.
+-
+-   You should have received a copy of the GNU Lesser General Public
+-   License along with the GNU C Library; if not, see
+-   <http://www.gnu.org/licenses/>.  */
+-
+-#include <sys/random.h>
+-#include <errno.h>
+-
+-/* Write LENGTH bytes of randomness starting at BUFFER.  Return 0 on
+-   success and -1 on failure.  */
+-int
+-getentropy (void *buffer, size_t length)
+-{
+-  __set_errno (ENOSYS);
+-  return -1;
+-}
+-
+-stub_warning (getentropy)
+diff --git a/stdlib/getrandom.c b/stdlib/getrandom.c
+deleted file mode 100644
+index 45234be..0000000
+--- a/stdlib/getrandom.c
++++ /dev/null
+@@ -1,31 +0,0 @@
+-/* Stub for getrandom.
+-   Copyright (C) 2016-2018 Free Software Foundation, Inc.
+-   This file is part of the GNU C Library.
+-
+-   The GNU C Library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Lesser General Public
+-   License as published by the Free Software Foundation; either
+-   version 2.1 of the License, or (at your option) any later version.
+-
+-   The GNU C Library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Lesser General Public License for more details.
+-
+-   You should have received a copy of the GNU Lesser General Public
+-   License along with the GNU C Library; if not, see
+-   <http://www.gnu.org/licenses/>.  */
+-
+-#include <sys/random.h>
+-#include <errno.h>
+-
+-/* Write up to LENGTH bytes of randomness starting at BUFFER.
+-   Return the number of bytes written, or -1 on error.  */
+-ssize_t
+-getrandom (void *buffer, size_t length, unsigned int flags)
+-{
+-  __set_errno (ENOSYS);
+-  return -1;
+-}
+-
+-stub_warning (getrandom)
+diff --git a/stdlib/sys/random.h b/stdlib/sys/random.h
+deleted file mode 100644
+index 056312c..0000000
+--- a/stdlib/sys/random.h
++++ /dev/null
+@@ -1,42 +0,0 @@
+-/* Interfaces for obtaining random bytes.
+-   Copyright (C) 2016-2018 Free Software Foundation, Inc.
+-   This file is part of the GNU C Library.
+-
+-   The GNU C Library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Lesser General Public
+-   License as published by the Free Software Foundation; either
+-   version 2.1 of the License, or (at your option) any later version.
+-
+-   The GNU C Library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Lesser General Public License for more details.
+-
+-   You should have received a copy of the GNU Lesser General Public
+-   License along with the GNU C Library; if not, see
+-   <http://www.gnu.org/licenses/>.  */
+-
+-#ifndef _SYS_RANDOM_H
+-#define _SYS_RANDOM_H 1
+-
+-#include <features.h>
+-#include <sys/types.h>
+-
+-/* Flags for use with getrandom.  */
+-#define GRND_NONBLOCK 0x01
+-#define GRND_RANDOM 0x02
+-
+-__BEGIN_DECLS
+-
+-/* Write LENGTH bytes of randomness starting at BUFFER.  Return the
+-   number of bytes written, or -1 on error.  */
+-ssize_t getrandom (void *__buffer, size_t __length,
+-                   unsigned int __flags) __wur;
+-
+-/* Write LENGTH bytes of randomness starting at BUFFER.  Return 0 on
+-   success or -1 on error.  */
+-int getentropy (void *__buffer, size_t __length) __wur;
+-
+-__END_DECLS
+-
+-#endif /* _SYS_RANDOM_H */
+diff --git a/stdlib/tst-getrandom.c b/stdlib/tst-getrandom.c
+deleted file mode 100644
+index 2b10498..0000000
+--- a/stdlib/tst-getrandom.c
++++ /dev/null
+@@ -1,245 +0,0 @@
+-/* Tests for the getentropy, getrandom functions.
+-   Copyright (C) 2016-2018 Free Software Foundation, Inc.
+-   This file is part of the GNU C Library.
+-
+-   The GNU C Library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Lesser General Public
+-   License as published by the Free Software Foundation; either
+-   version 2.1 of the License, or (at your option) any later version.
+-
+-   The GNU C Library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Lesser General Public License for more details.
+-
+-   You should have received a copy of the GNU Lesser General Public
+-   License along with the GNU C Library; if not, see
+-   <http://www.gnu.org/licenses/>.  */
+-
+-#include <errno.h>
+-#include <stdbool.h>
+-#include <stdio.h>
+-#include <string.h>
+-#include <sys/random.h>
+-
+-/* Set to true if any errors are encountered.  */
+-static bool errors;
+-
+-/* Test getrandom with a single buffer length.  NB: The passed-in
+-   buffer must have room for four extra bytes after the specified
+-   length, which are used to test that getrandom leaves those bytes
+-   unchanged.  */
+-static void
+-test_length (char *buffer, size_t length, unsigned int flags)
+-{
+-  memset (buffer, 0, length);
+-  strcpy (buffer + length, "123");
+-  ssize_t ret = getrandom (buffer, length, flags);
+-  if (ret < 0)
+-    {
+-      /* EAGAIN is an expected error with GRND_RANDOM and
+-         GRND_NONBLOCK.  */
+-      if ((flags & GRND_RANDOM)
+-          && (flags & GRND_NONBLOCK)
+-          && errno == EAGAIN)
+-        return;
+-      printf ("error: getrandom (%zu, 0x%x): %m\n", length, flags);
+-      errors = true;
+-      return;
+-    }
+- if (ret != length)
+-    {
+-      if (flags & GRND_RANDOM)
+-        {
+-          if (ret == 0 || ret > length)
+-            {
+-              printf ("error: getrandom (%zu, 0x%x) returned %zd\n",
+-                      length, flags, ret);
+-              errors = true;
+-            }
+-        }
+-      else
+-        {
+-          printf ("error: getrandom (%zu, 0x%x) returned %zd\n",
+-                  length, flags, ret);
+-          errors = true;
+-        }
+-    }
+-  if (length >= 7)
+-    {
+-      /* One spurious test failure in 2**56 is sufficiently
+-         unlikely.  */
+-      int non_null = 0;
+-      for (int i = 0; i < length; ++i)
+-        non_null += buffer[i] != 0;
+-      if (non_null == 0)
+-        {
+-          printf ("error: getrandom (%zu, 0x%x) returned all-zero bytes\n",
+-                  length, flags);
+-          errors = true;
+-        }
+-    }
+-  if (memcmp (buffer + length, "123", 4) != 0)
+-    {
+-      printf ("error: getrandom (%zu, 0x%x) wrote spurious bytes\n",
+-              length, flags);
+-      errors = true;
+-    }
+-}
+-
+-/* Call getrandom repeatedly to fill the buffer.  */
+-static bool
+-getrandom_full (char *buffer, size_t length, unsigned int flags)
+-{
+-  char *end = buffer + length;
+-  while (buffer < end)
+-    {
+-      ssize_t ret = getrandom (buffer, end - buffer, flags);
+-      if (ret < 0)
+-        {
+-          printf ("error: getrandom (%zu, 0x%x): %m\n", length, flags);
+-          errors = true;
+-          return false;
+-        }
+-      buffer += ret;
+-    }
+-
+-  return true;
+-}
+-
+-static void
+-test_flags (unsigned int flags)
+-{
+-  /* Test various lengths, but only for !GRND_RANDOM, to conserve
+-     entropy.  */
+-  {
+-    enum { max_length = 300 };
+-    char buffer[max_length + 4];
+-    if (flags & GRND_RANDOM)
+-      test_length (buffer, 0, flags);
+-    else
+-      {
+-        for (int length = 0; length <= 9; ++length)
+-          test_length (buffer, length, flags);
+-        test_length (buffer, 16, flags);
+-        test_length (buffer, max_length, flags);
+-      }
+-  }
+-
+-  /* Test that getrandom returns different data.  */
+-  if (!(flags & GRND_NONBLOCK))
+-    {
+-      char buffer1[8];
+-      memset (buffer1, 0, sizeof (buffer1));
+-
+-      char buffer2[8];
+-      memset (buffer2, 0, sizeof (buffer2));
+-
+-      if (getrandom_full (buffer1, sizeof (buffer1), flags)
+-          && getrandom_full (buffer2, sizeof (buffer2), flags))
+-        {
+-          /* The probability that these two 8-byte buffers are equal
+-             is very small (assuming that two subsequent calls to
+-             getrandom result are independent, uniformly distributed
+-             random variables).  */
+-          if (memcmp (buffer1, buffer2, sizeof (buffer1)) == 0)
+-            {
+-              printf ("error: getrandom returns constant value\n");
+-              errors = true;
+-            }
+-        }
+-    }
+-}
+-
+-static void
+-test_getentropy (void)
+-{
+-  char buf[16];
+-  memset (buf, '@', sizeof (buf));
+-  if (getentropy (buf, 0) != 0)
+-    {
+-      printf ("error: getentropy zero length: %m\n");
+-      errors = true;
+-      return;
+-    }
+-  for (size_t i = 0; i < sizeof (buf); ++i)
+-    if (buf[i] != '@')
+-      {
+-        printf ("error: getentropy modified zero-length buffer\n");
+-        errors = true;
+-        return;
+-      }
+-
+-  if (getentropy (buf, sizeof (buf)) != 0)
+-    {
+-      printf ("error: getentropy buf: %m\n");
+-      errors = true;
+-      return;
+-    }
+-
+-  char buf2[256];
+-  _Static_assert (sizeof (buf) < sizeof (buf2), "buf and buf2 compatible");
+-  memset (buf2, '@', sizeof (buf2));
+-  if (getentropy (buf2, sizeof (buf)) != 0)
+-    {
+-      printf ("error: getentropy buf2: %m\n");
+-      errors = true;
+-      return;
+-    }
+-
+-  /* The probability that these two buffers are equal is very
+-     small. */
+-  if (memcmp (buf, buf2, sizeof (buf) == 0))
+-    {
+-      printf ("error: getentropy appears to return constant bytes\n");
+-      errors = true;
+-      return;
+-    }
+-
+-  for (size_t i = sizeof (buf); i < sizeof (buf2); ++i)
+-    if (buf2[i] != '@')
+-      {
+-        printf ("error: getentropy wrote beyond the end of the buffer\n");
+-        errors = true;
+-        return;
+-      }
+-
+-  char buf3[257];
+-  if (getentropy (buf3, sizeof (buf3)) == 0)
+-    {
+-      printf ("error: getentropy successful for 257 byte buffer\n");
+-      errors = true;
+-      return;
+-    }
+-  if (errno != EIO)
+-    {
+-      printf ("error: getentropy wrong error for 257 byte buffer: %m\n");
+-      errors = true;
+-      return;
+-    }
+-}
+-
+-static int
+-do_test (void)
+-{
+-  /* Check if getrandom is not supported by this system.  */
+-  if (getrandom (NULL, 0, 0) == -1 && errno == ENOSYS)
+-    return 77;
+-
+-  for (int use_random = 0; use_random < 2; ++use_random)
+-    for (int use_nonblock = 0; use_nonblock < 2; ++use_nonblock)
+-      {
+-        unsigned int flags = 0;
+-        if (use_random)
+-          flags |= GRND_RANDOM;
+-        if (use_nonblock)
+-          flags |= GRND_NONBLOCK;
+-        test_flags (flags);
+-      }
+-
+-  test_getentropy ();
+-
+-  return errors;
+-}
+-
+-#include <support/test-driver.c>
+diff --git a/sysdeps/mach/hurd/i386/libc.abilist b/sysdeps/mach/hurd/i386/libc.abilist
+index 991c41b..33412c7 100644
+--- a/sysdeps/mach/hurd/i386/libc.abilist
++++ b/sysdeps/mach/hurd/i386/libc.abilist
+@@ -1996,8 +1996,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 gnu_dev_major F
+ GLIBC_2.25 gnu_dev_makedev F
+ GLIBC_2.25 gnu_dev_minor F
+diff --git a/sysdeps/unix/sysv/linux/aarch64/libc.abilist b/sysdeps/unix/sysv/linux/aarch64/libc.abilist
+index 90c9bc8..ccb50cb 100644
+--- a/sysdeps/unix/sysv/linux/aarch64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/aarch64/libc.abilist
+@@ -2092,8 +2092,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/alpha/libc.abilist b/sysdeps/unix/sysv/linux/alpha/libc.abilist
+index 8674a87..21b5e97 100644
+--- a/sysdeps/unix/sysv/linux/alpha/libc.abilist
++++ b/sysdeps/unix/sysv/linux/alpha/libc.abilist
+@@ -2003,8 +2003,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/arm/libc.abilist b/sysdeps/unix/sysv/linux/arm/libc.abilist
+index 044ec10..845a24b 100644
+--- a/sysdeps/unix/sysv/linux/arm/libc.abilist
++++ b/sysdeps/unix/sysv/linux/arm/libc.abilist
+@@ -93,8 +93,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/getentropy.c b/sysdeps/unix/sysv/linux/getentropy.c
+deleted file mode 100644
+index 561f8f4..0000000
+--- a/sysdeps/unix/sysv/linux/getentropy.c
++++ /dev/null
+@@ -1,73 +0,0 @@
+-/* Implementation of getentropy based on the getrandom system call.
+-   Copyright (C) 2016-2018 Free Software Foundation, Inc.
+-   This file is part of the GNU C Library.
+-
+-   The GNU C Library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Lesser General Public
+-   License as published by the Free Software Foundation; either
+-   version 2.1 of the License, or (at your option) any later version.
+-
+-   The GNU C Library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Lesser General Public License for more details.
+-
+-   You should have received a copy of the GNU Lesser General Public
+-   License along with the GNU C Library; if not, see
+-   <http://www.gnu.org/licenses/>.  */
+-
+-#include <sys/random.h>
+-#include <assert.h>
+-#include <errno.h>
+-#include <unistd.h>
+-
+-#ifdef __NR_getrandom
+-/* Write LENGTH bytes of randomness starting at BUFFER.  Return 0 on
+-   success and -1 on failure.  */
+-int
+-getentropy (void *buffer, size_t length)
+-{
+-  /* The interface is documented to return EIO for buffer lengths
+-     longer than 256 bytes.  */
+-  if (length > 256)
+-    {
+-      __set_errno (EIO);
+-      return -1;
+-    }
+-
+-  /* Try to fill the buffer completely.  Even with the 256 byte limit
+-     above, we might still receive an EINTR error (when blocking
+-     during boot).  */
+-  void *end = buffer + length;
+-  while (buffer < end)
+-    {
+-      /* NB: No cancellation point.  */
+-      ssize_t bytes = INLINE_SYSCALL_CALL (getrandom, buffer, end - buffer, 0);
+-      if (bytes < 0)
+-        {
+-          if (errno == EINTR)
+-            /* Try again if interrupted by a signal.  */
+-            continue;
+-          else
+-            return -1;
+-        }
+-      if (bytes == 0)
+-        {
+-          /* No more bytes available.  This should not happen under
+-             normal circumstances.  */
+-          __set_errno (EIO);
+-          return -1;
+-        }
+-      /* Try again in case of a short read.  */
+-      buffer += bytes;
+-    }
+-  return 0;
+-}
+-#else
+-int
+-getentropy (void *buffer, size_t length)
+-{
+-  __set_errno (ENOSYS);
+-  return -1;
+-}
+-#endif
+diff --git a/sysdeps/unix/sysv/linux/getrandom.c b/sysdeps/unix/sysv/linux/getrandom.c
+deleted file mode 100644
+index 435b037..0000000
+--- a/sysdeps/unix/sysv/linux/getrandom.c
++++ /dev/null
+@@ -1,43 +0,0 @@
+-/* Implementation of the getrandom system call.
+-   Copyright (C) 2016-2018 Free Software Foundation, Inc.
+-   This file is part of the GNU C Library.
+-
+-   The GNU C Library is free software; you can redistribute it and/or
+-   modify it under the terms of the GNU Lesser General Public
+-   License as published by the Free Software Foundation; either
+-   version 2.1 of the License, or (at your option) any later version.
+-
+-   The GNU C Library is distributed in the hope that it will be useful,
+-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-   Lesser General Public License for more details.
+-
+-   You should have received a copy of the GNU Lesser General Public
+-   License along with the GNU C Library; if not, see
+-   <http://www.gnu.org/licenses/>.  */
+-
+-#include <sys/random.h>
+-#include <errno.h>
+-#include <unistd.h>
+-#include <sysdep-cancel.h>
+-
+-#ifdef __NR_getrandom
+-/* Write up to LENGTH bytes of randomness starting at BUFFER.
+-   Return the number of bytes written, or -1 on error.  */
+-ssize_t
+-getrandom (void *buffer, size_t length, unsigned int flags)
+-{
+-  return SYSCALL_CANCEL (getrandom, buffer, length, flags);
+-}
+-#else
+-/* Always provide a definition, even if the kernel headers lack the
+-   system call number. */
+-ssize_t
+-getrandom (void *buffer, size_t length, unsigned int flags)
+-{
+-  /* Ideally, we would add a cancellation point here, but we currently
+-     cannot do so inside libc.  */
+-  __set_errno (ENOSYS);
+-  return -1;
+-}
+-#endif
+diff --git a/sysdeps/unix/sysv/linux/hppa/libc.abilist b/sysdeps/unix/sysv/linux/hppa/libc.abilist
+index 2360130..0a5a5b0 100644
+--- a/sysdeps/unix/sysv/linux/hppa/libc.abilist
++++ b/sysdeps/unix/sysv/linux/hppa/libc.abilist
+@@ -1857,8 +1857,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/i386/libc.abilist b/sysdeps/unix/sysv/linux/i386/libc.abilist
+index 39c993f..93f39b5 100644
+--- a/sysdeps/unix/sysv/linux/i386/libc.abilist
++++ b/sysdeps/unix/sysv/linux/i386/libc.abilist
+@@ -2015,8 +2015,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/ia64/libc.abilist b/sysdeps/unix/sysv/linux/ia64/libc.abilist
+index 68496aa..712ef0a 100644
+--- a/sysdeps/unix/sysv/linux/ia64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/ia64/libc.abilist
+@@ -1879,8 +1879,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/m68k/coldfire/libc.abilist b/sysdeps/unix/sysv/linux/m68k/coldfire/libc.abilist
+index b676025..6da753d 100644
+--- a/sysdeps/unix/sysv/linux/m68k/coldfire/libc.abilist
++++ b/sysdeps/unix/sysv/linux/m68k/coldfire/libc.abilist
+@@ -94,8 +94,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/m68k/m680x0/libc.abilist b/sysdeps/unix/sysv/linux/m68k/m680x0/libc.abilist
+index cdd1df5..e1d6baf 100644
+--- a/sysdeps/unix/sysv/linux/m68k/m680x0/libc.abilist
++++ b/sysdeps/unix/sysv/linux/m68k/m680x0/libc.abilist
+@@ -1971,8 +1971,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/microblaze/libc.abilist b/sysdeps/unix/sysv/linux/microblaze/libc.abilist
+index e4265fd..16498e7 100644
+--- a/sysdeps/unix/sysv/linux/microblaze/libc.abilist
++++ b/sysdeps/unix/sysv/linux/microblaze/libc.abilist
+@@ -2092,8 +2092,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/mips/mips32/fpu/libc.abilist b/sysdeps/unix/sysv/linux/mips/mips32/fpu/libc.abilist
+index 3a7e0b4..2354e86 100644
+--- a/sysdeps/unix/sysv/linux/mips/mips32/fpu/libc.abilist
++++ b/sysdeps/unix/sysv/linux/mips/mips32/fpu/libc.abilist
+@@ -1946,8 +1946,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/mips/mips32/nofpu/libc.abilist b/sysdeps/unix/sysv/linux/mips/mips32/nofpu/libc.abilist
+index 5e80592..fa08af8 100644
+--- a/sysdeps/unix/sysv/linux/mips/mips32/nofpu/libc.abilist
++++ b/sysdeps/unix/sysv/linux/mips/mips32/nofpu/libc.abilist
+@@ -1944,8 +1944,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/mips/mips64/n32/libc.abilist b/sysdeps/unix/sysv/linux/mips/mips64/n32/libc.abilist
+index 1973fac..17f456e 100644
+--- a/sysdeps/unix/sysv/linux/mips/mips64/n32/libc.abilist
++++ b/sysdeps/unix/sysv/linux/mips/mips64/n32/libc.abilist
+@@ -1942,8 +1942,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/mips/mips64/n64/libc.abilist b/sysdeps/unix/sysv/linux/mips/mips64/n64/libc.abilist
+index 5e18ab8..f86b6d9 100644
+--- a/sysdeps/unix/sysv/linux/mips/mips64/n64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/mips/mips64/n64/libc.abilist
+@@ -1937,8 +1937,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/nios2/libc.abilist b/sysdeps/unix/sysv/linux/nios2/libc.abilist
+index cc5885a..9a1c409 100644
+--- a/sysdeps/unix/sysv/linux/nios2/libc.abilist
++++ b/sysdeps/unix/sysv/linux/nios2/libc.abilist
+@@ -2133,8 +2133,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/powerpc/powerpc32/fpu/libc.abilist b/sysdeps/unix/sysv/linux/powerpc/powerpc32/fpu/libc.abilist
+index 676aa50..0db1401 100644
+--- a/sysdeps/unix/sysv/linux/powerpc/powerpc32/fpu/libc.abilist
++++ b/sysdeps/unix/sysv/linux/powerpc/powerpc32/fpu/libc.abilist
+@@ -1975,8 +1975,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/powerpc/powerpc32/nofpu/libc.abilist b/sysdeps/unix/sysv/linux/powerpc/powerpc32/nofpu/libc.abilist
+index 2016c7c..540cb7c 100644
+--- a/sysdeps/unix/sysv/linux/powerpc/powerpc32/nofpu/libc.abilist
++++ b/sysdeps/unix/sysv/linux/powerpc/powerpc32/nofpu/libc.abilist
+@@ -1980,8 +1980,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc-le.abilist b/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc-le.abilist
+index 3d19e38..57368f3 100644
+--- a/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc-le.abilist
++++ b/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc-le.abilist
+@@ -2180,8 +2180,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc.abilist b/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc.abilist
+index c57ab21..212f8a8 100644
+--- a/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/powerpc/powerpc64/libc.abilist
+@@ -94,8 +94,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/riscv/rv64/libc.abilist b/sysdeps/unix/sysv/linux/riscv/rv64/libc.abilist
+index 8ab44ec..e408250 100644
+--- a/sysdeps/unix/sysv/linux/riscv/rv64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/riscv/rv64/libc.abilist
+@@ -897,7 +897,6 @@ GLIBC_2.27 getdirentries64 F
+ GLIBC_2.27 getdomainname F
+ GLIBC_2.27 getdtablesize F
+ GLIBC_2.27 getegid F
+-GLIBC_2.27 getentropy F
+ GLIBC_2.27 getenv F
+ GLIBC_2.27 geteuid F
+ GLIBC_2.27 getfsent F
+@@ -969,7 +968,6 @@ GLIBC_2.27 getpwnam F
+ GLIBC_2.27 getpwnam_r F
+ GLIBC_2.27 getpwuid F
+ GLIBC_2.27 getpwuid_r F
+-GLIBC_2.27 getrandom F
+ GLIBC_2.27 getresgid F
+ GLIBC_2.27 getresuid F
+ GLIBC_2.27 getrlimit F
+diff --git a/sysdeps/unix/sysv/linux/s390/s390-32/libc.abilist b/sysdeps/unix/sysv/linux/s390/s390-32/libc.abilist
+index 2590372..2a3e3a7 100644
+--- a/sysdeps/unix/sysv/linux/s390/s390-32/libc.abilist
++++ b/sysdeps/unix/sysv/linux/s390/s390-32/libc.abilist
+@@ -1975,8 +1975,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/s390/s390-64/libc.abilist b/sysdeps/unix/sysv/linux/s390/s390-64/libc.abilist
+index 5d6800c..8bfdce9 100644
+--- a/sysdeps/unix/sysv/linux/s390/s390-64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/s390/s390-64/libc.abilist
+@@ -1876,8 +1876,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/sh/libc.abilist b/sysdeps/unix/sysv/linux/sh/libc.abilist
+index c04872c..dc75b6f 100644
+--- a/sysdeps/unix/sysv/linux/sh/libc.abilist
++++ b/sysdeps/unix/sysv/linux/sh/libc.abilist
+@@ -1861,8 +1861,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/sparc/sparc32/libc.abilist b/sysdeps/unix/sysv/linux/sparc/sparc32/libc.abilist
+index 85cbe30..e2c9ee1 100644
+--- a/sysdeps/unix/sysv/linux/sparc/sparc32/libc.abilist
++++ b/sysdeps/unix/sysv/linux/sparc/sparc32/libc.abilist
+@@ -1968,8 +1968,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/sparc/sparc64/libc.abilist b/sysdeps/unix/sysv/linux/sparc/sparc64/libc.abilist
+index f7a1ab8..af40f07 100644
+--- a/sysdeps/unix/sysv/linux/sparc/sparc64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/sparc/sparc64/libc.abilist
+@@ -1905,8 +1905,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/syscall-names.list b/sysdeps/unix/sysv/linux/syscall-names.list
+index 64eb2ad..ddc52cf 100644
+--- a/sysdeps/unix/sysv/linux/syscall-names.list
++++ b/sysdeps/unix/sysv/linux/syscall-names.list
+@@ -157,7 +157,6 @@ getpid
+ getpmsg
+ getppid
+ getpriority
+-getrandom
+ getresgid
+ getresgid32
+ getresuid
+diff --git a/sysdeps/unix/sysv/linux/tile/tilegx32/libc.abilist b/sysdeps/unix/sysv/linux/tile/tilegx32/libc.abilist
+index ab56ece..ab114e1 100644
+--- a/sysdeps/unix/sysv/linux/tile/tilegx32/libc.abilist
++++ b/sysdeps/unix/sysv/linux/tile/tilegx32/libc.abilist
+@@ -2099,8 +2099,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/tile/tilegx64/libc.abilist b/sysdeps/unix/sysv/linux/tile/tilegx64/libc.abilist
+index f2518c0..efde86a 100644
+--- a/sysdeps/unix/sysv/linux/tile/tilegx64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/tile/tilegx64/libc.abilist
+@@ -2099,8 +2099,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/x86_64/64/libc.abilist b/sysdeps/unix/sysv/linux/x86_64/64/libc.abilist
+index 2a3cc40..e3b63eb 100644
+--- a/sysdeps/unix/sysv/linux/x86_64/64/libc.abilist
++++ b/sysdeps/unix/sysv/linux/x86_64/64/libc.abilist
+@@ -1856,8 +1856,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F
+diff --git a/sysdeps/unix/sysv/linux/x86_64/x32/libc.abilist b/sysdeps/unix/sysv/linux/x86_64/x32/libc.abilist
+index 8bc16b9..8e65759 100644
+--- a/sysdeps/unix/sysv/linux/x86_64/x32/libc.abilist
++++ b/sysdeps/unix/sysv/linux/x86_64/x32/libc.abilist
+@@ -2099,8 +2099,6 @@ GLIBC_2.24 quick_exit F
+ GLIBC_2.25 GLIBC_2.25 A
+ GLIBC_2.25 __explicit_bzero_chk F
+ GLIBC_2.25 explicit_bzero F
+-GLIBC_2.25 getentropy F
+-GLIBC_2.25 getrandom F
+ GLIBC_2.25 strfromd F
+ GLIBC_2.25 strfromf F
+ GLIBC_2.25 strfroml F

@@ -102,10 +102,15 @@ case "${TOOLCHAIN_PLATFORM}" in
     BUILDROOT_VERSION=buildroot-2016.02
     CT_NG_VERSION=crosstool-ng-1.24.0
   ;;
-  # new targets: ct-ng 1.25 with gcc 9 + glibc 2.27
-  "modduo-new"|"modduox-new"|"moddwarf-new")
+  # intermediate new target: ct-ng 1.25 with gcc 9 + glibc 2.27
+  "modduo-new")
     BUILDROOT_VERSION=buildroot-2016.02
     CT_NG_VERSION=crosstool-ng-1.25.0
+  ;;
+  # new targets: ct-ng 1.27 with gcc 13.3 + glibc 2.27
+  "modduox-new"|"moddwarf-new")
+    BUILDROOT_VERSION=buildroot-2016.02
+    CT_NG_VERSION=crosstool-ng-1.27.0
   ;;
   # generic targets: ct-ng 1.25 with gcc 9 + glibc 2.34
   "generic-aarch64"|"generic-x86_64")
